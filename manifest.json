@@ -1,10 +1,10 @@
 {
   "name": "Last.fm Vkontakte integration",
   "version": "0.1",
-  "description": "You can search music from last.fm on vkontakte",
+  "description": "Integrates vkontakte audio search into last.fm",
   "content_scripts": [
     {
-      "matches": ["http://www.last.fm/*", "http://www.lastfm.ru/*"],
+      "matches": ["http://*.last.fm/*", "http://*.lastfm.ru/*"],
       "js": ["prototype.js","content_script.js"]
     }
   ]

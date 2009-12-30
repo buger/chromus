@@ -29,9 +29,7 @@ if(page_type == "song") {
 
     $$('.rightCol').first().insert({top:generate_link(track.replace("+"," "), "")})
 } else {
-    $$("table.tracklist tbody td.smallmultibuttonCell,\
-	table.chart tbody td.multibuttonCell,\ 
-	table.mediumImageChart tbody td.subjectCell").each(function(td){		
+    $$("table.tracklist tbody td.smallmultibuttonCell, table.chart tbody td.multibuttonCell, table.mediumImageChart tbody td.subjectCell").each(function(td){		
     
         className = td.className.strip()	
 
