@@ -1,7 +1,7 @@
 {
-  "name": "Last.fm Vkontakte integration",
-  "version": "0.1",
-  "description": "Integrates vkontakte audio search into last.fm",
+  "name": "Last.fm with Vkontakte audio search",
+  "version": "0.1.1",
+  "description": "Integrates vkontakte.ru (vk.com) audio search into last.fm",
   "content_scripts": [
     {
       "matches": ["http://*.last.fm/*", "http://*.lastfm.ru/*"],
