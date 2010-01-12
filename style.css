@@ -9,13 +9,15 @@ table.candyStriped.chart .vk_search_button {
 
 table.mediumImageChart .vk_search_button, 
 #friendsLoved .vk_search_button,
-#nowPlaying .vk_search_button {
+#nowPlaying .vk_search_button,
+ul.artistsWithInfo .vk_search_button {
     vertical-align:middle;
     display: inline-block;
     margin-right: 5px;
 }
 
-#nowPlaying .vk_search_button {
+#nowPlaying .vk_search_button,
+ul.artistsWithInfo .vk_search_button {
     margin-right: 0px;
 }
 

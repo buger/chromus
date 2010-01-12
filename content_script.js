@@ -60,7 +60,9 @@ var MusicDomElement = Class.create({
     },
 
     generateLink: function(track){       
-        return "<a href='"+SEARCH_PATTERN.replace('%s', track.gsub('\'',escape('\'')))+"' target='_blank' class='lfmButton vk_search_button'><img src='"+imgURL+"'/></a>"
+        track = track.gsub('\'',escape('\''))
+
+        return "<a href='"+SEARCH_PATTERN.replace('%s', track)+"' target='_blank' class='lfmButton vk_search_button'><img src='"+imgURL+"'/></a>"
     }
 })
 
@@ -88,8 +90,9 @@ manager.registerWrapper('table.tracklist, table.chart', TrackList)
 var SingleTrack = Class.create({
     initialize: function(element, artist){
         var track = artist + ' '+ window.location.toString().match(/\/([^\/]+$)/)[1]
+        track = track.gsub('\'',escape('\''))
          
-        var link = "<a href='"+SEARCH_PATTERN.replace('%s',track.gsub('\'',escape('\'')))+"' target='_blank' class='vk_search_button'><img src='"+imgURL+"'/></a>"
+        var link = "<a href='"+SEARCH_PATTERN.replace('%s',track)+"' target='_blank' class='vk_search_button'><img src='"+imgURL+"'/></a>"
         element.innerHTML = link + element.innerHTML
     }
 })
@@ -157,6 +160,26 @@ var NowPlaying = Class.create(MusicDomElement, {
     }
 })
 manager.registerWrapper('#nowPlaying', NowPlaying)
+
+
+var ArtistsWithInfo = Class.create(MusicDomElement, {
+    CHILD_ITEMS_PATTERN:'li',
+
+    getTrack: function(li){
+        var track = li.down('strong a').innerHTML
+        var artist = li.down('a.artist').innerHTML
+
+        return artist + " " + track
+    },
+
+    insertLink: function(li, track){
+        var elm = li.down('a')        
+        elm.insert({after:this.generateLink(track)})
+    }
+})
+manager.registerWrapper('ul.artistsWithInfo', ArtistsWithInfo)
+
+
 
 manager.wrapMusicElements()
 
