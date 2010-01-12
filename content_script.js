@@ -5,8 +5,9 @@ var InjectionManager = Class.create({
     registred_wrappers: $H({}),
 
     initialize: function(){
-        if(match = window.location.toString().match(/\/music\/([\w\+]+)/))
-            this.artist = match[1].replace("+"," ") 
+        if(match = window.location.toString().match(/\/music\/([^\/]+)/)){
+            this.artist = match[1].gsub('+',' ') //$$('#catalogueHead h1').first().innerHTML
+        }
     },
 
     wrapMusicElements: function(){
@@ -58,8 +59,8 @@ var MusicDomElement = Class.create({
         }
     },
 
-    generateLink: function(track){        
-        return "<a href='"+SEARCH_PATTERN.replace('%s',escape(track))+"' target='_blank' class='lfmButton vk_search_button'><img src='"+imgURL+"'/></a>"
+    generateLink: function(track){       
+        return "<a href='"+SEARCH_PATTERN.replace('%s', track.gsub('\'',escape('\'')))+"' target='_blank' class='lfmButton vk_search_button'><img src='"+imgURL+"'/></a>"
     }
 })
 
@@ -86,9 +87,9 @@ manager.registerWrapper('table.tracklist, table.chart', TrackList)
 // Track page, http://www.lastfm.ru/music/Ke$ha/_/TiK+ToK
 var SingleTrack = Class.create({
     initialize: function(element, artist){
-        var track = artist + ' '+ window.location.toString().match(/\/([\w\+]+$)/)[1]
-        
-        var link = "<a href='"+SEARCH_PATTERN.replace('%s',escape(track))+"' target='_blank' class='vk_search_button'><img src='"+imgURL+"'/></a>"
+        var track = artist + ' '+ window.location.toString().match(/\/([^\/]+$)/)[1]
+         
+        var link = "<a href='"+SEARCH_PATTERN.replace('%s',track.gsub('\'',escape('\'')))+"' target='_blank' class='vk_search_button'><img src='"+imgURL+"'/></a>"
         element.innerHTML = link + element.innerHTML
     }
 })
@@ -159,6 +160,7 @@ manager.registerWrapper('#nowPlaying', NowPlaying)
 
 manager.wrapMusicElements()
 
+// Tabs when switching in charts
 $$('.horizontalOptions').each(function(element){
     element.observe('click', function(){
         setTimeout(function(){manager.wrapMusicElements()}, 1000)
