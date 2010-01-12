@@ -1,76 +1,166 @@
 var imgURL = chrome.extension.getURL("vk.png")
-var vk_search_pattern = 'http://vkontakte.ru/gsearch.php?section=audio&q='
+var SEARCH_PATTERN = 'http://vkontakte.ru/gsearch.php?section=audio&q=%s'
 
-var artist, song, songInfo, vk_search_link, page_type, style, offset
-var loc = window.location.toString()
+var InjectionManager = Class.create({
+    registred_wrappers: $H({}),
 
-function generate_link(track, style){
-    return "<a href='"+vk_search_pattern+track+"' target='_blank' class='lfmButton' style='"+style+"'><img src='"+imgURL+"'/></a>"
-}
+    initialize: function(){
+        if(match = window.location.toString().match(/\/music\/([\w\+]+)/))
+            this.artist = match[1].replace("+"," ") 
+    },
 
-if(loc.match("/user/.*"))
-  page_type = "user"
-else if(loc.match("/music/.*/_/.*"))
-  page_type = "song"
-else if(page_type = loc.match("/music/(.*)/(.*)")){
-  artist = page_type[1]
-  page_type = "album"
-} else if(page_type = loc.match("/music/(.*)")){
-  artist = page_type[1]
-  page_type = "artist"
-} else if(page_type = loc.match("/charts.*")){
-  page_type = "chart"
-}
+    wrapMusicElements: function(){
+        var artist = this.artist
 
-if(page_type == "song") {
-    var match = loc.match("/music/(.*)/_/(.*)")
-    
-    track = match[1]+" "+match[2]    
+        this.registred_wrappers.each(function(pair){
+            $$(pair.key).each(function(element){
+                if(!element.hasClassName('with_vk_search')){
+                    new pair.value(element, artist)    
+                    element.addClassName('with_vk_search')
+                }
+            })
+        })
+    },
 
-    $$('.rightCol').first().insert({top:generate_link(track.replace("+"," "), "")})
-} else {
-    $$("table.tracklist tbody td.smallmultibuttonCell, table.chart tbody td.multibuttonCell, table.mediumImageChart tbody td.subjectCell").each(function(td){		
-    
-        className = td.className.strip()	
+    registerWrapper: function(css_expr, wrapper){
+        this.registred_wrappers.set(css_expr, wrapper)
+    }
+})
+var manager = new InjectionManager()
 
-	if(className == "smallmultibuttonCell" || className == "multibuttonCell")
-	    table_type = "simple"
-	else
-	    table_type = "chart"
 
-    
-	if(table_type == "simple"){
-	    td.style.width = "50px"	   
-	    songInfo = td.previous('.subjectCell').select('a')
-	} else if(table_type == "chart") {
-	    songInfo = td.select('a')
-	}
-	
-	style = "vertical-align:middle;display: inline-block;"
+var MusicDomElement = Class.create({
+    CHILD_ITEMS_PATTERN:'tbody tr',
 
-	if(table_type == "simple" && (page_type == "user" || page_type == "chart")){
-	    artist = songInfo[0].innerHTML	
-	    song = songInfo[1] ? songInfo[1].innerHTML : ""
-	} else if(page_type == "artist" || page_type == "album") {
-	    song = songInfo[0].innerHTML
-	} else if(table_type == "chart") { //Charts
-	    if(songInfo.length == 3)
-	      offset = 1
-	    else
-	      offset = 0
+    initialize: function(element, artist){
+        this.element = element
+        this.artist = artist
+        
+        this.injectSearch()
+    },
 
-	    artist = songInfo[offset].innerHTML
-	    song   = songInfo[offset+1] ? songInfo[offset+1].innerHTML : ""
-	    style += "margin-right: 5px;"
-	}
+    getTrack: function(child){
+        throw 'abstract function, redefine'
+    },
 
-	track = artist + " " + song	    
+    insertLink: function(row, track){
+        throw 'abstract function, redefine'
+    },
 
-	vk_search_link = generate_link(track, style) 
+    injectSearch: function(){
+        var track
+        var childs = this.element.select(this.CHILD_ITEMS_PATTERN)
 
-	if(table_type == "chart"){
-	    td.down('span').insert({top:vk_search_link})
-	}else
-	    td.innerHTML = vk_search_link + td.innerHTML
+        for(var i=0; i < childs.length; i++){
+            track = this.getTrack(childs[i])
+            
+            this.insertLink(childs[i], track)
+        }
+    },
+
+    generateLink: function(track){        
+        return "<a href='"+SEARCH_PATTERN.replace('%s',escape(track))+"' target='_blank' class='lfmButton vk_search_button'><img src='"+imgURL+"'/></a>"
+    }
+})
+
+// Standart table, user and artist charts, albums and etc.
+var TrackList = Class.create(MusicDomElement, {
+    getTrack: function(row){
+        var track_info = row.down('.subjectCell').select('a')
+
+        // If inside artist page
+        if(this.artist)
+            return this.artist+" "+track_info[0].innerHTML
+        else
+            return track_info[0].innerHTML+" "+(track_info[1] ? track_info[1].innerHTML : "")
+    },
+
+    insertLink: function(row, track){
+        var td = row.down('td.smallmultibuttonCell, td.multibuttonCell')
+        td.innerHTML = this.generateLink(track) + td.innerHTML
+    }
+})
+manager.registerWrapper('table.tracklist, table.chart', TrackList)
+
+
+// Track page, http://www.lastfm.ru/music/Ke$ha/_/TiK+ToK
+var SingleTrack = Class.create({
+    initialize: function(element, artist){
+        var track = artist + ' '+ window.location.toString().match(/\/([\w\+]+$)/)[1]
+        
+        var link = "<a href='"+SEARCH_PATTERN.replace('%s',escape(track))+"' target='_blank' class='vk_search_button'><img src='"+imgURL+"'/></a>"
+        element.innerHTML = link + element.innerHTML
+    }
+})
+manager.registerWrapper('h1.withAlbum', SingleTrack)
+
+
+var ArtistsChart = Class.create(MusicDomElement, {
+    getTrack: function(row){
+        var track_info = row.down('.subjectCell').select('a')
+
+        return track_info[1].innerHTML+" "+(track_info[2] ? track_info[2].innerHTML : "")
+    },
+
+    insertLink: function(row, track){
+        var span = row.down('td.subjectCell span')
+        span.innerHTML = this.generateLink(track) + span.innerHTML
+    }
+})
+manager.registerWrapper('table.mediumImageChart', ArtistsChart)
+
+
+var SongsChart = Class.create(MusicDomElement, {
+    CHILD_ITEMS_PATTERN:'li',
+
+    getTrack: function(li){
+        return li.down('strong').innerHTML
+    },
+
+    insertLink: function(li, track){
+        var p = li.down('strong')        
+        p.innerHTML = this.generateLink(track) + p.innerHTML
+    }
+})
+manager.registerWrapper('ul.mediumChartWithImages', SongsChart)
+
+
+var FriendsLoved = Class.create(MusicDomElement, {
+    CHILD_ITEMS_PATTERN:'li',
+
+    getTrack: function(li){
+        var track_info = li.select('.object strong a')
+
+        return track_info[track_info.length-2].innerHTML+" "+track_info.last().innerHTML
+    },
+
+    insertLink: function(li, track){
+        var elm = li.down('.object')        
+        elm.innerHTML = this.generateLink(track) + elm.innerHTML
+    }
+})
+manager.registerWrapper('#friendsLoved', FriendsLoved)
+
+var NowPlaying = Class.create(MusicDomElement, {
+    CHILD_ITEMS_PATTERN:'li',
+
+    getTrack: function(li){
+        var track_info = li.select('.track a')
+
+        return track_info[track_info.length-2].innerHTML+" "+track_info.last().innerHTML
+    },
+
+    insertLink: function(li, track){
+        var elm = li.down('.track')        
+        elm.innerHTML = this.generateLink(track) + elm.innerHTML
+    }
+})
+manager.registerWrapper('#nowPlaying', NowPlaying)
+
+manager.wrapMusicElements()
+
+$$('.horizontalOptions').each(function(element){
+    element.observe('click', function(){
+        setTimeout(function(){manager.wrapMusicElements()}, 1000)
     })
-}
+})

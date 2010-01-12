@@ -5,6 +5,7 @@
   "content_scripts": [
     {
       "matches": ["http://*.last.fm/*", "http://*.lastfm.ru/*"],
+      "css": ["style.css"],
       "js": ["prototype.js","content_script.js"]
     }
   ]

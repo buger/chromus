@@ -1,0 +1,28 @@
+table.candyStriped.chart td.multibuttonCell, table.candyStriped.chart td.multibuttonCell  {
+    width: 50px;
+}
+
+table.candyStriped.chart .vk_search_button {
+    vertical-align:middle;
+    display: inline-block;
+}
+
+table.mediumImageChart .vk_search_button, 
+#friendsLoved .vk_search_button,
+#nowPlaying .vk_search_button {
+    vertical-align:middle;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+#nowPlaying .vk_search_button {
+    margin-right: 0px;
+}
+
+ul.mediumChartWithImages .vk_search_button {
+    vertical-align:middle;
+    display: inline;
+    margin-right: 5px;
+    padding-left: 0px;
+}
+
