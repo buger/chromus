@@ -1,0 +1,98 @@
+<html>
+<head>
+<title>Last.fm external audio search</title>
+<script type="text/javascript">
+
+// Saves options to localStorage.
+function save_options(form) {
+    for(var i=0; i< form.search_provider.length; i++){
+	if(form.search_provider[i].checked){
+	    window.localStorage["search_provider"] = form.search_provider[i].id
+	    
+	    if(form.search_provider[i].id == "other")
+		window.localStorage["search_pattern"] = form.search_pattern.value
+	    else
+		window.localStorage["search_pattern"] = form.search_provider[i].value
+	}
+    }
+
+}
+
+// Restores select box state to saved value from localStorage.
+function restore_options() {
+    var search_provider = window.localStorage["search_provider"];
+    try {
+        var search_pattern = window.localStrorage["search_pattern"];
+    } catch(e){}
+
+    if(search_provider)
+        document.getElementById(search_provider).checked = true;
+    else
+        document.getElementById('vkontakte_ru').checked = true;
+
+    if(search_provider == 'other')
+	if(search_pattern)
+	    document.getElementById('search_pattern').value = search_pattern;
+}
+
+</script>
+<style>
+#options {
+    list-style: none;
+    text-align: left;
+    padding-left: 10px;
+}
+
+#options li {
+    padding: 3px;
+    vertical-align: middle;
+}
+
+.centered {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 50%;
+  margin: auto;
+} 
+
+</style>
+</head>
+<body onload="restore_options()">
+<div class="centered">
+<form onsubmit="save_options(this); return false">
+<h3>Chouse search provider:</h3>
+<ul id="options">
+    <li>
+	<input type="radio" name="search_provider" id="vkontakte_ru" value="http://vkontakte.ru/gsearch.php?section=audio&q=%s"/>
+	<img src="http://www.vkontakte.ru/favicon.ico" />
+	<label for="vkontakte_ru">vkontakte.ru</label>
+    </li>
+    <li>
+	<input type="radio" name="search_provider" id="vk_com" value="http://vk.com/gsearch.php?section=audio&q=%s"/>
+	<img src="http://www.vk.com/images/faviconvk.ico" />
+	<label for="vk_com">vk.com</label>
+    </li>
+    <li>
+	<input type="radio" name="search_provider" id="vpleer_ru" value="http://vpleer.ru/?q=%s"/>
+	<img src="http://www.vpleer.ru/favicon.ico" />
+	<label for="vpleer_ru">vpleer.ru</label>
+    </li>
+    <li>
+	<input type="radio" name="search_provider" id="grooveshark_com" value="http://listen.grooveshark.com/#/search/songs/?query=%s"/>
+	<img src="http://www.grooveshark.com/favicon.ico" />
+	<label for="grooveshark_com">grooveshark.com</label>
+    </li>
+    <li>
+	<input type="radio" name="search_provider" id="other"/>
+	<input type="text" id="search_pattern" name="search_pattern" style="width: 300px; border: 1px solid #ccc" onfocus="document.getElementById('other').checked = true"/>
+    </li>
+</ul>
+<input type="submit" value="Save" />
+</form>
+</div>
+</body>
+</html>

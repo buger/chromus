@@ -1,0 +1,25 @@
+<html>
+    <head>
+	<script>
+	function onLoad(){
+	    chrome.extension.onRequest.addListener(
+		function(request, sender, sendResponse) {
+		    console.log(sender.tab ?
+			    "from a content script:" + sender.tab.url :
+			    "from the extension");
+		    
+		    search_pattern = window.localStorage["search_pattern"]		    
+		    
+		    if(search_pattern == undefined)
+			search_pattern = "http://vkontakte.ru/gsearch.php?section=audio&q=%s"
+		    
+		    sendResponse({search_pattern: search_pattern});
+		}
+	    );
+	}
+	</script>
+    </head>
+    <body onload="onLoad()">
+	<div>zxc</div>
+    </body>
+</html>

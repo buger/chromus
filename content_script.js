@@ -1,11 +1,12 @@
-var imgURL = chrome.extension.getURL("vk.png")
+var imgURL = chrome.extension.getURL("search.png")
+
 var SEARCH_PATTERN = 'http://vkontakte.ru/gsearch.php?section=audio&q=%s'
 
 var InjectionManager = Class.create({
     registred_wrappers: $H({}),
 
     initialize: function(){
-        if(match = window.location.toString().match(/\/music\/([^\/]+)/)){
+        if(match = window.location.toString().match(/\/music\/([^\/\?]+)/)){
             this.artist = match[1].gsub('+',' ') //$$('#catalogueHead h1').first().innerHTML
         }
     },
@@ -180,12 +181,16 @@ var ArtistsWithInfo = Class.create(MusicDomElement, {
 manager.registerWrapper('ul.artistsWithInfo', ArtistsWithInfo)
 
 
+chrome.extension.sendRequest({}, function(response) {
+    SEARCH_PATTERN = response.search_pattern;
+    manager.wrapMusicElements()
 
-manager.wrapMusicElements()
-
-// Tabs when switching in charts
-$$('.horizontalOptions').each(function(element){
-    element.observe('click', function(){
-        setTimeout(function(){manager.wrapMusicElements()}, 1000)
+    // Tabs when switching in charts
+    $$('.horizontalOptions').each(function(element){
+        element.observe('click', function(){
+            setTimeout(function(){manager.wrapMusicElements()}, 1000)
+        })
     })
-})
+});
+
+

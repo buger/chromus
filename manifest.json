@@ -1,7 +1,10 @@
 {
-  "name": "Last.fm with Vkontakte audio search",
-  "version": "0.7",
-  "description": "Integrates vkontakte.ru (vk.com) audio search into last.fm",
+  "name": "Last.fm external audio search",
+  "version": "0.9.5",
+  "description": "External audio search for last.fm. You can chouse vkontakte.ru, vk.com, vpleer.ru, grooveshark.com or set your own search string.",
+  "icons": { "128": "lastfm_128.png" },
+  "background_page": "background.html",
+  "options_page": "options.html",
   "content_scripts": [
     {
       "matches": ["http://*.last.fm/*", "http://*.lastfm.ru/*"],
