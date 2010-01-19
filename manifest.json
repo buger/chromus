@@ -1,7 +1,7 @@
 {
   "name": "Last.fm external audio search",
-  "version": "0.9.5",
-  "description": "External audio search for last.fm. You can chouse vkontakte.ru, vk.com, vpleer.ru, grooveshark.com or set your own search string.",
+  "version": "0.9.7",
+  "description": "External audio search for last.fm. You can chouse vkontakte.ru, vk.com, vpleer.ru, grooveshark.com and etc. or set your own search provider.",
   "icons": { "128": "lastfm_128.png" },
   "background_page": "background.html",
   "options_page": "options.html",
