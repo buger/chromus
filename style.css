@@ -2,29 +2,38 @@ table.candyStriped.chart td.multibuttonCell, table.candyStriped.chart td.multibu
     width: 50px;
 }
 
-table.candyStriped.chart .vk_search_button {
+table.candyStriped.chart .vk_search_button,
+table.candyStriped.chart .sm2.button {
     vertical-align:middle;
     display: inline-block;
 }
 
 table.mediumImageChart .vk_search_button, 
 #friendsLoved .vk_search_button,
+#friendsLoved .sm2_button,
 #nowPlaying .vk_search_button,
-ul.artistsWithInfo .vk_search_button {
+#nowPlaying .sm2_button,
+table.mediumImageChart .sm2_button,
+ul.artistsWithInfo .vk_search_button,
+ul.artistsWithInfo .sm2_button {
     vertical-align:middle;
     display: inline-block;
     margin-right: 5px;
 }
 
-#nowPlaying .vk_search_button,
+#nowPlaying .sm2_button,
+ul.artistsWithInfo .sm2_button,
 ul.artistsWithInfo .vk_search_button {
     margin-right: 0px;
 }
 
-ul.mediumChartWithImages .vk_search_button {
+ul.mediumChartWithImages .vk_search_button, ul.mediumChartWithImages .sm2_button {
     vertical-align:middle;
     display: inline;
     margin-right: 5px;
     padding-left: 0px;
 }
 
+td.playbuttonCell a.previewbutton {
+    visibility: hidden;
+}
