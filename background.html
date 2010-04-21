@@ -229,67 +229,64 @@ function TrimString(sInString) {
 		            search_pattern = "http://vkontakte.ru/gsearch.php?section=audio&q=%s"
 		    
 		        sendResponse({search_pattern: search_pattern});
-		    } else if (request.method == 'search') {
+		    } else if (request.method == 'search') {        
             var track = request.track //request.track.replace(/\%\d\d/g,'').replace(/\W/g,'_')
 
-            var vk_xhr = new XMLHttpRequest();
             var md5hash;
+            var url;
             
-            vk_xhr.open("GET", "http://pda.vkontakte.ru/", true)
-            vk_xhr.onreadystatechange = function(){
-                if (vk_xhr.readyState == 4){
-                    var match = vk_xhr.responseText.match(/id(\d+)/)
-                    
-                    if(!match){
-                      md5hash = MD5('327488api_id=525159count=1format=jsonmethod=audio.searchq='+track+'test_mode=1g5vuj9EWFO')
-                      var url =  'http://api.vkontakte.ru/api.php'
-                    } else {
-                      var url = "http://vkhelers.appspot.com/"
-                    }
-                            
-
-               
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("POST", url, true)                   
-                    
-                    if(match)
-                      var post_data = 'query='+encodeURIComponent(track)
-                    else
-                      var post_data = 'api_id=525159&method=audio.search&format=json&sig='+md5hash+'&test_mode=1&count=1&q='+encodeURIComponent(track)
-                    
-                    console.log("track:", track)
-                    console.log("Post data:", post_data)
-                    console.log("md5:", md5hash)
-
-                    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-                    var processResponse = function(responseDetails) {
-                            results = JSON.parse(xhr.responseText);
-                           
-                            if(results.response[1]){
-                              var first_song = results.response[1].audio
-                            
-                              if(first_song)
-                                  sendResponse({url:first_song.url})
-                              else
-                                  sendResponse({url:""})
-                            } else {
-                                  sendResponse({url:""})
-                            }
-                    }                           
-
-                   xhr.onreadystatechange = function(){
-                        if (xhr.readyState == 4){
-                            processResponse(xhr);
-                        }
-                    };
-
-                    xhr.send(post_data)                    
-                }
-            };
-            
+            var vk_xhr = new XMLHttpRequest();
+            vk_xhr.open("GET", "http://pda.vkontakte.ru", true)
             vk_xhr.send()
-		    }	
+
+            vk_xhr.onreadystatechange = function(){                    
+              console.log(vk_xhr.responseText)
+
+              if(vk_xhr.responseText.match(/id\d+/)){ //пользователь залогинен на vkontakte.ru
+                url = "http://api.vk.com/api.php"
+              } else {
+                url = "http://api.vkontakte.ru/api.php"
+              }
+            
+              md5hash = MD5('327488api_id=525159count=1format=jsonmethod=audio.searchq='+track+'test_mode=1g5vuj9EWFO')
+             
+              var data = '?api_id=525159&method=audio.search&format=json&sig='+md5hash+'&test_mode=1&count=1&q='+encodeURIComponent(track)
+              
+              var xhr = new XMLHttpRequest();
+              xhr.open("GET", url+data, true)
+/*
+              console.log("track:", track)
+              console.log("md5:", md5hash)
+              console.log("data:", data)*/
+              console.log("url:", url)
+
+              var processResponse = function(responseDetails) {
+                      console.log("response:", xhr.responseText)
+
+                      results = JSON.parse(xhr.responseText);
+                     
+                      if(results.response[1]){
+                        var first_song = results.response[1].audio
+                      
+                        if(first_song)
+                            sendResponse({url:first_song.url})
+                        else
+                            sendResponse({url:""})
+                      } else {
+                            sendResponse({url:""})
+                      }
+              }                           
+
+             xhr.onreadystatechange = function(){
+                  if (xhr.readyState == 4){
+                      processResponse(xhr);
+                  }
+              };
+
+              xhr.send()
+            }
+
+          }
 		}
 	    );
 	}

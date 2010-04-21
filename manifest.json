@@ -2,17 +2,15 @@
    "background_page": "background.html",
    "content_scripts": [ {
       "css": [ "mp3_player_button.css", "style.css" ],
-      "js": [ "prototype.js", "md5.js", "content_script.js" ],
+      "js": [ "prototype.js", "content_script.js" ],
       "matches": [ "http://*.last.fm/*", "http://*.lastfm.ru/*", "http://*.lastfm.de/*", "http://*.lastfm.es/*", "http://*.lastfm.fr/*", "http://*.lastfm.it/*", "http://*.lastfm.jp/*", "http://*.lastfm.pl/*", "http://*.lastfm.com.br/*", "http://*.lastfm.se/*", "http://*.lastfm.com.tr/*" ]
    } ],
    "description": "External audio search for last.fm (prostopleer.com,vkontakte.ru,grooveshark.com and etc.) and FREE music playing.",
    "icons": {
       "128": "lastfm_128.png"
    },
-   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDd0p6VIH7QR2tXpvuTOiQxh3/Wc1HBMXAhn0x7V/qI6TSRJBYi1H54L41e7l/eqhJK1B4lgd3/gTXufuzQ37Wp6XDA6e4eKWnK5bMTQ/a2UxyMXsgjpo8Ts5U4UVLJ550fLOYo8aUcBv3Ri1Y2H14M7LJGv+WOvXLVJpXOx61tHQIDAQAB",
    "name": "Last.fm music search and FREE music playing",
    "options_page": "options.html",
-   "permissions": [ http://vkhelpers.appspot.com/", "http://api.vkontakte.ru/","http://pda.vkontakte.ru/" ],
-   "update_url": "http://clients2.google.com/service/update2/crx",
-   "version": "1.0.4"
+   "permissions": [ "http://api.vkontakte.ru/", "http://api.vk.com/", "http://pda.vkontakte.ru/" ],  
+   "version": "1.0.6"
 }
