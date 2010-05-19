@@ -1,0 +1,328 @@
+<html>
+    <head>
+    <link rel="stylesheet" href="mp3_player_button.css" type="text/css">
+    <style>
+        body { padding:0px; margin: 0px; font-size: 12px;}
+
+        body {
+            background: -webkit-gradient(
+                linear,
+                left bottom,
+                left top,
+                color-stop(0.08, rgb(156,156,156)),
+                color-stop(0.96, rgb(232,232,232)),
+                color-stop(1, rgb(255,255,255))                
+            )
+        }
+        
+        ul { list-style: none;}
+        li,ul { margin:0px; padding:0px; }
+        
+        div.wrapper {
+            overflow-x: hidden; 
+            max-height: 400px; 
+            min-width: 400px; 
+            margin-top: 30px; 
+            padding-top: 0px;
+
+            font-family: "Lucida Grande",Arial,Helvetica,Verdana,sans-serif;
+
+            border-top: 1px solid #ccc;
+        }
+        
+        ul#tracks_container li {
+            padding: 3px;
+            padding-top: 5px;
+            padding-bottom: 2px;
+            background: #fff;
+            vertical-align: middle;
+            text-overflow:ellipsis;
+            overflow:hidden;
+        }
+        
+        ul#tracks_container li.empty {
+            font-size: 12px;
+            text-align: center;
+            color: #696969;
+        }
+        
+        ul#tracks_container li span.number {
+            color: #696969;
+            padding-left: 10px;
+            width: 13px;
+            display: inline-block;
+            text-align: right;
+            font-size: 12px;
+        }
+
+        ul#tracks_container li a.sm2_button {
+            margin-right: 10px;
+            margin-left: 10px;    
+            margin-top: 1px;
+        }
+        
+        ul#tracks_container li a {
+            text-decoration: none;
+            color: #333;
+            font-size: 12px;
+            font-family: Arial;
+        }
+        
+        ul#tracks_container li a:hover {
+            color: #0187C5;
+            text-decoration: underline;
+        }
+        
+        ul#tracks_container li:nth-child(odd) {
+            background: #EBEBEB;
+        }
+
+        ul#tracks_container li:hover {
+            background: #D0E4F0;
+        }
+        
+        ul#tracks_container li a.sm2_button {
+            margin-bottom: 3px;
+        }
+                
+
+        #repeat, #stop_after_playing, #scrobbling {
+            position: absolute;
+            margin-right: 25px;
+            cursor: pointer;
+            font-size: 15px;
+            top: 5px;
+            opacity: 0.2;
+            font-family: Verdana;
+        }
+        
+        #repeat { 
+            left: 8px;
+            
+            background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAuNJREFUeNp0k01IVFEUx8/7mtHUSWdqplJKGZwxQ1s8w8BahEVDGmJuNAjCFgNFELWrRZuhheRKWgzFLGojZhQUkaZgYFHkRGZ+0aQGYmozOvnmzbzv1z3OvJSgB3/uPfec8zv33nMfVd8zB7a8PBfNMJ0A0EhUQrRONGzoesQ0zQTLcfDvR3zw5tIeYMncpWvavTO+/Pr2mkLPPgdrX9rQ5N6JlP/5lMAT8BUSk4D/fKymqp1NvoL66w3F5V2D8zAym4CuNn8+2qqkwMtv6X6WZYu25awRDRCFiVKsJIqNbbUHPLoBcONkBQxO/ARVMwHtttqdnlfTiXjL8XLeypZVXfk6J3gXltJodrMZMVXiLrLZFT0bIEkSyJoBaOP68nLcvBMeiVqAlhM1fn+Zoyz24/dpBNBSSlz/vpqWFVIRhQAFAWSO68S/Rul6HZgmKvhseHzWNEybKstOBNIZURx+8HpmRVJNuN33EWRZhvtDk4A2rqNfTSaBoSi8+ahpGJDJaEAAfy8x0jcaa5ZlBS6eqvZca+bti3FBvvXw/cqTt7EPDMdFStxuYBkGkrmkdEoEhex0E7C7tDRB2sjNi5oeuNn/iVTgrHfAMEzE4XIlGJYNkPfQamPooKSoIAqpLYCSyeBo81V7vRPz60lDFOtIMKQFARxOJxBIQJWkEAaZmrYpQdEglwc0kojWVJpR9voO+PMLCsaIwk6PB7AyOWvofMcRHuNI8hjGyCynYE52B9lzDYyPL3grD1eWCVX7+c+Ph6yuhTouN/GjyxJ4mxp4sjHYYajK1JfYIsnDxwSU40Iv6Y5ZaGhakNjYWydFUVGgqCBx4NlDx66286M9vdHtL5Fm2fDGo/YUZZXiDrVu/Si/ZkBfnQbGfRDoqrMBapc/ewezL+qsGHXyKRYGC4Aj/ljYATteam7cnNPV545CcUWj8a77LnaRKI6dIgB9O4DOCUFMTtbc8plYPAeRCMD4I8AA7IaNrwtUyvYAAAAASUVORK5CYII%3D);
+            padding-left: 18px;
+            background-repeat: no-repeat;
+            background-position: 0px 2px;
+        }
+
+        #stop_after_playing { 
+            left: 80px; 
+            background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAQ9JREFUeNrEU0FOwzAQHOMAUVqO5cIz8gFuvIEjJ77DFS6ceQMXPpA/tAdEKRJSm5DYu8bGTQpqhB0h5YAly9Z6dnbsWQvnHMaMA4wcyffm/H5165f8DznF09Xp9S8Cw5xfXpzlzP0r7d8wSQQeHp/DClhr1PUn1msTLT2dyhYXJCCloJTBZkM/h8wMrQnGMKy1mM0mLS5IoJsGRNaTMKqqQlmWPlmj7xK1uDBBXaNqFOYvS5Cv3Hkke+DGdriogsUHYZmkPpqGH0EeDSt4lRneJofRR6RjOaxglWR4T+OdSZ6bYwq29jgpcZIB1u0mutXt+oEF4jb6RirmN3eDLbg1WAhR7MfEv3+m0QRfAgwAs8CYARaPXuMAAAAASUVORK5CYII=);
+            padding-left: 18px;
+            background-repeat: no-repeat;
+            background-position: 0px 2px;
+        } 
+    
+        #scrobbling {
+            margin-right: 0px;
+            right: 5px;
+            background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAABx0RVh0U29mdHdhcmUAQWRvYmUgRmlyZXdvcmtzIENTNAay06AAAAAWdEVYdENyZWF0aW9uIFRpbWUAMTIvMTIvMDjcWp/eAAACrklEQVQ4jY2TTWhUVxiGn3Pm3juZGWcmiYrE6MTEaBKKFIv9E2RKoWJDKy1ol1247qKbUBBsKrSbVjBUqKWLosuCXQhCbRbB3yykpVBjm4hWbZz8mTTOODPnzr33nM9FKdhNmwfe5fvybh713Qs9m/a0ksubYzugFGum4qVmfkp7ZfX7UNd0d7E44L/6Esr3YA0jEiXEkzeo1KrTarFvo2QOvI4sVZDqYxD3322l0Bs2QftGzI8TeMYJvhOS5RUQWdv/uTn84gaME7zQCbkooh7FNKygukuIaZJaXSaX0vhakTihbh2uZzs4i569T2crInSC17KOmgmJ97/L4MgoXjYHwJO7t/nj+Aj+9E3izSX6vzxDrrQNgGZllsoXn9CyDm2cEG7pY2D0cxauX+FyeTeT772J6BSDY9+yIB4dRz5AZ7KM79/LtcMHUFrTNrgL4wQdOkf2lTJiLbc/HqGw8ojg1k2mjh8l3bmewluHcCj8fIF1zz1PODfPtdf28Nf5c4TO4bWs4Hd0Ej2pkSw9QjyNApqTV2kszLNl+CA/f/QhxZ1D7D15GoAH579n8cw3tKzgGedo1aqk2zswfkAjDAGInePBDxcYev8INnFcfWMfQU8v64ff5sWjo8T1OvNXrqNDJyxOTACw49hnzOmAavc2eo99ym9fncLGES+PnUZKvazeucO9ixexUYQuFAmdwNl8m1zYsVV+OXlCXJLIP6zcmpJz/Vtl/PA7Ur1/T56lNvunjB8clrP5NlFf59JS6mynXqth8wWyfdsxD2eRlWXSKAQIEdr6d6JzObCW5tSvrMsXmF99jBrLBNKVzRAkCS5JcIDm30rIMwHwfB+jUywZg1dzbkYaZqArHZAJgv91yQHGCZVGE4PMeKtOyi2xl6qJGVybCH8Tw0xTUX4KVyJgAt7qqwMAAAAASUVORK5CYII%3D);
+            padding-left: 22px;
+            background-repeat: no-repeat;
+            vertical-align: middle;
+        }
+
+        #repeat:hover, #stop_after_playing:hover, #scrobbling:hover {
+            text-decoration: underline;
+        }
+        
+        #repeat.active, #stop_after_playing.active, #scrobbling.active {
+            color: #000;
+            opacity: 1;
+        }
+        
+        #connect_lastfm {
+            position: absolute;
+            top: 8px;
+            right: 5px;            
+            font-size: 15px;
+        }        
+    </style>
+    <script src="utils.js"></script>
+    <script src="scrobbler.js"></script>
+    <script>
+    var port
+    var current_track
+    var playlist
+    
+    function updatePlaylist(){
+        var container = document.getElementById('tracks_container')        
+        var html = ""
+        var state
+        
+        for(var i=0; i<playlist.length; i++){
+            console.log("Item:", playlist[i])                                
+        
+            if(current_track && current_track.index == i)                
+                state = current_track.paused ? "paused" : "playing"
+            else
+                state = ""
+        
+            html += "<li>"+
+                        "<span class='number'>"+(i+1)+"</span>"+
+                        "<a id='ex_button_"+playlist[i].index+"' data-index-number='"+playlist[i].index+"' href='javascript:;' onclick='togglePlaying(this)' class='sm2_button "+state+"'></a>"+
+                        "<span class='track'>"+
+                            "<a target='_blank' href='http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"'>"+playlist[i].artist + "</a>" + 
+                            ' &ndash; '+ 
+                            "<a target='_blank' href=\"http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"/_/"+playlist[i].song.replace(/\s/g,'+')+"\">"+playlist[i].song+"</a>"+
+                        "</span>"+
+                    "</li>" 
+        }
+        
+        if(playlist.length == 0)
+            html = "<li class='empty'>No tracks selected</li>"
+
+        container.innerHTML = html
+                
+        if(current_track && current_track.index > 16)
+            container.parentNode.scrollTop = document.querySelector('a.playing').parentNode.offsetTop-30
+    }
+    
+    function initializePort(){
+        port = chrome.extension.connect({name: "popup"})
+        
+        port.onMessage.addListener(function(msg){
+            console.log("Message:", msg)
+
+            if(msg.method == 'trackInfo'){
+                console.log("Track info:", msg)
+            
+                playlist = msg.playlist
+                current_track = msg.track
+                
+                if(current_track)
+                    current_track.paused = msg.paused
+                
+                if(msg.repeat)
+                    document.getElementById('repeat').className = "active"
+                    
+                if(msg.stop_after_playing)
+                    document.getElementById('stop_after_playing').className = "active"
+
+                if(msg.scrobbling)
+                    document.getElementById('scrobbling').className = "active"
+                
+                console.log("Current track:", current_track)
+                
+                if(msg.playlist)
+                    updatePlaylist()
+                
+                if(!msg.username)
+                    document.getElementById('connect_lastfm').style.display = ''
+                else
+                    document.getElementById('scrobbling').style.display = ''
+                    
+            } else if(msg.method == 'readyToPlay'){
+                stopCurrentTrack()
+
+                var button = document.getElementById("ex_button_"+msg.index)
+
+                if(msg.error){
+                    button.className = "sm2_button disabled"
+                    button.title = msg.error
+                } else {
+                    button.className = "sm2_button playing"
+                }                
+
+                current_track = playlist[msg.index]                
+
+                console.log(current_track)
+            } else if(msg.method == "stop") {
+                stopCurrentTrack()
+
+            } else if(msg.method == "loading") {
+                var button = document.getElementById("ex_button_"+msg.index)
+                button.className = "sm2_button loading"                
+            }
+        })
+    }
+
+    function toggleRepeat(event){
+        var link = event.target
+        
+        if(link.className.match(/active/)){
+            link.className = ''
+        } else {
+            link.className = 'active'
+        }
+        
+        port.postMessage({method:'repeat', state:link.className.match(/active/)})
+    }    
+    
+    
+    function toggleStopAfterPlaying(event){
+        var link = event.target
+        
+        if(link.className.match(/active/)){
+            link.className = ''
+        } else {
+            link.className = 'active'
+        }
+
+        port.postMessage({method:'stop_after_playing', state:link.className.match(/active/)})
+    }
+
+    function toggleScrobbling(event){
+        var link = event.target
+        
+        if(link.className.match(/active/)){
+            link.className = ''
+        } else {
+            link.className = 'active'
+        }
+
+        port.postMessage({method:'scrobbling', state:link.className.match(/active/)})
+    }   
+
+    
+    function onLoad(){
+        initializePort()
+        port.postMessage({method:'getTrackInfo'})
+        
+        document.getElementById('repeat').addEventListener('click', toggleRepeat, false)
+        document.getElementById('stop_after_playing').addEventListener('click', toggleStopAfterPlaying, false)
+        document.getElementById('scrobbling').addEventListener('click', toggleScrobbling, false)
+        document.getElementById('connect_lastfm').addEventListener('click', function(){new Scrobbler().auth()}, false)
+    }
+
+    function stopCurrentTrack(){
+        var current_playing = document.querySelector("a.sm2_button.playing, a.sm2_button.paused, a.sm2_button.loading")
+
+        if(current_playing)
+            current_playing.className = "sm2_button"
+    }    
+    
+    function togglePlaying(link){
+        if(link.className.match(/disabled/))
+            return false
+    
+        if(link.className.match('playing')){
+            port.postMessage({method: 'pause'})
+            link.className = "sm2_button paused"
+        } else {        
+            if(link.className.match(/paused/)){
+                port.postMessage({method: 'play', track: current_track})
+                link.className = "sm2_button playing"
+            } else {
+                stopCurrentTrack()
+            
+                link.className = "sm2_button loading"                        
+                port.postMessage({method: 'play', track: playlist[parseInt(link.getAttribute('data-index-number'))]})
+            }
+        }
+    }    
+
+    </script>
+    </head>    
+    <body onload="onLoad()">
+        <div id='repeat'>repeat</div>
+        <div id='stop_after_playing'>stop after playing</div>
+        <div id='scrobbling' style='display:none'>scrobbling</div>
+        <a href="javascript:;" id='connect_lastfm' style="display:none">Want scrobbling?</a>
+
+        <div class="wrapper" style="">
+            <ul style="white-space:nowrap" id="tracks_container">            
+            </ul>
+        </div>
+    </body>
+</html>

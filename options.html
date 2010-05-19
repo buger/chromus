@@ -1,7 +1,13 @@
 <html>
 <head>
 <title>Last.fm external audio search</title>
+<script src="utils.js"></script>
+<script src="md5.js"></script>
+<script src="scrobbler.js"></script>
+
 <script type="text/javascript">
+    var scrobbler = chrome.extension.getBackgroundPage().scrobbler
+
 
 // Saves options to localStorage.
 function save_options(form) {
@@ -16,6 +22,7 @@ function save_options(form) {
 	}
     }
 
+    window.location.reload()
 }
 
 // Restores select box state to saved value from localStorage.
@@ -30,13 +37,43 @@ function restore_options() {
     else
         document.getElementById('vkontakte_ru').checked = true;
 
-    if(search_provider == 'other')
-	if(search_pattern)
-	    document.getElementById('search_pattern').value = search_pattern;
+    if(search_provider == 'other' && search_pattern){
+        document.getElementById('search_pattern').value = search_pattern;        
+    }
+
+    if(!window.localStorage['lastfm_token']){
+        document.getElementById('not_logged').style.display = ''    
+    }
+}
+
+function showError(msg){
+    document.getElementById("error").innerHTML = msg
+    document.getElementById("error").style.display = "block"
+}
+
+function lastfm_logout(){
+  delete window.localStorage["lastfm_token"]    
+  var port = chrome.extension.connect({name:"options"})
+  port.postMessage({method:"logout"})
+
+  window.location.reload()
+}
+
+function onLoad(){
+    console.log("Token:", window.localStorage['lastfm_token'])
+    
+    if(scrobbler._username){
+        document.getElementById("logged").style.display = ''
+        document.getElementById("username_display").innerHTML = scrobbler._username
+    }
 }
 
 </script>
 <style>
+body {
+    background: #e5f5ff;
+}
+
 #options {
     list-style: none;
     text-align: left;
@@ -54,16 +91,35 @@ function restore_options() {
   right: 0;
   bottom: 0;
   left: 0;
-  width: 50%;
-  height: 50%;
+  width: 700px;
+  height: 300px;
   margin: auto;
+
+background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    color-stop(0.1, rgb(194,194,194)),
+    color-stop(0.58, rgb(237,237,237))
+);
+    border: 1px solid #ccc;    
+    border-radius: 5px;
+    padding: 5px 5px 5px 15px;
 } 
 
 </style>
 </head>
-<body onload="restore_options()">
+<body onload="onLoad()">
 <div class="centered">
-<form onsubmit="save_options(this); return false">
+<form onsubmit="this.submit.disabled = true; save_options(this); return false">
+<div style="float: left; height: 500px; width: 250px; background: url(lastfm_128.png) top center no-repeat; padding-top: 130px;">
+    <div id="error" style="display: none">
+    </div>
+    <div id="logged" style="display: none; font-size: 20px; font-weight: bold;">Logged as <a id="username_display" href="javascript:;" target="_blank" onclick="this.href = 'http://last.fm/user/'+this.innerHTML" style="color:#0187C5"></a>
+    <br/><a href="javascript:lastfm_logout()" style="font-size: 12px;" target="_blank">Logout</a></div>    
+    <div id="not_logged" style="display: none; text-align: center"><a href="javascript:;" onclick="scrobbler.auth(); window.close()" style="color:#0187C5; font-size: 20px;">Login to last.fm</a></div>    
+</div>
+<div style="float: left; margin-left: 90px">
 <h3>Choose search provider:</h3>
 <ul id="options">
     <li>
@@ -77,8 +133,7 @@ function restore_options() {
       <label for="vk_com">vk.com</label>
     </li>
     <li>
-      <input type="radio" name="search_provider" id="vpleer_ru" value="http://vpleer.ru/?q=%s"/>
-      <img src="http://www.vpleer.ru/favicon.ico" />
+      <input type="radio" name="search_provider" id="vpleer_ru" value="http://vpleer.ru/?q=%s"/>      
       <label for="vpleer_ru">vpleer.ru</label>
     </li>
     <li>
@@ -98,8 +153,14 @@ function restore_options() {
       <span style="margin-left: 25px; color: #666; font-size: 12px">http://mysite.com/search?q=%s</span>
     </li>
 </ul>
-<input type="submit" value="Save" />
-</form>
+<input type="submit" value="Save" name="submit" onclick="this.value = 'Saving...';"/>
 </div>
+</form>
+<div style="clear: both">&nbsp;</div>
+</div>
+
+<script>
+	restore_options()
+</script>
 </body>
 </html>

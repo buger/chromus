@@ -68,9 +68,6 @@ a.sm2_button {
  overflow:hidden; /* don't draw inner link text */
  vertical-align:middle;
  /* and, a bit of round-ness for the cool browsers. */
- -moz-border-radius:13px;
- -webkit-border-radius:13px;
- -opera-border-radius:13px;
  border-radius:13px;
  margin-top:-1px; /* vertical align tweak */
  /* safari 3.1+ fun (/W3 working draft extension, TBD.) */
@@ -83,28 +80,40 @@ a.sm2_button:focus {
 }
 
 a.sm2_button,
-a.sm2_button.sm2_paused:hover {
+a.sm2_button.paused:hover {
  background-color:#3399cc;
  /* where possible, use data: and skip the HTTP request. Fancy-pants. Would use short-hand background: for above, but IE 8 doesn't override background-image. */
  background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAKCAYAAABmBXS+AAAAbklEQVQY02NgQAL//v1jZMAF/v//vwuIs9HEUBUBTbj4HwIeA3EGVsVAxtn/qOAVUGM8uknIiv4hsV8A5ZKxKfoLVvnvHwifAzLtMKwDSQLBVSBti27dJajkcSD2RJODO3wtkOOMz/tMSJJYAxMA5dmsL0IfubQAAAAASUVORK5CYII=);
+
+
  background-repeat:no-repeat;
  background-position:3px 50%;
  background-size: 60%;
 }
 
+a.sm2_button.loading {
+ background-image:url(data:image/gif;base64,R0lGODlhEAAQAPIAADOZzP///2Kw18nj8f///6/X6pbK5InD4SH+GkNyZWF0ZWQgd2l0aCBhamF4bG9hZC5pbmZvACH5BAAKAAAAIf8LTkVUU0NBUEUyLjADAQAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQACgABACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkEAAoAAgAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkEAAoAAwAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkEAAoABAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQACgAFACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQACgAGACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAAKAAcALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA%3D%3D);
+ background-size: 100%; 
+ background-position:0px;
+}
+
 a.sm2_button:hover,
-a.sm2_button.sm2_playing,
-a.sm2_button.sm2_playing:hover {
+a.sm2_button.playing,
+a.sm2_button.playing:hover {
  background-color:#cc3333;
 }
 
-a.sm2_button.sm2_paused,
-a.sm2_button.sm2_paused:hover {
+a.sm2_button.paused,
+a.sm2_button.paused:hover {
  background-color:#666;
 }
 
-a.sm2_button.sm2_paused.disabled,
-a.sm2_button.sm2_paused.disabled:hover {
+a.sm2_button.disabled,
+a.sm2_button.disabled:hover {
  background-color:#ccc;
+}
+
+a.sm2_button.playing {
+    background-image:url(data:image/gif;base64,R0lGODlhEAAQAIAAAP///////yH+EUNyZWF0ZWQgd2l0aCBHSU1QACH5BAEKAAEALAAAAAAQABAAAAIkjI+pu+DogIrwJXpwldnuf3mB1nEGeYroqIqpycIvSMfMjTMFADs%3D);
 }
 

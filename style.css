@@ -35,5 +35,27 @@ ul.mediumChartWithImages .vk_search_button, ul.mediumChartWithImages .sm2_button
 }
 
 td.playbuttonCell a.previewbutton {
-    visibility: hidden;
+}
+
+a.vk_search_button {
+    position:relative;
+    display:inline-block; /* If you worry old browser bugs, Firefox 2 might not like this and may need -moz-inline-box instead. :D */
+    width:16px;
+    height:14px;
+    text-indent:-9999px; /* don't show link text */
+    overflow:hidden; /* don't draw inner link text */
+    vertical-align:middle;
+    margin-top:-1px; /* vertical align tweak */
+    /* safari 3.1+ fun (/W3 working draft extension, TBD.) */
+    -webkit-transition-property: hover;
+    -webkit-transition: background-color 0.15s ease-in-out;
+
+    background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAABIAAAASABGyWs+AAACwklEQVQ4y32T20sUYRjGn2/mm9POtoepNNzKcDXMA4XrAbS9ECq6iOwPMLQU+hP6H7wIiqSLkKALrW4CDQzsxkSEVlcSXRfMw8XYuptou7rMzuzMfF2k5akeeHgvHvjxvg+8BHt6+fwplpeX5Su19ZWKqpZYZmF7ZWlpqfN+526kpRXb2SxOEnevowOMMfCK2tB2++6rYFXdRxoKvz9VUTMaab/1bvLLzI2dbJY86Oo6EUBGR0exrutNocs1rx1PoNolHBgAlwE8GMRCbiP1bfFRd3f3cGtrK6ampg4BeImDpzna/sRbej5aqvnh98jwKtKfyUmKl4JVDbzoHw5XVeUnJiYOAWhDU3O9JxC8fk7zQxYFOC4DA4NpO7AdF7IggGmn6y+FK5sDgcDI0ROoIEohURR9DgNcxsAA5M0idgsWHJeB5ziIkiypXu+FinD4WAc0l8tlieuYluPKlmECABgDFFEAASDyHHaNrLu7k8vqun4csLAwP1939VqytCzUwvEUbL9dMFACEMagb2b01dW16VRq4xiAj01P5z+MjBia33ez5OwZSRUFSDwHWeBBCbC2soy3Q4Nbn8fHh9fX178Hg0Gk0+m/gLm5OXwaG1sMBgI/XMeu5Qn8jl0kP7e3WDKxmHkzNGgmEokySmmjbdsxVVU3fD4fMpnM3qYAqqurkUwmSW9PT+XF8vKooigh0zQ3dV2fjMfjlYqiPKOUhmzbjluW1SvL8mw6nUYikfgN+JcikQhmZmbQ1tbWIUlSP6U0VCwW44VCodfj8czquv5/AAA0NjYiFoshGo12KIrSLwhCyLKsuGEYD3me/7oPIAB4AMIBUwDcXu4CKEYikTuapvWJoliaz+cfa5rWx+8/FQAJgALAA8B7wOpeJqZSqSW/37/IcdyqYRgDqqrmjp5ATvC+GACXEOJyHEcAMMdx8As6nhlfAosvgwAAACJ6VFh0U29mdHdhcmUAAHjaKy8v18vMyy5OTixI1csvSgcANtgGWBBTylwAAAAASUVORK5CYII%3D);
+    background-repeat:no-repeat;
+    background-position:0px 50%;
+    background-size: 90%;
+}
+
+table.tracklist .smallmultibuttonCell {
+    width: 50px !important;
 }
