@@ -149,7 +149,6 @@ if(window.location.toString().match(/yandex.ru\/white\.html/)){
         document.forms.web.text.style.display = 'none'
         
         port.postMessage({method:'auth_token', token: match[1]})
-        //window.location = chrome.extension.getURL("options.html")
     }
 }
 

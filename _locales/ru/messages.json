@@ -1,0 +1,10 @@
+{
+    "repeat": {    
+        "message": "повторять",
+        "description": "Кнопка репита"
+    },
+
+    "plugin_name": {
+        "message": "Бесплатный музыкальный плеер для Last.fm"
+    }
+}

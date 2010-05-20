@@ -11,9 +11,8 @@
     var repeat = false
     var stop_after_playing = false
     
-    var audio_player = new HTML5AudioPlayer()
-    var scrobbler = new Scrobbler(window.localStorage["lastfm_token"])
-    scrobbler.getSession()
+    var audio_player = new HTML5AudioPlayer()    
+    var scrobbler = new Scrobbler(window.localStorage["lastfm_session"], window.localStorage["lastfm_username"])
     
     chrome.browserAction.setBadgeBackgroundColor({color:[51,153,204,255]}) //blue
     
@@ -156,15 +155,21 @@
                 console.log(msg.method, msg)
 
                 if(msg.method == "auth_token"){
-                    window.localStorage['lastfm_token'] = msg.token
+                    scrobbler.getSession(msg.token, function(response){
+                        console.log("Getting session:", response)
 
-                    scrobbler = new Scrobbler(msg.token)
-                    scrobbler.getSession()
+                        if(response.session){
+                            window.localStorage['lastfm_session'] = response.session
+                            window.localStorage['lastfm_username'] = response.username
+                        }
+                        
+                        chrome.tabs.update(port.tab.id, {url:chrome.extension.getURL("options.html")})
+                    })
 
-                    chrome.tabs.update(port.tab.id, {url:chrome.extension.getURL("options.html")})
 
                 } else if(msg.method == "logout") {
-                    scrobbler = new Scrobbler()                    
+                    scrobbler._username = null
+                    scrobbler._session_key = null
 
                 } else if(msg.method == "getTrackInfo"){                    
                     port.postMessage({

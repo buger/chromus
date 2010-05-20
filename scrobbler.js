@@ -1,22 +1,23 @@
-var Scrobbler = function(token){
+var Scrobbler = function(session_key, username){
     this._api_key = "170909e77e67705570080196aca5040b"
     this._secret = "516a97ba6f832d9184ae5b32c231a3af"
-    this._token = token
+    this._session_key = session_key
+    this._username = username
     this.scrobbling  = true
 }
 
-Scrobbler.prototype.getSession = function(callback){
-    if(!this._token)
+Scrobbler.prototype.getSession = function(token, callback){
+    if(!token)
         return false
 
     console.log("Getting session")
 
-    var signature = MD5("api_key"+this._api_key+"methodauth.getSessiontoken"+this._token+this._secret)
+    var signature = MD5("api_key"+this._api_key+"methodauth.getSessiontoken"+token+this._secret)
 
     var scrobbler = this
 
     xhrRequest("http://ws.audioscrobbler.com/2.0/", "GET", 
-               "method=auth.getSession&api_key="+this._api_key+"&api_sig="+signature+"&token="+this._token, 
+               "method=auth.getSession&api_key="+this._api_key+"&api_sig="+signature+"&token="+token, 
         function(xhr){
             console.log("Session info:", xhr.responseText)
 
@@ -28,7 +29,7 @@ Scrobbler.prototype.getSession = function(callback){
                 scrobbler._username = xhr.responseText.match(/<name>(.*)<\/name>/)[1]
 
                 if(callback)
-                    callback({username:scrobbler._username})
+                    callback({username:scrobbler._username, session: scrobbler._session_key})                    
             }            
         }
     )
@@ -81,7 +82,7 @@ Scrobbler.prototype.setNowPlaying = function(artist, track, duration, callback){
         return false
 
     if(!this._username)
-        return false
+        return 
 
     if(!callback)
         callback = function(){}

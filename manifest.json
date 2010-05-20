@@ -17,5 +17,6 @@
    "name": "Last.fm free music player",
    "options_page": "options.html",
    "permissions": ["notifications", "tabs", "http://*/"],  
-   "version": "2.0"
+   "version": "2.0",
+   "default_locale": "en"
 }
