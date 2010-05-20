@@ -98,9 +98,28 @@
 
     
     var not_found_in_row = 0
-    
+
+    function notification()
+    {
+      if(window.webkitNotifications) // If we have the Notification API
+      {
+        var nc = window.webkitNotifications; // Set the API to nc for easy access
+        if(nc.checkPermission()) // 1 = Not Allowed, 2 = Denied, 0 = Allowed
+        {
+          console.log("Requesting notifications")
+
+          nc.requestPermission(showNotification); // Request Permission with a callback to myNotification();
+        } 
+      }
+    }
+    notification()    
+
     function showNotification(){
-        scrobbler.artistInfo(current_track.artist, function(response){
+        var nc = window.webkitNotifications; // Set the API to nc for easy access
+        if(nc.checkPermission())
+          return false
+
+        scrobbler.artistInfo(current_track.artist, function(response){            
             var notification = window.webkitNotifications.createNotification(response.image, current_track.song, current_track.artist)
 
             notification.show()
@@ -253,5 +272,6 @@
     </script>
     </head>
     <body onload="onLoad()">
+      <div id="vk_search"></div>
     </body>
 </html>

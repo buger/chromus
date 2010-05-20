@@ -1,22 +1,22 @@
 {
-   "background_page": "background.html",
+   "name": "Last.fm free music player",
+   "version": "2.0.10",
+   "description": "!! Yes it plays music! Browser as a music player? Why not? Free music player Google Chrome with Last.fm integration.",
+   "icons": {
+      "128": "lastfm_128.png"
+   },
+   "default_locale": "en",
+   "browser_action": {
+     "default_icon": "lastfm_128.png", 
+     "default_title": "Last.fm free music player",      
+     "popup": "popup.html"        
+   },
    "content_scripts": [ {
       "css": [ "mp3_player_button.css", "style.css" ],
       "js": [ "utils.js", "manager.js", "content_script.js" ],
       "matches": [ "http://*.last.fm/*", "http://*.lastfm.ru/*","http://*.lastfm.pt/*",  "http://*.lastfm.de/*", "http://*.lastfm.es/*", "http://*.lastfm.fr/*", "http://*.lastfm.it/*", "http://*.lastfm.jp/*", "http://*.lastfm.pl/*", "http://*.lastfm.com.br/*", "http://*.lastfm.se/*", "http://*.lastfm.com.tr/*", "http://yandex.ru/white*"]
    } ],
-   "description": "External audio search for last.fm (prostopleer.com,vkontakte.ru,grooveshark.com and etc.) and FREE music playing.",
-   "browser_action": {
-     "default_icon": "lastfm_128.png", // required
-     "default_title": "Last.fm free music player",      // optional; shown in tooltip
-     "popup": "popup.html"        // optional
-   },
-   "icons": {
-      "128": "lastfm_128.png"
-   },
-   "name": "Last.fm free music player",
+   "background_page": "background.html",
    "options_page": "options.html",
-   "permissions": ["notifications", "tabs", "http://*/"],  
-   "version": "2.0",
-   "default_locale": "en"
+   "permissions": ["tabs", "http://*/"]
 }
