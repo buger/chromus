@@ -32,11 +32,12 @@ var VK = {
                 var url = "http://api.vk.com/api.php"
 
                 xhrRequest("http://vkontakte.ru/gsearch.php?section=audio&name=1&ajax=1", "POST", "c%5Bq%5D="+encodeURIComponent(track)+"&ra=1&c%5Bsection%5D=audio", function(xhr){
-                  response = JSON.parse(xhr.responseText)
-                  
-                  var container = document.getElementById('vk_search')
-                  container.innerHTML = response.rows
 
+                  console.log("Response:", xhr.responseText)
+//                  response = JSON.parse(xhr.responseText)
+                  var container = document.getElementById('vk_search')
+                  container.innerHTML = xhr.responseText.match(/rows":"(.*)",/)[1].replace(/\n/g,'').replace(/\t/g,'').replace(/\\/g,'')
+                  
                   var audio_data = []
                   var audio_rows = container.querySelectorAll('div.audioRow')
                   
