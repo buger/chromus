@@ -1,9 +1,7 @@
 <html>
 <head>
 <title>Last.fm external audio search</title>
-<script src="utils.js"></script>
-<script src="md5.js"></script>
-<script src="scrobbler.js"></script>
+<script src="javascript/utils.js"></script>
 
 <script type="text/javascript">
     var scrobbler = chrome.extension.getBackgroundPage().scrobbler
@@ -54,6 +52,7 @@ function showError(msg){
 function lastfm_logout(){
   delete window.localStorage["lastfm_session"]    
   delete window.localStorage["lastfm_username"]
+  
   scrobbler._username = null
   scrobbler._session_key = null
 

@@ -1,13 +1,12 @@
 <html>
     <head>
-    <script src="md5.js"></script>
-    <script src="utils.js"></script>
-    <script src="audio_player.js"></script>
-    <script src="oauth/chrome_ex_oauth.js"></script>
-    <script src="scrobbler.js"></script>
-    <script src="vk.js"></script>
+    <script src="javascript/md5.js"></script>
+    <script src="javascript/utils.js"></script>
+    <script src="javascript/audio_player.js"></script>
+    <script src="javascript/scrobbler.js"></script>
+    <script src="javascript/vk.js"></script>
     <script> 
-    
+   	
     var repeat = false
     var stop_after_playing = false
     
@@ -19,6 +18,8 @@
     var current_track
     var playlist = []
 
+
+    // Called when ready to play
     audio_player.options.canPlayThrough = function(){
         console.log("Setting now playing:", current_track)
 
@@ -114,6 +115,7 @@
     }
     notification()    
 
+    // TODO: Notifications disabled. They don't work in Chrome 4.
     function showNotification(){
         var nc = window.webkitNotifications; // Set the API to nc for easy access
         if(nc.checkPermission())

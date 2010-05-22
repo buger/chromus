@@ -1,7 +1,7 @@
 {
    "name": "Last.fm free music player",
-   "version": "2.0.10",
-   "description": "!! Yes it plays music! Browser as a music player? Why not? Free music player Google Chrome with Last.fm integration.",
+   "version": "2.0.11",
+   "description": "!! Yes it plays music! Browser as a music player? Why not? Free music player for Google Chrome with Last.fm integration.",
    "icons": {
       "128": "lastfm_128.png"
    },
@@ -12,10 +12,14 @@
      "popup": "popup.html"        
    },
    "content_scripts": [ {
-      "css": [ "mp3_player_button.css", "style.css" ],
-      "js": [ "utils.js", "manager.js", "content_script.js" ],
-      "matches": [ "http://*.last.fm/*", "http://*.lastfm.ru/*","http://*.lastfm.pt/*",  "http://*.lastfm.de/*", "http://*.lastfm.es/*", "http://*.lastfm.fr/*", "http://*.lastfm.it/*", "http://*.lastfm.jp/*", "http://*.lastfm.pl/*", "http://*.lastfm.com.br/*", "http://*.lastfm.se/*", "http://*.lastfm.com.tr/*", "http://yandex.ru/white*"]
-   } ],
+      "css": [ "css/mp3_player_button.css", "css/style.css" ],
+      "js": [ "javascript/utils.js", "javascript/manager.js", "javascript/content_script.js" ],
+      "matches": [ "http://*.last.fm/*", "http://*.lastfm.ru/*","http://*.lastfm.pt/*",  "http://*.lastfm.de/*", "http://*.lastfm.es/*", "http://*.lastfm.fr/*", "http://*.lastfm.it/*", "http://*.lastfm.jp/*", "http://*.lastfm.pl/*", "http://*.lastfm.com.br/*", "http://*.lastfm.se/*", "http://*.lastfm.com.tr/*"]
+   },
+   {
+     "js": ["javascript/lastfm_auth_callback.js"],
+     "matches": ["http://yandex.ru/white*"] 
+   }],
    "background_page": "background.html",
    "options_page": "options.html",
    "permissions": ["tabs", "http://*/"]
