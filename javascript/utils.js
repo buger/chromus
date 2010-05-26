@@ -10,7 +10,7 @@ function findParent(element, className){
 function xhrRequest(url, method, data, callback){
     var xhr = new XMLHttpRequest()
 
-    console.debug('Sending request:', url+'?'+data)
+    //console.debug('Sending request:', url+'?'+data)
 
     if(method == "POST"){
         xhr.open(method, url, true)
