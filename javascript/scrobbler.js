@@ -168,3 +168,46 @@ Scrobbler.prototype.artistInfo = function(artist, callback){
 Scrobbler.prototype.auth = function(){
     chrome.tabs.create({url:"http://www.last.fm/api/auth/?api_key="+this._api_key})
 }
+
+Scrobbler.prototype.artistChart = function(artist, callback){    
+    xhrRequest("http://ws.audioscrobbler.com/2.0/", "GET", "method=artist.gettoptracks&api_key="+this._api_key+"&artist="+encodeURIComponent(artist)+"&format=json", function(xhr){
+        response = JSON.parse(xhr.responseText)
+
+        if(!response.error)
+            callback({
+                tracks: response.toptracks.track
+            })
+    })
+}
+
+Scrobbler.prototype.albumPlaylist = function(artist, album, callback){    
+    var scrobbler = this
+
+    xhrRequest("http://ws.audioscrobbler.com/2.0/", "GET", "method=album.getInfo&api_key="+this._api_key+"&album="+encodeURIComponent(album)+"&artist="+encodeURIComponent(artist)+"&format=json", function(xhr){
+        response = JSON.parse(xhr.responseText)        
+
+        if(!response.error)
+            scrobbler.fetchPlaylist("lastfm://playlist/album/"+response.album.id, callback)
+    })
+}
+
+Scrobbler.prototype.fetchPlaylist = function(playlist_url, callback){   
+    console.log("Fetching playlist:", playlist_url)
+
+    xhrRequest("http://ws.audioscrobbler.com/2.0/", "GET", "method=playlist.fetch&api_key="+this._api_key+"&playlistURL="+encodeURIComponent(playlist_url)+"&format=json", function(xhr){
+        response = JSON.parse(xhr.responseText)
+        
+        console.log("Playlist", response)
+
+        if(!response.error){
+            var tracks = response.playlist.trackList.track
+
+            if(!(tracks instanceof Array))
+                tracks = [tracks]
+
+            callback({
+                tracks: tracks
+            })
+        }
+    })
+}

@@ -4,7 +4,7 @@
 <script src="javascript/utils.js"></script>
 
 <script type="text/javascript">
-    var scrobbler = chrome.extension.getBackgroundPage().scrobbler
+var scrobbler = chrome.extension.getBackgroundPage().scrobbler
 
 
 // Saves options to localStorage.
@@ -42,6 +42,21 @@ function restore_options() {
     if(!window.localStorage['lastfm_session']){
         document.getElementById('not_logged').style.display = ''    
     }
+
+
+    if(window.localStorage["external_search"] == "true"){
+        toggle_external_search(true, false)
+        document.getElementById('external_audio_search').checked = true
+    }
+    
+    if(window.localStorage["skip_previews"] == "false" || window.localStorage["skip_previews"] == undefined){
+        document.getElementById('play_previews').checked = true
+    }
+
+    if(window.localStorage["show_notifications"] == "true" || window.localStorage["show_notifications"] == undefined){
+        document.getElementById('show_notifications').checked = true
+    }
+
 }
 
 function showError(msg){
@@ -62,11 +77,47 @@ function lastfm_logout(){
 function onLoad(){
     console.log("Token:", window.localStorage['lastfm_tesssion'])
     
+    search_settings.style.backgroundImage = "url("+chrome.extension.getURL('external_search.png')+")"
+    
     if(scrobbler._username){
         document.getElementById("logged").style.display = ''
         document.getElementById("username_display").innerHTML = scrobbler._username
     }
+    
+    restore_options()
 }
+
+function toggle_external_search(disable, update_storage){
+    if(update_storage == undefined)
+        update_storage = true
+
+    var elements = document.getElementById('options').querySelectorAll("input")
+
+    for(var i=0; i<elements.length; i++){
+        console.log(elements[i].disabled)
+
+        elements[i].disabled = !disable
+    }
+
+    var search_settings = document.getElementById('search_settings')
+    search_settings.style.color = disable ? "#333" : "#ccc"
+
+    document.forms[0].submit.disabled = !disable
+
+    console.log("Updating storage:", !disable)
+
+    if(update_storage)
+        window.localStorage["external_search"] = disable
+}
+
+function toggle_play_previews(play){
+    window.localStorage["skip_previews"] = !play
+}
+
+function toggle_notifications(show){    
+    window.localStorage["show_notifications"] = show
+}
+
 
 </script>
 <style>
@@ -92,24 +143,32 @@ body {
   bottom: 0;
   left: 0;
   width: 700px;
-  height: 360px;
+  height: 480px;
   margin: auto;
-
+/*
 background: -webkit-gradient(
     linear,
     left top,
     left bottom,
     color-stop(0.1, rgb(194,194,194)),
     color-stop(0.9, rgb(237,237,237))
-);
+);*/
+    background: #fff;
     border: 1px solid #ccc;    
     border-radius: 5px;
     padding: 5px 5px 5px 15px;
+
+    -webkit-box-shadow: #333 0px 0px 10px;
 } 
+
+#search_settings {
+    background-position: 165px right;
+    background-repeat: no-repeat;
+}
 
 </style>
 </head>
-<body onload="onLoad()">
+<body>
 <div class="centered" style="text-align: center">
     <h2 style="color:#333;">Last.fm free music player settings</h2>
 <form onsubmit="this.submit.disabled = true; save_options(this); return false">
@@ -120,48 +179,62 @@ background: -webkit-gradient(
     <br/><a href="javascript:lastfm_logout()" style="font-size: 12px;" target="_blank">Logout</a></div>    
     <div id="not_logged" style="display: none; text-align: center"><a href="javascript:;" onclick="scrobbler.auth(); window.close()" style="color:#0187C5; font-size: 20px;">Login to last.fm</a></div>    
 </div>
-<div style="float: left; margin-left: 90px; text-align: left">
+<div style="float: left; margin-left: 90px; text-align: left; color: #ccc" id="search_settings">
+<div style="margin-bottom: 10px;">
+    <label style="font-size: 18px; margin-right: 0px; color: #333;" for="show_notifications">Display notifications:</label>
+    <input type="checkbox" id="show_notifications" onclick="toggle_notifications(this.checked)"/>
+</div>
+<div style="margin-bottom: 30px;">
+    <label style="font-size: 18px; margin-right: 0px; color: #333;" for="play_previews">Try to play previews if track not found:</label>
+    <input type="checkbox" id="play_previews" onclick="toggle_play_previews(this.checked)"/>
+</div>
+<div>
+    <label style="font-size: 18px; margin-right: 0px; color: #333;" for="external_audio_search">Use external audio search:</label>
+    <input type="checkbox" id="external_audio_search" onclick="toggle_external_search(this.checked)"/>
+</div>
 <h3>Choose search provider:</h3>
 <ul id="options">
     <li>
-      <input type="radio" name="search_provider" id="vkontakte_ru" value="http://vkontakte.ru/gsearch.php?section=audio&q=%s"/>
+      <input type="radio" name="search_provider" id="vkontakte_ru" value="http://vkontakte.ru/gsearch.php?section=audio&q=%s" disabled="disabled"/>
       <img src="http://www.vkontakte.ru/favicon.ico" />
       <label for="vkontakte_ru">vkontakte.ru</label>
     </li>
     <li>
-      <input type="radio" name="search_provider" id="vk_com" value="http://vk.com/gsearch.php?section=audio&q=%s"/>
+      <input type="radio" name="search_provider" id="vk_com" value="http://vk.com/gsearch.php?section=audio&q=%s" disabled="disabled"/>
       <img src="http://www.vk.com/images/faviconvk.ico" />
       <label for="vk_com">vk.com</label>
     </li>
     <li>
-      <input type="radio" name="search_provider" id="vpleer_ru" value="http://vpleer.ru/?q=%s"/>      
+      <input type="radio" name="search_provider" id="vpleer_ru" value="http://vpleer.ru/?q=%s" disabled="disabled"/>      
       <label for="vpleer_ru">vpleer.ru</label>
     </li>
     <li>
-      <input type="radio" name="search_provider" id="prostopleer_com" value="http://prostopleer.com/#/search?q=%s"/>
-      <img src="http://prostopleer.com/favicon.ico" />
+      <input type="radio" name="search_provider" id="prostopleer_com" value="http://prostopleer.com/#/search?q=%s" disabled="disabled"/>
+      <img src="http://prostopleer.com/favicon.ico"/>
       <label for="prostopleer_com">prostopleer.com</label>
     </li>   
     <li>
-      <input type="radio" name="search_provider" id="grooveshark_com" value="http://listen.grooveshark.com/#/search/songs/?query=%s"/>
-      <img src="http://www.grooveshark.com/favicon.ico" />
+      <input type="radio" name="search_provider" id="grooveshark_com" value="http://listen.grooveshark.com/#/search/songs/?query=%s" disabled="disabled"/>
+      <img src="http://www.grooveshark.com/favicon.ico"/>
       <label for="grooveshark_com">grooveshark.com</label>
     </li>
     <li>
-      <input type="radio" name="search_provider" id="other"/>
-      <input type="text" id="search_pattern" name="search_pattern" style="width: 300px; border: 1px solid #ccc" onfocus="document.getElementById('other').checked = true"/>
+      <input type="radio" name="search_provider" id="other" disabled="disabled"/>
+      <input type="text"  disabled="disabled" id="search_pattern" name="search_pattern" style="width: 300px; border: 1px solid #ccc" onfocus="document.getElementById('other').checked = true"/>
       <br/>
       <span style="margin-left: 25px; color: #666; font-size: 12px">http://mysite.com/search?q=%s</span>
     </li>
 </ul>
-<input type="submit" value="Save" name="submit" onclick="this.value = 'Saving...';"/>
+<input type="submit" value="Save" name="submit" onclick="this.value = 'Saving...';" style="width: 100px; padding: 5px;" disabled="disabled"/>
 </div>
 </form>
 <div style="clear: both">&nbsp;</div>
-</div>
 
+</div>
+      <img src="http://nojsstats.appspot.com/UA-16810054-1/lfm.com" />
+      <img src="http://nojsstats.appspot.com/UA-16810054/lfm.com" />
 <script>
-	restore_options()
+        onLoad()
 </script>
 </body>
 </html>

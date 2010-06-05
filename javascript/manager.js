@@ -50,10 +50,10 @@ WrapperManager.prototype.registred_wrappers = {}
 
     Uses all registered wrappers to handle all the possible elements on the page.
 **/
-WrapperManager.prototype.wrapMusicElements = function(){
-    if(window.location.toString().match(/\/event\//))
-        return
-    
+WrapperManager.prototype.wrapMusicElements = function(include_search_link){
+//    if(window.location.toString().match(/\/event\//))
+//        return
+
     var artist = this.artist
 
     for(var css_expr in this.registred_wrappers){
@@ -66,12 +66,12 @@ WrapperManager.prototype.wrapMusicElements = function(){
 
             if(!class_name.match('with_vk_search')){
                 try{
-                    new wrapper(elements[i], artist).injectSearch()
+                    new wrapper(elements[i], artist).injectSearch(include_search_link)
                     
                     this.container_count += 1
                 } catch(e){
                     console.warn(elements[i])
-                    console.error(e.message)
+                    console.warn(e.message)
                 }
 
                 elements[i].className += ' with_vk_search'
@@ -124,7 +124,8 @@ MusicDomElement.prototype.insertLink = function(el){console.error('Abstract func
 
     Finds all parent blocks matching a pattern, and injects play and search links into all matching childs.
 **/
-MusicDomElement.prototype.injectSearch = function(){
+MusicDomElement.prototype.injectSearch = function(include_search_link){
+    this.include_search_link = include_search_link
     var track
 
     if(!this.element)
@@ -135,16 +136,36 @@ MusicDomElement.prototype.injectSearch = function(){
     var counter = 0
     for(var i=0; i < childs.length; i++){
         try {
-            track = this.getTrack(childs[i])    
+            track_info = this.getTrack(childs[i]) 
+            
+            if(!track_info)
+                continue
 
-            if(track[0] && track[1]){
+            if(track_info[0]){
                 childs[i].className += " ex_container"
-                childs[i].setAttribute('data-artist', track[0])        
-                childs[i].setAttribute('data-song', track[1])
-                        
-                if(this.insertLink(childs[i], track.join(' - ')) != false){
-                    childs[i].setAttribute('data-index-number', counter)
-                    counter += 1
+                childs[i].setAttribute('data-artist', track_info[0])        
+
+                var track
+
+                if(track_info[1]){
+                    childs[i].setAttribute('data-song', track_info[1])
+                    track = track_info.join(' - ')
+                } else { 
+                    track = track_info[0]
+
+                    if(track_info[2]){
+                        childs[i].className += " ex_album"
+                        childs[i].setAttribute('data-album', track_info[2])
+                    } else
+                        childs[i].className += " ex_artist"
+                }
+                
+
+                if(this.insertLink(childs[i], track) != false){
+                    if(track_info[1]){
+                        childs[i].setAttribute('data-index-number', counter)
+                        counter += 1
+                    }
                 }
             }
         } catch(e) {
@@ -154,12 +175,15 @@ MusicDomElement.prototype.injectSearch = function(){
 }
 
 MusicDomElement.prototype.generateLink = function(track){
-    return "<a href='"+manager.search_pattern.replace('%s', encodeURIComponent(track))+"' target='_blank' Class='lfmButton vk_search_button' title='Search song'></a>"
+    if(this.include_search_link)
+        return "<a href='"+manager.search_pattern.replace('%s', encodeURIComponent(track))+"' target='_blank' Class='lfmButton vk_search_button' title='Search song'></a>"
+    else
+        return ""
 }
 
 
 MusicDomElement.prototype.generateAudioLink = function(track){
-  var link = "<a href=\"javascript:;\" target='_blank' Class='sm2_button' title='Play song' id='ex_button_"+manager.track_count+"' >"+track+"</a>"
+  var link = "<a href=\"javascript:;\" target='_blank' class='sm2_button' title='Play song' id='ex_button_"+manager.track_count+"' >"+track+"</a>"
   
   manager.track_count += 1
 
@@ -186,10 +210,10 @@ TrackList.prototype.getTrack = function(row){
         track_info = row.querySelectorAll('.track a')
 
     // If inside artist page
-    if(!this.element.className.match('big') && !document.getElementById('thePlaylist') && (!this.element.className.match('tracklist') && (track_info.length == 1 || track_info[1].href.match(/\.mp3/)) || document.getElementById('libraryBreadcrumb')))
-    return [this.artist, track_info[0].innerHTML]
+    if(this.artist && !this.element.className.match('big') && !document.getElementById('thePlaylist') && (!this.element.className.match('tracklist') && (track_info.length == 1 || track_info[1].href.match(/\.mp3/)) || document.getElementById('libraryBreadcrumb')))
+        return [this.artist, track_info[0].innerHTML]
     else
-    return [track_info[0].innerHTML, track_info[1].innerHTML]
+        return [track_info[0].innerHTML, track_info[1] ? track_info[1].innerHTML : undefined]
 }
 
 TrackList.prototype.insertLink = function(row, track) {
@@ -199,6 +223,7 @@ TrackList.prototype.insertLink = function(row, track) {
         td.innerHTML = this.generateLink(track) + td.innerHTML      
 
     var td_playbtn = row.querySelector('td.playbuttonCell')
+
     if(td_playbtn)
         td_playbtn.innerHTML = this.generateAudioLink(track)
     else
@@ -249,12 +274,30 @@ ArtistsChart.prototype.constructor = ArtistsChart
 
 ArtistsChart.prototype.getTrack = function(row){
     var track_info = row.querySelectorAll('.subjectCell a')
-    return [track_info[1].innerHTML, (track_info[2] ? track_info[2].innerHTML : null)]
+    var num = 0
+    if(track_info[0].className.match(/(playbutton|previewbutton)/))    
+        num = 1
+
+    var artist, track
+
+    if((track_info.length-num) == 2){
+        artist = track_info[track_info.length-2].innerHTML
+        track = track_info[track_info.length-1].innerHTML
+    } else {
+        artist = track_info[track_info.length-1].innerHTML
+    }
+
+    return [artist, track]
 }
 
 ArtistsChart.prototype.insertLink = function(row, track){
     var span = row.querySelector('td.subjectCell span')
-    span.innerHTML = this.generateLink(track) + span.innerHTML
+
+    span.innerHTML = this.generateLink(track) + this.generateAudioLink(track) + span.innerHTML
+    
+    var previewlink = span.querySelector('a.playbutton, a.previewbutton')
+    if(previewlink)
+        span.removeChild(previewlink)
 }
 
 manager.registerWrapper('table.mediumImageChart', ArtistsChart)
@@ -365,3 +408,280 @@ ArtistsWithInfo.prototype.insertLink = function(li, track){
 }
 
 manager.registerWrapper('ul.artistsWithInfo', ArtistsWithInfo)
+
+
+/**
+    Class ArtistsLargeThumbnails < MusicDomElement
+
+    Used in artists library
+**/
+var ArtistsLargeThumbnails = function(element, artist){
+    this.element = element
+    this.artist = artist
+    this.child_items_pattern = 'li'
+}
+
+ArtistsLargeThumbnails.prototype = new MusicDomElement()
+ArtistsLargeThumbnails.prototype.constructor = ArtistsLargeThumbnails
+
+ArtistsLargeThumbnails.prototype.getTrack = function(li){
+    try{
+        var artist = li.querySelector('strong.name').innerHTML
+    }catch(e){}
+
+    return [artist]
+}
+
+ArtistsLargeThumbnails.prototype.insertLink = function(li, track){
+    var playbtn = li.querySelector('.playbutton')    
+    if(playbtn){
+        li.removeChild(playbtn)
+    }
+
+    li.innerHTML += this.generateAudioLink(track)
+}
+
+manager.registerWrapper('ul.artistsLarge', ArtistsLargeThumbnails)
+
+/**
+    Class ArtistRecomendations < MusicDomElement
+    
+    www.lastfm.ru/home/recs
+**/
+var ArtistRecomendations = function(element, artist){
+    this.element = element
+    this.artist = artist
+    this.child_items_pattern = 'li'
+}
+
+ArtistRecomendations.prototype = new MusicDomElement()
+ArtistRecomendations.prototype.constructor = ArtistRecomendations
+
+ArtistRecomendations.prototype.getTrack = function(li){
+    var artist = li.querySelector('h2 a.name').innerHTML
+
+    return [artist]
+}
+
+ArtistRecomendations.prototype.insertLink = function(li, track){
+    var elm = li.querySelector('h2')
+    var playbtn = elm.querySelector('a.playbutton')    
+    if(playbtn){
+        elm.removeChild(playbtn)
+    }
+
+    elm.innerHTML = this.generateAudioLink(track) + elm.innerHTML
+}
+
+manager.registerWrapper('ul#artistRecs', ArtistRecomendations)
+
+
+/**
+    Class ArtistRecsPreview < MusicDomElement
+    
+    www.lastfm.ru/home Recomendations block
+**/
+var ArtistRecsPreview = function(element, artist){
+    this.element = element
+    this.artist = artist
+    this.child_items_pattern = 'li'
+}
+
+ArtistRecsPreview.prototype = new MusicDomElement()
+ArtistRecsPreview.prototype.constructor = ArtistRecsPreview
+
+ArtistRecsPreview.prototype.getTrack = function(li){
+    var artist = li.querySelector('strong.name').innerHTML
+
+    return [artist]
+}
+
+ArtistRecsPreview.prototype.insertLink = function(li, track){
+    var elm = li.querySelector('.container')
+
+    elm.innerHTML += this.generateAudioLink(track)
+
+    var playbtn = elm.querySelector('.playbutton')    
+    if(playbtn){
+        elm.removeChild(playbtn)
+    }
+
+}
+
+manager.registerWrapper('ul.artistRecs', ArtistRecsPreview)
+
+
+/**
+    Class ArtistsWithInfo < MusicDomElement
+
+    www.lastfm.ru/music/Camille/+similar
+**/
+var ArtistsWithInfo = function(element, artist){
+    this.element = element
+    this.artist = artist
+    this.child_items_pattern = 'li'
+}
+
+ArtistsWithInfo.prototype = new MusicDomElement()
+ArtistsWithInfo.prototype.constructor = ArtistsWithInfo
+
+ArtistsWithInfo.prototype.getTrack = function(li){
+
+    var artist = li.querySelector('a.artist strong').innerHTML
+
+    return [artist]
+}
+
+ArtistsWithInfo.prototype.insertLink = function(li, track){
+    li.innerHTML += this.generateAudioLink(track)
+
+    var playbtn = li.querySelector('.playbutton')    
+    if(playbtn){
+        li.removeChild(playbtn)
+    }
+}
+
+manager.registerWrapper('ul.artistsWithInfo', ArtistsWithInfo)
+
+
+
+/**
+    Class AlbumsMedium < MusicDomElement
+
+    www.lastfm.ru/home
+    www.lastfm.ru/music/Carla+Bruni/+albums
+**/
+var AlbumsMedium = function(element, artist){
+    this.element = element
+    this.artist = artist
+    this.child_items_pattern = 'li'
+}
+
+AlbumsMedium.prototype = new MusicDomElement()
+AlbumsMedium.prototype.constructor = AlbumsMedium
+
+AlbumsMedium.prototype.getTrack = function(li){
+    if(li.parentNode.className.match(/lfmDropDownBody/))
+        return false
+
+    var artist = li.querySelector('a.artist').innerHTML
+    var album = li.querySelector("strong a").childNodes[1].nodeValue.replace(/^\s+/,'')
+
+    return [artist, undefined, album]
+}
+
+AlbumsMedium.prototype.insertLink = function(li, track){
+    li.innerHTML += this.generateAudioLink(track)
+
+    var elm = li.querySelector('div.resContainer')
+
+    var playbtn = elm.querySelector('.playbutton')    
+    if(playbtn){
+        elm.removeChild(playbtn)
+    }
+}
+
+manager.registerWrapper('ul.albumsMedium, ul.albumsLarge', AlbumsMedium)
+
+
+/**
+    Class AlbumsLibrary < MusicDomElement
+
+    www.lastfm.ru/user/buger_swamp/library/music/Carla+Bruni
+**/
+var AlbumsLibrary = function(element, artist){
+    this.element = element
+    this.artist = artist
+    this.child_items_pattern = 'li'
+}
+
+AlbumsLibrary.prototype = new MusicDomElement()
+AlbumsLibrary.prototype.constructor = AlbumsLibrary
+
+AlbumsLibrary.prototype.getTrack = function(li){
+    var album = li.querySelector("strong.title").innerHTML
+
+    return [this.artist, undefined, album]
+}
+
+AlbumsLibrary.prototype.insertLink = function(li, track){
+    var elm = li.querySelector('span.albumCover')
+    elm.innerHTML = this.generateAudioLink(track) + elm.innerHTML
+}
+
+manager.registerWrapper('#albumstrip ul', AlbumsLibrary)
+
+
+/**
+    Class NewReleases < MusicDomElement
+
+    www.lastfm.ru/home/newreleases
+**/
+var NewReleases = function(element, artist){
+    this.element = element
+    this.artist = artist
+}
+
+NewReleases.prototype = new MusicDomElement()
+NewReleases.prototype.constructor = NewReleases
+
+NewReleases.prototype.getTrack = function(tr){
+    var album = tr.querySelector(".release a.title strong")
+    
+    if(!album)
+        return false
+
+    album = album.innerHTML
+
+    var artist = tr.querySelector(".library a.artist strong").innerHTML
+
+    return [artist, undefined, album]
+}
+
+NewReleases.prototype.insertLink = function(tr, track){
+    var elm = tr.querySelector('.release')
+    elm.innerHTML = this.generateAudioLink(track) + elm.innerHTML
+
+    var playbtn = elm.querySelector('.playbutton')    
+    if(playbtn){
+        elm.removeChild(playbtn)
+    }
+}
+
+manager.registerWrapper('#newReleases', NewReleases)
+
+/**
+    Class RecentAlbumns < MusicDomElement
+
+    www.last.fm/tag/baroque%20pop Recently added block
+**/
+var RecentAlbums = function(element, artist){
+    this.element = element
+    this.artist = artist
+    this.child_items_pattern = 'li'
+}
+
+RecentAlbums.prototype = new MusicDomElement()
+RecentAlbums.prototype.constructor = RecentAlbums
+
+RecentAlbums.prototype.getTrack = function(li){
+    if(li.parentNode.className.match(/lfmDropDownBody/))
+        return false
+
+    var album = li.querySelector("a.album strong").innerHTML
+    var artist = li.querySelector("a.artist").innerHTML
+
+    console.log("Album:", album)
+
+    return [artist, undefined, album]
+}
+
+RecentAlbums.prototype.insertLink = function(li, track){
+    li.innerHTML += this.generateAudioLink(track)
+
+    var playbtn = li.querySelector('.playbutton')    
+    if(playbtn)
+        li.removeChild(playbtn)
+}
+
+manager.registerWrapper('ul.recentAlbums', RecentAlbums)

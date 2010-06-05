@@ -62,8 +62,8 @@
 a.sm2_button {
  position:relative;
  display:inline-block; /* If you worry old browser bugs, Firefox 2 might not like this and may need -moz-inline-box instead. :D */
- width:14px;
- height:14px;
+ width:13px;
+ height:13px;
  text-indent:-9999px; /* don't show link text */
  overflow:hidden; /* don't draw inner link text */
  vertical-align:middle;
@@ -88,7 +88,7 @@ a.sm2_button.paused:hover {
 
  background-repeat:no-repeat;
  background-position:3px 50%;
- background-size: 60%;
+ background-size: 55%;
 }
 
 a.sm2_button.loading {

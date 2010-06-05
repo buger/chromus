@@ -4,19 +4,6 @@
     Module for working with vk.com
 **/
 var VK = {
-    /**
-        VK Applications for using in test_mode
-    **/
-    apps: [
-        [525159, 'g5vuj9EWFO'],
-        [1863410, '9qEFmMTgP8'],
-        [1872690, '3OlqUQB7KL']
-    ],
-
-    getApiData: function(){
-        return VK.apps[Math.floor(Math.random()*VK.apps.length)]    
-    },    
-
     determineSearchMethod: function(callback){        
         console.info("Trying to determine search method")
 
@@ -103,11 +90,25 @@ var VK = {
         return false
     },
 
+    /**
+        VK Applications for using in test_mode
+    **/
+    apps: [        
+        [327488, 525159, 'g5vuj9EWFO'],
+        [2118012, 1882836,'xYsD1Dtsng'],
+        [19730188, 1881945, 'rcj0HPk4Wk']
+//        [327488, 1863410, '9qEFmMTgP8'],
+//        [327488, 1872690, '3OlqUQB7KL']
+    ],
+
+    getApiData: function(){
+        return VK.apps[Math.floor(Math.random()*VK.apps.length)]    
+    },    
 
     /**
         VK#_testmodeSearch(artist, song, callback)
 
-        Searching vkontakte with api
+        Searching vkontakte with api in test_mode
     **/
     _testmodeSearch: function(artist, song, callback){
         var track = artist + " " + song
@@ -115,8 +116,8 @@ var VK = {
         var api = VK.getApiData()
         var url = "http://api.vk.com/api.php"
 
-        md5hash = MD5('327488api_id='+api[0]+'count=10format=jsonmethod=audio.searchq='+track+'test_mode=1'+api[1])
-        var data = 'api_id='+api[0]+'&method=audio.search&format=json&sig='+md5hash+'&test_mode=1&count=10&q='+encodeURIComponent(track)
+        md5hash = MD5(api[0]+'api_id='+api[1]+'count=10format=jsonmethod=audio.searchq='+track+'test_mode=1'+api[2])
+        var data = 'api_id='+api[1]+'&method=audio.search&format=json&sig='+md5hash+'&test_mode=1&count=10&q='+encodeURIComponent(track)
 
         console.log("Search url:", url+'?'+data)
 

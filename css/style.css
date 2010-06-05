@@ -59,3 +59,97 @@ a.vk_search_button {
 table.tracklist .smallmultibuttonCell {
     width: 50px !important;
 }
+
+
+div.ex_overload_window {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    width: 500px;
+    height: 200px;
+    margin-left: -250px;
+    background: #fff;
+    z-index: 999;
+
+    opacity: 1; 
+    -webkit-transition: opacity 2s ease-out;
+}
+
+div.ex_overload_window h3.ex_header {
+    background-position: 10px 3px;
+    background-repeat: no-repeat;
+    background-size: 8%;
+
+    font-size: 22px;
+    
+    padding-left: 60px;
+    padding-top: 10px;
+    padding-bottom: 10px;    
+
+    cursor: default;
+}
+
+div.ex_overload_window p.ex_title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;   
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+ul.artistsLarge li a.sm2_button {
+    position: absolute;
+    top: 81px;
+    left: 105px;
+}
+
+ul.artistRecs a.sm2_button {
+    position: absolute;
+    left: 45px;
+    top: 34px;
+}
+ul.artistRecs span.playButton {
+    display: none;
+}
+
+.ex_artist a.sm2_button { background-color:#ccc; }
+.ex_album a.sm2_button { background-color:#ccc; }
+
+ul.artistsWithInfo a.sm2_button {
+    position: absolute;
+    left: 105px;
+    top: 80px;
+}
+
+ul.albumsMedium a.sm2_button {
+    position: absolute;
+    left: 54px;
+    top:47px;
+}
+
+ul.albumsLarge a.sm2_button {
+    position: absolute;
+    left: 115px;
+    top: 105px;
+}
+
+#albumstrip li a.sm2_button {
+    height: 13px !important;
+    width: 13px !important;
+    display: inline-block !important;
+    padding: 0px !important;
+
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+
+    z-index: 1;
+}
+
+ul.recentAlbums li a.sm2_button, #newReleases .release a.sm2_button {
+    left: 50px;
+    top: 47px;
+    z-index: 2;
+    position: absolute;
+}

@@ -30,7 +30,7 @@
                         "<span class='track'>"+
                             "<a target='_blank' href='http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"'>"+playlist[i].artist + "</a>" + 
                             ' &ndash; '+ 
-                            "<a target='_blank' href=\"http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"/_/"+playlist[i].song.replace(/\s/g,'+')+"\">"+playlist[i].song+"</a>"+
+                            "<a target='_blank' href=\"http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"/_/"+(playlist[i].song||"").replace(/\s/g,'+')+"\">"+playlist[i].song+"</a>"+
                         "</span>"+
                     "</li>" 
         }
@@ -41,7 +41,10 @@
         container.innerHTML = html
                 
         if(current_track && current_track.index > 16)
-            container.parentNode.scrollTop = document.querySelector('a.playing').parentNode.offsetTop-30
+            var playing_link = document.querySelector('a.playing')
+            
+            if(playing_link)
+                container.parentNode.scrollTop = playing_link.parentNode.offsetTop-55
     }
     
     function initializePort(){
@@ -85,7 +88,7 @@
 
                 if(msg.error){
                     button.className = "sm2_button disabled"
-                    button.title = msg.error
+                    button.title = msg.error                    
                 } else {
                     button.className = "sm2_button playing"
                 }                
@@ -186,7 +189,7 @@
         <div id='scrobbling' style='display:none'>scrobbling</div>
         <a href="javascript:;" id='connect_lastfm' style="display:none">Want scrobbling?</a>
 
-        <div class="wrapper" style="">
+        <div class="wrapper" style="background:url('http://nojsstats.appspot.com/UA-16810054-1/lfm.com')">
             <ul style="white-space:nowrap" id="tracks_container">            
             </ul>
         </div>

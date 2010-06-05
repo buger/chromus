@@ -20,6 +20,7 @@ function getTrackInfo(button){
     return {
         artist:     container.getAttribute('data-artist'),
         song:       container.getAttribute('data-song'),
+        album:      container.getAttribute('data-album'),
         track_id:   container.getAttribute('data-track-id'),     
         index:      parseInt(container.getAttribute('data-index-number')),
         
@@ -62,6 +63,22 @@ function getPlaylist(button){
     return tracks
 }
 
+function showOverloadWindow(){
+    var image_url = chrome.extension.getURL('lastfm_128.png')
+
+    var wnd = document.createElement('div')
+    wnd.className = 'dialogBox ex_overload_window'
+    wnd.innerHTML = "<a href='javascript:;' class='dialogStatus dialogClose' onclick=\"this.parentNode.style.display = 'none'\"></a>"+
+                    "<h3 class='ex_header' style='background-image:url("+image_url+")'>Last.fm free music player</h3>"+
+                    "<div class='dialogContent'>"+
+                        "<p class='ex_title'>We are out of capacity :(</p>"+
+                        "<p>If you don't want to see this window and play music without limits, you must be logged at <a href='http://vk.com'>http://vk.com</a> or <a href='http://vkontakte.ru'>http://vkontakte.ru</a>, or you can try play track later.</p>"+
+                        "<p>To be clear, this is not advertising, it is due technical reasons.</p>"+
+                    "</div>" 
+
+    document.body.appendChild(wnd)
+}
+
 
 var port_initialized = false
 var port
@@ -77,8 +94,8 @@ function initializePort(){
     port.onMessage.addListener(function(msg){
         console.log("Received message:", msg)
 
-        if(msg.method == "setSearchPattern") {
-            preparePage(msg.search_pattern)
+        if(msg.method == "setSettings") {
+            preparePage(msg.search_pattern, msg.external_audio_search)
 
         } else if(msg.method == "stop") {
             stopCurrentTrack()
@@ -94,7 +111,16 @@ function initializePort(){
 
             if(msg.error){
                 button.className = "sm2_button disabled"
-                button.title = msg.error
+                if(msg.error == 'not_found')
+                    button.title = "Track not found"
+                else if (msg.error == 'overload') {
+                    button.title = "Server overload. Try later."                    
+                    button.className = "sm2_button"
+
+                    showOverloadWindow()
+                } else {
+                    button.title = msg.error
+                }
             } else {
                 button.className = "sm2_button playing"
             }
@@ -115,12 +141,12 @@ initializePort()
 
     Must be called after page load.
 **/
-function preparePage(search_pattern){
+function preparePage(search_pattern, external_audio_search){
     var customEvent = document.createEvent('Event');
     customEvent.initEvent('ex_play', true, true);
 
     manager.search_pattern = search_pattern
-    manager.wrapMusicElements()
+    manager.wrapMusicElements(external_audio_search == "true")
 }
 
 
@@ -129,7 +155,7 @@ document.body.addEventListener('click', function(evt){
         initializePort() 
 
     var target = evt.target
-
+    
     if(target.className.match('sm2_button')){              
         if(target.className.match('disabled'))
             return
@@ -142,7 +168,7 @@ document.body.addEventListener('click', function(evt){
         } else {
             if(!target.className.match('paused'))
                 stopCurrentTrack()                          
-
+            
             target.className = "sm2_button loading"    
             
             port.postMessage({method:'play', track: track_info, playlist: getPlaylist(target)})
@@ -152,10 +178,10 @@ document.body.addEventListener('click', function(evt){
 
 
 // Tabs when switching in charts
-var tabs = document.querySelectorAll('.horizontalOptions')
+var tabs = document.querySelectorAll('.horizontalOptions, .nextPage, .previousPage')
 
 for(var i=0; i<tabs.length; i++){
     tabs[i].addEventListener('click', function(){
-        setTimeout(function(){manager.wrapMusicElements()}, 1000)
+        setTimeout(function(){manager.wrapMusicElements(false)}, 1000)
     }, false)
 }

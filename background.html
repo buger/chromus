@@ -6,7 +6,9 @@
     <script src="javascript/scrobbler.js"></script>
     <script src="javascript/vk.js"></script>
     <script> 
-   	
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-16659466-1']);
+  	
     var repeat = false
     var stop_after_playing = false
     
@@ -42,7 +44,10 @@
     }
 
     
-    function playNextTrack(repeat){
+    function playNextTrack(repeat, send_stop_message){
+        if(send_stop_message == undefined)
+            send_stop_message = true
+        
         if(!current_track)
             return
 
@@ -65,9 +70,11 @@
                 next_track.track  = next_track.artist + " - " + next_track.song
             }
             
-            current_track.port.postMessage({method:'stop', element_id: current_track.element_id})
-            if(popup_port)
-                popup_port.postMessage({method:'stop', index: current_track.index})
+            if(send_stop_message){
+                current_track.port.postMessage({method:'stop', element_id: current_track.element_id})
+                if(popup_port)
+                    popup_port.postMessage({method:'stop', index: current_track.index})
+            }
                 
             current_track = next_track
             
@@ -100,39 +107,28 @@
     
     var not_found_in_row = 0
 
-    function notification()
-    {
-      if(window.webkitNotifications) // If we have the Notification API
-      {
-        var nc = window.webkitNotifications; // Set the API to nc for easy access
-        if(nc.checkPermission()) // 1 = Not Allowed, 2 = Denied, 0 = Allowed
-        {
-          console.log("Requesting notifications")
-
-          nc.requestPermission(showNotification); // Request Permission with a callback to myNotification();
-        } 
-      }
-    }
-    notification()    
-
     // TODO: Notifications disabled. They don't work in Chrome 4.
     function showNotification(){
-        var nc = window.webkitNotifications; // Set the API to nc for easy access
-        if(nc.checkPermission())
-          return false
+        if(window.localStorage["show_notifications"] == "true" || window.localStorage["show_notifications"] == undefined){
+            scrobbler.artistInfo(current_track.artist, function(response){            
+                var notification = window.webkitNotifications.createNotification(response.image, current_track.song, current_track.artist)
 
-        scrobbler.artistInfo(current_track.artist, function(response){            
-            var notification = window.webkitNotifications.createNotification(response.image, current_track.song, current_track.artist)
-
-            notification.show()
-            setTimeout(function(){notification.cancel()}, 5000)
-        })
+                notification.show()
+                setTimeout(function(){notification.cancel()}, 6000)
+            })
+        }
     }
 
     function searchTrack(track){
         VK.search(track.artist, track.song, function(response){
             if(response.error){
-                if(response.error == 'not_found' && track.streamable) {
+                if(response.error == 'overload')
+                    _gaq.push(['_trackEvent', "Search", 'overload']);
+
+
+                var play_preview = window.localStorage["skip_previews"] == "false" || window.localStorage["skip_previews"] == undefined
+
+                if(response.error == 'not_found' && track.streamable && play_previews) {
                     not_found_in_row = 0
 
                     scrobbler.preview_mp3(track.track_id, function(response){
@@ -140,7 +136,7 @@
                     })                
                     
                     showNotification()
-                } else {
+                } else {                
                     track.port.postMessage({method:'readyToPlay', error: response.error, element_id: track.element_id})
                     
                     if(popup_port)
@@ -152,6 +148,8 @@
                 }
 
             } else {
+                _gaq.push(['_trackEvent', "Search", 'playing']);
+
                 not_found_in_row = 0
                 audio_player.play(response.url)
 
@@ -160,7 +158,59 @@
         })
     }
 
-    
+    function playArtistChart(artist, port){
+        console.log("Port:", port)
+
+        scrobbler.artistChart(artist, function(response){
+            var tracks = response.tracks     
+            
+            if(tracks.length == 0)
+                return false
+
+            playlist = []  
+            for(var i=0; i<tracks.length; i++){
+                playlist.push({
+                    port: port,
+                    index: i,                    
+                    artist: artist,
+                    port_id: port.portId_,
+                    element_id: "ex_button_"+(i+999),
+                    song: tracks[i].name,
+                    track: artist + " - " + tracks[i].name
+                })
+            }
+
+            current_track = playlist[0]
+            playNextTrack(true, false)
+        })
+    }
+
+    function playAlbum(artist, album, port){
+        scrobbler.albumPlaylist(artist, album, function(response){
+            var tracks = response.tracks     
+            
+            console.log("Tracks:", tracks)
+
+            if(tracks.length == 0)
+                return false
+
+            playlist = []  
+            for(var i=0; i<tracks.length; i++){
+                playlist.push({
+                    port: port,
+                    index: i,                    
+                    artist: artist,
+                    port_id: port.portId_,
+                    element_id: "ex_button_"+(i+999),
+                    song: tracks[i].title,
+                    track: artist + " - " + tracks[i].title
+                })
+            }
+
+            current_track = playlist[0]
+            playNextTrack(true, false)
+        })
+    }
     var popup_port
     
     function onLoad(){    
@@ -220,8 +270,18 @@
 
                 } else if(msg.method == "play"){
                     var track_info = msg.track
+                    
+                    if(!track_info.song)
+                        delete track_info.song 
+                    else
+                        track_info.song = track_info.song.replace(/&amp;/g, '&')
 
-                    track_info.song = track_info.song.replace(/&amp;/g, '&')
+                    if(!track_info.album)
+                        delete track_info.album
+                    else
+                        track_info.album = track_info.album.replace(/&amp;/g, '&')
+                       
+
                     track_info.artist =  track_info.artist.replace(/&amp;/g, '&')
                     
                     track_info.port = port
@@ -236,22 +296,26 @@
                     if(msg.playlist)
                         playlist = msg.playlist                    
 
-                    if(current_track && current_track.port_id == track_info.port_id && current_track.element_id == track_info.element_id){
-                        audio_player.play()                       
+                    if(track_info.song && current_track && current_track.port_id == track_info.port_id && current_track.element_id == track_info.element_id){
+                        audio_player.play()
                         
                         if(port.tab)
                             port.postMessage({method:'readyToPlay', element_id: current_track.element_id})
                         else
-                            port.postMessage({method:'readyToPlay', index: current_track.index})
-                        end
-                    } else {                    
-
+                            port.postMessage({method:'readyToPlay', index: current_track.index})                        
+                    } else {
                         if(current_track && current_track.port_id && current_track.port_id != track_info.port_id)
                             current_track.port.postMessage({method:'stop'})
 
-                        current_track = track_info
-
-                        searchTrack(current_track)
+                        if(track_info.song){
+                            current_track = track_info
+                            searchTrack(current_track)
+                        } else {                            
+                            if(track_info.album)
+                                playAlbum(track_info.artist, track_info.album, msg.track.port)
+                            else 
+                                playArtistChart(track_info.artist, msg.track.port)
+                        }
                     }
 
                 }
@@ -268,12 +332,28 @@
                 search_pattern = "http://vkontakte.ru/gsearch.php?section=audio&q=%s"
             
             if(!port.reconnect)
-                port.postMessage({method:'setSearchPattern', search_pattern: search_pattern})
+                port.postMessage({method:'setSettings', 
+                                  search_pattern: search_pattern, 
+                                  external_audio_search: window.localStorage["external_search"]})
         })
+        
+       // _gaq.push(['_trackPageview']);
     }
     </script>
     </head>
     <body onload="onLoad()">
       <div id="vk_search"></div>
+      <img src="http://nojsstats.appspot.com/UA-16810054-1/lfm.com" />
+      <img src="http://nojsstats.appspot.com/UA-16810054/lfm.com" />
+      <script type="text/javascript">
+
+
+      /*
+     (function() {
+       var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+       ga.src = 'https://ssl.google-analytics.com/ga.js';
+       (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+     })();*/
+      </script>
     </body>
 </html>
