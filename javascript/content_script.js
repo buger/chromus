@@ -102,28 +102,30 @@ function initializePort(){
 
         } else if(msg.method == "loading") {
             var button = document.getElementById(msg.element_id)
-            button.className = "sm2_button loading"
+            if(button)
+                button.className = "sm2_button loading"
 
         } else if(msg.method == "readyToPlay") {
             stopCurrentTrack()
 
             var button = document.getElementById(msg.element_id)
+            
+            if(button)
+                if(msg.error){
+                    button.className = "sm2_button disabled"
+                    if(msg.error == 'not_found')
+                        button.title = "Track not found"
+                    else if (msg.error == 'overload') {
+                        button.title = "Server overload. Try later."                    
+                        button.className = "sm2_button"
 
-            if(msg.error){
-                button.className = "sm2_button disabled"
-                if(msg.error == 'not_found')
-                    button.title = "Track not found"
-                else if (msg.error == 'overload') {
-                    button.title = "Server overload. Try later."                    
-                    button.className = "sm2_button"
-
-                    showOverloadWindow()
+                        showOverloadWindow()
+                    } else {
+                        button.title = msg.error
+                    }
                 } else {
-                    button.title = msg.error
+                    button.className = "sm2_button playing"
                 }
-            } else {
-                button.className = "sm2_button playing"
-            }
         }
     })
 

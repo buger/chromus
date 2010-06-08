@@ -128,7 +128,7 @@
 
                 var play_preview = window.localStorage["skip_previews"] == "false" || window.localStorage["skip_previews"] == undefined
 
-                if(response.error == 'not_found' && track.streamable && play_previews) {
+                if(response.error == 'not_found' && track.streamable && play_preview) {
                     not_found_in_row = 0
 
                     scrobbler.preview_mp3(track.track_id, function(response){

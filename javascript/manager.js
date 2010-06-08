@@ -140,7 +140,7 @@ MusicDomElement.prototype.injectSearch = function(include_search_link){
             
             if(!track_info)
                 continue
-
+    
             if(track_info[0]){
                 childs[i].className += " ex_container"
                 childs[i].setAttribute('data-artist', track_info[0])        
@@ -158,8 +158,7 @@ MusicDomElement.prototype.injectSearch = function(include_search_link){
                         childs[i].setAttribute('data-album', track_info[2])
                     } else
                         childs[i].className += " ex_artist"
-                }
-                
+                }                                         
 
                 if(this.insertLink(childs[i], track) != false){
                     if(track_info[1]){
@@ -685,3 +684,72 @@ RecentAlbums.prototype.insertLink = function(li, track){
 }
 
 manager.registerWrapper('ul.recentAlbums', RecentAlbums)
+
+
+/**
+    Class MostUnwanted < MusicDomElement
+
+    playground.last.fm/unwanted
+**/ 
+var Playground = function(element, artist){
+    this.element = element
+    this.artist = artist
+    
+    this.loc = window.location.toString()
+
+    if(this.loc.match(/unwanted/))
+        this.page_type = "unwanted"
+    else if(this.loc.match(/sterec/))
+        this.page_type = "sterec"    
+    else if(this.loc.match(/multitag/)){
+        this.page_type = "multitag"
+    }
+}
+
+Playground.prototype = new MusicDomElement()
+
+Playground.prototype.getTrack = function(row){
+    if(this.page_type == "unwanted"){
+        var track_info = row.querySelectorAll('td')[2].querySelectorAll('a')
+        var l = track_info.length
+
+        return [track_info[l-1].innerHTML, track_info[l-2].innerHTML]
+    } else if(this.page_type == "sterec" || this.page_type == "multitag"){
+        var track_info = row.querySelectorAll('td')[1].querySelectorAll('a')
+        
+        if(track_info[0].href.match(/autostart/))
+            if(this.page_type == "multitag" && !this.loc.match(/artists/))
+                return [track_info[1].innerHTML, track_info[2].innerHTML]
+            else 
+                return [track_info[1].innerHTML]
+        else
+            if(this.page_type == "multitag" && !this.loc.match(/artists/))
+                return [track_info[0].innerHTML, track_info[1].innerHTML]
+            else
+                return [track_info[0].innerHTML]
+        
+    } else {
+        return []
+    }
+}
+
+Playground.prototype.insertLink = function(row, track) {
+    if(this.page_type == "unwanted"){
+        var td = row.querySelectorAll('td')[2]
+        var track_info = td.querySelectorAll('a')
+
+        if(track_info.length == 3)
+            td.removeChild(track_info[0])
+
+        td.innerHTML = this.generateAudioLink(track) + td.innerHTML      
+    } else if(this.page_type == "sterec" || this.page_type == "multitag") {
+        var td = row.querySelectorAll('td')[1]
+        var track_info = td.querySelectorAll('a')
+
+        if(track_info[0].href.match(/autostart/))
+            td.removeChild(track_info[0])
+        
+        td.innerHTML = this.generateAudioLink(track) + td.innerHTML
+    }
+}
+manager.registerWrapper('#bottombox table', Playground)
