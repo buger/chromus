@@ -5,222 +5,99 @@
     <script src="javascript/audio_player.js"></script>
     <script src="javascript/scrobbler.js"></script>
     <script src="javascript/vk.js"></script>
+    <script src="javascript/music_manager.js"></script>
     <script> 
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-16659466-1']);
-  	
-    var repeat = false
-    var stop_after_playing = false
+    function ease(x) {
+      return (1-Math.sin(Math.PI/2+x*Math.PI))/2;
+    }
     
-    var audio_player = new HTML5AudioPlayer()    
-    var scrobbler = new Scrobbler(window.localStorage["lastfm_session"], window.localStorage["lastfm_username"])
-    
+    var rotation = 0
+    var animationSpeed = 10
+    var animationFrames = 26
+    var canvasContext
+    var canvas
+
+    function animateFlip() {
+      rotation += 1/animationFrames;
+      drawIconAtRotation();
+
+      if (rotation <= 1) {
+        setTimeout(animateFlip, animationSpeed);
+      } else {
+        rotation = 0;
+
+        chrome.browserAction.setIcon({path:chrome.extension.getURL('lastfm_128.png')});
+      }
+    }
+
+    function drawIconAtRotation() {
+      canvasContext.save();
+      canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+      canvasContext.translate(
+          Math.ceil(canvas.width/2),
+          Math.ceil(canvas.height/2));
+      canvasContext.rotate(2*Math.PI*ease(rotation));
+      canvasContext.drawImage(document.getElementById('lastfm_icon'),
+          -Math.ceil(canvas.width/2),
+          -Math.ceil(canvas.height/2));
+      canvasContext.restore();
+
+      chrome.browserAction.setIcon({imageData:canvasContext.getImageData(0, 0, canvas.width,canvas.height)});
+    }
+
     chrome.browserAction.setBadgeBackgroundColor({color:[51,153,204,255]}) //blue
     
-    var current_track
-    var playlist = []
+    var scrobbler = new Scrobbler(window.localStorage["lastfm_session"], window.localStorage["lastfm_username"])
 
+    var music_manager = new MusicManager(scrobbler)
 
-    // Called when ready to play
-    audio_player.options.canPlayThrough = function(){
-        console.log("Setting now playing:", current_track)
+    music_manager.audio.addEventListener('onPlay', function(){
+        var track = music_manager.playlist[music_manager.current_track]
 
-        scrobbler.setNowPlaying(current_track.artist, current_track.song, audio_player.audio.duration)
-        chrome.browserAction.setTitle({title: current_track.track})
-        
-        current_track.port.postMessage({method:'readyToPlay', element_id: current_track.element_id})
-        
-        if(popup_port)
-            popup_port.postMessage({method:'readyToPlay', index:current_track.index})
-    }
+        chrome.browserAction.setTitle({title: track.artist +' - '+ track.song})
+
+        stopInAllPorts()
+    }, true)
+
+    music_manager.audio.addEventListener('onEnded', function(){
+        chrome.browserAction.setBadgeText({text:''})
+    }, true)
     
-    audio_player.options.onEnded = function(){
-        if(audio_player.audio.duration != 30)
-            scrobbler.scrobble(current_track.artist, current_track.song, audio_player.audio.duration)
-
-        current_track.port.postMessage({method:'stop'})
-        
-        playNextTrack(repeat)
-    }
-
-    
-    function playNextTrack(repeat, send_stop_message){
-        if(send_stop_message == undefined)
-            send_stop_message = true
-        
-        if(!current_track)
-            return
-
-        console.log("Playlist length:", playlist.length)
-        console.log("Current track index:", current_track.index)
-            
-        if(repeat || !stop_after_playing && playlist.length > (current_track.index+1)){
-            audio_player.pause()
-
-            if(repeat){
-                var next_track = current_track
-            } else {
-                var next_track = playlist[current_track.index+1]
-                
-                next_track.port   = current_track.port
-                next_track.port_id = current_track.port_id
-                next_track.song   = next_track.song.replace(/&amp;/g, '&')
-                next_track.artist = next_track.artist.replace(/&amp;/g, '&')
-
-                next_track.track  = next_track.artist + " - " + next_track.song
-            }
-            
-            if(send_stop_message){
-                current_track.port.postMessage({method:'stop', element_id: current_track.element_id})
-                if(popup_port)
-                    popup_port.postMessage({method:'stop', index: current_track.index})
-            }
-                
-            current_track = next_track
-            
-            current_track.port.postMessage({method:'loading', element_id: next_track.element_id})
-            if(popup_port)
-                current_track.port.postMessage({method:'loading', index: next_track.index})
-            
-            console.log("Playing next:", current_track)
-            
-            searchTrack(current_track)
-        } else {
-            current_track = null
-        }
-    }
-
-
     function updateTime(){
-        if(!audio_player.audio.paused && audio_player.audio.duration){
-            var time_left = audio_player.audio.duration - audio_player.audio.currentTime
-            if(time_left != 0) {
-                chrome.browserAction.setBadgeText({text:prettyTime(time_left)})
-            } else
-                chrome.browserAction.setBadgeText({text:''})
+        var track = music_manager.playlist[music_manager.current_track]
 
+        if(!music_manager.audio.paused && music_manager.audio.duration && track){
+            var time_left = track.duration - music_manager.audio.currentTime
+
+            if(time_left != 0) 
+                chrome.browserAction.setBadgeText({text:prettyTime(time_left)})
         }
 
         setTimeout(updateTime, 1000)
     }
-
     
-    var not_found_in_row = 0
+    var connected_ports = []
+    function stopInAllPorts(){
+        console.log("Stopping all ports", connected_ports)
 
-    // TODO: Notifications disabled. They don't work in Chrome 4.
-    function showNotification(){
-        if(window.localStorage["show_notifications"] == "true" || window.localStorage["show_notifications"] == undefined){
-            scrobbler.artistInfo(current_track.artist, function(response){            
-                var notification = window.webkitNotifications.createNotification(response.image, current_track.song, current_track.artist)
-
-                notification.show()
-                setTimeout(function(){notification.cancel()}, 6000)
-            })
+        for(i in connected_ports){
+            connected_ports[i].postMessage({method:"stop"})
         }
     }
-
-    function searchTrack(track){
-        VK.search(track.artist, track.song, function(response){
-            if(response.error){
-                if(response.error == 'overload')
-                    _gaq.push(['_trackEvent', "Search", 'overload']);
-
-
-                var play_preview = window.localStorage["skip_previews"] == "false" || window.localStorage["skip_previews"] == undefined
-
-                if(response.error == 'not_found' && track.streamable && play_preview) {
-                    not_found_in_row = 0
-
-                    scrobbler.preview_mp3(track.track_id, function(response){
-                        audio_player.play(response.url)
-                    })                
-                    
-                    showNotification()
-                } else {                
-                    track.port.postMessage({method:'readyToPlay', error: response.error, element_id: track.element_id})
-                    
-                    if(popup_port)
-                        track.port.postMessage({method:'readyToPlay', error: response.error, index: track.index})
-                        
-                    not_found_in_row += 1
-                    if(not_found_in_row < 10)
-                        setTimeout(playNextTrack, 500)
-                }
-
-            } else {
-                _gaq.push(['_trackEvent', "Search", 'playing']);
-
-                not_found_in_row = 0
-                audio_player.play(response.url)
-
-                showNotification()
-            }
-        })
-    }
-
-    function playArtistChart(artist, port){
-        console.log("Port:", port)
-
-        scrobbler.artistChart(artist, function(response){
-            var tracks = response.tracks     
-            
-            if(tracks.length == 0)
-                return false
-
-            playlist = []  
-            for(var i=0; i<tracks.length; i++){
-                playlist.push({
-                    port: port,
-                    index: i,                    
-                    artist: artist,
-                    port_id: port.portId_,
-                    element_id: "ex_button_"+(i+999),
-                    song: tracks[i].name,
-                    track: artist + " - " + tracks[i].name
-                })
-            }
-
-            current_track = playlist[0]
-            playNextTrack(true, false)
-        })
-    }
-
-    function playAlbum(artist, album, port){
-        scrobbler.albumPlaylist(artist, album, function(response){
-            var tracks = response.tracks     
-            
-            console.log("Tracks:", tracks)
-
-            if(tracks.length == 0)
-                return false
-
-            playlist = []  
-            for(var i=0; i<tracks.length; i++){
-                playlist.push({
-                    port: port,
-                    index: i,                    
-                    artist: artist,
-                    port_id: port.portId_,
-                    element_id: "ex_button_"+(i+999),
-                    song: tracks[i].title,
-                    track: artist + " - " + tracks[i].title
-                })
-            }
-
-            current_track = playlist[0]
-            playNextTrack(true, false)
-        })
-    }
-    var popup_port
     
     function onLoad(){    
         updateTime()
 
-        chrome.extension.onConnect.addListener(function(port) {    
+        canvas = document.getElementById('canvas')
+        canvasContext = canvas.getContext('2d')
+
+        chrome.extension.onConnect.addListener(function(port) {
             console.log("Connected:", port)
             
             if(port.name == "popup")
                 popup_port = port
+
+            connected_ports.push(port)            
 
             port.onMessage.addListener(function(msg) {
                 console.log(msg.method, msg)
@@ -242,88 +119,25 @@
                     scrobbler._username = null
                     scrobbler._session_key = null
 
-                } else if(msg.method == "getTrackInfo"){                    
-                    port.postMessage({
-                        method: "trackInfo", 
-                        track: current_track, 
-                        paused:audio_player.audio.paused, 
-                        playlist: playlist,
-                        
-                        stop_after_playing: stop_after_playing,
-                        repeat: repeat,
-                        scrobbling: scrobbler.scrobbling,
-                        
-                        username: scrobbler._username
-                    })
-                    
-                } else if(msg.method == "scrobbling"){                
-                    scrobbler.scrobbling = msg.state                    
-                    
-                } else if(msg.method == "repeat"){                
-                    repeat = msg.state                    
-                    
-                } else if(msg.method == "stop_after_playing") {
-                    stop_after_playing = msg.state
-                    
-                } else if(msg.method == "pause"){
-                    audio_player.pause()                                    
-
-                } else if(msg.method == "play"){
-                    var track_info = msg.track
-                    
-                    if(!track_info.song)
-                        delete track_info.song 
-                    else
-                        track_info.song = track_info.song.replace(/&amp;/g, '&')
-
-                    if(!track_info.album)
-                        delete track_info.album
-                    else
-                        track_info.album = track_info.album.replace(/&amp;/g, '&')
-                       
-
-                    track_info.artist =  track_info.artist.replace(/&amp;/g, '&')
-                    
-                    track_info.port = port
-
-                    if(!msg.port_id)
-                        track_info.port_id = port.tab ? port.portId_ : msg.track.port_id
-
-                    track_info.track = track_info.artist + " - " + track_info.song
-
-                    console.log("Track info:", track_info)
-                    
-                    if(msg.playlist)
-                        playlist = msg.playlist                    
-
-                    if(track_info.song && current_track && current_track.port_id == track_info.port_id && current_track.element_id == track_info.element_id){
-                        audio_player.play()
-                        
-                        if(port.tab)
-                            port.postMessage({method:'readyToPlay', element_id: current_track.element_id})
-                        else
-                            port.postMessage({method:'readyToPlay', index: current_track.index})                        
-                    } else {
-                        if(current_track && current_track.port_id && current_track.port_id != track_info.port_id)
-                            current_track.port.postMessage({method:'stop'})
-
-                        if(track_info.song){
-                            current_track = track_info
-                            searchTrack(current_track)
-                        } else {                            
-                            if(track_info.album)
-                                playAlbum(track_info.artist, track_info.album, msg.track.port)
-                            else 
-                                playArtistChart(track_info.artist, msg.track.port)
-                        }
+                } else if(msg.method == "play"){                    
+                    if(msg.playlist) {
+                        animateFlip()
+                        music_manager.playlist = msg.playlist
+                        delete music_manager.current_track
                     }
 
+                    music_manager.play(msg.track)
                 }
             })
 
             port.onDisconnect.addListener(function(msg){
                 if(port.name == "popup")
                     delete popup_port
+                else {
+                    var index = connected_ports.indexOf(port)
+                    if(index >= 0)
+                        connected_ports.splice(index, 1)
+                }
             })
 
 
@@ -355,5 +169,8 @@
        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
      })();*/
       </script>
+
+      <img id="lastfm_icon" src="lastfm_19.png" width="19" height="19"/>
+      <canvas id="canvas" width="19" height="19" />
     </body>
 </html>

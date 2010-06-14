@@ -1,8 +1,6 @@
 function stopCurrentTrack(){
     var current_playing = document.querySelector("a.sm2_button.playing, a.sm2_button.paused, a.sm2_button.loading")
 
-    console.log("Stopping current track:", current_playing)
-
     if(current_playing)
         current_playing.className = "sm2_button"
 }
@@ -17,7 +15,7 @@ function getTrackInfo(button){
     else if(container.className.match('streamable'))
         streamable = true
 
-    return {
+    var track_info = {
         artist:     container.getAttribute('data-artist'),
         song:       container.getAttribute('data-song'),
         album:      container.getAttribute('data-album'),
@@ -27,6 +25,12 @@ function getTrackInfo(button){
         element_id: button.id,
         streamable: streamable
     }
+
+    for(key in track_info)
+        if(track_info[key] == undefined) 
+            delete track_info[key]
+    
+    return track_info
 }
 
 

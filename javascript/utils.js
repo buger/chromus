@@ -49,4 +49,20 @@ function prettyTime(seconds){
     return minutes + ":" + seconds
 }
 
+function timeToSeconds(time){
+    time = time.split(':')
 
+    return parseInt(time[0])*60 + parseInt(time[1])
+}
+
+String.prototype.replaceEntities = function(){
+   this = this.replace(/&amp;/g, '&') 
+}
+
+Function.prototype.bind = function(scope) {
+  var _function = this;
+  
+  return function() {
+    return _function.apply(scope, arguments);
+  }
+}

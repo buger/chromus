@@ -7,23 +7,28 @@
     <script src="javascript/scrobbler.js"></script>
 
     <script>
-    var port
-    var current_track
-    var playlist
-    
+    var music_manager = chrome.extension.getBackgroundPage().music_manager
+
+    music_manager.audio.addEventListener('onPlay', function(){
+        stopCurrentTrack()
+        
+        if(music_manager.current_track)
+            document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"
+    }, true)
+
     function updatePlaylist(){
         var container = document.getElementById('tracks_container')        
         var html = ""
         var state
         
+        var playlist = music_manager.playlist
+
         for(var i=0; i<playlist.length; i++){
-            console.log("Item:", playlist[i])                                
-        
-            if(current_track && current_track.index == i)                
-                state = current_track.paused ? "paused" : "playing"
+            if(music_manager.current_track != undefined && music_manager.current_track == i)
+                state = music_manager.audio.paused ? "paused" : "playing"
             else
                 state = ""
-        
+
             html += "<li>"+
                         "<span class='number'>"+(i+1)+"</span>"+
                         "<a id='ex_button_"+playlist[i].index+"' data-index-number='"+playlist[i].index+"' href='javascript:;' onclick='togglePlaying(this)' class='sm2_button "+state+"'></a>"+
@@ -40,72 +45,13 @@
 
         container.innerHTML = html
                 
-        if(current_track && current_track.index > 16)
+        if(music_manager.current_track && music_manager.current_track > 16)
             var playing_link = document.querySelector('a.playing')
             
             if(playing_link)
                 container.parentNode.scrollTop = playing_link.parentNode.offsetTop-55
     }
     
-    function initializePort(){
-        port = chrome.extension.connect({name: "popup"})
-        
-        port.onMessage.addListener(function(msg){
-            console.log("Message:", msg)
-
-            if(msg.method == 'trackInfo'){
-                console.log("Track info:", msg)
-            
-                playlist = msg.playlist
-                current_track = msg.track
-                
-                if(current_track)
-                    current_track.paused = msg.paused
-                
-                if(msg.repeat)
-                    document.getElementById('repeat').className = "active"
-                    
-                if(msg.stop_after_playing)
-                    document.getElementById('stop_after_playing').className = "active"
-
-                if(msg.scrobbling)
-                    document.getElementById('scrobbling').className = "active"
-                
-                console.log("Current track:", current_track)
-                
-                if(msg.playlist)
-                    updatePlaylist()
-                
-                if(!msg.username)
-                    document.getElementById('connect_lastfm').style.display = ''
-                else
-                    document.getElementById('scrobbling').style.display = ''
-                    
-            } else if(msg.method == 'readyToPlay'){
-                stopCurrentTrack()
-
-                var button = document.getElementById("ex_button_"+msg.index)
-
-                if(msg.error){
-                    button.className = "sm2_button disabled"
-                    button.title = msg.error                    
-                } else {
-                    button.className = "sm2_button playing"
-                }                
-
-                current_track = playlist[msg.index]                
-
-                console.log(current_track)
-            } else if(msg.method == "stop") {
-                stopCurrentTrack()
-
-            } else if(msg.method == "loading") {
-                var button = document.getElementById("ex_button_"+msg.index)
-                button.className = "sm2_button loading"                
-            }
-        })
-    }
-
     function toggleRepeat(event){
         var link = event.target
         
@@ -115,7 +61,7 @@
             link.className = 'active'
         }
         
-        port.postMessage({method:'repeat', state:link.className.match(/active/)})
+        music_manager.repeat = link.className.match(/active/)
     }    
     
     
@@ -128,7 +74,7 @@
             link.className = 'active'
         }
 
-        port.postMessage({method:'stop_after_playing', state:link.className.match(/active/)})
+        music_manager.stop_after_playing = link.className.match(/active/)
     }
 
     function toggleScrobbling(event){
@@ -140,13 +86,21 @@
             link.className = 'active'
         }
 
-        port.postMessage({method:'scrobbling', state:link.className.match(/active/)})
+        music_manager.scrobbler.scrobbling = link.className.match(/active/)
     }   
 
     
     function onLoad(){
-        initializePort()
-        port.postMessage({method:'getTrackInfo'})
+        updatePlaylist()
+
+        if(music_manager.repeat)
+            document.getElementById('repeat').className = 'active'
+
+        if(music_manager.stop_after_playing)
+            document.getElementById('stop_after_playing').className = 'active'
+        
+        if(music_manager.scrobbler.scrobbling)
+            document.getElementById('scrobbling').className = 'active'
 
         document.getElementById('repeat').addEventListener('click', toggleRepeat, false)
         document.getElementById('stop_after_playing').addEventListener('click', toggleStopAfterPlaying, false)
@@ -166,24 +120,25 @@
             return false
     
         if(link.className.match('playing')){
-            port.postMessage({method: 'pause'})
             link.className = "sm2_button paused"
-        } else {        
+
+            music_manager.pause()
+        } else {
             if(link.className.match(/paused/)){
-                port.postMessage({method: 'play', track: current_track})
                 link.className = "sm2_button playing"
-            } else {
+            } else {                
                 stopCurrentTrack()
-            
+
                 link.className = "sm2_button loading"                        
-                port.postMessage({method: 'play', track: playlist[parseInt(link.getAttribute('data-index-number'))]})
             }
+            
+            music_manager.play(music_manager.playlist[link.getAttribute('data-index-number')])
         }
     }    
 
     </script>
     </head>    
-    <body onload="onLoad()">
+    <body>
         <div id='repeat'>repeat</div>
         <div id='stop_after_playing'>stop after playing</div>
         <div id='scrobbling' style='display:none'>scrobbling</div>
@@ -193,5 +148,8 @@
             <ul style="white-space:nowrap" id="tracks_container">            
             </ul>
         </div>
+        <script>
+            onLoad()
+        </script>
     </body>
 </html>

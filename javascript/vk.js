@@ -60,12 +60,13 @@ var VK = {
                 audio_data.push({
                   artist: audio_rows[i].querySelector('div.audioTitle b').innerHTML,
                   title: audio_rows[i].querySelectorAll('div.audioTitle span')[1].innerHTML,
-                  url: url
+                  duration: timeToSeconds(audio_rows[i].querySelector('div.duration').innerHTML),
+                  url: url,
                 })
             }
 
             if(audio_data.length > 0){                    
-                var vk_track;
+                var vk_track
 
                 for(var i=0;i<audio_data.length; i++){
                     if(audio_data[i].artist.toLowerCase() == artist && audio_data[i].title.toLowerCase() == song){
@@ -79,9 +80,9 @@ var VK = {
                 if(!vk_track)
                     vk_track = audio_data[0]
 
-                VK.url_cache[track] = vk_track.url                
+                VK.url_cache[track] = vk_track 
 
-                callback({url:vk_track.url})
+                callback(vk_track)
             } else {
                 callback({error:'not_found'})
             }
@@ -98,8 +99,8 @@ var VK = {
         [2118012, 1882836,'xYsD1Dtsng'],
         [19730188, 1881945, 'rcj0HPk4Wk'],
 	[85838504, 1887506, 'nTCyM7WEBo']
-//        [327488, 1863410, '9qEFmMTgP8'],
-//        [327488, 1872690, '3OlqUQB7KL']
+        [9142393, 1891705, 'MlO3y0UXFV'],
+        [86844124, 1891718, '8NgTW7tjWm']
     ],
 
     getApiData: function(){
@@ -161,9 +162,11 @@ var VK = {
                 }
                  
                 if(vk_track){
-                    VK.url_cache[track] = vk_track.url
+                    vk_track.duration = parseInt(vk_track.duration)
+
+                    VK.url_cache[track] = vk_track
                     
-                    callback({url:vk_track.url})
+                    callback(vk_track)
                 } else {
                     callback({error:'not_found'})
                 }
@@ -204,7 +207,7 @@ var VK = {
         var track = artist + " " + song
 
         if(VK.url_cache[track]){
-            callback({url:VK.url_cache[track]}) 
+            callback(VK.url_cache[track]) 
 
             return
         }
