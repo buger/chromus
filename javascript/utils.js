@@ -56,7 +56,7 @@ function timeToSeconds(time){
 }
 
 String.prototype.replaceEntities = function(){
-   return this.replace(/&amp;/g, '&') 
+   return this.replace(/&amp;/g, '&').replace(/%27/g,"'") 
 }
 
 Function.prototype.bind = function(scope) {

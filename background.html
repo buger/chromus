@@ -63,6 +63,9 @@
 
     music_manager.audio.addEventListener('onEnded', function(){
         chrome.browserAction.setBadgeText({text:''})
+
+        if(active_port)
+            active_port.postMessage({method:"stop"})
     }, true)
 
     music_manager.audio.addEventListener('onLoading', function(){

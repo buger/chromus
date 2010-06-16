@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="357bb98f-ad2a-494e-9087-d1df1bfe73ca" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/javascript/content_script.js" afterPath="$PROJECT_DIR$/javascript/content_script.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/popup.html" afterPath="$PROJECT_DIR$/popup.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/javascript/utils.js" afterPath="$PROJECT_DIR$/javascript/utils.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/javascript/music_manager.js" afterPath="$PROJECT_DIR$/javascript/music_manager.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/javascript/scrobbler.js" afterPath="$PROJECT_DIR$/javascript/scrobbler.js" />
@@ -36,10 +34,10 @@
   <component name="FileColors" enabled="true" enabledForTabs="true" />
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="background.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="background.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/background.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="33" selection-start="97" selection-end="97" vertical-scroll-proportion="-0.9375">
+            <state line="66" column="22" selection-start="2219" selection-end="2219" vertical-scroll-proportion="0.4627383">
               <folding />
             </state>
           </provider>
@@ -48,16 +46,16 @@
       <file leaf-file-name="popup.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/popup.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="24" column="125" selection-start="984" selection-end="984" vertical-scroll-proportion="-7.5">
+            <state line="24" column="125" selection-start="984" selection-end="984" vertical-scroll-proportion="-5.625">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="music_manager.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="music_manager.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/javascript/music_manager.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="198" column="66" selection-start="4769" selection-end="4769" vertical-scroll-proportion="2.848">
+            <state line="7" column="0" selection-start="148" selection-end="148" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -75,7 +73,7 @@
       <file leaf-file-name="vk.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/javascript/vk.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="156" column="60" selection-start="5858" selection-end="5858" vertical-scroll-proportion="-91.2">
+            <state line="46" column="148" selection-start="1659" selection-end="1659" vertical-scroll-proportion="-12.6">
               <folding />
             </state>
           </provider>
@@ -93,7 +91,7 @@
       <file leaf-file-name="utils.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/javascript/utils.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="10" selection-start="1336" selection-end="1336" vertical-scroll-proportion="0.0">
+            <state line="58" column="55" selection-start="1381" selection-end="1381" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -102,7 +100,7 @@
       <file leaf-file-name="scrobbler.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/javascript/scrobbler.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="205" column="52" selection-start="6259" selection-end="6259" vertical-scroll-proportion="0.0">
+            <state line="113" column="23" selection-start="3621" selection-end="3621" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -118,14 +116,14 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/javascript/utils.js" />
         <option value="$PROJECT_DIR$/javascript/content_script.js" />
-        <option value="$PROJECT_DIR$/javascript/music_manager.js" />
-        <option value="$PROJECT_DIR$/background.html" />
         <option value="$PROJECT_DIR$/popup.html" />
-        <option value="$PROJECT_DIR$/javascript/vk.js" />
         <option value="$PROJECT_DIR$/javascript/cache.js" />
         <option value="$PROJECT_DIR$/javascript/scrobbler.js" />
+        <option value="$PROJECT_DIR$/javascript/vk.js" />
+        <option value="$PROJECT_DIR$/javascript/utils.js" />
+        <option value="$PROJECT_DIR$/javascript/music_manager.js" />
+        <option value="$PROJECT_DIR$/background.html" />
       </list>
     </option>
   </component>
@@ -223,7 +221,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="25" width="1280" height="748" extended-state="6" />
+    <frame x="0" y="25" width="1280" height="748" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
@@ -274,23 +272,9 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/background.html">
+    <entry file="file://$PROJECT_DIR$/javascript/scrobbler.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="33" selection-start="97" selection-end="97" vertical-scroll-proportion="-0.9375">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/popup.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="24" column="125" selection-start="984" selection-end="984" vertical-scroll-proportion="-7.5">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/javascript/vk.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="156" column="60" selection-start="5858" selection-end="5858" vertical-scroll-proportion="-91.2">
+        <state line="113" column="23" selection-start="3621" selection-end="3621" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -302,16 +286,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/javascript/utils.js">
+    <entry file="file://$PROJECT_DIR$/javascript/vk.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="10" selection-start="1336" selection-end="1336" vertical-scroll-proportion="0.0">
+        <state line="46" column="148" selection-start="1659" selection-end="1659" vertical-scroll-proportion="-12.6">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/javascript/scrobbler.js">
+    <entry file="file://$PROJECT_DIR$/javascript/utils.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="205" column="52" selection-start="6259" selection-end="6259" vertical-scroll-proportion="0.0">
+        <state line="58" column="55" selection-start="1381" selection-end="1381" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -325,7 +309,21 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/javascript/music_manager.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="198" column="66" selection-start="4769" selection-end="4769" vertical-scroll-proportion="2.848">
+        <state line="7" column="0" selection-start="148" selection-end="148" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/popup.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="125" selection-start="984" selection-end="984" vertical-scroll-proportion="-5.625">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/background.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="66" column="22" selection-start="2219" selection-end="2219" vertical-scroll-proportion="0.4627383">
           <folding />
         </state>
       </provider>

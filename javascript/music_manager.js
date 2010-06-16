@@ -6,8 +6,6 @@ Audio.prototype.playOrLoad = function(url){
         this.load()
     }
 
-    this.volume = 0
-
     this.play()
 }
 
@@ -43,6 +41,12 @@ MusicManager.prototype.onTimeUpdate = function(){
     if(this.audio.duration > 31 && percent_played > 70 && !track.scrobbled){        
         this.scrobbler.scrobble(track.artist, track.song, track.duration)
         track.scrobbled = true
+
+        var next_track = this.playlist[this.current_track+1]
+        if(next_track){
+            console.log("Prefetching next track")
+            this.searchTrack(this.current_track+1, false)
+        }
 
         console.log("Track scrobbled", track)
     }

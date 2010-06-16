@@ -111,7 +111,7 @@ Scrobbler.prototype.setNowPlaying = function(artist, track, duration, callback){
                 } else {
                     this.setNowPlaying(artist, track, duration, callback)
                 }
-            })
+            }.bind(this))
         } else {
             if(xhr.statusText == "OK")
                 callback({})

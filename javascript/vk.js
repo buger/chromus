@@ -44,7 +44,7 @@ var VK = {
             }
 
             var container = document.getElementById('vk_search')
-            container.innerHTML = xhr.responseText.match(/rows":"(.*)",/)[1].replace(/\n/g,'').replace(/\t/g,'').replace(/\\/g,'')
+            container.innerHTML = xhr.responseText.match(/rows":"(.*)",/)[1].replace(/\n/g,'').replace(/\t/g,'').replace(/\\/g,'').replaceEntities()
 
             var audio_data = []
             var audio_rows = container.querySelectorAll('div.audioRow')
@@ -138,7 +138,11 @@ var VK = {
                 return
             }
 
-            results = JSON.parse(xhr.responseText);
+            var response_text = xhr.responseText.replace(/\u001D/g,'').replaceEntities()
+            
+            var results = JSON.parse(response_text);
+
+            console.log(results)
          
             if(results.response){
                 var vk_track
@@ -146,6 +150,8 @@ var VK = {
                 if(results.response[1]){                                
                     for(var i=1; i<results.response.length; i++){
                         var audio = results.response[i].audio
+
+                        console.log(audio.artist)
 
                         if(audio.artist.toLowerCase() == artist && audio.title.toLowerCase() == song){
                             vk_track = audio 
