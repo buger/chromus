@@ -122,6 +122,8 @@ MusicManager.prototype.playAlbum = function(artist, album){
     MusicManager#playNextTrack()
 **/
 MusicManager.prototype.playNextTrack = function(){
+    console.log("Next track:", this.current_track)
+
     if(this.current_track != undefined && !this.repeat)
         this.current_track += 1
     
@@ -160,6 +162,8 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
     VK.search(track.artist, track.song, function(response){
         if(!playAfterSearch) return
 
+        console.log("Resp",response)
+
         if(response.error){
             if(response.error == 'not_found' && track.track_id && track.streamable && this.playPreviews()) {
                 this.not_found_in_row = 0
@@ -172,10 +176,22 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
                 track.duration = 30
 
                 this.showNotification()
-            } else {                
+            } else {
+                this.current_track = trackIndex
+
+                track.not_found = true
+
+                this.fireEvent("onPlay")
+                
+                if(!this.not_found_in_row)
+                    this.not_found_in_row = 0
+
                 this.not_found_in_row += 1
+
                 if(this.not_found_in_row < 10)
-                    setTimeout(function(){this.playNextTrack()}, 500)
+                    setTimeout(this.playNextTrack.bind(this), 500)
+                else
+                    this.not_found_in_row = 0
             }
         } else {
             this.current_track = trackIndex

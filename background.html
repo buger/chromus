@@ -55,10 +55,15 @@
     music_manager.audio.addEventListener('onPlay', function(){
         var track = music_manager.playlist[music_manager.current_track]
 
-        chrome.browserAction.setTitle({title: track.artist +' - '+ track.song})
+        if(!track.not_found)
+            chrome.browserAction.setTitle({title: track.artist +' - '+ track.song})       
 
-        if(active_port)
-            active_port.postMessage({method:"readyToPlay", element_id:track.element_id})
+        if(active_port){
+            if(track.not_found)
+                active_port.postMessage({method:"readyToPlay", error:'not_found', element_id: track.element_id})
+            else
+                active_port.postMessage({method:"readyToPlay", element_id:track.element_id})
+        }
     }, true)
 
     music_manager.audio.addEventListener('onEnded', function(){

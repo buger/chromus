@@ -10,10 +10,14 @@
     var music_manager = chrome.extension.getBackgroundPage().music_manager
 
     music_manager.audio.addEventListener('onPlay', function(){
+        var track = music_manager.playlist[music_manager.current_track]
         stopCurrentTrack()
 
         if(music_manager.current_track != undefined)
-            try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"}catch(e){}
+            if(track.not_found)
+                try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button disabled"}catch(e){}
+            else
+                try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"}catch(e){}
     }, true)
 
     music_manager.audio.addEventListener('onEnded', function(){
@@ -36,7 +40,7 @@
             if(music_manager.current_track != undefined && music_manager.current_track == i)
                 state = music_manager.audio.paused ? "paused" : "playing"
             else
-                state = ""
+                state = playlist[i].not_found ? "disabled" : ""
 
             html += "<li>"+
                         "<span class='number'>"+(i+1)+"</span>"+

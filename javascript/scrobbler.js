@@ -151,7 +151,7 @@ Scrobbler.prototype.scrobble = function(artist, track, duration, callback){
                     } else {
                         this.scrobble(artist, track, duration, callback)
                     }
-                })
+                }.bind(this))
             } else {
                 callback({error:xhr.reponseText})
             }
