@@ -19,7 +19,7 @@ function getTrackInfo(button){
         artist:     container.getAttribute('data-artist'),
         song:       container.getAttribute('data-song'),
         album:      container.getAttribute('data-album'),
-        track_id:   container.getAttribute('data-track-id'),     
+        track_id:   container.getAttribute('data-track-id'),
         index:      parseInt(container.getAttribute('data-index-number')),
         
         element_id: button.id,
@@ -128,6 +128,8 @@ function initializePort(){
                         button.title = msg.error
                     }
                 } else {
+                    stopCurrentTrack()
+                    
                     button.className = "sm2_button playing"
                 }
         }
@@ -175,9 +177,12 @@ document.body.addEventListener('click', function(evt){
             if(!target.className.match('paused'))
                 stopCurrentTrack()                          
             
-            target.className = "sm2_button loading"    
-            
-            port.postMessage({method:'play', track: track_info, playlist: getPlaylist(target)})
+            if(target.className.match('paused'))
+                port.postMessage({method:'play', track: track_info})
+            else
+                port.postMessage({method:'play', track: track_info, playlist: getPlaylist(target)})
+
+            target.className = "sm2_button loading"                            
         }
     }
 }, false)

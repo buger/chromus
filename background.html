@@ -1,6 +1,7 @@
 <html>
     <head>
     <script src="javascript/md5.js"></script>
+    <script src="javascript/cache.js"></script>
     <script src="javascript/utils.js"></script>
     <script src="javascript/audio_player.js"></script>
     <script src="javascript/scrobbler.js"></script>
@@ -40,7 +41,7 @@
       canvasContext.drawImage(document.getElementById('lastfm_icon'),
           -Math.ceil(canvas.width/2),
           -Math.ceil(canvas.height/2));
-      canvasContext.restore();
+      canvasContext.restore()
 
       chrome.browserAction.setIcon({imageData:canvasContext.getImageData(0, 0, canvas.width,canvas.height)});
     }
@@ -56,12 +57,21 @@
 
         chrome.browserAction.setTitle({title: track.artist +' - '+ track.song})
 
-        stopInAllPorts()
+        if(active_port)
+            active_port.postMessage({method:"readyToPlay", element_id:track.element_id})
     }, true)
 
     music_manager.audio.addEventListener('onEnded', function(){
         chrome.browserAction.setBadgeText({text:''})
     }, true)
+
+    music_manager.audio.addEventListener('onLoading', function(){
+        var track = music_manager.playlist[music_manager.current_track]
+
+        if(active_port && track.element_id)
+            active_port.postMessage({method:"loading", element_id:track.element_id})
+    }, true)
+
     
     function updateTime(){
         var track = music_manager.playlist[music_manager.current_track]
@@ -77,14 +87,9 @@
     }
     
     var connected_ports = []
-    function stopInAllPorts(){
-        console.log("Stopping all ports", connected_ports)
 
-        for(i in connected_ports){
-            connected_ports[i].postMessage({method:"stop"})
-        }
-    }
-    
+    var active_port
+
     function onLoad(){    
         updateTime()
 
@@ -119,7 +124,16 @@
                     scrobbler._username = null
                     scrobbler._session_key = null
 
-                } else if(msg.method == "play"){                    
+                } else if(msg.method == "pause") {
+                    music_manager.pause()
+                    
+                } else if(msg.method == "play"){
+                    if(active_port && active_port != port && port.name != "popup")
+                        active_port.postMessage({method:"stop"})                    
+
+                    if(port.name != "popup")
+                        active_port = port
+
                     if(msg.playlist) {
                         animateFlip()
                         music_manager.playlist = msg.playlist

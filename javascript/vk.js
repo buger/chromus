@@ -22,8 +22,6 @@ var VK = {
         })
     },
 
-    url_cache: {},
-   
     /**
         VK.#_rawSearch(artist, song, callback)
 
@@ -61,7 +59,7 @@ var VK = {
                   artist: audio_rows[i].querySelector('div.audioTitle b').innerHTML,
                   title: audio_rows[i].querySelectorAll('div.audioTitle span')[1].innerHTML,
                   duration: timeToSeconds(audio_rows[i].querySelector('div.duration').innerHTML),
-                  url: url,
+                  url: url
                 })
             }
 
@@ -80,7 +78,8 @@ var VK = {
                 if(!vk_track)
                     vk_track = audio_data[0]
 
-                VK.url_cache[track] = vk_track 
+                //Caching for 3 hours
+                CACHE.set(track, vk_track, 1000*60*60*3)                                
 
                 callback(vk_track)
             } else {
@@ -98,7 +97,7 @@ var VK = {
         [327488, 525159, 'g5vuj9EWFO'],
         [2118012, 1882836,'xYsD1Dtsng'],
         [19730188, 1881945, 'rcj0HPk4Wk'],
-	[85838504, 1887506, 'nTCyM7WEBo']
+	    [85838504, 1887506, 'nTCyM7WEBo']
         [9142393, 1891705, 'MlO3y0UXFV'],
         [86844124, 1891718, '8NgTW7tjWm']
     ],
@@ -164,7 +163,8 @@ var VK = {
                 if(vk_track){
                     vk_track.duration = parseInt(vk_track.duration)
 
-                    VK.url_cache[track] = vk_track
+                    //Caching for 3 hours
+                    CACHE.set(track, vk_track, 1000*60*60*3)
                     
                     callback(vk_track)
                 } else {
@@ -206,11 +206,9 @@ var VK = {
         
         var track = artist + " " + song
 
-        if(VK.url_cache[track]){
-            callback(VK.url_cache[track]) 
-
-            return
-        }
+        if(CACHE.get(track))
+            return callback(CACHE.get(track))
+        
 
         if(this.search_method == "test_mode")
             this._testmodeSearch(artist, song, callback)

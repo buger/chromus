@@ -11,9 +11,18 @@
 
     music_manager.audio.addEventListener('onPlay', function(){
         stopCurrentTrack()
-        
-        if(music_manager.current_track)
-            document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"
+
+        if(music_manager.current_track != undefined)
+            try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"}catch(e){}
+    }, true)
+
+    music_manager.audio.addEventListener('onEnded', function(){
+        stopCurrentTrack()
+    }, true)
+
+    music_manager.audio.addEventListener('onLoading', function(){
+        if(music_manager.current_track != undefined)
+            try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button loading"}catch(e){}
     }, true)
 
     function updatePlaylist(){
@@ -45,8 +54,8 @@
 
         container.innerHTML = html
                 
-        if(music_manager.current_track && music_manager.current_track > 16)
-            var playing_link = document.querySelector('a.playing')
+        if(music_manager.current_track != undefined && music_manager.current_track > 16)
+            var playing_link = document.querySelector('a.playing, a.paused')
             
             if(playing_link)
                 container.parentNode.scrollTop = playing_link.parentNode.offsetTop-55
@@ -101,6 +110,11 @@
         
         if(music_manager.scrobbler.scrobbling)
             document.getElementById('scrobbling').className = 'active'
+
+        if(!music_manager.scrobbler._username)
+                document.getElementById('connect_lastfm').style.display = ''
+            else
+                document.getElementById('scrobbling').style.display = ''
 
         document.getElementById('repeat').addEventListener('click', toggleRepeat, false)
         document.getElementById('stop_after_playing').addEventListener('click', toggleStopAfterPlaying, false)
