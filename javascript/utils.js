@@ -27,7 +27,7 @@ function xhrRequest(url, method, data, callback){
 
     xhr.onreadystatechange = function(){
         if(xhr.readyState == 4){
-  //          console.log("Response:", xhr)
+            console.log("Response:", xhr)
 
             callback(xhr)
         }

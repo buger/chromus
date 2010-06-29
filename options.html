@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Last.fm external audio search</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
 <script src="javascript/utils.js"></script>
 
 <script type="text/javascript">
@@ -169,70 +170,129 @@ background: -webkit-gradient(
 </style>
 </head>
 <body>
+<a href="http://chrome-music.tumblr.com" style="position: absolute; top: 5px; left: 15px; font-size: 35px; color: #333;">http://chrome-music.tumblr.com</a>
+<div style="position: absolute; top: 10px; right: 10px; text-align: right; width: 500px;">
+    <a href="https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh" title="Google Chrome extension" style="vertical-align:top; color: #333; font-size: 25px; white-space:nowrap">
+        Like it? Rate us with five stars! <img src="http://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Chrome_Logo.svg/200px-Chrome_Logo.svg.png" width="80" style="margin-right: 3px"/></a>
+    <br/>
+    <br/>
+
+    <a href="http://www.twitter.com/chrome_music"><img src="http://twitter-badges.s3.amazonaws.com/follow_bird-b.png" alt="Follow chrome_music on Twitter" style="margin-bottom: 20px;"/></a>
+    <br/>
+    <div style="position: relative; margin-left: 330px; margin-bottom: 5px;">
+        <div style="float: left;padding-top: 5px; margin-right: 10px;">
+            <script type="text/javascript">
+            tweetmeme_url = 'https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh?';
+            </script>
+            <script type="text/javascript" src="http://tweetmeme.com/i/scripts/button.js"></script>
+        </div>
+        <div style="float: left; margit-top: -5px; margin-right: 10px;">
+            <a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="normal-count" data-url="https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh"></a>
+            <script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>
+        </div>
+        <div style="float: left; padding-top: 5px;">
+            <script src="http://www.stumbleupon.com/hostedbadge.php?s=5&r=https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh"></script>
+        </div>
+    </div>
+    <iframe src="http://www.facebook.com/plugins/likebox.php?id=128158783888611&amp;width=200&amp;connections=10&amp;stream=false&amp;header=true&amp;height=287" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:200px; height:287px; margin-top: 10px; background: white;" allowTransparency="true"></iframe>
+    <br/>
+    <!-- AddToAny BEGIN -->
+    <a class="a2a_dd" href="http://www.addtoany.com/share_save?linkurl=https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh&amp;linkname=Last.fm%20free%20music%20player"><img src="http://static.addtoany.com/buttons/share_save_171_16.png" width="171" height="16" border="0" alt="Share/Bookmark"/></a>
+    <script type="text/javascript">
+    var a2a_config = a2a_config || {};
+    a2a_config.linkname = "Last.fm free music player";
+    a2a_config.linkurl = "http://chrome-music.tumblr.com";
+    </script>
+    <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+
+    <br/>
+    
+<a href="http://vkontakte.ru/club18588135" style="padding-left: 40px; display: block; height: 40px; padding-top: 15px; font-size: 16px; color: #45688E; line-height: 60px; height: 60px;"><img src="http://vk.com/images/vk32.png" alt=""/>&nbsp;Группа ВКонтакте</a>
+<br/>    
+
+</div>
 <div class="centered" style="text-align: center">
     <h2 style="color:#333;">Last.fm free music player settings</h2>
-<form onsubmit="this.submit.disabled = true; save_options(this); return false">
-<div style="float: left; height: 500px; width: 250px; background: url(lastfm_128.png) top center no-repeat; padding-top: 130px; text-align: left;">
-    <div id="error" style="display: none">
-    </div>
-    <div id="logged" style="display: none; font-size: 20px; font-weight: bold;">Logged as <a id="username_display" href="javascript:;" target="_blank" onclick="this.href = 'http://last.fm/user/'+this.innerHTML" style="color:#0187C5"></a>
-    <br/><a href="javascript:lastfm_logout()" style="font-size: 12px;" target="_blank">Logout</a></div>    
-    <div id="not_logged" style="display: none; text-align: center"><a href="javascript:;" onclick="scrobbler.auth(); window.close()" style="color:#0187C5; font-size: 20px;">Login to last.fm</a></div>    
-</div>
-<div style="float: left; margin-left: 90px; text-align: left; color: #ccc" id="search_settings">
-<div style="margin-bottom: 10px;">
-    <label style="font-size: 18px; margin-right: 0px; color: #333;" for="show_notifications">Display notifications:</label>
-    <input type="checkbox" id="show_notifications" onclick="toggle_notifications(this.checked)"/>
-</div>
-<div style="margin-bottom: 30px;">
-    <label style="font-size: 18px; margin-right: 0px; color: #333;" for="play_previews">Try to play previews if track not found:</label>
-    <input type="checkbox" id="play_previews" onclick="toggle_play_previews(this.checked)"/>
-</div>
-<div>
-    <label style="font-size: 18px; margin-right: 0px; color: #333;" for="external_audio_search">Use external audio search:</label>
-    <input type="checkbox" id="external_audio_search" onclick="toggle_external_search(this.checked)"/>
-</div>
-<h3>Choose search provider:</h3>
-<ul id="options">
-    <li>
-      <input type="radio" name="search_provider" id="vkontakte_ru" value="http://vkontakte.ru/gsearch.php?section=audio&q=%s" disabled="disabled"/>
-      <img src="http://www.vkontakte.ru/favicon.ico" />
-      <label for="vkontakte_ru">vkontakte.ru</label>
-    </li>
-    <li>
-      <input type="radio" name="search_provider" id="vk_com" value="http://vk.com/gsearch.php?section=audio&q=%s" disabled="disabled"/>
-      <img src="http://www.vk.com/images/faviconvk.ico" />
-      <label for="vk_com">vk.com</label>
-    </li>
-    <li>
-      <input type="radio" name="search_provider" id="vpleer_ru" value="http://vpleer.ru/?q=%s" disabled="disabled"/>      
-      <label for="vpleer_ru">vpleer.ru</label>
-    </li>
-    <li>
-      <input type="radio" name="search_provider" id="prostopleer_com" value="http://prostopleer.com/#/search?q=%s" disabled="disabled"/>
-      <img src="http://prostopleer.com/favicon.ico"/>
-      <label for="prostopleer_com">prostopleer.com</label>
-    </li>   
-    <li>
-      <input type="radio" name="search_provider" id="grooveshark_com" value="http://listen.grooveshark.com/#/search/songs/?query=%s" disabled="disabled"/>
-      <img src="http://www.grooveshark.com/favicon.ico"/>
-      <label for="grooveshark_com">grooveshark.com</label>
-    </li>
-    <li>
-      <input type="radio" name="search_provider" id="other" disabled="disabled"/>
-      <input type="text"  disabled="disabled" id="search_pattern" name="search_pattern" style="width: 300px; border: 1px solid #ccc" onfocus="document.getElementById('other').checked = true"/>
-      <br/>
-      <span style="margin-left: 25px; color: #666; font-size: 12px">http://mysite.com/search?q=%s</span>
-    </li>
-</ul>
-<input type="submit" value="Save" name="submit" onclick="this.value = 'Saving...';" style="width: 100px; padding: 5px;" disabled="disabled"/>
-</div>
-</form>
+    <form onsubmit="this.submit.disabled = true; save_options(this); return false">
+        <div style="float: left; height: 500px; width: 250px; background: url(lastfm_128.png) top center no-repeat; padding-top: 130px; text-align: left;">
+            <div id="error" style="display: none">
+            </div>
+            <div id="logged" style="display: none; font-size: 20px; font-weight: bold;">Logged as <a id="username_display" href="javascript:;" target="_blank" onclick="this.href = 'http://last.fm/user/'+this.innerHTML" style="color:#0187C5"></a>
+            <br/><a href="javascript:lastfm_logout()" style="font-size: 12px;" target="_blank">Logout</a></div>
+            <div id="not_logged" style="display: none; text-align: center"><a href="javascript:;" onclick="scrobbler.auth(); window.close()" style="color:#0187C5; font-size: 20px;">Login to last.fm</a></div>
+        </div>
+        <div style="float: left; margin-left: 90px; text-align: left; color: #ccc" id="search_settings">
+        <div style="margin-bottom: 10px;">
+            <label style="font-size: 18px; margin-right: 0px; color: #333;" for="show_notifications">Display notifications:</label>
+            <input type="checkbox" id="show_notifications" onclick="toggle_notifications(this.checked)"/>
+        </div>
+        <div style="margin-bottom: 30px;">
+            <label style="font-size: 18px; margin-right: 0px; color: #333;" for="play_previews">Try to play previews if track not found:</label>
+            <input type="checkbox" id="play_previews" onclick="toggle_play_previews(this.checked)"/>
+        </div>
+        <div>
+            <label style="font-size: 18px; margin-right: 0px; color: #333;" for="external_audio_search">Use external audio search:</label>
+            <input type="checkbox" id="external_audio_search" onclick="toggle_external_search(this.checked)"/>
+        </div>
+        <h3>Choose search provider:</h3>
+        <ul id="options">
+            <li>
+              <input type="radio" name="search_provider" id="vkontakte_ru" value="http://vkontakte.ru/gsearch.php?section=audio&q=%s" disabled="disabled"/>
+              <img src="http://www.vkontakte.ru/favicon.ico" />
+              <label for="vkontakte_ru">vkontakte.ru</label>
+            </li>
+            <li>
+              <input type="radio" name="search_provider" id="vk_com" value="http://vk.com/gsearch.php?section=audio&q=%s" disabled="disabled"/>
+              <img src="http://www.vk.com/images/faviconvk.ico" />
+              <label for="vk_com">vk.com</label>
+            </li>
+            <li>
+              <input type="radio" name="search_provider" id="vpleer_ru" value="http://vpleer.ru/?q=%s" disabled="disabled"/>
+              <label for="vpleer_ru">vpleer.ru</label>
+            </li>
+            <li>
+              <input type="radio" name="search_provider" id="prostopleer_com" value="http://prostopleer.com/#/search?q=%s" disabled="disabled"/>
+              <img src="http://prostopleer.com/favicon.ico"/>
+              <label for="prostopleer_com">prostopleer.com</label>
+            </li>
+            <li>
+              <input type="radio" name="search_provider" id="grooveshark_com" value="http://listen.grooveshark.com/#/search/songs/?query=%s" disabled="disabled"/>
+              <img src="http://www.grooveshark.com/favicon.ico"/>
+              <label for="grooveshark_com">grooveshark.com</label>
+            </li>
+            <li>
+              <input type="radio" name="search_provider" id="other" disabled="disabled"/>
+              <input type="text"  disabled="disabled" id="search_pattern" name="search_pattern" style="width: 300px; border: 1px solid #ccc" onfocus="document.getElementById('other').checked = true"/>
+              <br/>
+              <span style="margin-left: 25px; color: #666; font-size: 12px">http://mysite.com/search?q=%s</span>
+            </li>
+        </ul>
+        <input type="submit" value="Save" name="submit" onclick="this.value = 'Saving...';" style="width: 100px; padding: 5px;" disabled="disabled"/>
+        </div>
+    </form>
 <div style="clear: both">&nbsp;</div>
 
 </div>
 <script>
         onLoad()
+</script>
+
+<script type="text/javascript" charset="utf-8">
+  var is_ssl = ("https:" == document.location.protocol);
+  var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
+  document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+
+<script type="text/javascript" charset="utf-8">
+  var feedback_widget_options = {};
+
+  feedback_widget_options.display = "overlay";
+  feedback_widget_options.company = "lastfm_free_music_player";
+  feedback_widget_options.placement = "left";
+  feedback_widget_options.color = "#222";
+  feedback_widget_options.style = "idea";
+
+  var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
 </script>
 </body>
 </html>

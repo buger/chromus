@@ -2,11 +2,10 @@
     <head>
     <script src="javascript/md5.js"></script>
     <script src="javascript/cache.js"></script>
-    <script src="javascript/utils.js"></script>
-    <script src="javascript/audio_player.js"></script>
-    <script src="javascript/scrobbler.js"></script>
-    <script src="javascript/vk.js"></script>
-    <script src="javascript/music_manager.js"></script>
+    <script src="javascript/utils.js?rnd=4"></script>    
+    <script src="javascript/scrobbler.js?rnd=10"></script>
+    <script src="javascript/vk.js?rnd=13"></script>
+    <script src="javascript/music_manager.js?rnd=18"></script>
     <script> 
     function ease(x) {
       return (1-Math.sin(Math.PI/2+x*Math.PI))/2;
@@ -84,11 +83,17 @@
     function updateTime(){
         var track = music_manager.playlist[music_manager.current_track]
 
-        if(!music_manager.audio.paused && music_manager.audio.duration && track){
-            var time_left = track.duration - music_manager.audio.currentTime
+        if(!music_manager.audio.paused){
+            if(music_manager.audio.duration && track && track.duration && music_manager.audio.currentTime){
+                var time_left = track.duration - music_manager.audio.currentTime
 
-            if(time_left != 0) 
-                chrome.browserAction.setBadgeText({text:prettyTime(time_left)})
+                if(time_left > 0)
+                    chrome.browserAction.setBadgeText({text:prettyTime(time_left)})
+                else
+                    chrome.browserAction.setBadgeText({text:""})
+            } else {
+                chrome.browserAction.setBadgeText({text:""})
+            }
         }
 
         setTimeout(updateTime, 1000)

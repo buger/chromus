@@ -33,22 +33,25 @@ MusicManager.prototype.onTimeUpdate = function(){
 
     if(!track) return
 
-    if(this.audio.currentTime >= track.duration)
+    if(this.audio.currentTime >= track.duration || this.audio.ended)
         this.onEnded()
 
     var percent_played = (this.audio.currentTime / track.duration)*100
 
     if(this.audio.duration > 31 && percent_played > 70 && !track.scrobbled){        
-        this.scrobbler.scrobble(track.artist, track.song, track.duration)
+        this.scrobbler.scrobble(track.artist, track.song, track.album, track.duration)
         track.scrobbled = true
 
         var next_track = this.playlist[this.current_track+1]
         if(next_track){
             console.log("Prefetching next track")
-            this.searchTrack(this.current_track+1, false)
+            if(this.play_mode == "shuffle" && this.shuffle_tracks)
+                this.searchTrack(this.shuffle_tracks[0], false)
+            else
+                this.searchTrack(this.current_track+1, false)
         }
 
-        console.log("Track scrobbled", track)
+        console.log("Track scrobbled", track)        
     }
 }
 
@@ -69,7 +72,9 @@ MusicManager.prototype.fireEvent = function(event_name){
 MusicManager.prototype.onStartPlaying = function(){
     var track = this.playlist[this.current_track]
 
-    this.scrobbler.setNowPlaying(track.artist, track.song, track.duration)
+    console.log("Album:", track.album)
+
+    this.scrobbler.setNowPlaying(track.artist, track.song, track.album, track.duration)
 
     this.fireEvent("onPlay")
 }
@@ -83,7 +88,7 @@ MusicManager.prototype.onEnded = function(){
 
     var track = this.playlist[this.current_track]
 
-    if(this.stop_after_playing)
+    if(this.play_mode == "stop" || (this.play_mode != "shuffle" && this.current_track == (this.playlist.length-1)))
         delete this.current_track        
     else
         this.playNextTrack()
@@ -100,7 +105,7 @@ MusicManager.prototype.playArtist = function(artist){
         this.playlist = response.tracks
         delete this.current_track
     
-        this.playNextTrack(true, false)
+        this.playNextTrack()
     }.bind(this))
 }
 
@@ -113,7 +118,7 @@ MusicManager.prototype.playAlbum = function(artist, album){
         this.playlist = response.tracks
         delete this.current_track
 
-        this.playNextTrack(true, false)
+        this.playNextTrack()
     }.bind(this))
 }
 
@@ -121,13 +126,36 @@ MusicManager.prototype.playAlbum = function(artist, album){
 /**
     MusicManager#playNextTrack()
 **/
-MusicManager.prototype.playNextTrack = function(){
+MusicManager.prototype.playNextTrack = function(ignore_repeat){
     console.log("Next track:", this.current_track)
 
-    if(this.current_track != undefined && !this.repeat)
-        this.current_track += 1
+    if(this.play_mode == "shuffle" && this.repeat_mode != "repeat_one"){
+        if(this.shuffle_tracks == undefined){
+            this.shuffle_tracks = []
+
+            for(i in this.playlist)
+                this.shuffle_tracks.push(i)
+
+            this.shuffle_tracks.sort(function() {return 0.5 - Math.random()})
+        }
+
+        if(this.shuffle_tracks.length == 0){
+            if(this.playlist.length != 0 && (this.repeat_mode == "repeat_all" || ignore_repeat)){
+                delete this.shuffle_tracks                
+                this.playNextTrack(ignore_repeat)
+            }
+
+            return
+        }
+
+        this.current_track = this.shuffle_tracks[0]        
+        this.shuffle_tracks.splice(0,1)
+    } else {
+        if(this.current_track != undefined && (this.repeat_mode != "repeat_one" || ignore_repeat))
+            this.current_track += 1
+    }
     
-    if(!this.current_track)
+    if(!this.current_track || this.current_track > (this.playlist.length-1))
         this.current_track = 0
 
     this.searchTrack(this.current_track)    
@@ -150,8 +178,27 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
 
     trackIndex = parseInt(trackIndex)
 
-    var track = this.playlist[trackIndex]    
-    if(!track) return
+    var track = this.playlist[trackIndex]
+
+    console.log("Track:", track, this.playlist[0])
+
+    if(!track) {
+        if(this.repeat_mode == "repeat_all" && this.playlist[0]){
+            track = this.playlist[0]
+            trackIndex = 0
+        } else
+            return
+    }
+
+    console.log("Track:", track)
+
+    if(!track.info){
+        this.updateTrackInfo(trackIndex, function(){
+            this.searchTrack(trackIndex, playAfterSearch)
+        }.bind(this))
+
+        return
+    }
 
     track.song = track.song.replaceEntities()
     track.artist = track.artist.replaceEntities()
@@ -159,8 +206,9 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
     if(playAfterSearch == undefined)
         playAfterSearch = true
 
-    VK.search(track.artist, track.song, function(response){
-        if(!playAfterSearch) return
+    VK.search(track.artist, track.song, track.info.duration, function(response){
+        if(!playAfterSearch)
+            return        
 
         console.log("Resp",response)
 
@@ -172,6 +220,8 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
 
                 this.fireEvent("onLoading")
                 this.audio.playOrLoad(this.scrobbler.previewURL(track.track_id))
+
+                this.setVolume()                
 
                 track.duration = 30
 
@@ -200,6 +250,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
             this.fireEvent("onLoading")
             
             this.audio.playOrLoad(response.url)
+            this.setVolume()            
     
             track.duration = parseInt(response.duration)
             track.scrobbled = false
@@ -218,6 +269,8 @@ MusicManager.prototype.play = function(track_info){
 
     console.log("Playing:", track, track_info, this.current_track)
 
+    delete this.shuffle_tracks
+
     if(track_info.song){
         // If resuming track
         track_info.song = track_info.song.replaceEntities()
@@ -225,6 +278,7 @@ MusicManager.prototype.play = function(track_info){
 
         if(track && track_info.song == track.song && track_info.artist == track.artist && track_info.index == track.index){
             this.audio.playOrLoad()
+            this.setVolume()            
 
             this.fireEvent("onPlay")
         } else {
@@ -255,11 +309,89 @@ MusicManager.prototype.showNotification = function(){
     var show_notification = window.localStorage["show_notifications"] == "true" || window.localStorage["show_notifications"] == undefined
 
     if(!show_notification || !track || !window.webkitNotifications) return
-    
-    this.scrobbler.artistInfo(track.artist, function(response){            
-        var notification = window.webkitNotifications.createNotification(response.image, track.song, track.artist)
-        notification.show()
 
-        setTimeout(function(){notification.cancel()}, 6000)
-    })
+
+    var notification = window.webkitNotifications.createNotification(track.image, track.song, track.artist)
+    notification.show()
+    setTimeout(function(){notification.cancel()}, 6000)
+}
+
+
+/**
+ * MusicManager#getTrackInfo()
+ */
+MusicManager.prototype.updateTrackInfo = function(trackIndex, callback){
+    var track = this.playlist[trackIndex]
+
+    if(!track.info)
+        this.scrobbler.trackInfo(track.artist, track.song, function(response){
+            if(response.track_info){
+                track.info = response.track_info
+
+                if(track.info.album){
+                    track.album = track.info.album.title                    
+                    track.image = track.info.album.image
+                }
+            }
+            
+            if(!track.image)
+                this.scrobbler.artistInfo(track.artist, function(resp){
+                    track.image = resp.image
+
+                    if(callback)
+                        callback()
+                }.bind(this))
+            else
+                if(callback)
+                    callback()
+        }.bind(this))
+    else{
+        if(callback)
+            callback()
+    }
+}
+
+
+/**
+ * MusicManager#setVolume(value)
+ */
+MusicManager.prototype.setVolume = function(volume){
+    if(volume != undefined)
+        this.volume = volume
+
+    this.audio.volume = 0.000001
+    this.audio.volume = this.getVolume()
+}
+
+
+/**
+ * MusicManager#getVolume() -> Integer
+**/
+MusicManager.prototype.getVolume = function(){
+    if(this.volume == undefined)
+        this.volume = 1
+
+    return this.volume
+}
+
+
+/**
+ * MusicManager#love()
+ */
+MusicManager.prototype.love = function(){
+    var track = this.playlist[this.current_track]
+
+    if(track)
+        this.scrobbler.loveTrack(track.artist, track.song)
+}
+
+
+/**
+ * MusicManager#ban()
+ */
+MusicManager.prototype.ban = function(){
+    var track = this.playlist[this.current_track]
+
+    if(track)
+        this.scrobbler.banTrack(track.artist, track.song)
 }

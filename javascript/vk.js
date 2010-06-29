@@ -5,7 +5,7 @@
 **/
 var VK = {
     determineSearchMethod: function(callback){        
-        console.info("Trying to determine search method")
+        console.log("Trying to determine search method")
 
         xhrRequest("http://vkontakte.ru", "GET", null, function(xhr){
             if(xhr.responseText.match(/quickLogin/)){
@@ -27,7 +27,7 @@ var VK = {
 
         Searching by parsing page. Callback function must return hash with url.        
     **/
-    _rawSearch: function(artist, song, callback){    
+    _rawSearch: function(artist, song, duration, callback){    
         var track = artist + " " + song
 
         var url  = "http://"+VK.search_method+"/gsearch.php?section=audio&name=1&ajax=1"
@@ -38,7 +38,7 @@ var VK = {
             if(xhr.responseText.match(/progress\.gif/)){
                 delete VK.search_method
 
-                VK.search(artist, song, callback)
+                VK.search(artist, song, duration, callback)
 
                 return
             }
@@ -54,10 +54,16 @@ var VK = {
 
                 var url_data = audio_rows[i].querySelector('img.playimg').outerHTML.toString().match(/\((.*)\)/)[1].replace(/'/g,'').split(',')
                 var url = "http://cs"+url_data[1]+".vkontakte.ru/u"+url_data[2]+"/audio/"+url_data[3]+".mp3"
+                
+                var title = audio_rows[i].querySelectorAll('div.audioTitle span')[1]
+                if(title.querySelector('a'))
+                    title = title.querySelector('a').innerHTML
+                else
+                    title = title.innerHTML
 
                 audio_data.push({
                   artist: audio_rows[i].querySelector('div.audioTitle b').innerHTML,
-                  title: audio_rows[i].querySelectorAll('div.audioTitle span')[1].innerHTML,
+                  title: title,
                   duration: timeToSeconds(audio_rows[i].querySelector('div.duration').innerHTML),
                   url: url
                 })
@@ -67,10 +73,16 @@ var VK = {
                 var vk_track
 
                 for(var i=0;i<audio_data.length; i++){
+                    console.log(audio_data[i], Math.abs(parseInt(audio_data[i].duration) - duration))
+
                     if(audio_data[i].artist.toLowerCase() == artist && audio_data[i].title.toLowerCase() == song){
-                        vk_track = audio_data[i]
-                        break
-                    } else if(!audio_data[i].title.toLowerCase().match(/(remix|mix)/) && audio_data[i].artist.toLowerCase() == artist){
+                        if(!duration || Math.abs(parseInt(audio_data[i].duration) - duration) <= 2){
+                            vk_track = audio_data[i]
+                            break
+                        }
+                    } else if(!audio_data[i].title.toLowerCase().match(/(remix|mix)/) &&
+                               audio_data[i].artist.toLowerCase() == artist &&
+                               audio_data[i].title.toLowerCase() == song){
                         vk_track = audio_data[i]
                     }
                 }
@@ -111,7 +123,7 @@ var VK = {
 
         Searching vkontakte with api in test_mode
     **/
-    _testmodeSearch: function(artist, song, callback){
+    _testmodeSearch: function(artist, song, duration, callback){
         var track = artist + " " + song
 
         var api = VK.getApiData()
@@ -131,7 +143,7 @@ var VK = {
                         callback({error:'overload'})
                     } else {
                         VK.search_method = response.search_method
-                        VK.search(artist, song, callback)
+                        VK.search(artist, song, duration, callback)
                     }
                 })
 
@@ -151,11 +163,14 @@ var VK = {
                     for(var i=1; i<results.response.length; i++){
                         var audio = results.response[i].audio
 
-                        console.log(audio.artist)
+                        console.log(audio)
 
                         if(audio.artist.toLowerCase() == artist && audio.title.toLowerCase() == song){
-                            vk_track = audio 
-                            break
+                            if(!duration || Math.abs((parseInt(audio.duration) - duration) <= 2)){
+                                vk_track = audio
+                                
+                                break
+                            }
                         } else if(!audio.title.toLowerCase().match(/(remix|mix)/) && audio.artist.toLowerCase() == artist){
                             vk_track = audio
                         }
@@ -194,14 +209,16 @@ var VK = {
         - song (String): Song
         - callback (Function): Function to be called when search compete, to obtain results. 
     **/    
-    search: function(artist, song, callback){
+    search: function(artist, song, duration, callback){
+        console.log("Search method:", this.search_method)
+
         if(this.search_method == undefined){
             this.determineSearchMethod(function(response){
                 console.log("Search method:", response.search_method)
 
                 VK.search_method = response.search_method
 
-                VK.search(artist, song, callback)
+                VK.search(artist, song, duration, callback)
             })
 
             return 
@@ -209,7 +226,10 @@ var VK = {
         
         artist = artist.toLowerCase()
         song = song.toLowerCase()
-        
+
+        if(duration != undefined)
+            duration = parseInt(duration)
+
         var track = artist + " " + song
 
         if(CACHE.get(track))
@@ -217,8 +237,8 @@ var VK = {
         
 
         if(this.search_method == "test_mode")
-            this._testmodeSearch(artist, song, callback)
+            this._testmodeSearch(artist, song, duration, callback)
         else
-            this._rawSearch(artist, song, callback)
+            this._rawSearch(artist, song, duration, callback)
     }
 }

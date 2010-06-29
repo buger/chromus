@@ -52,7 +52,7 @@ Scrobbler.prototype.handshake = function(callback){
     var auth_token = MD5(this._secret+timestamp)
         
     var url = 'http://post.audioscrobbler.com/'
-    var data = 'hs=true&p=1.2.1&c=fmp&v=2.0&u='+this._username+'&t='+timestamp+'&a='+auth_token+"&sk="+this._session_key+"&api_key="+this._api_key
+    var data = 'hs=true&p=1.2.1&c=fmp&v=2.8&u='+this._username+'&t='+timestamp+'&a='+auth_token+"&sk="+this._session_key+"&api_key="+this._api_key
 
     if(!callback)
         callback = function(){}
@@ -87,17 +87,21 @@ Scrobbler.prototype.handshake = function(callback){
 /**
     Scrobbler#setNowPlaying(artist, track, duration, callback)
 **/
-Scrobbler.prototype.setNowPlaying = function(artist, track, duration, callback){
+Scrobbler.prototype.setNowPlaying = function(artist, track, album, duration, callback){
     if(!this.scrobbling)
         return false
 
     if(!this._username)
         return 
 
+    if(!album)
+        album = ""
+
     if(!callback)
         callback = function(){}
     
-    var data = "s="+this._sid+"&a="+encodeURIComponent(artist)+"&t="+encodeURIComponent(track)+"&b=&l="+parseInt(duration)+"&n=&m="
+    var data = "s="+this._sid+"&a="+encodeURIComponent(artist)+"&t="+encodeURIComponent(track)+
+               "&b="+encodeURIComponent(album)+"&l="+parseInt(duration)+"&n=&m="
 
     xhrRequest(this._now_playing_url, "POST", data, function(xhr){
         console.log("Now playing response:", xhr.responseText)
@@ -109,7 +113,7 @@ Scrobbler.prototype.setNowPlaying = function(artist, track, duration, callback){
                     console.log("Error while handshake:", response.error)
                     callback(response)
                 } else {
-                    this.setNowPlaying(artist, track, duration, callback)
+                    this.setNowPlaying(artist, track, album, duration, callback)
                 }
             }.bind(this))
         } else {
@@ -125,19 +129,24 @@ Scrobbler.prototype.setNowPlaying = function(artist, track, duration, callback){
 /**
     Scrobbler#scrobble(artist, track, duration, callback)
 **/
-Scrobbler.prototype.scrobble = function(artist, track, duration, callback){
+Scrobbler.prototype.scrobble = function(artist, track, album, duration, callback){
     if(!this.scrobbling)
         return false
         
     if(!this._username)
-        return false 
+        return false
+
+    if(!album)
+        album = ""
 
     if(!callback)
         callback = function(){}
 
     var now = new Date()
     var timestamp = parseInt(now.getTime()/1000.0)
-    var data = "s="+this._sid+"&a[0]="+encodeURIComponent(artist)+"&t[0]="+encodeURIComponent(track)+"&i[0]="+timestamp+"&o[0]=P&l[0]="+parseInt(duration)+"&r[0]=&b[0]=&n[0]=&m[0]="
+    var data = "s="+this._sid+"&a[0]="+encodeURIComponent(artist)+"&t[0]="+encodeURIComponent(track)+"&i[0]="+timestamp+
+               "&o[0]=P&l[0]="+parseInt(duration)+"&r[0]="+
+               "&b[0]="+encodeURIComponent(album)+"&n[0]=&m[0]="
 
     xhrRequest(this._submission_url, "POST", data, function(xhr){
         if(xhr.statusText == "OK") {
@@ -149,7 +158,7 @@ Scrobbler.prototype.scrobble = function(artist, track, duration, callback){
                         console.log("Error while handshake:", response.error)
                         callback(response)
                     } else {
-                        this.scrobble(artist, track, duration, callback)
+                        this.scrobble(artist, track, album, duration, callback)
                     }
                 }.bind(this))
             } else {
@@ -180,14 +189,48 @@ Scrobbler.prototype.previewURL = function(track_id){
     Scrobbler#callMethod(method, params, callback)
 **/
 Scrobbler.prototype.callMethod = function(method, params, callback){
+    var http_method = 'GET'
+    if(params['http_method']){
+        http_method = params['http_method']
+        delete params['http_method']
+    }
+
     params["method"] = method
     params["api_key"] = this._api_key
-    params["format"] = "json"
+    params["format"] = 'json'
+    
+    for(key in params)
+        if(params[key] != undefined && typeof(params[key]) == 'string')
+            params[key] = params[key].replace(/&amp;/g,'and')
+
+    if(params['sig_call']){
+        delete params['sig_call']
+        delete params['format']
+
+        if(this._session_key){
+            params['sk'] = this._session_key
+            
+            var signature = []
+            for(key in params)
+                signature.push(key+params[key])
+
+            signature.sort()
+
+            console.log("Sig string:", signature.join('')+this._secret)
+
+            signature = MD5(signature.join('')+this._secret)
+
+            params['api_sig'] = signature
+        }
+    }
 
     var query_string = []
     for(key in params)
-        query_string.push(key+"="+encodeURIComponent(params[key]))
-    
+        if(params[key] != undefined)
+            query_string.push(key+"="+encodeURIComponent(params[key]))
+
+    query_string.sort()
+
     query_string = query_string.join('&')
 
     console.log("Calling method:", method)
@@ -199,14 +242,20 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
         return
     }
 
-    xhrRequest("http://ws.audioscrobbler.com/2.0/", "GET", query_string, function(xhr){
-        var response = JSON.parse(xhr.responseText)
-        
+    xhrRequest("http://ws.audioscrobbler.com/2.0/", http_method, query_string, function(xhr){
+        try{
+            var response = JSON.parse(xhr.responseText)
+        } catch(e) {
+            var response = {error: 'Parsing error'}
+        }
+
         if(!response.error){
             //By default caching without expiration (if params['expire_time'] is undefined) 
             CACHE.set(query_string, response, params['expire_time'])
             
             callback(response)
+        } else {
+            console.error("Error:", xhr.responseText, query_string)
         }
     })
 }
@@ -217,7 +266,7 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
 **/
 Scrobbler.prototype.artistInfo = function(artist, callback){
     this.callMethod("artist.getinfo", {artist: artist}, function(response){
-        callback({image: response.artist.image[1]["#text"]})
+        callback({image: response.artist.image[1]["#text"].replace(/serve\/([^\/]*)/,'serve/64s')})
     })
 }
 
@@ -241,6 +290,15 @@ Scrobbler.prototype.fetchPlaylist = function(playlist_url, callback){
             result_tracks[i].index = i            
             result_tracks[i].song  = tracks[i].title
             result_tracks[i].artist = tracks[i].creator
+            result_tracks[i].info = {
+                duration: parseInt(tracks[i].duration)/1000
+            }
+
+            if(tracks[i].album)
+                result_tracks[i].album = tracks[i].album                            
+
+            if(tracks[i].image)
+                result_tracks[i].image = tracks[i].image
         }
 
         callback({tracks: result_tracks})
@@ -261,7 +319,7 @@ Scrobbler.prototype.albumPlaylist = function(artist, album, callback){
 
 
 /**
-    Scrobbler.artistChart(artist, callback)
+    Scrobbler#artistChart(artist, callback)
 **/
 Scrobbler.prototype.artistChart = function(artist, callback){    
     this.callMethod("artist.gettoptracks", {artist: artist}, function(response){
@@ -280,4 +338,56 @@ Scrobbler.prototype.artistChart = function(artist, callback){
 
         callback({tracks: result_tracks})
     })
+}
+
+
+/**
+ *  Scrobbler#trackInfo(artist, track, callback)
+ */
+Scrobbler.prototype.trackInfo = function(artist, track, callback){
+    this.callMethod("track.getInfo", {artist:artist, track:track, username:this._username}, function(response){
+        var track = response.track
+        var track_info = {}
+
+        track_info.duration = parseInt(track.duration)/1000
+
+        if(track.userloved)
+            track_info.loved = track.userloved
+
+        if(track.album){
+            track_info.album = {}
+            track_info.album.title = track.album.title
+
+            if(track.album.image && track.album.image[0])
+                track_info.album.image = track.album.image[0]["#text"]
+        }
+
+        if(track.toptags.tag){
+            track_info.tags = []
+
+            for(i in track.toptags.tag)
+                track_info.tags.push(track.toptags.tag[i].name)
+        }
+
+        callback({track_info: track_info})
+    })
+}
+
+
+/**
+ *  Scrobbler#loveTrack(artist, track)
+ */
+Scrobbler.prototype.loveTrack = function(artist, track, callback){
+    if(this._username){
+        this.callMethod("track.love", {artist:artist, track:track, sig_call: true, http_method:'POST'}, callback)
+    }
+}
+
+
+/**
+ *  Scrobbler#banTrack(artist, track)
+ */
+Scrobbler.prototype.banTrack = function(artist, track, callback){
+    if(this._username)
+        this.callMethod("track.ban", {artist:artist, track:track, sig_call:true, http_method:'POST'}, callback)
 }
