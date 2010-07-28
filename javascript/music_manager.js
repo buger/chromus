@@ -40,7 +40,7 @@ MusicManager.prototype.onTimeUpdate = function(){
 
     var percent_played = (this.audio.currentTime / track.duration)*100
 
-    if(this.audio.duration > 31 && percent_played > 70 && !track.scrobbled){        
+    if(this.audio.duration > 31 && percent_played > 50 && !track.scrobbled){        
         this.scrobbler.scrobble(track.artist, track.song, track.album, track.duration)
         track.scrobbled = true
 
