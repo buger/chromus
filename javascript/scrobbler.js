@@ -169,20 +169,24 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
     console.info("Using server url: ", server_url)
 
     xhrRequest(server_url, http_method, query_string, function(xhr){
-        try{
-            var response = JSON.parse(xhr.responseText)
-        } catch(e) {
-            var response = {error: 'Parsing error'}
+        if(!xhr.responseXML){
+          try{
+              var response = JSON.parse(xhr.responseText)
+          } catch(e) {
+              var response = {error: 'Parsing error'}
+          }
+        } else {
+          var response = xhr.responseXML
         }
 
-        if(!response.error){
-            //By default caching without expiration (if params['expire_time'] is undefined) 
-            if(params['use_cache'] != false)
-              CACHE.set(query_string, response, params['expire_time'])            
-
-            callback(response)
-        } else {
+        if(!xhr.responseXML && response.error || xhr.responseXML && xhr.responseText && xhr.status != 200){
             console.error("Error:", xhr.responseText, query_string, xhr)
+        } else {
+          //By default caching without expiration (if params['expire_time'] is undefined) 
+          if(params['use_cache'] != false)
+            CACHE.set(query_string, response, params['expire_time'])            
+
+          callback(response)
         }
     })
 }
