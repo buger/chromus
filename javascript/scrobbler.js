@@ -22,6 +22,8 @@ Scrobbler.prototype.getSession = function(token, callback){
 
     var signature = MD5("api_key"+this._api_key+"methodauth.getSessiontoken"+token+this._secret)
 
+    console.log("TRIAM!")
+
     xhrRequest("http://ws.audioscrobbler.com/2.0/", "GET",
                "method=auth.getSession&api_key="+this._api_key+"&api_sig="+signature+"&token="+token, 
         function(xhr){
@@ -41,51 +43,6 @@ Scrobbler.prototype.getSession = function(token, callback){
     )
 }
 
-
-/**
-    Scrobbler#handshake(callback)
-**/
-Scrobbler.prototype.handshake = function(callback){    
-    if(!this._username)
-        return false
-
-    var now = new Date()
-    var timestamp = parseInt(now.getTime()/1000.0)
-    var auth_token = MD5(this._secret+timestamp)
-        
-    var url = 'http://post.audioscrobbler.com/'
-    var data = 'hs=true&p=1.2.1&c=fmp&v=2.8&u='+this._username+'&t='+timestamp+'&a='+auth_token+"&sk="+this._session_key+"&api_key="+this._api_key
-
-    if(!callback)
-        callback = function(){}
-
-    xhrRequest(url, "GET", data, function(xhr){
-        if (xhr.statusText == 'OK') {
-            var res = xhr.responseText.split('\n')
-
-            if (res[0] == 'OK') {
-                var data = {}
-
-                data.sid = res[1]
-
-                this._now_playing_url = res[2]
-                this._submission_url = res[3]
-                this._sid = data.sid
-
-                callback(data)
-            } else if (res[0] == 'BADUSER') {
-                callback({error:'Username was not found'})
-            } else {
-                console.error(xhr.responseText)
-                callback({error:'Auth error'})
-            }
-        } else {
-	        callback({error:'Handshake error:'+xhr.responseText})
-	    }
-    }.bind(this))
-}
-
-
 /**
     Scrobbler#setNowPlaying(artist, track, duration, callback)
 **/
@@ -98,35 +55,11 @@ Scrobbler.prototype.setNowPlaying = function(artist, track, album, duration, cal
     if(!this._username)
         return 
 
-    if(!album)
-        album = ""
-
     if(!callback)
         callback = function(){}
     
-    var data = "s="+this._sid+"&a="+encodeURIComponent(artist)+"&t="+encodeURIComponent(track)+
-               "&b="+encodeURIComponent(album)+"&l="+parseInt(duration)+"&n=&m="
-
-    xhrRequest(this._now_playing_url, "POST", data, function(xhr){
-        console.log("Now playing response:", xhr.responseText)
-        if(xhr.responseText == "" || xhr.responseText.match("BADSESSION")){
-            this.handshake(function(response){                
-                console.log("Bad session, handshake!:", response)
-
-                if(response.error){
-                    console.log("Error while handshake:", response.error)
-                    callback(response)
-                } else {
-                    this.setNowPlaying(artist, track, album, duration, callback)
-                }
-            }.bind(this))
-        } else {
-            if(xhr.statusText == "OK")
-                callback({})
-            else
-                callback({error:xhr.reponseText})            
-        }
-    }.bind(this))
+    this.callMethod("User.updateNowPlaying", 
+                   {artist:artist, track:track, album:album, duration:duration, sig_call:true, http_method:'POST'}, callback)
 }
 
 
@@ -142,36 +75,14 @@ Scrobbler.prototype.scrobble = function(artist, track, album, duration, callback
 
     _gaq.push(['_trackEvent', 'lastfm', 'scrobble', artist+'-'+track]);
 
-    if(!album)
-        album = ""
-
     if(!callback)
         callback = function(){}
 
     var now = new Date()
     var timestamp = parseInt(now.getTime()/1000.0)
-    var data = "s="+this._sid+"&a[0]="+encodeURIComponent(artist)+"&t[0]="+encodeURIComponent(track)+"&i[0]="+timestamp+
-               "&o[0]=P&l[0]="+parseInt(duration)+"&r[0]="+
-               "&b[0]="+encodeURIComponent(album)+"&n[0]=&m[0]="
-
-    xhrRequest(this._submission_url, "POST", data, function(xhr){
-        if(xhr.statusText == "OK") {
-            callback({})
-        } else {
-            if(xhr.responseText.match("BADSESSION")){
-                this.handshake(function(response){
-                    if(response.error){
-                        console.log("Error while handshake:", response.error)
-                        callback(response)
-                    } else {
-                        this.scrobble(artist, track, album, duration, callback)
-                    }
-                }.bind(this))
-            } else {
-                callback({error:xhr.reponseText})
-            }
-        }
-    }.bind(this))
+    
+    this.callMethod("Track.scrobble", 
+                   {artist:artist, track:track, album:album, duration:duration, timestamp: timestamp, sig_call:true, http_method:'POST'}, callback)
 }
 
 
@@ -250,7 +161,14 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
         return
     }
 
-    xhrRequest("http://ws.audioscrobbler.com/2.0/", http_method, query_string, function(xhr){
+    if (method == "User.updateNowPlaying" || method == "Track.scrobble")
+      var server_url = "http://post.audioscrobbler.com/2.0/"
+    else
+      var server_url = "http://ws.audioscrobbler.com/2.0/"
+
+    console.info("Using server url: ", server_url)
+
+    xhrRequest(server_url, http_method, query_string, function(xhr){
         try{
             var response = JSON.parse(xhr.responseText)
         } catch(e) {
@@ -259,11 +177,12 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
 
         if(!response.error){
             //By default caching without expiration (if params['expire_time'] is undefined) 
-            CACHE.set(query_string, response, params['expire_time'])
-            
+            if(params['use_cache'] != false)
+              CACHE.set(query_string, response, params['expire_time'])            
+
             callback(response)
         } else {
-            console.error("Error:", xhr.responseText, query_string)
+            console.error("Error:", xhr.responseText, query_string, xhr)
         }
     })
 }
