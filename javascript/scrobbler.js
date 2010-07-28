@@ -160,6 +160,7 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
         callback(CACHE.get(query_string))
         return
     }
+    
 
     if (method == "User.updateNowPlaying" || method == "Track.scrobble")
       var server_url = "http://post.audioscrobbler.com/2.0/"
