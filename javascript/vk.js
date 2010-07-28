@@ -1,3 +1,5 @@
+var _gaq = _gaq || [];
+
 /**
     VK
 
@@ -235,6 +237,8 @@ var VK = {
         if(CACHE.get(track))
             return callback(CACHE.get(track))
         
+
+        _gaq.push(['_trackEvent', 'vkontakte_search', this.search_method, artist+'-'+song]);
 
         if(this.search_method == "test_mode")
             this._testmodeSearch(artist, song, duration, callback)

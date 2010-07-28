@@ -1,3 +1,5 @@
+var _gaq = _gaq || [];
+
 Audio.prototype.playOrLoad = function(url){
     if(url){
         console.log("Playing url:", url)
@@ -101,6 +103,8 @@ MusicManager.prototype.onEnded = function(){
     MusicManager#playArtist(artist, callback)
 **/
 MusicManager.prototype.playArtist = function(artist){
+    _gaq.push(['_trackEvent', 'music_manager', 'playArtist', artist]);
+
     this.scrobbler.artistChart(artist, function(response){
         this.playlist = response.tracks
         delete this.current_track
@@ -114,6 +118,8 @@ MusicManager.prototype.playArtist = function(artist){
     MusicManager#playAlbum(artist, album, callback)
 **/
 MusicManager.prototype.playAlbum = function(artist, album){
+    _gaq.push(['_trackEvent', 'music_manager', 'playAlbum', artist+'-'+album]);
+
     this.scrobbler.albumPlaylist(artist, album, function(response){
         this.playlist = response.tracks
         delete this.current_track
@@ -265,6 +271,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
     MusicManager#play(track_info)
 **/
 MusicManager.prototype.play = function(track_info){
+
     var track = this.playlist[this.current_track]
 
     console.log("Playing:", track, track_info, this.current_track)
@@ -283,6 +290,10 @@ MusicManager.prototype.play = function(track_info){
             this.fireEvent("onPlay")
         } else {
             this.searchTrack(track_info.index)
+            
+            _gaq.push(['_trackEvent', 'music_manager', 'play', track_info.artist+'-'+track_info.song]);
+
+            _gaq.push(['_trackEvent', 'music_manager', 'play_artist_chart', track_info.artist]);
         }
     } else {
         if(track_info.album)

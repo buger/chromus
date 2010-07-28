@@ -1,3 +1,5 @@
+var _gaq = _gaq || [];
+
 /**
     Class Scrobbler
 **/
@@ -91,6 +93,8 @@ Scrobbler.prototype.setNowPlaying = function(artist, track, album, duration, cal
     if(!this.scrobbling)
         return false
 
+    _gaq.push(['_trackEvent', 'lastfm', 'setNowPlaying', artist+'-'+track]);
+
     if(!this._username)
         return 
 
@@ -135,6 +139,8 @@ Scrobbler.prototype.scrobble = function(artist, track, album, duration, callback
         
     if(!this._username)
         return false
+
+    _gaq.push(['_trackEvent', 'lastfm', 'scrobble', artist+'-'+track]);
 
     if(!album)
         album = ""
@@ -189,6 +195,8 @@ Scrobbler.prototype.previewURL = function(track_id){
     Scrobbler#callMethod(method, params, callback)
 **/
 Scrobbler.prototype.callMethod = function(method, params, callback){
+    _gaq.push(['_trackEvent', 'lastfm', method]);
+
     var http_method = 'GET'
     if(params['http_method']){
         http_method = params['http_method']

@@ -20,9 +20,9 @@ ul#tracks_container {
 }
 
 ul#tracks_container li {
-    padding: 3px;
-    padding-top: 5px;
-    padding-bottom: 2px;
+    padding: 5px;
+    padding-top: 7px;
+    padding-bottom: 4px;
     background: #fff;
     vertical-align: middle;
     text-overflow:ellipsis;

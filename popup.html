@@ -1,7 +1,7 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=12" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=15" type="text/css">
 
     <script src="javascript/utils.js"></script>
     <script src="javascript/scrobbler.js"></script>
@@ -78,7 +78,7 @@
         }
         
         if(playlist.length == 0){
-            html = "<li class='empty' style='height: 90px; font-size: 16px;'>Find some tracks on <a target='_blank' href='http://www.lastfm.ru/music/The+Beatles/+charts'>Last.fm</a></li>"            
+            html = "<li class='empty' style='height: 90px; font-size: 16px;'>Find some tracks on <a target='_blank' href='http://www.last.fm/music/The+Beatles/+charts'>Last.fm</a></li>"            
         }
 
         container.innerHTML = html
@@ -87,11 +87,12 @@
             var playing_link = document.querySelector('a.sm2_button.playing, a.sm2_button.paused')
             
             if(playing_link)
-                container.parentNode.scrollTop = playing_link.parentNode.offsetTop-98
+                container.parentNode.scrollTop = playing_link.parentNode.offsetTop-102
     }
     
 
     function toggleScrobbling(event){
+
         var link = event.target
         
         if(link.className.match(/active/)){
@@ -99,8 +100,10 @@
         } else {
             link.className = 'toggle_lfm active'
         }
-
+        
         music_manager.scrobbler.scrobbling = link.className.match(/active/)
+        
+        _gaq.push(['_trackEvent', 'controls', 'scrobbling', music_manager.scrobbler.scrobbling+'']);
     }   
 
 
@@ -210,6 +213,8 @@
         var next_track = document.querySelector('.controls_container .next')
         next_track.addEventListener('click', function(){
             music_manager.playNextTrack(true)
+            
+            _gaq.push(['_trackEvent', 'controls', 'nextTrack']);
         }, false)
 
         /* Initializing volume */
@@ -221,6 +226,8 @@
         volume_toggle.addEventListener('click', function(){
             volume_range.value = 0
             music_manager.setVolume(0)
+            
+            _gaq.push(['_trackEvent', 'controls', 'muteVolume']);
         })
 
         /* Progress bar */
@@ -233,6 +240,8 @@
 
             if(track)
                 music_manager.audio.currentTime = track.duration * progress 
+            
+            _gaq.push(['_trackEvent', 'controls', 'progressChange']);
         }, false)
         
 
@@ -243,6 +252,8 @@
             document.getElementById('play_mode_icon').src = "images/"+evt.target.value+'.png'
 
             music_manager.play_mode = evt.target.value
+            
+            _gaq.push(['_trackEvent', 'controls', 'playMode', music_manager.play_mode]);
         })
 
         var repeat_mode = document.getElementById('repeat_mode')
@@ -250,6 +261,8 @@
             document.getElementById('repeat_mode_icon').src = "images/"+evt.target.value+'.png'
             
             music_manager.repeat_mode = evt.target.value
+            
+            _gaq.push(['_trackEvent', 'controls', 'repeatMode', music_manager.repeat_mode]);
         })
 
         var evt = document.createEvent("Events")
@@ -288,6 +301,8 @@
         }
 
         updatePlaylist()
+        
+        _gaq.push(['_trackEvent', 'controls', 'togglePlaying', 'big']);
     }
 
     function onVolumeChange(evt){
@@ -322,6 +337,8 @@
             }
             
             music_manager.play(music_manager.playlist[link.getAttribute('data-index-number')])
+            
+            _gaq.push(['_trackEvent', 'controls', 'togglePlaying', 'playlist']);
         }        
 
         updateTrackInfo()
@@ -467,6 +484,18 @@
         </div>
         <script>
             onLoad()
+        </script>
+        <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-16810054-3']);
+        _gaq.push(['_trackPageview']);
+        _gaq.push(['_trackEvent', 'pageLoad', 'popup']);
+        
+        (function() {
+          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+          ga.src = 'https://ssl.google-analytics.com/ga.js';
+          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+        })();
         </script>
     </body>
 </html>
