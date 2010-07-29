@@ -43,17 +43,20 @@ MusicManager.prototype.onTimeUpdate = function(){
     if(this.audio.duration > 31 && percent_played > 50 && !track.scrobbled){        
         this.scrobbler.scrobble(track.artist, track.song, track.album, track.duration)
         track.scrobbled = true
+        
+        console.log("Track scrobbled", track)
+    }
+    
+    if(this.audio.duration > 31 && percent_played > 90 && this.play_mode != "stop"){
+      var next_track = this.playlist[this.current_track+1]
 
-        var next_track = this.playlist[this.current_track+1]
-        if(next_track){
-            console.log("Prefetching next track")
-            if(this.play_mode == "shuffle" && this.shuffle_tracks)
-                this.searchTrack(this.shuffle_tracks[0], false)
-            else
-                this.searchTrack(this.current_track+1, false)
-        }
-
-        console.log("Track scrobbled", track)        
+      if(next_track){
+          console.log("Prefetching next track")
+          if(this.play_mode == "shuffle" && this.shuffle_tracks)
+              this.searchTrack(this.shuffle_tracks[0], false)
+          else
+              this.searchTrack(this.current_track+1, false)
+      }
     }
 }
 
