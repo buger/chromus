@@ -67,7 +67,6 @@
                 state = playlist[i].not_found ? "disabled" : ""
 
                 html += "<li>"+
-                            "<span class='number'>"+(i+1)+"</span>"+
                             "<a id='ex_button_"+playlist[i].index+"' data-index-number='"+playlist[i].index+"' href='javascript:;' onclick='togglePlaying(this)' class='sm2_button "+state+"'></a>"+
                             "<span class='track'>"+
                                 "<a target='_blank' href='http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"'>"+playlist[i].artist + "</a>" +
