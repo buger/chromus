@@ -52,6 +52,8 @@ MusicManager.prototype.onTimeUpdate = function(){
 
       if(next_track){
           console.log("Prefetching next track")
+          _gaq.push(['_trackEvent', 'music_manager', 'prefetchingTrack']);
+
           if(this.play_mode == "shuffle" && this.shuffle_tracks)
               this.searchTrack(this.shuffle_tracks[0], false)
           else

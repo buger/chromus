@@ -10,7 +10,7 @@ li,ul { margin:0px; padding:0px; }
 div.wrapper {
     overflow-x: hidden; 
     max-height: 400px; 
-    width: 400px;
+    width: 468px;
     padding-top: 0px;
 
     font-family: "Lucida Grande",Arial,Helvetica,Verdana,sans-serif;
@@ -75,7 +75,7 @@ ul#tracks_container li a.sm2_button {
 }
 
 #controls {
-    height: 70px;
+    height: 85px;
     padding-left: 2px;
     background:-webkit-gradient(
         linear,
@@ -93,7 +93,7 @@ a#play {
 #next img, #previous img {margin-bottom: 13px;}
 
 #progress_bar {
-    height: 3px;
+    height: 8px;
     background:rgb(216,216,216);
     cursor: pointer;
     padding-top: 0px;
@@ -101,15 +101,15 @@ a#play {
 }
 
 #progress {
-    height: 5px;
+    height: 8px;
     background-color:#cc3333;
     width: 0%;
     cursor: pointer;
 }
 
 #controls .album_image {
-    width: 64px;
-    height: 64px;
+    width: 80px;
+    height: 80px;
     margin-top: 2px;
     position: relative;
     overflow: hidden;
@@ -119,8 +119,8 @@ a#play {
 
 #play {
     border: 1px solid #ccc;
-    height: 62px;
-    width: 62px;
+    height: 78px;
+    width: 78px;
     display: block;
     text-align: center;
     position: absolute;
@@ -129,8 +129,8 @@ a#play {
 }
 
 #play img{
-    margin-left: 5px;
-    margin-top: 7px;
+    margin-left: 0px;
+    margin-top: 10px;
     opacity: 0.8;
 
     -webkit-transition-property: hover;
@@ -160,12 +160,12 @@ a#play {
     line-height: 30px;
     text-overflow: ellipsis;
     display:block;
-    width: 280px;
+    width: 274px;
     overflow: hidden;
 }
 
 #controls .track_info .container {
-    width: 306px;
+    width: 290px;
     text-overflow: ellipsis;
     overflow: hidden;
 }
@@ -183,7 +183,7 @@ a#play {
 
 #controls .track_info .controls_container a {
     margin-right: 10px;
-    opacity: 0.7;
+    opacity: 0.5;
     -webkit-transition-property: hover;
     -webkit-transition: opacity 0.15s ease-in-out;
 
@@ -217,7 +217,7 @@ a#play {
     background: #eee;
     top: 0px;
     right: 0px;
-    height: 45px;
+    height: 55px;
     z-index: 0;
     border: 1px solid #ccc;
 }

@@ -1,7 +1,7 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=15" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=27" type="text/css">
 
     <script src="javascript/utils.js"></script>
     <script src="javascript/scrobbler.js"></script>
@@ -67,7 +67,6 @@
                 state = playlist[i].not_found ? "disabled" : ""
 
                 html += "<li>"+
-                            "<span class='number'>"+(i+1)+"</span>"+
                             "<a id='ex_button_"+playlist[i].index+"' data-index-number='"+playlist[i].index+"' href='javascript:;' onclick='togglePlaying(this)' class='sm2_button "+state+"'></a>"+
                             "<span class='track'>"+
                                 "<a target='_blank' href='http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"'>"+playlist[i].artist + "</a>" +
@@ -426,11 +425,22 @@
     </style>
     </head>    
     <body>
+    <!-- BuySellAds.com Ad Code -->
+    <script type="text/javascript">
+    (function(){
+      var bsa = document.createElement('script');
+         bsa.type = 'text/javascript';
+         bsa.async = true;
+         bsa.src = 'http://s3.buysellads.com/ac/bsa.js';
+      (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);
+    })();
+    </script>
+    <!-- END BuySellAds.com Ad Code -->        
         <div id="controls">
             <div class="buttons float">
                 <div class="album_image">
-                    <img src="" alt="Album image" id="album_image" width="64" />
-                    <a id="play" class="paused"><img src="images/play.png" alt="Play" width="48" height="48"/></a>
+                    <img src="" alt="Album image" id="album_image" width="80" />
+                    <a id="play" class="paused"><img src="images/play.png" alt="Play" width="58" height="58"/></a>
                 </div>
             </div>
             <div class="float track_info">
@@ -440,8 +450,8 @@
                     <a href="javascript:;" class="album" target="_blank"></a>
                 </div>
                 <div class="controls_container">
-                    <a href="javascript:;" class="next" title="Next track"><img src="/images/next_2.png" alt="Next track" height="20"/></a>
-                    <a href="javascript:;" class="love" title="Love!"><img src="/images/love.png" alt="Love!" width="16" />&nbsp;Love!</a>
+                    <a href="javascript:;" class="next" title="Next track"><img src="http://png-4.findicons.com/files/icons/2152/snowish/128/gtk_media_next_ltr.png" alt="Next track" height="34"/></a>
+                    <a href="javascript:;" class="love" title="Love!"><img src="/images/love.png" alt="Love!" width="28" /></a>
                     <!--<a href="javascript:;" class="ban" title="Ban track"><img src="/images/ban_2.png" alt="Ban" width="16" /></a>-->
                     <span class="time">00:00/30:20</span>
                 </div>
@@ -455,7 +465,9 @@
         <div id="progress_bar">
             <div id="progress"></div>
         </div>
-
+        <!-- BuySellAds.com Zone Code -->
+        <div id="bsap_1250075" class="bsarocks bsap_0e440463f3a541a54a8e6c18177114d6"></div>
+        <!-- END BuySellAds.com Zone Code -->        
         <div class="wrapper">
             <ul style="white-space:nowrap" id="tracks_container">
             </ul>
