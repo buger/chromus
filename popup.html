@@ -3,6 +3,7 @@
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
     <link rel="stylesheet" href="css/popup.css?rnd=27" type="text/css">
 
+    <script src="javascript/browser_detect.js"></script>
     <script src="javascript/utils.js"></script>
     <script src="javascript/scrobbler.js"></script>
 
@@ -502,12 +503,14 @@
         _gaq.push(['_setAccount', 'UA-16810054-3']);
         _gaq.push(['_trackPageview']);
         _gaq.push(['_trackEvent', 'pageLoad', 'popup']);
-        
-        (function() {
-          var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-          ga.src = 'https://ssl.google-analytics.com/ga.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
-        })();
+
+        if(BrowserDetect.OS != 'Mac' && BrowserDetect.OS != 'Linux'){        
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = 'https://ssl.google-analytics.com/ga.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
+          })();
+        }
         </script>
     </body>
 </html>
