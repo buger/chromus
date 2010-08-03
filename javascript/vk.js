@@ -93,7 +93,7 @@ var VK = {
                     vk_track = audio_data[0]
 
                 //Caching for 3 hours
-                CACHE.set(track, vk_track, 1000*60*60*3)                                
+                CACHE.set(track, vk_track, 1000*60*60*2)                                
 
                 callback(vk_track)
             } else {
@@ -111,7 +111,7 @@ var VK = {
         [327488, 525159, 'g5vuj9EWFO'],
         [2118012, 1882836,'xYsD1Dtsng'],
         [19730188, 1881945, 'rcj0HPk4Wk'],
-        [85838504, 1887506, 'nTCyM7WEBo']
+        [85838504, 1887506, 'nTCyM7WEBo'],
         [9142393, 1891705, 'MlO3y0UXFV'],
         [86844124, 1891718, '8NgTW7tjWm']
     ],
