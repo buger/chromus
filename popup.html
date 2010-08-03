@@ -1,11 +1,15 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=27" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=39" type="text/css">
+    <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
 
     <script src="javascript/browser_detect.js"></script>
     <script src="javascript/utils.js"></script>
     <script src="javascript/scrobbler.js"></script>
+
+    <script src="javascript/jquery.min.js"></script>
+    <script src="javascript/jquery-ui.min.js"></script>
 
     <script>
     var music_manager = chrome.extension.getBackgroundPage().music_manager
@@ -218,9 +222,9 @@
         }, false)
 
         /* Initializing volume */
-        var volume_range = document.querySelector('.volume_control .range')
-        volume_range.value = music_manager.getVolume() * 100
-        volume_range.addEventListener('change', onVolumeChange, false)
+//        var volume_range = document.querySelector('.volume_control .range')
+//        volume_range.value = music_manager.getVolume() * 100
+//        volume_range.addEventListener('change', onVolumeChange, false)
 
         var volume_toggle = document.querySelector('.volume_control .volume_link')
         volume_toggle.addEventListener('click', function(){
@@ -423,6 +427,11 @@
             color: #D01F3C !important;
             text-decoration: underline !important;
         }
+
+        .bsap a {
+            margin: 0px !important;
+            padding: 0px !important;
+        }
     </style>
     </head>    
     <body>
@@ -457,9 +466,8 @@
                     <span class="time">00:00/30:20</span>
                 </div>
             </div>
-            <div class="float volume_control" style="width: 15px; margin-top: 2px;">
-                <div class="volume_bg"></div>
-                <input type="range" class="range" max="100" min="0" />
+            <div class="float volume_control" style="width: 15px; padding-top: 5px;">
+                <div id="volume-slider" style="height: 60px;"></div>
                 <a href="javascript:;" class="volume_link"><img src="images/volume.png" alt="Volume" /></a>
             </div>
         </div>
@@ -511,6 +519,22 @@
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
           })();
         }
+        </script>
+        <script>
+$(function() {
+  $("#volume-slider").slider({
+    orientation: "vertical",
+    range: "min",
+    min: 0,
+    max: 100,
+    value: 60,
+    slide: function(event, ui) {
+      //$("#amount").val(ui.value);
+      console.log(ui.value)
+    }
+  });
+//  $("#amount").val($("#volume-slider").slider("value"));
+});        
         </script>
     </body>
 </html>

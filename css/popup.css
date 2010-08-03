@@ -2,6 +2,8 @@ body { padding:0px; margin: 0px; font-size: 12px;}
 
 body {
     max-height: 400px;
+    max-width: 468px;
+    width: 468px;
 }
 
 ul { list-style: none;}
@@ -93,7 +95,7 @@ a#play {
 #next img, #previous img {margin-bottom: 13px;}
 
 #progress_bar {
-    height: 8px;
+    height: 5px;
     background:rgb(216,216,216);
     cursor: pointer;
     padding-top: 0px;
@@ -101,7 +103,7 @@ a#play {
 }
 
 #progress {
-    height: 8px;
+    height: 5px;
     background-color:#cc3333;
     width: 0%;
     cursor: pointer;
@@ -160,12 +162,12 @@ a#play {
     line-height: 30px;
     text-overflow: ellipsis;
     display:block;
-    width: 274px;
+    width: 334px;
     overflow: hidden;
 }
 
 #controls .track_info .container {
-    width: 290px;
+    width: 350px;
     text-overflow: ellipsis;
     overflow: hidden;
 }

@@ -250,7 +250,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
                 this.not_found_in_row += 1
 
                 if(this.not_found_in_row < 10)
-                    setTimeout(this.playNextTrack.bind(this), 500)
+                    setTimeout(this.playNextTrack.bind(this), 1000)
                 else
                     this.not_found_in_row = 0
             }
