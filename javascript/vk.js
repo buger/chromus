@@ -93,7 +93,7 @@ var VK = {
                     vk_track = audio_data[0]
 
                 //Caching for 3 hours
-                CACHE.set(track, vk_track, 1000*60*60*3)                                
+                CACHE.set(track, vk_track, 1000*60*60*2)                                
 
                 callback(vk_track)
             } else {
