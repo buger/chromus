@@ -105,15 +105,17 @@ var VK = {
     },
 
     /**
-        VK Applications for using in test_mode
+        VK Applications for using in test_mode. [user_id, app_id, app_key]
     **/
     apps: [        
         [327488, 525159, 'g5vuj9EWFO'],
         [2118012, 1882836,'xYsD1Dtsng'],
         [19730188, 1881945, 'rcj0HPk4Wk'],
-        [85838504, 1887506, 'nTCyM7WEBo']
+        [85838504, 1887506, 'nTCyM7WEBo'],
         [9142393, 1891705, 'MlO3y0UXFV'],
-        [86844124, 1891718, '8NgTW7tjWm']
+        [86844124, 1891718, '8NgTW7tjWm'],
+	[4824199, 1915951, 'pvHpN0V001'],
+	[5573107, 1914989, 'CChij669jU']
     ],
 
     getApiData: function(){
