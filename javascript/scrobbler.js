@@ -131,7 +131,8 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
             
             var signature = []
             for(key in params)
-                signature.push(key+params[key])
+                if(params[key] != undefined)
+                    signature.push(key+params[key])
 
             signature.sort()
 
