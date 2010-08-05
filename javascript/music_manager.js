@@ -47,8 +47,10 @@ MusicManager.prototype.onTimeUpdate = function(){
         console.log("Track scrobbled", track)
     }
     
-    if(this.audio.duration > 31 && percent_played > 90 && this.play_mode != "stop" && !track.prefetched_next_track){
+    if(this.audio.duration > 31 && percent_played > 90 && this.play_mode != "stop" && !track.next_song_prefetched){
       var next_track = this.playlist[this.current_track+1]
+
+      track.next_song_prefetched = true
 
       if(next_track){
           console.log("Prefetching next track")
@@ -57,8 +59,6 @@ MusicManager.prototype.onTimeUpdate = function(){
           else
               this.searchTrack(this.current_track+1, false)
       }
-      
-      track.prefetched_next_track = true
     }
 }
 
@@ -265,7 +265,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
     
             track.duration = parseInt(response.duration)
             track.scrobbled = false
-            track.prefetched_next_track = false
+            track.next_song_prefetched = false 
 
             this.showNotification()
         }
