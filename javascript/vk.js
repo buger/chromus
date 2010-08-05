@@ -114,8 +114,8 @@ var VK = {
         [85838504, 1887506, 'nTCyM7WEBo'],
         [9142393, 1891705, 'MlO3y0UXFV'],
         [86844124, 1891718, '8NgTW7tjWm'],
-	[4824199, 1915951, 'pvHpN0V001'],
-	[5573107, 1914989, 'CChij669jU']
+        [4824199, 1915951, 'pvHpN0V001'],
+        [5573107, 1914989, 'CChij669jU']
     ],
 
     getApiData: function(){
@@ -214,7 +214,7 @@ var VK = {
         - callback (Function): Function to be called when search compete, to obtain results. 
     **/    
     search: function(artist, song, duration, callback){
-	console.log("Seaching:", artist, " - ", song)
+        console.log("Seaching:", artist, " - ", song)
         console.log("Search method:", this.search_method)
 
         if(this.search_method == undefined){
