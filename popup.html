@@ -1,7 +1,7 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=39" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=88" type="text/css">
     <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
 
     <script src="javascript/browser_detect.js"></script>
@@ -53,9 +53,18 @@
 
         var track_time = document.querySelector('.controls_container .time')
         if(track && track.duration)
-            track_time.innerHTML = prettyTime(music_manager.audio.currentTime)+'/'+prettyTime(track.duration)
+            track_time.innerHTML = prettyTime(music_manager.audio.currentTime)+' /'+prettyTime(track.duration)
         else
             track_time.innerHTML = ""
+    }
+
+    function removeFromPlaylist(link){
+      var index = parseInt(link.getAttribute('data-index-number'))
+      music_manager.playlist.splice(index, 1)
+
+      link.parentNode.parentNode.removeChild(link.parentNode)
+
+      updatePlaylist()
     }
 
     function updatePlaylist(){
@@ -75,9 +84,10 @@
                             "<a id='ex_button_"+playlist[i].index+"' data-index-number='"+playlist[i].index+"' href='javascript:;' onclick='togglePlaying(this)' class='sm2_button "+state+"'></a>"+
                             "<span class='track'>"+
                                 "<a target='_blank' href='http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"'>"+playlist[i].artist + "</a>" +
-                                ' &ndash; '+
+                                '  &ndash;  '+
                                 "<a target='_blank' href=\"http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"/_/"+(playlist[i].song||"").replace(/\s/g,'+')+"\">"+playlist[i].song+"</a>"+
                             "</span>"+
+                            "<a href='javascript:;' title='Delete from playlist' data-index-number='"+playlist[i].index+"' onclick='removeFromPlaylist(this)' class='delete'></a>"
                         "</li>"
         }
         
@@ -146,7 +156,6 @@
             if(track.image)
                 document.querySelector("#controls #album_image").src = track.image
 
-
             var container = document.querySelector("#controls .track_info")
             var links = trackLinks(track)
 
@@ -179,9 +188,15 @@
         }
     }
 
+    function onMouseWheel(evt){
+      console.log(evt.wheelDelta)
+    }
+    window.addEventListener('DOMMouseScroll', onMouseWheel, false)
+
     function onLoad(){
         updatePlaylist()
         updateTrackInfo()
+
 
         /* Love & Ban buttons */
         var love_btn = document.querySelector('.controls_container .love')
@@ -221,14 +236,10 @@
             _gaq.push(['_trackEvent', 'controls', 'nextTrack']);
         }, false)
 
-        /* Initializing volume */
-//        var volume_range = document.querySelector('.volume_control .range')
-//        volume_range.value = music_manager.getVolume() * 100
-//        volume_range.addEventListener('change', onVolumeChange, false)
-
         var volume_toggle = document.querySelector('.volume_control .volume_link')
         volume_toggle.addEventListener('click', function(){
-            volume_range.value = 0
+            var volume_range = $('#volume-slider')
+            volume_range.slider("option", "value", 0)
             music_manager.setVolume(0)
             
             _gaq.push(['_trackEvent', 'controls', 'muteVolume']);
@@ -238,7 +249,7 @@
         var progress = document.getElementById('progress_bar')
         progress.addEventListener('click', function(evt){
             var track = music_manager.playlist[music_manager.current_track]
-            var progress = (evt.clientX/400)
+            var progress = (evt.clientX/468)
 
             console.log("X:", track.duration * progress)
 
@@ -282,7 +293,7 @@
             repeat_mode.value = music_manager.repeat_mode
 
             repeat_mode.dispatchEvent(evt)
-        }
+        }        
     }
 
     function togglePlayingBig(evt){
@@ -307,12 +318,6 @@
         updatePlaylist()
         
         _gaq.push(['_trackEvent', 'controls', 'togglePlaying', 'big']);
-    }
-
-    function onVolumeChange(evt){
-        var volume = parseInt(evt.target.value)/100.0
-
-        music_manager.setVolume(volume)
     }
 
     function stopCurrentTrack(){
@@ -347,6 +352,7 @@
 
         updateTrackInfo()
     }
+
 
     </script>
     <style type="text/css">
@@ -461,13 +467,13 @@
                 </div>
                 <div class="controls_container">
                     <a href="javascript:;" class="next" title="Next track"><img src="http://png-4.findicons.com/files/icons/2152/snowish/128/gtk_media_next_ltr.png" alt="Next track" height="34"/></a>
-                    <a href="javascript:;" class="love" title="Love!"><img src="/images/love.png" alt="Love!" width="28" /></a>
+                    <a href="javascript:;" class="love" title="Love!"><img src="images/love.png" alt="Love!" width="28" /></a>
                     <!--<a href="javascript:;" class="ban" title="Ban track"><img src="/images/ban_2.png" alt="Ban" width="16" /></a>-->
                     <span class="time">00:00/30:20</span>
                 </div>
             </div>
-            <div class="float volume_control" style="width: 15px; padding-top: 5px;">
-                <div id="volume-slider" style="height: 60px;"></div>
+            <div class="float volume_control" style="width: 15px; padding-top: 10px;">
+                <div id="volume-slider" style="height: 50px;"></div>
                 <a href="javascript:;" class="volume_link"><img src="images/volume.png" alt="Volume" /></a>
             </div>
         </div>
@@ -527,13 +533,11 @@ $(function() {
     range: "min",
     min: 0,
     max: 100,
-    value: 60,
+    value: music_manager.getVolume()*100,
     slide: function(event, ui) {
-      //$("#amount").val(ui.value);
-      console.log(ui.value)
+      music_manager.setVolume(ui.value/100)
     }
   });
-//  $("#amount").val($("#volume-slider").slider("value"));
 });        
         </script>
     </body>
