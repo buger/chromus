@@ -1,7 +1,7 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=88" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=96" type="text/css">
     <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
 
     <script src="javascript/browser_detect.js"></script>
@@ -36,13 +36,18 @@
         updateTrackInfo()
     }, true)
 
+    music_manager.audio.addEventListener('progress', function(){
+        updateLoadProgress()
+    })
 
     music_manager.audio.addEventListener('timeupdate', function(){
         updateProgress()
+        updateLoadProgress()
     }, false)
 
     function updateProgress(){
         var progress = 0
+        var loaded_progress = 0
 
         var track = music_manager.playlist[music_manager.current_track]
 
@@ -56,6 +61,20 @@
             track_time.innerHTML = prettyTime(music_manager.audio.currentTime)+' /'+prettyTime(track.duration)
         else
             track_time.innerHTML = ""
+
+    }
+
+    function updateLoadProgress(){
+        var track = music_manager.playlist[music_manager.current_track]
+
+        if(track)
+          try {
+            loaded_progress = (music_manager.audio.buffered.end()/track.duration)*100.0
+          } catch(e){
+            loaded_progress = 0
+          }
+
+        document.getElementById('progress_loaded').style.width = loaded_progress+'%'
     }
 
     function removeFromPlaylist(link){
@@ -479,6 +498,7 @@
         </div>
         <div id="progress_bar">
             <div id="progress"></div>
+            <div id="progress_loaded"></div>
         </div>
         <!-- BuySellAds.com Zone Code -->
         <div id="bsap_1250075" class="bsarocks bsap_0e440463f3a541a54a8e6c18177114d6"></div>

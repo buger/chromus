@@ -120,7 +120,9 @@ a#play {
     background:rgb(216,216,216);
     cursor: pointer;
     padding-top: 0px;
-    padding-bottom: 1px
+    padding-bottom: 1px;
+
+    position: relative;
 }
 
 #progress {
@@ -128,6 +130,19 @@ a#play {
     background-color:#cc3333;
     width: 0%;
     cursor: pointer;
+    
+    position: absolute;
+    z-index: 3;
+}
+
+#progress_loaded {
+    height: 5px;
+    background-color:#c1c1c1;
+    width: 0%;
+    cursor: pointer;
+    position: absolute;
+
+    z-index: 2;
 }
 
 #controls .album_image {
