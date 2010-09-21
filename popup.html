@@ -1,7 +1,7 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=53" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=54" type="text/css">
     <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
 
     <script src="javascript/browser_detect.js"></script>
@@ -237,8 +237,7 @@
 
 
             var toggle_link = document.querySelector('#toggle_scrobbling')
-            //toggle_link.addEventListener('click', toggleScrobbling, false)
-
+            
             if(!music_manager.scrobbler.scrobbling)
                 $(toggle_link).addClass('disabled');
             
@@ -425,21 +424,6 @@
             <button id="stop_after_control" class="ui-toggler stop_after_playing disabled"></button>
             <button id="repeat_mode_control" class="ui-toggler ui-corner-right repeat_mode disabled"></button>
 
-<!--
-            <span><img src="images/normal.png" alt="" id="play_mode_icon"></span>
-            <select id="play_mode">
-                <option value="normal">Normal</option>
-                <option value="stop">Stop after playing</option>
-                <option value="shuffle">Shuffle</option>
-            </select>
-
-            <span><img src="images/no_repeat.png" alt="" id="repeat_mode_icon"></span>
-            <select id="repeat_mode">
-                <option value="no_repeat">No repeat</option>
-                <option value="repeat_one">Repeat track</option>
-                <option value="repeat_all">Repeat all</option>
-            </select>
--->
             <div id='scrobbling'>
                 <button id="toggle_scrobbling" class="ui-toggler ui-corner-all toggle_scrobbling" style="display:none"></button>
                 <a href="#" class="lfm_link" target="_blank" style="display:none">buger_swamp</a>
@@ -475,7 +459,6 @@ $(function() {
       music_manager.setVolume(ui.value/100)
     }
   });
-
 
 
   $('button#play_mode_control').click(function(){
