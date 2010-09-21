@@ -1,7 +1,7 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=88" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=53" type="text/css">
     <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
 
     <script src="javascript/browser_detect.js"></script>
@@ -12,6 +12,30 @@
     <script src="javascript/jquery-ui.min.js"></script>
 
     <script>
+
+    function helpOnHover(element, help){
+        var help_func = function(){
+            var help_text;
+
+            if (typeof(help) == 'string'){
+                help_text = help
+            } else {
+                help_text = help.call(element)
+            }
+
+            $('#quick_help').get(0).innerHTML = help_text
+            $('#quick_help').show()
+
+            element.title = help_text
+        }
+
+        element.mouseenter(help_func);
+        element.click(help_func);
+        element.mouseleave(function(){
+            $('#quick_help').hide()
+        })
+    }
+
     var music_manager = chrome.extension.getBackgroundPage().music_manager
 
     music_manager.audio.addEventListener('onPlay', function(){
@@ -106,7 +130,6 @@
     
 
     function toggleScrobbling(event){
-
         var link = event.target
         
         if(link.className.match(/active/)){
@@ -204,18 +227,21 @@
             music_manager.love()
         }, false)
 
+        helpOnHover($(love_btn), "Love track")
+
+
         if(music_manager.scrobbler._username){
             var link = document.querySelector('#scrobbling .lfm_link')
             link.innerHTML = music_manager.scrobbler._username
             link.href = "http://last.fm/user/"+music_manager.scrobbler._username
 
 
-            var toggle_link = document.querySelector('#scrobbling .toggle_lfm')
-            toggle_link.addEventListener('click', toggleScrobbling, false)
+            var toggle_link = document.querySelector('#toggle_scrobbling')
+            //toggle_link.addEventListener('click', toggleScrobbling, false)
 
-            if(music_manager.scrobbler.scrobbling)
-                toggle_link.className = 'toggle_lfm active'
-
+            if(!music_manager.scrobbler.scrobbling)
+                $(toggle_link).addClass('disabled');
+            
             link.style.display = 'inline'
             toggle_link.style.display = 'inline'
         } else {
@@ -228,6 +254,9 @@
 
         var play_btn = document.getElementById('play')
         play_btn.addEventListener('click', togglePlayingBig, false)
+        
+        helpOnHover($(play_btn), "Play/Pause")
+
 
         var next_track = document.querySelector('.controls_container .next')
         next_track.addEventListener('click', function(){
@@ -235,6 +264,9 @@
             
             _gaq.push(['_trackEvent', 'controls', 'nextTrack']);
         }, false)
+        
+        helpOnHover($(next_track), "Next track")
+
 
         var volume_toggle = document.querySelector('.volume_control .volume_link')
         volume_toggle.addEventListener('click', function(){
@@ -244,6 +276,7 @@
             
             _gaq.push(['_trackEvent', 'controls', 'muteVolume']);
         })
+        helpOnHover($(volume_toggle), "Mute")
 
         /* Progress bar */
         var progress = document.getElementById('progress_bar')
@@ -260,40 +293,22 @@
         }, false)
         
 
-        var play_mode = document.getElementById('play_mode')
-        play_mode.addEventListener('change', function(evt){
-            console.log(evt.target.value)
+        var play_mode = $('#play_mode_control')
+        var repeat_mode = $('#repeat_mode_control')
+        var stop_after = $('#stop_after_control')
 
-            document.getElementById('play_mode_icon').src = "images/"+evt.target.value+'.png'
+        if (music_manager.play_mode == "shuffle")
+            play_mode.removeClass('disabled')
 
-            music_manager.play_mode = evt.target.value
-            
-            _gaq.push(['_trackEvent', 'controls', 'playMode', music_manager.play_mode]);
-        })
+        if (music_manager.repeat_mode && music_manager.repeat_mode != "normal"){
+            repeat_mode.removeClass('disabled')
 
-        var repeat_mode = document.getElementById('repeat_mode')
-        repeat_mode.addEventListener('change', function(evt){
-            document.getElementById('repeat_mode_icon').src = "images/"+evt.target.value+'.png'
-            
-            music_manager.repeat_mode = evt.target.value
-            
-            _gaq.push(['_trackEvent', 'controls', 'repeatMode', music_manager.repeat_mode]);
-        })
-
-        var evt = document.createEvent("Events")
-        evt.initEvent("change", true, true)
-
-        if(music_manager.play_mode){
-            play_mode.value = music_manager.play_mode
-
-            play_mode.dispatchEvent(evt)
+            if (music_manager.repeat_mode == "repeat_all")
+                repeat_mode.addClass('all')
         }
 
-        if(music_manager.repeat_mode){
-            repeat_mode.value = music_manager.repeat_mode
-
-            repeat_mode.dispatchEvent(evt)
-        }        
+        if (music_manager.stop_after_playing == "stop")
+            stop_after.removeClass('disabled')
     }
 
     function togglePlayingBig(evt){
@@ -353,92 +368,7 @@
         updateTrackInfo()
     }
 
-
     </script>
-    <style type="text/css">
-        .play_mode_controls {
-            position: absolute;
-            bottom: 0px;
-            left: 0px;
-            width: 400px;
-        }
-
-        .play_mode_controls span {
-            float: left;
-            margin-top: 4px;
-            margin-left: 3px;
-        }
-
-        .play_mode_controls select {
-            float: left;
-            padding: 2px 0 2px 5px;
-            background: #eee;
-            border: 1px solid #ccc;
-            font-size: 11px;
-            margin-right: 15px;
-        }
-
-        #scrobbling {
-            position: absolute;
-            right: 0px;
-            top: 3px;
-
-            cursor: pointer;
-            font-size: 13px;
-            font-family: Arial;
-            width: 120px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-
-            white-space:nowrap;
-        }
-
-        #scrobbling a {
-            float: left;
-            text-decoration: none;
-            color: #333;
-        }
-        
-        #scrobbling a:hover {
-            color: #0187C5;
-            text-decoration: underline;
-        }
-
-        #scrobbling a.lfm_link {
-            margin-top: 2px;
-            margin-left: 3px;
-        }
-
-        #scrobbling a.toggle_lfm {
-            width: 18px;
-            height: 18px;
-            background-size: 100%;            
-            background: url(images/lfm_off.png?rnd=1);            
-        }
-
-        #scrobbling a.toggle_lfm.active {
-            width: 18px;
-            height: 18px;            
-            background: url(images/lfm.png?rnd=1234);
-        }
-
-        #scrobbling a.connect_lfm {
-            color: #0187C5;
-            text-decoration: underline;
-            margin-top: 2px;
-        }
-
-        li.empty a {
-            font-size: 20px !important;
-            color: #D01F3C !important;
-            text-decoration: underline !important;
-        }
-
-        .bsap a {
-            margin: 0px !important;
-            padding: 0px !important;
-        }
-    </style>
     </head>    
     <body>
     <!-- BuySellAds.com Ad Code -->
@@ -466,7 +396,7 @@
                     <a href="javascript:;" class="album" target="_blank"></a>
                 </div>
                 <div class="controls_container">
-                    <a href="javascript:;" class="next" title="Next track"><img src="http://png-4.findicons.com/files/icons/2152/snowish/128/gtk_media_next_ltr.png" alt="Next track" height="34"/></a>
+                    <a href="javascript:;" class="next" title="Next track"><img src="images/next_2.png" width="34px"/></a>
                     <a href="javascript:;" class="love" title="Love!"><img src="images/love.png" alt="Love!" width="28" /></a>
                     <!--<a href="javascript:;" class="ban" title="Ban track"><img src="/images/ban_2.png" alt="Ban" width="16" /></a>-->
                     <span class="time">00:00/30:20</span>
@@ -474,7 +404,7 @@
             </div>
             <div class="float volume_control" style="width: 15px; padding-top: 10px;">
                 <div id="volume-slider" style="height: 50px;"></div>
-                <a href="javascript:;" class="volume_link"><img src="images/volume.png" alt="Volume" /></a>
+                <a href="javascript:;" class="volume_link"><img src="images/volume_2.png" alt="Volume" /></a>
             </div>
         </div>
         <div id="progress_bar">
@@ -486,9 +416,16 @@
         <div class="wrapper">
             <ul style="white-space:nowrap" id="tracks_container">
             </ul>
+            <div id="quick_help" class="ui-corner-tr" style="position: absolute; background: #ddd; color: #666; bottom: 27px; left: 0px; padding: 3px;display: none; max-width: 200px; overflow:hidden;text-overflow: ellipsis;"></div>
         </div>
-        <div style="height: 25px; border-top: 1px solid #ccc"></div>
+        <div style="height: 26px; border-top: 1px solid #ccc"></div>
         <div class="play_mode_controls">
+            <button id="play_source" class="ui-toggler ui-corner-all play_source"></button>
+            <button id="play_mode_control" class="ui-toggler ui-corner-left shuffle disabled"></button>
+            <button id="stop_after_control" class="ui-toggler stop_after_playing disabled"></button>
+            <button id="repeat_mode_control" class="ui-toggler ui-corner-right repeat_mode disabled"></button>
+
+<!--
             <span><img src="images/normal.png" alt="" id="play_mode_icon"></span>
             <select id="play_mode">
                 <option value="normal">Normal</option>
@@ -502,12 +439,12 @@
                 <option value="repeat_one">Repeat track</option>
                 <option value="repeat_all">Repeat all</option>
             </select>
-
+-->
             <div id='scrobbling'>
-                <a href="#" class="toggle_lfm" title="Toggle scrobbling" style="display:none"></a>
+                <button id="toggle_scrobbling" class="ui-toggler ui-corner-all toggle_scrobbling" style="display:none"></button>
                 <a href="#" class="lfm_link" target="_blank" style="display:none">buger_swamp</a>
                 <a href="javascript:;" class='connect_lfm' style="display:none">Want scrobbling?</a>
-            </div>
+            </div>            
         </div>
         <script>
             onLoad()
@@ -538,6 +475,78 @@ $(function() {
       music_manager.setVolume(ui.value/100)
     }
   });
+
+
+
+  $('button#play_mode_control').click(function(){
+      $(this).toggleClass('disabled');
+
+      music_manager.play_mode = $(this).hasClass('disabled') ? "normal" : "shuffle";
+      
+      _gaq.push(['_trackEvent', 'controls', 'playMode', music_manager.play_mode]);
+  });
+
+  helpOnHover($('button#play_mode_control'), function(){
+      if ($(this).hasClass('disabled'))
+          return "Shuffle mode disabled"
+      else
+          return "Shuffle mode enabled"
+  })
+
+  $('button#stop_after_control').click(function(){
+      $(this).toggleClass('disabled');
+
+      music_manager.stop_after_playing = $(this).hasClass('disabled') ? "normal" : "stop";
+
+      _gaq.push(['_trackEvent', 'controls', 'playMode', music_manager.stop_after_playing]);
+  });
+
+  helpOnHover($('button#stop_after_control'), function(){
+      if ($(this).hasClass('disabled'))
+          return "Playing without stopping"
+      else
+          return "Stop after playing"
+  })
+
+    
+    
+  $('button#repeat_mode_control').click(function(){
+      if ($(this).hasClass('all')){
+        $(this).removeClass('all').addClass('disabled');
+        music_manager.repeat_mode = "normal";
+      } else if ($(this).hasClass('disabled')){
+        $(this).removeClass('disabled all')
+        music_manager.repeat_mode = "repeat_one";
+      } else {
+        $(this).removeClass('disabled').addClass('all');
+          music_manager.repeat_mode = "repeat_all";
+      }
+
+      _gaq.push(['_trackEvent', 'controls', 'repeatMode', music_manager.repeat_mode]);
+  });
+
+  helpOnHover($('button#repeat_mode_control'), function(){
+      if($(this).hasClass('all'))
+        return "Repeat playlist"
+      else if($(this).hasClass('disabled'))
+        return "Don't repeat"
+      else
+        return "Repeat track"
+  })
+
+
+  $('button#toggle_scrobbling').click(function(){
+      $(this).toggleClass('disabled')
+
+      music_manager.scrobbler.scrobbling = !$(this).hasClass('disabled')
+  })
+
+  helpOnHover($('button#toggle_scrobbling'), function(){
+      if($(this).hasClass('disabled'))
+        return "Scrobbling disabled"
+      else
+        return "Scrobbling enabled"
+  })
 });        
         </script>
     </body>

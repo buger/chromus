@@ -47,7 +47,7 @@ MusicManager.prototype.onTimeUpdate = function(){
         console.log("Track scrobbled", track)
     }
     
-    if(this.audio.duration > 31 && percent_played > 90 && this.play_mode != "stop" && !track.next_song_prefetched){
+    if(this.audio.duration > 31 && percent_played > 90 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
       var next_track = this.playlist[this.current_track+1]
 
       track.next_song_prefetched = true
@@ -97,7 +97,7 @@ MusicManager.prototype.onEnded = function(){
 
     var track = this.playlist[this.current_track]
 
-    if(this.play_mode == "stop" || (this.play_mode != "shuffle" && this.current_track == (this.playlist.length-1)))
+    if(this.stop_after_playing == "stop" || (this.play_mode != "shuffle" && this.current_track == (this.playlist.length-1)))
         delete this.current_track        
     else
         this.playNextTrack()
