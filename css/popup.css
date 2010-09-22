@@ -50,7 +50,7 @@ ul#tracks_container li span.number {
 
 ul#tracks_container li a.sm2_button {
     margin-right: 10px;
-    margin-left: 10px;    
+    margin-left: 5px;    
     margin-top: 1px;
 }
 
@@ -275,4 +275,133 @@ a#play {
     top: 15px;
     font-size: 15px;
     color: #aaa;
+}
+
+.ui-toggler {
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    height: 24px;
+    display: inline-block;
+    cursor:pointer;
+    font-size: 11px;
+}
+
+.ui-toggler:hover {
+    border-color: #999;    
+}
+
+button.shuffle {
+    width: 50px;
+    background: url(../images/shuffle.png) center no-repeat;
+    margin-right: 0px;
+}
+
+button.shuffle.disabled {
+    background-image: url(../images/shuffle_bw.png);
+}
+
+button.stop_after_playing {
+    width: 50px;
+    background: url(../images/stop.png) center no-repeat;
+    margin-right: 0px;
+}
+
+button.stop_after_playing.disabled {
+    background-image: url(../images/stop_bw.png);
+}
+
+button.repeat_mode {
+    width: 50px;
+    background: url(../images/repeat_one.png) center no-repeat;
+    margin-left: 0px;
+}
+
+button.repeat_mode.all {
+    background-image: url(../images/repeat_all.png);
+}
+
+button.repeat_mode.disabled {
+    background-image: url(../images/repeat_bw.png);
+}
+
+button.play_source {
+    width: 40px;
+    background: url(../images/plus_blue.png) center no-repeat;
+    margin-right: 10px;
+}
+
+button.toggle_scrobbling {    
+    width: 26px;
+    background: url(../images/lfm_small.png) center no-repeat;
+}
+
+button.toggle_scrobbling.disabled {    
+    background-image: url(../images/lfm_small_bw.png);
+}
+
+.play_mode_controls {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 460px;
+}
+
+.play_mode_controls span {
+    float: left;
+    margin-top: 4px;
+    margin-left: 3px;
+}
+
+.play_mode_controls select {
+    float: left;
+    padding: 2px 0 2px 5px;
+    background: #eee;
+    border: 1px solid #ccc;
+    font-size: 11px;
+    margin-right: 15px;
+}
+
+#scrobbling {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+
+    max-width: 120px;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: Arial;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space:nowrap;
+}
+
+
+#scrobbling a.lfm_link {
+    color: #333;
+    text-decoration: none;
+    margin-top: 2px;
+    margin-left: 3px;
+}
+
+#scrobbling a:hover {
+    color: #0187C5;
+    text-decoration: underline;
+}
+
+#scrobbling a.connect_lfm {
+    color: #0187C5;
+    text-decoration: underline;
+    margin-top: 2px;
+}
+
+li.empty a {
+    font-size: 20px !important;
+    color: #D01F3C !important;
+    text-decoration: underline !important;
+}
+
+.bsap a {
+    margin: 0px !important;
+    padding: 0px !important;
 }
