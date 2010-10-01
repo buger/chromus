@@ -10,9 +10,9 @@ var VK = {
         console.log("Trying to determine search method")
 
         xhrRequest("http://vkontakte.ru", "GET", null, function(xhr){
-            if(xhr.responseText.match(/quickLogin/)){
-                xhrRequest("http://vk.com", "GET", null, function(xhr){
-                    if(xhr.responseText.match(/quickLogin/)) {
+            if(xhr.responseText.match(/quickLogin/) || xhr.responseText.match(/quick_login_form/)){
+                xhrRequest("http://vk.com", "GET", null, function(xhr_vk){
+                    if(xhr_vk.responseText.match(/quickLogin/) || xhr_vk.responseText.match(/quick_login_form/)) {
                         callback({search_method:'test_mode'})
                     } else {
                         callback({search_method:'vk.com'})
