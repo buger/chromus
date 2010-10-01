@@ -12,7 +12,7 @@ var VK = {
         xhrRequest("http://vkontakte.ru", "GET", null, function(xhr){
             if(xhr.responseText.match(/quickLogin/)){
                 xhrRequest("http://vk.com", "GET", null, function(xhr){
-                    if(xhr.responseText.match(/quickLogin/)) {
+                    if(xhr.responseText.match(/quick_login_form/)) {
                         callback({search_method:'test_mode'})
                     } else {
                         callback({search_method:'vk.com'})
