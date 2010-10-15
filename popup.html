@@ -1,12 +1,12 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=96" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=99" type="text/css">
     <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
 
     <script src="javascript/browser_detect.js"></script>
     <script src="javascript/utils.js"></script>
-    <script src="javascript/scrobbler.js"></script>
+    <script src="javascript/scrobbler.js?rnd=12"></script>
 
     <script src="javascript/jquery.min.js"></script>
     <script src="javascript/jquery-ui.min.js"></script>
@@ -327,6 +327,28 @@
 
         if (music_manager.stop_after_playing == "stop")
             stop_after.removeClass('disabled')
+
+
+        var play_source = document.getElementById('play_source');
+        play_source.addEventListener('click', function(evt){
+            music_manager.scrobbler.radioTune('lastfm://user/buger_swamp/loved', function(response){            
+                music_manager.scrobbler.radioGetPlaylist(function(response){
+                    console.log("ZXCZXC")
+/*
+                    var xhr = new XMLHttpRequest()
+                    xhr.open("GET", response.url, true)
+                    xhr.send()
+                    
+                    console.log("Sending redirect response:", response.url)
+
+                    xhr.onreadystatechange = function(){
+                        console.log("Redirect response:", xhr)
+                    }
+*/
+//                    music_manager.audio.playOrLoad(response.url)
+                })
+            })
+        })
     }
 
     function togglePlayingBig(evt){

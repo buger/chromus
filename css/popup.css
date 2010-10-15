@@ -334,6 +334,7 @@ button.play_source {
 button.toggle_scrobbling {    
     width: 26px;
     background: url(../images/lfm_small.png) center no-repeat;
+    margin-right: 0px;
 }
 
 button.toggle_scrobbling.disabled {    

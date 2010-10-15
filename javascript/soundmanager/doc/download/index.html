@@ -1,0 +1,1041 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>SoundManager 2: Download</title>
+<meta name="robots" content="noindex" />
+<meta name="description" content="Get the latest version of SoundManager 2 (BSD licensed.)" />
+<meta name="keywords" content="download, javascript sound, javascript audio api" />
+<meta name="robots" content="all" />
+<meta name="author" content="Scott Schiller" />
+<meta name="copyright" content="Copyright (C) 1997 onwards Scott Schiller" />
+<meta name="language" content="en-us" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet" type="text/css" media="screen" href="../../demo/index.css" />
+<script type="text/javascript" src="../../script/soundmanager2.js"></script>
+<script type="text/javascript" src="../../demo/index.js"></script>
+<script type="text/javascript">
+	soundManager.handleFlashBlock = false;
+	soundManager.debugMode = false;
+	soundManager.url = '../../swf/';
+	soundManager.onload = function() {
+	}
+</script>
+</head>
+
+<body>
+	
+<div id="content">
+
+ <div id="top">
+
+  <h1>SoundManager 2: Download</h1>
+
+	<div id="nav">
+	 <ul>
+
+	  <li>
+	   <a href="../../">Home</a>
+	  </li>
+
+	  <li>
+	   <a href="#">Demos</a>
+	   <ul>
+		<li><a href="../../demo/api/">API Examples</a></li>
+	    <li><a href="../../demo/play-mp3-links/" class="exclude">Playable MP3 links</a></li>
+	    <li><a href="../../demo/mp3-player-button/" class="exclude">Basic MP3 Play Button</a></li>
+		<li><a href="../../demo/page-player/">Muxtape-style UI</a></li>
+		<li><a href="../../demo/360-player/">360&deg; Player UI</a></li>
+	    <li><a href="../../demo/mpc/">Drum Machine (MPC)</a></li>
+		<li><a href="../../demo/animation/">DOM/Animation Demos</a></li>
+		<li><a href="../../demo/flashblock/">FlashBlock Handling</a></li>
+		<li><a href="../../demo/template/">Basic Template</a></li>
+	   </ul>
+	  </li>
+
+	  <li>
+	   <a href="../getstarted/">Getting Started</a>
+	   <ul>
+		<li><a href="../getstarted/#how-sm2-works">How SoundManager 2 works</a></li>
+		<li><a href="../getstarted/#basic-inclusion">Including SM2 on your site</a></li>
+		<li><a href="../getstarted/#troubleshooting">Troubleshooting</a></li>
+	   </ul>
+	  </li>
+
+	  <li>
+	   <a href="..">Documentation</a>
+	   <ul>
+		<li><a href="../#sm-config">SoundManager Properties</a></li>
+		<li><a href="../#sound-object-properties">Sound Object Properties</a></li>
+		<li><a href="../#smdefaults">Global Sound Defaults</a></li>
+		<li><a href="../#api">SoundManager Core API</a></li>
+		<li><a href="../#smsoundmethods">Sound Object (SMSound) API</a></li>
+	   </ul>
+	  </li>
+	
+	  <li>
+	   <strong><a href="#">Download</a></strong>
+	   <ul>
+		<li><a href="#latest">Get SoundManager 2</a></li>
+		<li><a href="#revision-history">Revision History</a></li>
+	   </ul>
+	  </li>
+	
+	  <li>
+	   <a href="../technotes/">Technical Notes</a>
+	   <ul>
+		<li><a href="../technotes/#requirements">System Requirements</a></li>
+		<li><a href="../technotes/#debug-output">Debug + Console Output</a></li>
+	   </ul>
+	  </li>
+
+	  <li>
+	   <a href="../resources/">Resources</a>
+	   <ul>
+		<li><a href="../resources/#licensing">Licensing</a></li>
+		<li><a href="../resources/#related">Related Projects</a></li>
+		<li><a href="http://getsatisfaction.com/schillmania/products/schillmania_soundmanager_2/">SM2 support / discussion</a></li>
+		<li><a href="http://www.schillmania.com/content/react/contact/">Contact Info @ Schillmania.com</a></li>
+	   </ul>
+	  </li>
+
+	 </ul>
+	 <div class="clear"></div>
+	</div>
+	
+ </div>
+
+ <div id="main" class="triple">
+
+
+		<div id="filter-box" class="columnar">
+
+		 <div class="c1">
+		  <div id="reset-filter"></div>
+	         </div>
+
+		 <div class="c2">
+		  <div id="search-results"><!-- search results for %s --></div>
+	         </div>
+
+		</div>
+
+		<div id="newest" class="columnar">
+			
+			<div class="c1">
+				<h2>Get SoundManager 2</h2>
+				<p>Get the latest and greatest.</p>
+			</div>
+			
+			<div class="c2">
+				<h3>Download SoundManager 2</h3>
+				<p>Code cleanup (full debug codebase ~5% lighter), HTML5 audio tweaks, merged RTMP fork from GitHub, experimental video feature <i>removed</i>, optional crossdomain.xml feature. See <a href="#history">revision history</a> for details.</p>
+				
+				<p style="padding-top:0.5em"><a href="../../download/soundmanagerv297a-20101010.zip" title="Download SoundManager 2" class="norewrite feature">Download SoundManager 2.97a.20101010</a></p>
+				<p style="padding-top:0.5em">Also on Github (dev branches, forks etc.): <a href="http://github.com/scottschiller/SoundManager2">http://github.com/scottschiller/SoundManager2</a></p>
+				<p><b>Performance tip:</b> SM2's code size varies from 90 KB (debug) down to 10 KB (optimized) over HTTP; check the <a href="../getstarted/#basic-inclusion" title="Including SoundManager 2 on your site: Script build options">pre-optimized builds</a> for details.</p>
+			</div>
+			
+		</div>
+
+		
+		<div id="history" class="columnar">
+			
+			<div class="c1">
+				<h2>Revision History</h2>
+				<p>Latest changes and archived notes from bug fixes, API updates, feature development etc.</p>
+			</div>
+			
+			<div class="c2">
+				
+			  <div class="f-block c-revision-history">
+
+			  <h3 id="revision-history">Revision History</h3>
+			
+			  <p>A changelog of sorts.</p>
+
+			  <ul id="revision-list" class="standard">
+
+			   <li class="in">
+			    <h3><b>V2.97a.20101010</b> - Code cleanup, HTML5 audio tweaks, merged RTMP fork, removal of experimental video, optional usePolicyFile crossdomain.xml feature</h3>
+				<p>Shuffling of SoundManager 2 core, approximately 5% shaved off full debug-enabled file size after bug fixes, additional comments, new features and so on. Internal event handling code cleaned up. .SWF builds optimized, Flash 9 non-debug version now under 10 KB. Debug version now flash debugger-enabled. Merged GitHub user kjvarga's RTMP fork including improvements for Red5 + Flash Media Server streaming cases - buffering, event and state handling. Experimental video feature is toast, createVideo() no longer implemented. iPhone + iPad touch events on page player + 360&deg; player UI demos; tap and drag to seek, etc.</p>
+				
+			    <ul class="double">
+			
+			     <li class="in">
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li>No HTML5 audio for *any* Safari on OS X Snow Leopard 10.6.[3|4] due to underlying bugs causing intermittent audio playback failure; ongoing Apple issue, on their radar. (See <a href="http://github.com/scottschiller/SoundManager2/commit/707697685408ef4aafd23811eeaa61a2d2ec120a">related GitHub commit</a>)</li>
+				   <li>Don't <code>unload()</code> at <code>onfinish()</code> for HTML5 audio (was originally done to be conservative, but results in additional HTTP requests despite caching expectations?)</li>
+				   <li><code>onload()</code> for HTML5 now using proper boolean values</li>
+				   <li>Fix NetStream-specific <code>autoLoad</code>/<code>autoPlay</code>/<code>volume</code> <code>createSound()</code> call, specific null flash sound object error scenario. (Related <a href="http://github.com/scottschiller/SoundManager2/commit/0867fd641e83fda4e99665567a62f3398651fac4">changes on GitHub</a>.)</li>
+				   <li>Fix for "<code>onbufferchange(1)</code> followed immediately by <code>onbufferchange(0)</code>" case when audio was actually still buffering.</li>
+				   <li>Removed <code>setPosition()</code> within <code>unload()</code>, cleaner exit when destroying a sound</li>
+				  </ul>
+			     </li>
+
+			     <li class="in">
+				  <p class="compact">Merged: RTMP Fork</p>
+				  <ul class="nested compact flat">
+				   <li>Merged GitHub user kjvarga's <a href="http://github.com/kjvarga/SoundManager2/">RTMP fork of SoundManager 2</a>, including buffering, event and state handling fixes and improvements. For more RTMP documentation/features, see the readme on GitHub, or <a href="../../README.rdoc" class="norewrite">view locally</a>.</li>
+				  </ul>
+                 </li>
+
+			     <li class="in">
+				  <p class="compact">API Updates</p>
+				  <ul class="nested compact flat">
+				   <li><b>Removed</b> experimental video feature (originally added late 2008, never developed further.) <code>createVideo()</code>, <code>allowFullScreen</code> and related video methods are now gone. Other dedicated HTML5/flash video player projects have since solved this problem.</li>
+                   <li>New SMSound option: <a href="../#smsound-usepolicyfile" title="SoundManager sound option: usePolicyFile">usePolicyFile</a> - (boolean, default: <code>false</code>) - enables Flash to request /crossdomain.xml file for content on third-party domains, if access to ID3/metadata such as wave/peak/spectrum is needed. Will automagically enable if <code>onid3()</code> or peak/wave/spectrum features are being used.</li>
+				   <li><code>console.warn()</code>-style messaging (instead of throwing exceptions) if <code>createSound()</code> etc. are called before SM2 init has fired. Now calls similar warning and exits if called after a failed, unsuccessful startup (ie., timeout or not-supported case.)</li>
+				  </ul>
+				 </li>
+
+			     <li class="in">
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+				   <li>SoundManager 2 core code cleanup, ~5% shaved off soundmanager2.js code size after new features, bug fixes and comments etc. Internal event handling (DOM-related events for init, IE 6 vs. everybody else) improved.</li>
+				   <li>Flash builds optimized; Flash 9 SWF build now under 10 KB. Debug-enabled Flash 9 SWF now hooks into Flash debug player/IDE debugging tools (compiled with <code>-debug=true</code>)</li>
+				   <li>Attempt to detect RTL documents, position Flash accordingly if so to avoid long horizontal scrollbar issue (<a href="http://getsatisfaction.com/schillmania/topics/rtl_window_scroll_bar_issues_with_container_position" rel="nofollow">related discussion</a>)</li>
+				   <li>iPhone + iPad <code>touchmove()</code> and related events added to page player + 360&deg; player UI demos; tap and drag to seek should now work.</li>
+			      </ul>
+			     </li>
+
+			    </ul>
+
+			   </li>
+
+
+			   <li class="in">
+			    <h3><b>V2.96a.20100822</b> - HTML5 audio support no longer alpha, Safari 5.0.1/SL HTML5 audio issues continue, iPad/iPhone "play through", Flash tweak for Android (<a href="../../download/soundmanagerv296a-20100822.zip">Download archived version</a>)</h3>
+				<p><code>useHTML5Audio</code> feature now considered beta-worthy, though disabled by default to be safe (with the exception of iPhone + iPad.) iPhone/iPad will now play a sequence of sounds, user interaction only required to start first one. Flash on-screen positioning tweak for Android devices that run Flash. Safari 5.0.1 on Snow Leopard exhibits same buggy HTML5 audio issue, disabled by default; Apple have been notified. IE 9 "Platform Preview 4" has <code>&lt;audio&gt;</code> but no <code>Audio()</code> support (yet?) See <a href="https://connect.microsoft.com/IE/feedback/details/586311/audio-but-no-audio-support">bug #586311</a> (may require connect.microsoft.com / Windows Live ID, login first etc.)</p>
+				
+			    <ul class="double">
+			
+			     <li class="in">
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li>HTML5 <code>Audio()</code> still broken in Safari 5.0.1 on Snow Leopard (10.6.3, 10.6.4), where sounds intermittently fail to load and play. Apple are aware of the regression. Related bug: <a href="https://bugs.webkit.org/show_bug.cgi?id=32159#c14">#32519</a>. Include <code>sm2-ignorebadua</code> in URL on SM2 pages to ignore this check and verify broken behaviour, etc.</li>
+				   <li>Tweaks for experimental RTMP feature re: handling of paused state, tracking of position and <code>onfinish()</code> firing early.</li>
+				   <li>Bumped SWF z-index to 5000 for Safari 5, SoundCloud-reported bug-and-fix for Safari 5-specific bad redraw issues, and occasional crash case referencing WebCore::RenderLayer::paintLayer</li>
+				  </ul>
+			     </li>
+			     <li class="in">
+				  <p class="compact">API Updates</p>
+				  <ul class="nested compact flat">
+				   <li>iPhone/iOS 4 and iPad can now play a sequence of sounds (once the user starts sound initially), provided <code>onfinish()</code> is used to create/play the next sound. Example: Muxtape-style UI on homepage will play through list without further interaction once a user plays something in the list.</li>
+				  </ul>
+				 </li>
+			     <li class="in">
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+				   <li>Special case for getting SM2 working more reliably on HTC Android + Flash 10.1, where flash does not load until on-screen (ie., in view.) If off-screen, Flash is repositioned at left/top 0px in order to load (including scroll/resize if needed), then events released and movie is repositioned off-screen. If movie is in the DOM already eg. as in <code>useFlashBlock</code> cases, <code>flashLoadTimeout</code> is set to 0 to allow infinite wait (eg., SM2 will not timeout with an error, and will simply load when the flash is scrolled into view.)</li>
+				   <li>Documentation: Clarified <code>createSound()</code> behaviour if an existing sound ID is given (returns sound object "as-is", ignores any options passed.)</li>
+				   <li>Page-player demo updated to use <code>canPlayLink()</code> instead of <code>canPlayURL</code>, more flexible link/type handling.</li>
+				   <li>Homepage and documentation UI/layout and language tweaks, a few new "as seen on the internets" icons etc.</li>
+			      </ul>
+			     </li>
+
+			    </ul>
+
+			   </li>
+
+			   <li class="in">
+			    <h3><b>V2.96a.20100624</b> - Safari 5/Snow Leopard 10.6.3/10.6.4 HTML5 Audio() issue, X-domain SWF build fixes (<a href="../../download/soundmanagerv296a-20100624.zip">Download archived version</a>)</h3>
+			
+				<p>Disabling HTML5 Audio for Safari 5 on Snow Leopard 10.6.3 + 10.6.4 (current release) only, as it is broken similar to Safari 4.x (also on Snow Leopard only.) Related bug: <a href="https://bugs.webkit.org/show_bug.cgi?id=32159#c14">#32519</a>. Also, version info in SWFs and fixed X-domain SWF build.</p>
+			
+			    <ul class="double">
+			
+			     <li class="in">
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li>HTML5 Audio() still broken in Safari 5 on Snow Leopard (10.6.3, 10.6.4) - disabling for now, falling back to Flash as with Safari 4.x on Snow Leopard. Include <code>sm2-ignorebadua</code> in URL to ignore this check and verify broken behaviour, etc.</li>
+				   <li>Fixed X-domain SWF builds to actually work cross-domain.</li>
+				  </ul>
+			     </li>
+			     <li class="in">
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+				   <li>Added version info string to SWFs in Flash right-click / context menu, helpful when troubleshooting SWFs.</li>
+			      </ul>
+			     </li>
+
+			    </ul>
+
+			   </li>
+
+			   <li class="in">
+			    <h3><b>V2.96a.20100606</b> - RTMP (Flash Media Server) Support, HTML5 Updates (<a href="../../download/soundmanagerv295b-20100606.zip">Download archived version</a>)</h3>
+			
+				<p>HTML5 update, new RTMP feature: Experimental Flash Media Server support, <code>onposition()</code> event listener, SMSound <code>type</code> option and code cleanup.</p>
+			
+			    <ul class="double">
+			
+			     <li class="in">
+			      <p class="compact">API Updates</p>
+			      <ul class="nested compact flat">
+				   <li>New experimental <a href="../#smsound-serverurl" title="SMSound serverURL property">RTMP support</a> via kjvarga's fork at <a href="http://github.com/kjvarga/SoundManager2/">http://github.com/kjvarga/SoundManager2/</a> while maintaining existing NetStream-based behaviour for non-RTMP MPEG4 audio, etc. Uses new <code>serverURL</code> parameter for FMS (I used Red5 for dev/testing,) eg. <code>soundManager.createSound({id:'rtmpTest',serverURL:'rtmp://localhost/oflaDemo',url:'oh-alberta.mp3'}).play();</code></li>
+				   <li>New SMSound option for createSound(), load(), play(): '<a href="../#smsound-type" title="SMSound type option">type</a>', for specifying MIME type alongside URL to help with detecting playability. eg. 
+<code>soundManager.createSound({id:'foo', url:'/player.php?stream=1', type:'audio/mp3'}).play();</code> and so on. Hat tip: <a href="http://sylvinus.org">sylvinus.org</a></li>
+                   <li>New SMSound event: <a href="../#smsound-onposition" title="SMSound onposition() event">onposition()</a>, for attaching listeners to specific times within a sound.</li>
+				  </ul>
+				 </li>
+			     <li class="in">
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li>Flash sound unload/destroy ActionScript "could not close stream" exception/warning (finally?) fixed.</li>
+				   <li>Sound looping updated for Flash 8, working (albeit with a quirk - requires preloading.)</li>
+				  </ul>
+			     </li>
+			     <li class="in">
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+				   <li>Removed Base64 HTML5 Audio() tests, redundant as numerous MIME (audio/mpeg, audio/mp3 etc.) checks seem to cover it.</li>
+				   <li>Updated MPC (drum machine) demo from 2006-era design, modernizing the CSS a bit.</li>
+				   <li><code>nullURL = 'about:blank'</code> tweak for unloading (flash 8.) May have finally fixed that dumb stream closing error on unload/destroy.</li>
+				   <li>set <code>soundManager.didFlashBlock</code> *before* firing <code>onready()</code>/<code>onerror()</code> listeners</li>
+			      </ul>
+			     </li>
+
+			    </ul>
+
+			   </li>
+
+			   <li class="in">
+			    <h3><b>V2.96a.20100520</b> - HTML5 Edition (<a href="../../download/soundmanagerv295b-20100520.zip">Download archived version</a>)</h3>
+			
+				<p>Experimental HTML5 support, lots of code shuffling and performance tweaks.</p>
+			
+			    <ul class="double">
+			
+			     <li class="in">
+			      <p class="compact">API Updates</p>
+			      <ul class="nested compact flat">
+				   <li>New <a href="../#soundmanager-usehtml5audio" title="SoundManager: useHTML5Audio feature">soundManager.useHTML5Audio</a> (disabled by default except for iPad, Palm Pre) - adds experimental HTML5 Audio support, with Flash fallback for MP3/MP4 formats as needed.</li>
+				   <li>Sound looping now works in Flash! eg. <code>mySound.play({loops:3});</code> - for an example + discussion of how to get near-seamless looping, see <a href="http://www.flickr.com/photos/schill/4499319436/" title="SoundManager 2: Seamless Looping MP3s in Flash (Demo)">Seamless Looping MP3s in Flash</a> (demo video) on Flickr.</li>
+				  </ul>
+				 </li>
+			     <li class="in">
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li><code>beginDelayedInit()</code> is always used in lazy loading case (eg. via dynamic script tag/XHR etc.,) as some cases where SM2 won't auto-start eg. document.readyState empty for Firefox 3.5.5 (seen on Win32) with an HTML5 DOCTYPE.</li>
+				   <li>SWF is now 8x8 pixels by default, vs. 6x6 pixels (odd fix for HTML5 Doctype on Firefox 3.6/win32)</li>
+				   <li>Fixed dumb IE undefined ID bug</li>
+			      </ul>
+			     </li>
+			     <li class="in">
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+					<li>soundmanager2.swf and soundmanager2_flash9.swf are now "non-debug" versions; with debugMode enabled, soundmanager2_debug.swf and soundmanager2_flash9_debug.swf are loaded instead.</li>
+					<li>New build script for JS + SWFs, see <a href="../getstarted/#basic-inclusion" title="Including SoundManager 2, file size options">file size table</a>. JS compression now done via Google Closure compiler; new soundmanager-jsmin.js build, debug-enabled but compressed, in addition to build-script-optimized, no-debug, compressed JS (~9 KB with gzip vs. ~90 KB for raw, commented, debug-enabled version.)</li>
+					<li>Null check fix for unavailable eq/waveform data</li>
+					<li>Experimental video (flash 9-only) change: Use stage width/height instead of 0/0 when lacking metadata</li>
+				   	<li>Page player whileloading() calls now being throttled</li>
+				    <li>Better page player click handling for IE 7</li>
+			      </ul>
+			     </li>
+
+			    </ul>
+
+			   </li>
+
+			   <li class="in">
+			    <h3><b>V2.95b.20100323</b> (<a href="../../download/soundmanagerv295b-20100323.zip">Download archived version</a>)</h3>
+			    <p><code>useFlashBlock</code>, better handling of time-out/errors (CSS-based SWF repositioning options for unblocking on time-out), "play MP3 button" demo, <code>canPlayLink()</code>, <code>canPlayMIME()</code>, <code>eqData</code> + <code>waveformData</code> for AAC/H.264 (movieStar) content, missing documentation and miscellaneous bug fixes.</p>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">API Updates</p>
+			      <ul class="nested compact flat">
+				   <li>New <code>soundManager.useFlashBlock</code> (disabled by default) - enables CSS classes assigned to SWF container indicate start-up state (ok/error/blocked), allowing positioning/display of SWF for unblock cases and successful recovery from unblocking. Built into homepage + (most) demos. Updated flashblock demo as well.</li>
+				   <li>playableClass attribute eg. <code>&lt;a href="foo.php" class="inline-playable"&gt;</code>, allowing URLs without .mp3 to be picked up</li>
+				   <li>New <code>soundManager.canPlayLink()</code> + <code>canPlayMIME()</code>, ability to check &lt;a href="foo.php" type="audio/mp3"> for example</li>
+				  </ul>
+				 </li>
+			     <li class="in">
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li><code>soundManager.play()</code> type check fix, instanceof Object vs. typeof x === 'Object' (typo)</li>
+				   <li><code>computeSpectrum()</code> can access waveform and eq (spectrum) data for movieStar (AAC/MP4, netstream-based) objects, too.</li>
+			      </ul>
+				 </li>
+			     <li class="in">
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+				   	<li>Moved old demo code using <code>$()</code> to <code>_id()</code>, <code>_$</code> in <code>soundManager2</code> to <code>_id()</code> to avoid potential jQuery (and other $-based library) collisions</li>
+					<li>Make <code>new SoundManager('/path/to/swfs/');</code> actually work.</li>
+					<li>Flash time-out (flash blockers) vs. security failure detection/other error cases is smarter on the SM2 homepage now</li>
+					<li>New "MP3 player button" demo</li>
+					<li>Removed old IE onclick handler fix in several demos for non-MP3 links</li>
+					<li><code>eqeqeq = true</code> for jslint, why not.</li>
+			      </ul>
+			     </li>
+
+				</ul>
+			   </li>
+
+				
+			   <li class="in">
+			    <h3><b>V2.95b.20100101</b> (<a href="../../download/soundmanagerv295b-20100101.zip">Download archived version</a>)</h3>
+			    <p>New features: Flash movie debugging in SWF via <code>debugFlash</code> (default:false), <code>SMSound.eqData = { left:[], right:[] }</code>, code tidying and debug output clean-up</p>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">API Updates</p>
+			      <ul class="nested compact flat">
+				   <li>New <code>soundManager.debugFlash</code> property, enables debug messages from within flash (output to flash movie). Useful for troubleshooting start-up, security issues etc. <a href="../getstarted/#flashdebug">Flash debug output example</a></li>
+				   <li><code>SMSound.eqData</code> now has left and right channels - e.g. <code>eqData = { left: [], right: [] }</code> - was previously a single array: <code>eqData = [];</code> Backwards-compatibility is maintained for now as <code>eqData[i]</code> still works with the new structure.</li>
+				  </ul>
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li><code>stream = true</code> is no longer automatically set when <code>SMSound.play()</code> is called and <code>readyState == 0</code>, as it was breaking the <code>stream:false</code> case where playback should not start until the sound has fully-loaded.</li>
+				   <li><code>soundManager.reboot()</code> forces recreation of object/embed rather than old method of node remove/re-append (in case other options changed, eg. debugFlash was false, but assigned to true after an error during start-up.)</li>
+			      </ul>
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+				   	<li>Review of all SM2 debug output, more concise and informative messaging - especially around start-up troubleshooting/error debugging, security sandbox errors, SWF 404 case etc.</li>
+					<li>Code formatting clean-up (via jsbeautifier.org)
+					soundmanager2.js tested and passes JSLint, Edition 2009-11-22 + options: /*jslint undef: true, bitwise: true, newcap: true, immed: true */</li>
+					<li>Better organization/use of strings for debug output</li>
+					<li>New canvas-based favicon VU meter demo for home page, 360 player and muxtape-style player demos where supported (Firefox and Opera, currently.) Firefox 3.6 is disappearing support for XBM images, which were previously used.</li>
+			      </ul>
+			     </li>
+
+				</ul>
+			   </li>
+				
+			   <li class="in">
+			    <h3><b>V2.95a.20090717</b> (<a href="../../download/soundmanagerv295a-20090717.zip">Download archived version</a>)</h3>
+			    <p>New features: onready(), fast polling, flash blocking demos etc.</p>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">API Updates</p>
+			      <ul class="nested compact flat">
+				   <li>New <code>soundManager.onready(myFunction[,scope])</code> method, for asynchronous queueing of <code>onload()</code>-style handlers. Fires when SM2 has finished initializing. Accepts an <i>optional</i> scope parameter to apply to handler; if none given, window object is used. A "status" object is passed to your handler (can be ignored) which includes a <code>success</code> boolean indicating whether SM2 loaded OK or not. Handlers added via onready() after successful initialisation will fire immediately.</li>
+				   <li>New <code>soundManager.oninitmovie()</code> event callback, single assignment similar to <code>onload()</code>. Fires when the flash movie has first been written to (or read from) the DOM. Used internally for a flashblock-handler-related example, custom timeout condition.</li>
+				   <li>New <code>soundManager.useFastPolling</code> property (false by default), enables 1 msec Flash 9+ timer for highest-possible <code>whileplaying()</code> and related JS callback frequency (default is 20 msec.) Use with <code>soundManager.useHighPerformance = true</code> for best performance, frame rates while updating the UI via whileplaying() etc.</li>
+				   <li>New sound option (soundManager.defaultOptions): <code>multiShotEvents</code> (default:false) - enable support for multiShot-style events (currently <code>onfinish()</code> only). Eg. When <code>mySound.play()</code> is called three times, <code>onfinish()</code> will subsequently fire three times.</li>
+			      </ul>
+			     </li>
+
+			     <li>
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li><code>createSound</code> now writes a warning to debug output if the sound ID is a number, or is a string starting with a numeric character. Because SMSound objects are stored in <code>soundManager.sounds[]</code>, while not syntactically invalid, numeric IDs will be treated as array indices and are likely to break things.</li>
+				  </ul>
+			     </li>
+
+			     <li>
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+				   <li>New flashblock / "click to flash" demo, example of handling blocked conditions and graceful recovery when flash is initially blocked until user chooses to allow it.</li>
+				   <li>Cross-domain-scripting enabled SWF (using <code>allowDomain("*")</code>) included in swf/ directory (in its own .zip file.) Use when you must have domain A loading SM2 .SWF from domain B, or for testing etc and can't compile your own custom x-domain SWF from source.</li>
+				   <li>Documentation, layout and menu tweaks</li>
+				  </ul>
+			     </li>
+
+			    </ul>
+			   </li>
+				
+			   <li class="in">
+			    <h3><b>V2.95a.20090501</b> (<a href="../../download/soundmanagerv295a-20090501.zip">Download archived version</a>)</h3>
+			    <p>Lots of updates.</p>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">API Updates</p>
+			      <ul class="nested compact flat">
+				   <li>Added <code class="in">soundManager.allowFullVideo</code> for full-screen video playback, triggered by double-clicking. Also, related <code>soundManager.onfullscreenchange</code> event handler.</li>
+				   <li>Updated <code>waveformData</code> to include stereo channels. Now an object literal instead of a single array. New format: <code>SMSound.waveformData = { left: [], right: [] }</code></li>
+				   <li>New <code>SMSound.ondataerror()</code> (flash 9+) handler for cases where waveform/eq data is inaccessible due to other flash movies in the current browser which have loaded sound. (Flash must have security permissions to "read" all data currently being output, long story short. Having a YouTube tab open can cause this, for example.)</li>
+				   <li>New <code class="in">isBuffering</code> property for MovieStar (MP4 audio/video) content, related <code class="in">onbufferchange()</code> event handler (sound object)</li>
+				   <li>New <code>bufferTime</code> property for MovieStream content. Defines seconds of data to buffer before playback begins (null = flash default of 0.1 seconds; if AAC playback is gappy, try up to 3 seconds.)</li>
+			      </ul>
+			     </li>
+			
+			     <li>
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li>Off-screen flash with <code class="in">wmode</code> set to non-default value (transparent/opaque) will break SM2 for non-IE on Windows, time-out error style. SM2 will now revert wmode to default for this case (losing transparency/layering of movie) - <i>or</i> set <code>soundManager.flashLoadTimeout</code> to 0 and SM2 will retain wmode, but must now wait potentially infinitely for flash to load (until user scrolls it into view.) <code>soundManager.specialWmodeCase</code> reflects if this fix has been applied after init time. </li>
+				   <li>Calling <code>soundObject.load()</code> after directly assigning a value to <code>soundObject.url</code> should now work as expected.</li>
+				  </ul>
+			     </li>
+
+			     <li>
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+				   <li>Shiny new "360&deg; UI" canvas + visualization demos (Warning: Beta-ish code.)</li>
+				   <li>Experimental SM2 exception/error handling + stack trace reporting added, an attempt to make custom errors thrown from SM2 more meaningful (ideally showing the user's call to SM2 where things went wrong in the stack.)</li>
+				   <li>Calling <code>soundObject.load()</code> after directly assigning a value to <code>soundObject.url</code> should now work as expected.</li>
+				   <li><code class="in">soundManager.useHighPerformance</code> update: Now false/disabled by default. Strange bug with JS/flash communication breaking with wmode=opaque on flash, specific (?) to Firefox on windows. SM2 does not normally set wmode. When <code class="in">useHighPerformance = true</code>, wmode=transparent will be used on the flash movie by default.</li>
+				   <li>Tweaks related to position, whileplaying(), playState, buffering and state resetting when sound has finished playing (fixes for a few edge cases if replaying or reusing the same sound or video.)</li>
+				   <li>Better code/feature separation and clean-up on inline player, Muxtape-style demos</li>
+				  </ul>
+			     </li>
+			
+			   </ul>
+			  </li>
+
+			   <li class="in">
+			    <h3><b>V2.94a.20090206</b> (<a href="../../download/soundmanagerv294a-20090206.zip">Download archived version</a>)</h3>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">API Updates</p>
+			      <ul class="nested compact flat">
+				   <li>New <code class="in">isBuffering</code> property, related <code class="in">onbufferchange()</code> event handler (sound object)</li>
+				   <li>New <code class="in">soundManager.reboot()</code> method (<i>experimental</i>): Shut down and re-initialise SoundManager, remove and recreate flash movie (possibly handy for cases where you want to restart after flashblock-type whitelisting, etc.)</li>
+				   <li>New <code class="in">soundManager.flashLoadTimeout</code> property, milliseconds SM2 will wait for flash movie callback before failing and calling soundManager.onerror() during start-up/init. If set to 0, SM2 will wait indefinitely for flash (good for reboot/flashblock-type scenarios.)</li>
+			      </ul>
+			     </li>
+				
+			     <li>
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li>Reverted Firebug 1.3 console.log().apply() hack, was breaking console.log() under IE 8 RC1 (as used with debug mode.) Firebug 1.3 seems to have a bug, occasional "console undefined" error.</li>
+				   <li>Fixed a dumb flash 9/AS3 bug with setVolume() passing an extra parameter to flash.</li>
+				   <li><code class="in">soundManager.useHighPerformance</code> update: Now false/disabled by default. Strange bug with JS/flash communication breaking with wmode=opaque on flash, specific (?) to Firefox on windows. SM2 does not normally set wmode. When <code class="in">useHighPerformance = true</code>, wmode=transparent will be used on the flash movie by default.</li>
+				  </ul>
+			     </li>
+
+			     <li>
+				  <p class="compact">Miscellaneous</p>
+				  <ul class="nested compact flat">
+				   <li>Tweaked project page / documentation UI, nicer code/debug formatting</li>
+				   <li>Misc. API documentation fixes, improvements</li>
+				  </ul>
+			     </li>
+
+			    </ul>
+			
+			   </li>
+
+
+			   <li class="in">
+			    <h3><b>V2.93a.20090117</b> (<a href="../../download/soundmanagerv293a-20090117.zip">Download archived version</a>)</h3>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">General Updates</p>
+			      <ul class="nested compact flat">
+				   <li>New SoundManager 2 start-up debugger / troubleshooting tool, built into project home (see <a href="../getstarted/#troubleshooting" title="SM2 troubleshooting">troubleshooting</a>, and a standalone version - see "<a href="../../troubleshoot/" title="SoundManager 2 standalone troubleshooting tool" class="norewrite">troubleshoot/</a>" directory of download package)</li>
+				   <li>New soundManager.getMemoryUse() method (flash 9+.) Returns RAM use for flash plugin (appears to be browser-wide, possibly system-wide by design.) <a href="../../demo/video/" title="SM2 javascript video demo">Video demo</a> includes an example RAM use monitor.</li>
+				   <li>highPerformance disabled by default for Firefox on Windows due to reports of bugs preventing SM2 start-up in some cases. To override the disabling safety check, set <code class="in">soundManager.useHighPerformance = 'always';</code></li>
+				   <li>Updated API demo testcases (<a href="../../demo/api/">API Demo page</a>)</li>
+			      </ul>
+			     </li>
+				
+			     <li>
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li class="in">Fixed Flash 8 bug with <code class="in">autoLoad</code>/<code class="in">autoPlay</code> and <code class="in">playState</code> not being correctly set.</li>
+				   <li class="in">Fixed a bug with <code class="in">onfinish()</code> not firing when <code class="in">autoPlay</code> is used.</li>
+				   <li class="in">Fixed a bug with pan and volume defaults not being correctly inherited and handled</li>
+				   <li class="in">console[method]() now uses apply(), preventing possible Firebug 1.3-related scope issue where this != console</li>
+				   <li class="in">IE now appends (vs. destructive .innerHTML write) SWF movie to target element, appends DIV with className "sm2-object-box"</li>
+				  </ul>
+			     </li>
+
+			      </ul>
+			
+			   </li>
+
+
+			   <li class="in">
+			    <h3><b>V2.92a.20081224</b> (<a href="../../download/soundmanagerv292a-20081224.zip">Download archived version</a>)</h3>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">General Updates</p>
+			      <ul class="nested compact flat">
+				   <li>Note: Flash (SWF) assets moved to swf/ subdirectory, starting with this version.</li>
+				   <li>Updated design on API demo page, new <a href="../../demo/api/#looping">looping example</a></li>
+			      </ul>
+			     </li>
+				
+			     <li>
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li class="in">Improved regular-expression-based URL detection for <code>canPlayURL()</code>, flash 8/9 and MovieStar (video) formats</li>
+				   <li class="in">Improved <code>soundManager.url</code>-related <code>normalizeURL()</code> handling. If GET parameters are in the URL including the SWF, it will be left alone.</li>
+				   <li class="in">Fixed out-of-bounds issue with <code>setPosition()</code>.</li>
+				   <li class="in">Fixed a <code>setPosition(0)</code> and <i>before</i> <code>onfinish()</code>-related issue, so it is possible to nicely loop sounds from within <code>onfinish()</code> - see <a href="../../demo/api/#looping">looping a sound</a> (API demo)</li>
+				   <li class="in">Fixed an error condition where destroying a loading sound would not terminate the HTTP request, relating to error cases involving <code>netStream.close()</code>.</li>
+				  </ul>
+			     </li>
+
+			      </ul>
+			
+			   </li>
+
+				
+			   <li class="in">
+			    <h3><b>V2.91a.20081205</b> (<a href="../../download/soundmanagerv291a-20081205.zip">Download archived version</a>)</h3>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">General Updates</p>
+			      <ul class="nested compact flat">
+				   <li>Completely-redesigned project page, multiple pages/sections, more-legible grid-based documentation layout</li>
+				   <li>Code verified with <a href="http://jslint.com">jslint</a>. 0 errors reported with default settings, Edition 2008-11-26</li>
+				  </ul>
+				 </li>
+				
+				 <li>
+				  <p class="compact">Bug fixes</p>
+				  <ul class="nested compact flat">
+				   <li class="in">True XHTML DOM compatibility. Rewrote <code>createMovie()</code> to use standard DOM <code>createElement()</code> methods, vs. previous writing to .innerHTML method which caused exceptions with XHTML documents.</li>
+				   <li class="in">Special-cased <code>useHighPerformance</code> for Firefox 2 only, disabling it as it seems to be problematic. Further research pending.</li>
+				   <li class="in">Removed try .. catch error handling within <code>soundManager.onload()</code>, catching exceptions when calling user-defined onload handler. Errors should now fall through as normally expected.</li>
+				   <li class="in">Fixed several <code>setPosition()</code>-related bugs (NaN/undefined error, seeking to invalid position, position inconsistencies with pause/resume)</li>
+			      </ul>
+			     </li>
+			    </ul>
+			
+			   </li>
+
+			   <li class="in">
+			    <h3><b>V2.90a.20081028 (Old documentation theme) - <a href="http://schillmania.com/projects/soundmanager2/download/soundmanagerv290a-20081028.zip">Download archived version</a></b></h3>
+
+			    <ul class="double">
+			     <li class="in">
+			      <p class="compact">API: Bug fixes</p>
+			      <ul class="nested compact flat">
+				   <li>Fixed numerous Flash AS3 exceptions for Flash 10 plugin users of SM2 with Flash 9 .SWF</li>
+				   <li class="in">Fixed a <code>setPosition()</code> bug where position &gt; duration would stop sounds playing in other tabs</li>
+				   <li class="in">Fixed <code>createSound(); play(); destruct();</code> sequence to correctly stop sound under Flash 9</li>
+				   <li class="in">Changed Flash 9 <code>onload()</code> to properly pass boolean "false" on load failure, same as Flash 8</li>
+				   <li class="in">Fixed <code>autoLoad</code>=true bug with Flash 9 movieStar (MPEG4) content, now pauses after creating</li>
+			      </ul>
+			     </li>
+
+			     <li class="in">
+			      <p class="compact">API: New shiny!</p>
+			      <ul class="nested compact flat">
+				   <li class="in"><code>soundManager.useHighPerformance</code>: Minimize JS/Flash lag, ~3x <code>whileplaying()</code> frequency! (Most noticeable on Mac OS X, and Safari on Windows? Investigating IE cases.)</li>
+			       <li class="in"><code>soundManager.pauseAll()</code> / <code>soundManager.resumeAll()</code>: Global pause/resume</li>
+			       <li class="in"><code>soundManager.muteAll()</code> / <code>soundManager.unmuteAll()</code>: Global mute/unmute</li>
+			      </ul>
+			     </li>
+
+			     <li>
+				  <p class="compact">MovieStar MPEG4 video support! <em>(experimental)</em></p>
+				  <ul class="nested compact flat">
+			       <li class="in"><code>soundManager.createVideo()</code> / <code>soundManager.destroyVideo()</code> for MovieStar MPEG4 formats!</li>
+			       <li>Uses same SMSound instance object and API methods/options as regular sounds, with a few extra parameters</li>
+				   <li class="in"><code>soundManager.useVideo</code> will show video when applicable (false/disabled by default)</li>
+				   <li class="in"><code>SMSound.onmetadata</code>: Meta data handler for MPEG4 video files - provides dimensions (w/h)</li>
+				  </ul>
+			     </li>
+
+			     <li class="in">
+			       <p class="compact">Miscellaneous</p>
+			       <ul class="nested compact flat">
+				    <li><b>Removed</b> experimental flashBlock support. Considering eliminating SM2 timeout-based onerror() behaviour in favour of asynchronous loading (eg. user may initially block, notice flash movie and take action to unblock many seconds after loading - thus, flash movie eventually loads and can eventually trigger successful SM2 init.)</li>
+					<li class="in">Modified <code>pause()</code> and <code>resume()</code> to only affect playing sounds (eg. <code>playState != 0</code>).</li>
+				   </ul>
+			     </li>
+
+			    </ul>
+
+			   </li>
+
+			   <!-- not newest -->
+
+			   <li class="in">
+			    <h3><b>V2.80a.20081005</b></h3>
+
+			    <ul class="double">
+			     <li class="in">
+			      <p class="compact">API: Bug fixes</p>
+			      <ul class="nested compact flat">
+			       <li class="in">Changed Flash 8 <code>onload()</code> boolean "loaded" to be based on sound duration being &gt;0, better test of load success.</li>
+			       <li class="in">Modified Flash 9 <code>onload()</code> to include boolean result for success/fail, parity with Flash 8</li>
+			      </ul>
+			     </li>
+
+			     <li class="in">
+			      <p class="compact">API: New shiny!</p>
+			      <ul class="nested compact flat">
+			       <li class="in">
+				    <p style="font-weight:normal;padding-top:0px">Added <em>experimental</em> Flash 9.0r115+ (flash codename "<a href="http://www.adobe.com/support/documentation/en/flashplayer/9/releasenotes.html#fixes_90115">MovieStar</a>", Flash 9 Update 3) MPEG4 / HE-AAC support (audio only.) A subset of MPEG4 should be supported including FLV, MP4, M4A, MOV, MP4V, 3GP and 3G2 files. Feature is disabled by default.</p>
+				    <ul class="nested compact flat">
+					 <li class="in">New soundManager <code>useMovieStar</code> property, controls feature availability (currently disabled by default.)</li>
+					 <li>New SMSound option, <code>isMovieStar</code>, configures feature behaviour on a per-sound basis. Default (null) is to auto-detect .mp4, .mov etc. in URL and enable if found, but can also be forced on or off (true / false).</li>
+					 <li class="in">Video-based formats use the Flash 9 <code>NetStream</code> and <code>NetConnection</code> objects, whose API differs slightly from the Sound object. Seeking is limited to video key frames and is not as smooth as an MP3.</li>
+					 <li class="in">Audio playback has been seen to pause during certain events (window scrolling, etc.) while playing MovieStar formats. It doesn't appear to be from CPU overload. More investigation is needed.</li>
+					 <li class="in">Basic load, progress, onload, whileplaying API support is provided (page player demo includes MP4 and FLV formats). Not all methods (eg. setVolume) have been tested.</li>
+					 <li class="in">.AVI is not included by default, but may work if the format is actually MPEG4-based.</li>
+					 <li>Format limitation note: EQ, peak and spectrumData are not available with MovieStar content. This may be a Flash 9/AS3 limitation.</li>
+					</ul>
+				   </li>
+			      </ul>
+			     </li>
+
+			     <li class="in">
+			      <ul class="double">
+			       <li class="in">
+			        <p class="compact">Miscellaneous</p>
+			         <ul class="nested compact flat">
+				      <li>Added CSS checks to page player: "exclude" and "playable" to override default URL matching behaviour.</li>
+				     </ul>
+			       </li>
+			      </ul>
+			     </li>
+
+			    </ul>
+
+			   </li>
+
+			   <li class="in">
+			    <h3><b>V2.78a.20080920</b></h3>
+
+			    <ul class="double">
+			     <li class="in">
+			      <p class="compact">API: Bug fixes</p>
+			      <ul class="nested compact flat">
+			       <li class="in">Added <code>SoundLoaderContext</code> parameter to <code>load()</code>, Flash should now check policy-related (crossdomain.xml) files when loading resources from remote domains. Should fix previous security exception warnings when trying to access ID3 and/or waveform/EQ data. See related <a href="http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/flash/media/SoundLoaderContext.html">SoundLoaderContext documentation</a> (ActionScript 3)</li>
+			       <li class="in">Fixed a bug with <code>load()</code>, was improperly expecting an options object - now works properly.</li>
+			      </ul>
+			     </li>
+			     <li class="in">
+			      <p class="compact">API: New shiny!</p>
+			      <ul class="nested compact flat">
+			       <li class="in">Added <code>soundManager.altURL</code> property (and <code>useAltURL</code> conditional) for convenient offline and other URL switching cases (dev vs. production environments, etc.)</li>
+			      </ul>
+			     </li>
+			     <li class="in">
+			      <p class="compact">Miscellaneous</p>
+			      <ul class="nested compact flat">
+			       <li class="in">Renamed internal soundManager and SMSound <code>self</code> closure references to <code>_s</code> and <code>_t</code>, respectively, to avoid potential conflicts with others' code</li>
+			       <li class="in">Moved self-destruct to use <code>window.onunload</code> instead of <code>onbeforeunload</code>, given the latter event can be caught and canceled if desired by the user</li>
+			       <li class="in">Inline player demo: Added <code>autoPlay</code> option</li>
+			       <li class="in">"Basic" demo directory (demo/basic/) moved to demo/api/, added <code>load()</code>-related testcase</li>
+			      </ul>
+			     </li>
+			    </ul>
+
+			   </li>
+
+			   <li class="in">
+			    <h3><b>V2.78a.20080920</b></h3>
+
+			    <ul class="double">
+			     <li class="in">
+			      <p class="compact">API: Bug fixes</p>
+			      <ul class="nested compact flat">
+			       <li class="in">Added <code>SoundLoaderContext</code> parameter to <code>load()</code>, Flash should now check policy-related (crossdomain.xml) files when loading resources from remote domains. Should fix previous security exception warnings when trying to access ID3 and/or waveform/EQ data. See related <a href="http://livedocs.adobe.com/flash/9.0/ActionScriptLangRefV3/flash/media/SoundLoaderContext.html">SoundLoaderContext documentation</a> (ActionScript 3)</li>
+			       <li class="in">Fixed a bug with <code>load()</code>, was improperly expecting an options object - now works properly.</li>
+			      </ul>
+			     </li>
+			     <li class="in">
+			      <p class="compact">API: New shiny!</p>
+			      <ul class="nested compact flat">
+			       <li class="in">Added <code>soundManager.altURL</code> property (and <code>useAltURL</code> conditional) for convenient offline and other URL switching cases (dev vs. production environments, etc.)</li>
+			      </ul>
+			     </li>
+			     <li class="in">
+			      <p class="compact">Miscellaneous</p>
+			      <ul class="nested compact flat">
+			       <li class="in">Renamed internal soundManager and SMSound <code>self</code> closure references to <code>_s</code> and <code>_t</code>, respectively, to avoid potential conflicts with others' code</li>
+			       <li class="in">Moved self-destruct to use <code>window.onunload</code> instead of <code>onbeforeunload</code>, given the latter event can be caught and canceled if desired by the user</li>
+			       <li class="in">Inline player demo: Added <code>autoPlay</code> option</li>
+			       <li class="in">"Basic" demo directory (demo/basic/) moved to demo/api/, added <code>load()</code>-related testcase</li>
+			      </ul>
+			     </li>
+			    </ul>
+
+			   </li>
+
+			   <li class="old">
+			    <h3><b>V2.77a.20080901</b></h3>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">API: Bug fixes</p>
+			      <ul class="nested compact flat">
+			       <li class="in">Fixed some <code>mute()</code> / <code>unmute()</code>-related bugs, global muting should now work properly. Added some related demo page examples.</li>
+			       <li class="in">Removed comment on flash9Options merging code, was previously new and didn't actually work as it was commented out. Oops. :D</li>
+			       <li class="in">Added <i>experimental</i> Flashblock exception handling (mozilla/firefox extension), "notification bar"-style UI which can message and assist users in unblocking SM2 .swf. Configured via <code>soundManager.flashBlockHelper</code> object, currently disabled by default.</li>
+			       <li class="in">Modified <code>soundManager.destroySound()</code> and <code>sound.destruct()</code>, fixed a bug with these methods and flash's unloading of sounds which was breaking things. Hopefully fixes destroying sounds within whileplaying() and related event handlers, too.</li>
+			       <li class="in">Modified flash 9 "peak data" code to only set the data if the feature is actually enabled.</li>
+			       <li class="in">Modified <code>soundManager._debug()</code> to list all sound object details, instead of just ID/URL.</li>
+			      </ul>
+			     </li>
+
+			    </ul>
+
+			   </li>
+
+			   <li class="old">
+			    <h3><b>V2.76a.20080808</b></h3>
+
+			    <ul class="double">
+
+			     <li class="in">
+			      <p class="compact">API: Bug fixes</p>
+			      <ul class="nested compact flat">
+			       <li class="in">Fixed some memory "leaks" / garbage collection issues. RAM allocated to load sounds previously wasn't freed until page unload; now memory should be garbage collected some time after <code>sound.unload()</code> and/or <code>soundManager.destroySound()</code>/<code>sound.destruct()</code> methods are called. In certain cases, Flash sound objects may be destroyed and re-created (transparent to the JS-side) to release memory. Note that garbage collection is not instantaneous, and is affected by CPU/system load and other variables.</li>
+			       <li class="in">Fixed an issue with <code>play()</code> not working on sounds created with <code>autoPlay</code>.</li>
+			       <li class="in">Fixed SM2 to work under proper XHTML (served as <code>application/xhtml+xml</code> MIME type). Rewrote object/embed code <em>again</em>, now version-agnostic for IE (no CLSID parameters.)</li>
+			       <li class="in">Corrected reported <code>loadFromXML()</code> bug, multiple loadFromXML() calls should work.</li>
+			      </ul>
+			     </li>
+
+			     <li class="in">
+			      <p class="compact">API: New shiny!</p>
+			      <ul class="nested compact flat">
+			       <li class="in">New <code>useWaveformData</code> and <code>useEQData</code> sound options, providing access to raw waveform and sound frequency/EQ spectrum data via sound.waveformData and sound.eqData.</li>
+			       <li class="in">Renamed <code>useSpectrumData</code> to <code>useWaveformData</code> - if using waveform stuff currently, make sure you update your code!</li>
+			       <li class="in">Added <code>soundManager.features</code> object, which reflects the "support" state for <code>peakData</code>, <code>waveformData</code> and <code>eqData</code>. Handy for current and future version/support branching.</li>
+			      </ul>
+			     </li>
+
+			     <li class="in">
+			      <p class="compact">API: Miscellaneous</p>
+			      <ul class="nested compact flat">
+			       <li class="in">New <code>flash9Options</code> configuration object for logical separation. When Flash 9+ is used, these options are merged into the <code>defaultOptions</code> object.</li>
+			       <li class="in">Added <code>allowDomain()</code> stubs and documentation to .as source for allowing .swf on external domains to work (recompile of .swf required)</li>
+			      </ul>
+			     </li>
+
+			     <li class="in">
+			      <p class="compact">"Page As Playlist" demo: Updates</p>
+			      <ul class="nested compact flat">
+			       <li>Added "favicon" VU meter display option (Flash 9+ only, experimental, currently Firefox/Opera only)</li>
+			       <li class="in">More-efficient RAM use via <code>unload()</code> and <code>destruct()</code> sound methods, discarding inactive sounds and freeing RAM as appropriate.</li>
+			       <li class="in">Added <code>useEQData</code>, showing sound spectrum (frequency range) instead of raw waveform</li>
+			       <li class="in">Added <code>fillGraph</code> config option, allowing solid waveform graphs instead of only peak points</li>
+			       <li class="in">Fixed <code>playNext</code> bug where same track couldn't be played twice in a row.</li>
+			       <li>Fixed duplicate URL bug; items with identical MP3 URLs will now work. (Previously, URL was the ID for items and thus had to be unique. Lookup is now done by object.)</li>
+			       <li>Modified MP3 URL search to include URL parameters, characters after ".mp3"</li>
+			      </ul>
+			     </li>
+
+			     <li class="in">
+			      <p class="compact">Other updates</p>
+			      <ul class="nested compact flat">
+			       <li>Demo code clean-up, externalised CSS, prettier demo layout and code color highlighting</li>
+			      </ul>
+			     </li>
+
+			    </ul>
+			   </li>
+
+			   <li class="old">
+			    <h3><b>V2.75a.20080707</b></h3>
+			    <ul class="nested">
+			     <li class="in">Flash 9 support! (soundmanager2_flash9.swf) - <code>multiShot</code> now actually works (layering/"chorus" effects on sounds), new <code>spectrumData</code> and <code>peakData</code> API features. All existing API features should have parity.</li>
+			     <li class="in">Added <code>soundManager.flashVersion</code> property. Flash 8 is the supplied default.</li>
+			     <li class="in">Modified <code>soundManager.url</code> to require only a path, eg. <code>/path/to/soundmanager-swfs/</code> to allow loading of varying .SWF versions.</li>
+			     <li class="in">Basic (API) demo: Updated multiShot/Flash 9 behaviour documentation</li>
+			     <li class="in">Page player demo: Added optional spectrum and VU (spectrumData/peakData) features</li>
+			     <li class="in">MPC + animation demos: Modified to use Flash 9 (demo improved multiShot feature)</li>
+			     <li>Flash 9 behaviour differences:
+			      <ul>
+			       <li class="in"><code>multiShot</code> properly allows <code>play()</code> to be called multiple times on a sound object, creating desired "chorus" effect. Will call <code>onfinish()</code> multiple times, but <code>whileplaying()</code> etc. are called only for the first "play instance" to avoid complications.</li>
+			       <li class="in">New <code>soundSpectrum</code> and <code>peakData</code> sound features (spectrum graph / "VU" meter-style data) available</li>
+			       <li>Sounds can be actually unloaded ("null" MP3 no longer needed to cancel loading of an MP3), but URL cannot be changed without destroying and recreating the related Flash sound object. The Flash 9 version does this to maintain API consistency.</li>
+			      </ul>
+			     </li>
+			     <li>New + improved documentation/project page, updated 2-column layout with content filters, "Get Satisfaction" integration and self-update checks (and a light-switch-related easter egg.)</li>
+			    </ul>
+			   </li>
+
+			   <li class="old">
+			    <h3>V2.5b.20080525</h3>
+			    <ul class="nested">
+			     <li class="in">Added <code>waitForWindowLoad</code> for delayed init</li>
+			     <li class="in">Added <code>onpause()</code> and <code>onresume()</code> event handlers</li>
+			     <li class="in">Added <code>mute()</code> and <code>unmute()</code></li>
+			     <li class="in">Updated demos, revised documentation</li>
+			    </ul>
+			   </li>
+
+			   <li class="old">
+			    <h3>V2.5b.20080505</h3>
+			    <ul class="nested">
+			     <li class="in">To improve startup time, <code>soundManager.go()</code> (<code>createMovie()</code> alias) now fires at <code>onDOMContentLoaded()</code> by default if supported. (Otherwise, falls back to <code>window.onload()</code>.)</li>
+			     <li class="in">Improved initialisation routine - <code>soundManager.onerror()</code> is called when the Flash init "times out." Specifically, <code>onerror()</code> is called when Flash fails to make an ExternalInterface (Flash-&gt; JS) call to SM2 within 1 second of <code>window.onload()</code> firing.</li>
+			     <li>Added logic to handle special Safari delayed init case (Flash not loading when in a new, unfocused tab until focused) as a exception to the above.</li>
+			     <li>Added better exception handling + debug messaging for initialisation failure cases (Flash security restrictions due to loading from local file system, no flash support, no ExternalInterface support etc.)</li>
+			     <li class="in">Updated .swf appendChild() target to use best-to-worst options: <code>(document.body || document.documentElement || document.getElementsByTagName('div')[0])</code></li>
+			     <li>Safari console[log|warn|error]-style messages are now properly formatted.</li>
+			     <li class="in">Added tons of semicolons to closing braces, eg. <code>};</code></li>
+			     <li>"No-debug", minified version of SM2 included: <a href="script/soundmanager2-nodebug-jsmin.js" title="No-debug, minified version of SoundManager 2 script">soundmanager2-nodebug-jsmin.js</a> (17.4 KB, down from full size of 35 KB.) With Gzip compression, file size is ~6 KB. (Commented, debug-enabled version compresses to 10 KB with Gzip.)</li>
+			    </ul>
+			   </li>
+
+			   <li class="old">
+
+			    <h3>V2.5b.20080501</h3>
+			    <p class="compact"><b>Warning:</b> A little experimental too, read details below.</p>
+			    <p><em>Changelog</em>:</p>
+			    <ul class="nested">
+				 <li class="in">Rewrote SoundManager initialisation: "Way faster." Communication now initiated from Flash, verification callback then performed by JS; far faster, hopefully more-reliable (TBD.) Init time drastically reduced from seconds to milliseconds in most cases, dependent primarily on Flash movie load rather than <code>window.onload()</code>.</li>
+				 <li>Above change also fixes Safari "loading SM2 in background tab" issue, where Safari does not init Flash until background tab comes into focus (when a link is opened in a new, non-focused tab.)</li>
+				 <li class="in">Current drawback: Difficult to determine, save for falling back to <code>window.onload()</code> plus focus methods due to above issue, whether SM2 is actually available or not (ie., <code>soundManager.onerror()</code> will not likely be called as in past.) However, the <code>supported()</code> method will correctly reflect if SM2 has successfully initialised, for example.</li>
+				 <li class="in">Added sandbox/security model code; SM2 can now tell if it is restricted to either local or internet access only, for example. Helpful in potential debugging errors, plus viewing demos off the local filesystem should no longer throw init errors requiring whitelisting (seemingly due to the new initialisation method.) Win!</li>
+				 <li class="in">Opera 9.27 has been noted to have some bugs relating to ExternalInterface, seems to be unable to make calls from ActionScript-level methods using <code>setTimeout()</code> or <code>setInterval()</code>. As a reulst, SoundManager 2 events like <code>onfinish()</code>, <code>whileplaying()</code> and <code>onfinish()</code> can be sporadically called or missed altogether. No known workaround at this time, but Opera 9.5 (beta 2) does not have this issue. Popular MP3 "mix tape" site muxtape.com uses similar techniques for JS-Flash communication and appears to suffer from the same problem.</li>
+				 <li class="in"><strong>Warning</strong>: Random crash issue noticed when using IE 6 + 7 and this demo page, calling <code>createSound()</code> when <code>soundManager.defaultOptions.autoLoad = true;</code> from within <code>soundManager.onload()</code>, for creating + preloading the tab/theme switch sounds. Removing autoLoad=true (leaving the default of false) fixed the crash. Exact reason not determined, perhaps recursive calls or pre-onload issue (?), seems to be isolated to the home page. MPC demo uses autoLoad also, but did not crash. Mentioning just in case.</li>
+			         <li>Updated Muxtape-style demo: More themes, load/security debugging info etc.</li>
+			    </ul>
+			   </li>
+
+			   <li class="old">
+
+			    <h3>V2.2.20080420</h3>
+			    <p><em>Changelog</em>:</p>
+			    <ul class="nested">
+			     <li>More demos! "<a href="../demo/page-player/" title="Muxtape.com-style playable page of MP3 links">Page as a playlist</a>" (muxtape.com-style) example, "<a href="../demo/play-mp3-links/" title="Play MP3 links in a web page using SoundManager 2">Make MP3 links playable inline</a>" demo</li>
+			     <li class="in">Corrected <code>onStop()</code> handler inheritance/overriding behaviour (was incorrectly checking defaultOptions)</li>
+			     <li class="in">Added debug output of options object for <code>createSound()</code> calls. Full options (result of merging global default + sound-instance-specific options) displayed, helpful in troubleshooting. Event handler function code is intelligently (hopefully) displayed, truncated at 64 characters of first block or end of line, whichever comes first.</li>
+			     <li class="in">Removed most HTML markup from non-HTML (eg. console) <code>_writeDebug()</code> calls</li>
+			     <li class="in"><code>soundManager.destruct()</code> writes to console, to be consistent</li>
+			    </ul>
+
+			   </li>
+
+			   <li class="old">
+
+			    <h3>V2.1.20080331</h3>
+			    <p><em>Changelog</em>:</p>
+			    <ul class="nested">
+			     <li class="in">Modified <code>createSound()</code> to return a sound object if successful (more logical)</li>
+			     <li class="in">Updated <code>setPosition()</code> method and added <code>position</code> option parameter, documentation + demo (bugfix)</li>
+			     <li class="in">Corrected <code>createSound()</code> and <code>play()</code> sound option inheritance/overriding behaviour (eg. <code>position</code>) to work as expected (most to least important: Method call options -&gt; sound object instance options -&gt; SM2 global options)</li>
+			     <li class="in">Updated <code>deleteSound()</code> so Array.splice() is used instead of delete, the latter doesn't cause Array.length to update (bugfix)</li>
+			     <li>Modified debug=alert to only work when debug mode is enabled (potential annoyance aversion)</li>
+			     <li class="in">Modified <code>togglePause()</code> to use <code>position</code> option parameter rather than undocumented <code>offset</code> (oops :D)</li>
+			     <li class="in">Added <code>supported()</code> convenience method (indicates pass/fail after SM2 has initialised.)</li>
+			     <li>Added disabling debug calls from Flash (performance)</li>
+			     <li>Added URL hash updating/bookmarking and page title updating to jsAMP demo app</li>
+			     <li>Updated project page layout</li>
+			    </ul>
+
+			   </li>
+
+			   <li class="old">
+
+			    <h3>V2.0b.20070415</h3>
+			    <p><em>Changelog</em>:</p>
+			    <ul class="nested">
+			     <li class="in">Added <code>destroySound()</code> method</li>
+			     <li>Made debug output slightly less-verbose (commented out)</li>
+			     <li>Safety tweak for position-related Flash bug when loading new sounds</li>
+			     <li class="in">Highly-expanded documentation (<code>SMSound</code> events + properties, examples, caveats, FAQs etc.)</li>
+			     <li>Added time-sensitive light/dark theme for documentation</li>
+			    </ul>
+
+			   </li>
+
+			   <li class="old">
+
+			    <h3>V2.0b.20070201</h3>
+			    <p class="compact">Second beta?</p>
+			    <p><em>Changelog</em>:</p>
+			    <ul class="nested">
+			     <li>Fixed stopAll() bug (previously broken)</li>
+			     <li>Added <code class="in">nullURL</code> parameter</li>
+			     <li>Updated documentation</li>
+			    </ul>
+			    <h3>V2.0b.20070123</h3>
+			    <h3>V2.0b.20070118</h3>
+			    <h3>V2.0b.20070115</h3>
+			   </li>
+
+			   <li class="old">
+			    <h3>V2.0b.20070107</h3>
+			    <p class="compact">First beta</p>
+			   </li>
+
+			   <li class="old">
+			    <h3>V2.0a.20060904</h3>
+			    <p class="compact">Prerelease alpha</p>
+			   </li>
+
+			  </ul>
+			  
+				<!-- <script type="text/javascript">document.getElementById('revision-list').className += ' hide-old';</script> -->
+
+			  </div>
+				
+			</div>
+			
+		</div>
+
+	
+	<div id="col3" class="c3">
+
+ 
+  <div id="get-satisfaction" class="box">
+   <div id="gsfn_list_widget">
+    <h2><a href="http://getsatisfaction.com/schillmania/products/schillmania_soundmanager_2/" title="User discussion, FAQs and support for SoundManager 2" rel="nofollow">Discussion / Support</a><span class="l"></span><span class="r"></span></h2>
+    <div id="gsfn_content"></div>
+    <div class="powered_by"><a href="http://getsatisfaction.com/">Get Satisfaction support network</a></div>
+   </div>
+  <!-- /.box -->
+
+  </div>
+
+ <div id="shortcuts">
+
+<!--
+  <div class="box">
+
+  <h2>Shortcuts<span class="l"></span><span class="r"></span></h2>
+
+  <ul class="first">
+   <li onclick="setFilter(event,'c-')" class="ignore">
+
+    <ul>
+
+     <li>Demos</li>
+     <li>Getting Started</li>
+     <li>Basic Use</li>
+     <li>Download</li>
+     <li>Requirements</li>
+     <li>Limitations</li>
+
+     <li>Debug Output</li>
+     <li>Revision History</li>
+     <li>About</li>
+    </ul>
+
+   </li>
+  </ul>
+
+  </div>
+-->
+
+ </div>
+
+
+
+	</div>
+	
+	<div class="clear"></div>
+
+ <!-- /main -->
+ </div>
+
+ <!-- /content -->
+ </div>
+
+<script type="text/javascript">
+init();
+</script>
+	
+</body>
+
+</html>

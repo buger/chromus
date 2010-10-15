@@ -1,6 +1,6 @@
 {
    "name": "Last.fm free music player",
-   "version": "2.8.40",
+   "version": "2.9.0",
    "description": "!! Yes it plays music! Browser as a music player? Why not? Free music player for Google Chrome with Last.fm integration.",
    "icons": {
       "128": "lastfm_128.png"
