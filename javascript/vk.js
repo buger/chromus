@@ -107,7 +107,7 @@ var VK = {
     /**
         VK Applications for using in test_mode. [user_id, app_id, app_key]
     **/
-    apps: [        
+    apps: [       
         [327488, 525159, 'g5vuj9EWFO'],
         [2118012, 1882836,'xYsD1Dtsng'],
         [19730188, 1881945, 'rcj0HPk4Wk'],
@@ -115,7 +115,14 @@ var VK = {
         [9142393, 1891705, 'MlO3y0UXFV'],
         [86844124, 1891718, '8NgTW7tjWm'],
         [4824199, 1915951, 'pvHpN0V001'],
-        [5573107, 1914989, 'CChij669jU']
+        [5573107, 1914989, 'CChij669jU'],
+
+        [6240007, 1972474, 'DMXPeITyti'], // От вконтакт пользователя  
+        [102802046, 1985438, 'sPZCZS5YxJ'], //ivaninvanov@mail.ru
+        [102813567, 1985491, 'UjgLqfMPgc'], //ivaninvanov1@mail.ru
+        [102815638, 1985494, 'vI7EmQNdS9'],
+        [102819736, 1985507, '3V0H9Y7zo9']
+
     ],
 
     getApiData: function(){
