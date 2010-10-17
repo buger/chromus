@@ -34,6 +34,20 @@ function xhrRequest(url, method, data, callback){
     }
 }
 
+function xhrRedirectUrl(url, callback){    
+    console.log("ASDASDASD")
+
+    var xhr = new XMLHttpRequest()
+    xhr.open("GET", url, true)
+    xhr.send()
+    
+    console.log("Sending redirect response:", url)
+
+    xhr.onreadystatechange = function(){
+        console.log("Redirect response:", xhr)
+    }
+}
+
 function prettyTime(seconds){
     seconds = parseInt(seconds)
 

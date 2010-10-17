@@ -47,13 +47,15 @@ MusicManager.prototype.onTimeUpdate = function(){
         console.log("Track scrobbled", track)
     }
     
-    if(this.audio.duration > 31 && percent_played > 90 && this.play_mode != "stop" && !track.next_song_prefetched){
+    if(this.audio.duration > 31 && percent_played > 90 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
       var next_track = this.playlist[this.current_track+1]
 
       track.next_song_prefetched = true
 
       if(next_track){
           console.log("Prefetching next track")
+          _gaq.push(['_trackEvent', 'music_manager', 'prefetchingTrack']);
+
           if(this.play_mode == "shuffle" && this.shuffle_tracks)
               this.searchTrack(this.shuffle_tracks[0], false)
           else
@@ -95,7 +97,7 @@ MusicManager.prototype.onEnded = function(){
 
     var track = this.playlist[this.current_track]
 
-    if(this.play_mode == "stop" || (this.play_mode != "shuffle" && this.current_track == (this.playlist.length-1)))
+    if(this.stop_after_playing == "stop" || (this.play_mode != "shuffle" && this.repeat_mode != "repeat_one" && this.current_track == (this.playlist.length-1)))
         delete this.current_track        
     else
         this.playNextTrack()
@@ -167,7 +169,7 @@ MusicManager.prototype.playNextTrack = function(ignore_repeat){
     }
     
     if(!this.current_track || this.current_track > (this.playlist.length-1))
-        this.current_track = 0
+        this.current_track = 0    
 
     this.searchTrack(this.current_track)    
 }
@@ -250,7 +252,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
                 this.not_found_in_row += 1
 
                 if(this.not_found_in_row < 10)
-                    setTimeout(this.playNextTrack.bind(this), 500)
+                    setTimeout(this.playNextTrack.bind(this), 1000)
                 else
                     this.not_found_in_row = 0
             }

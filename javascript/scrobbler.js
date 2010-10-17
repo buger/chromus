@@ -203,6 +203,36 @@ Scrobbler.prototype.artistInfo = function(artist, callback){
     })
 }
 
+Scrobbler.prototype.parseXSPFPlaylist = function(response){
+    console.log("Tracklist: ", response)
+
+    var tracks = response.playlist.trackList.track
+    var result_tracks = []
+    
+    if(!(tracks instanceof Array))
+        tracks = [tracks]
+    
+    for(var i=0; i<tracks.length; i++){
+        result_tracks[i] = {}
+        result_tracks[i].index = i            
+        result_tracks[i].song  = tracks[i].title
+        result_tracks[i].artist = tracks[i].creator
+        result_tracks[i].info = {
+            duration: parseInt(tracks[i].duration)/1000
+        }
+
+        if(tracks[i].album)
+            result_tracks[i].album = tracks[i].album                            
+
+        if(tracks[i].image)
+            result_tracks[i].image = tracks[i].image
+
+        if(tracks[i].location)
+            result_tracks[i].url = tracks[i].location
+    }
+
+    return result_tracks
+}
 
 /**
     Scrobbler#fetchPlaylist(playlist_url, callback)
@@ -212,30 +242,8 @@ Scrobbler.prototype.fetchPlaylist = function(playlist_url, callback){
         callback = function(){}
 
     this.callMethod("playlist.fetch", {playlistURL: playlist_url}, function(response){
-        var tracks = response.playlist.trackList.track
-        var result_tracks = []
-        
-        if(!(tracks instanceof Array))
-            tracks = [tracks]
-        
-        for(var i=0; i<tracks.length; i++){
-            result_tracks[i] = {}
-            result_tracks[i].index = i            
-            result_tracks[i].song  = tracks[i].title
-            result_tracks[i].artist = tracks[i].creator
-            result_tracks[i].info = {
-                duration: parseInt(tracks[i].duration)/1000
-            }
-
-            if(tracks[i].album)
-                result_tracks[i].album = tracks[i].album                            
-
-            if(tracks[i].image)
-                result_tracks[i].image = tracks[i].image
-        }
-
-        callback({tracks: result_tracks})
-    })
+        callback({tracks: this.parseXSPFPlaylist(response)})
+    }.bind(this))
 }
 
 
@@ -323,4 +331,22 @@ Scrobbler.prototype.loveTrack = function(artist, track, callback){
 Scrobbler.prototype.banTrack = function(artist, track, callback){
     if(this._username)
         this.callMethod("track.ban", {artist:artist, track:track, sig_call:true, http_method:'POST'}, callback)
+}
+
+
+Scrobbler.prototype.radioTune = function(station, callback){
+    if(this._username)
+        this.callMethod("radio.tune", {station:station, sig_call:true, http_method:'POST', use_cache:false}, callback)
+}
+
+Scrobbler.prototype.radioGetPlaylist = function(callback){
+
+    if(this._username)
+        this.callMethod("radio.getPlaylist", {sig_call:true, http_method:'POST', use_cache: false}, function(response){            
+            var url = response.getElementsByTagName("location")[0].firstChild.nodeValue
+
+            console.log("radioGetPlaylist response:", url)
+
+            callback({url:url})            
+        }.bind(this))
 }

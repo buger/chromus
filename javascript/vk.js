@@ -221,7 +221,7 @@ var VK = {
         - callback (Function): Function to be called when search compete, to obtain results. 
     **/    
     search: function(artist, song, duration, callback){
-	console.log("Seaching:", artist, " - ", song)
+        console.log("Seaching:", artist, " - ", song)
         console.log("Search method:", this.search_method)
 
         if(this.search_method == undefined){
