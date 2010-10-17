@@ -140,11 +140,11 @@
 
         container.innerHTML = html
                 
-        if(music_manager.current_track != undefined && music_manager.current_track > 16)
+        if(music_manager.current_track != undefined && music_manager.current_track > 12)
             var playing_link = document.querySelector('a.sm2_button.playing, a.sm2_button.paused')
             
             if(playing_link)
-                container.parentNode.scrollTop = playing_link.parentNode.offsetTop-102
+                container.parentNode.scrollTop = playing_link.parentNode.offsetTop-120
     }
     
 
@@ -439,7 +439,7 @@
                     <a href="javascript:;" class="next" title="Next track"><img src="images/next_2.png" width="34px"/></a>
                     <a href="javascript:;" class="love" title="Love!"><img src="images/love.png" alt="Love!" width="28" /></a>
                     <!--<a href="javascript:;" class="ban" title="Ban track"><img src="/images/ban_2.png" alt="Ban" width="16" /></a>-->
-                    <span class="time">00:00/30:20</span>
+                    <span class="time"></span>
                 </div>
             </div>
             <div class="float volume_control" style="width: 15px; padding-top: 10px;">
@@ -461,7 +461,9 @@
         </div>
         <div style="height: 26px; border-top: 1px solid #ccc"></div>
         <div class="play_mode_controls">
+            <!--
             <button id="play_source" class="ui-toggler ui-corner-all play_source"></button>
+            -->
             <button id="play_mode_control" class="ui-toggler ui-corner-left shuffle disabled"></button>
             <button id="stop_after_control" class="ui-toggler stop_after_playing disabled"></button>
             <button id="repeat_mode_control" class="ui-toggler ui-corner-right repeat_mode disabled"></button>

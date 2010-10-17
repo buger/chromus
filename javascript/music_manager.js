@@ -97,7 +97,7 @@ MusicManager.prototype.onEnded = function(){
 
     var track = this.playlist[this.current_track]
 
-    if(this.stop_after_playing == "stop" || (this.play_mode != "shuffle" && this.current_track == (this.playlist.length-1)))
+    if(this.stop_after_playing == "stop" || (this.play_mode != "shuffle" && this.repeat_mode != "repeat_one" && this.current_track == (this.playlist.length-1)))
         delete this.current_track        
     else
         this.playNextTrack()
@@ -169,7 +169,7 @@ MusicManager.prototype.playNextTrack = function(ignore_repeat){
     }
     
     if(!this.current_track || this.current_track > (this.playlist.length-1))
-        this.current_track = 0
+        this.current_track = 0    
 
     this.searchTrack(this.current_track)    
 }
