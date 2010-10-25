@@ -1,7 +1,7 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=99" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=2" type="text/css">
     <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
 
     <script src="javascript/browser_detect.js"></script>
@@ -75,6 +75,12 @@
 
         var track = music_manager.playlist[music_manager.current_track]
 
+        if (track) {
+          if (!track.duration){
+            track.duration = music_manager.audio.duration;
+          }
+        }
+
         if(track)
             progress = (music_manager.audio.currentTime/track.duration)*100.0
 
@@ -125,13 +131,18 @@
 
                 html += "<li>"+
                             "<a id='ex_button_"+playlist[i].index+"' data-index-number='"+playlist[i].index+"' href='javascript:;' onclick='togglePlaying(this)' class='sm2_button "+state+"'></a>"+
-                            "<span class='track'>"+
-                                "<a target='_blank' href='http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"'>"+playlist[i].artist + "</a>" +
+                            "<span class='track'>"
+
+                if (!playlist[i].artist && playlist[i].file_url)
+                  html += playlist[i].file_url
+                else
+                  html +=       "<a target='_blank' href='http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"'>"+playlist[i].artist + "</a>" +
                                 '  &ndash;  '+
                                 "<a target='_blank' href=\"http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"/_/"+(playlist[i].song||"").replace(/\s/g,'+')+"\">"+playlist[i].song+"</a>"+
                             "</span>"+
                             "<a href='javascript:;' title='Delete from playlist' data-index-number='"+playlist[i].index+"' onclick='removeFromPlaylist(this)' class='delete'></a>"
                         "</li>"
+                
         }
         
         if(playlist.length == 0){
@@ -164,6 +175,10 @@
 
 
     function trackLinks(track){
+        if (!track.artist && track.file_url)
+          return {}
+        
+
         var artist_link = "http://last.fm/music/"+track.artist.replace(/\s/g,'+')
         var song_link = artist_link+"/_/"+track.song.replace(/\s/g,'+')
         if(track.album)
@@ -331,10 +346,12 @@
 
         var play_source = document.getElementById('play_source');
         play_source.addEventListener('click', function(evt){
-            music_manager.scrobbler.radioTune('lastfm://user/buger_swamp/loved', function(response){            
+            window.open("index.html")
+/*            
+              music_manager.scrobbler.radioTune('lastfm://user/buger_swamp/loved', function(response){            
                 music_manager.scrobbler.radioGetPlaylist(function(response){
                     console.log("ZXCZXC")
-/*
+
                     var xhr = new XMLHttpRequest()
                     xhr.open("GET", response.url, true)
                     xhr.send()
@@ -344,10 +361,11 @@
                     xhr.onreadystatechange = function(){
                         console.log("Redirect response:", xhr)
                     }
-*/
-//                    music_manager.audio.playOrLoad(response.url)
+
+                    music_manager.audio.playOrLoad(response.url)
                 })
             })
+*/            
         })
     }
 
@@ -457,13 +475,11 @@
         <div class="wrapper">
             <ul style="white-space:nowrap" id="tracks_container">
             </ul>
-            <div id="quick_help" class="ui-corner-tr" style="position: absolute; background: #ddd; color: #666; bottom: 27px; left: 0px; padding: 3px;display: none; max-width: 200px; overflow:hidden;text-overflow: ellipsis;"></div>
+            <div id="quick_help" class="ui-corner-tr" style="position: absolute; background: #ddd; color: #666; bottom: 27px; left: 0px; padding: 3px;display: none; max-width: 200px; overflow:hidden;text-overflow: ellipsis; z-index: 9999"></div>
         </div>
         <div style="height: 26px; border-top: 1px solid #ccc"></div>
         <div class="play_mode_controls">
-            <!--
             <button id="play_source" class="ui-toggler ui-corner-all play_source"></button>
-            -->
             <button id="play_mode_control" class="ui-toggler ui-corner-left shuffle disabled"></button>
             <button id="stop_after_control" class="ui-toggler stop_after_playing disabled"></button>
             <button id="repeat_mode_control" class="ui-toggler ui-corner-right repeat_mode disabled"></button>

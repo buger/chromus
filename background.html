@@ -7,11 +7,12 @@
     </script>
     -->
     <script src="javascript/md5.js"></script>
+    <script src="javascript/id3.js"></script>
     <script src="javascript/cache.js"></script>
     <script src="javascript/utils.js?rnd=6"></script>    
     <script src="javascript/scrobbler.js?rnd=13"></script>
     <script src="javascript/vk.js?rnd=15"></script>
-    <script src="javascript/music_manager.js?rnd=20"></script>
+    <script src="javascript/music_manager.js?rnd=21"></script>
     <script src="javascript/browser_detect.js?rnd=1"></script>
     <script> 
     function ease(x) {
@@ -33,7 +34,7 @@
       } else {
         rotation = 0;
 
-        chrome.browserAction.setIcon({path:chrome.extension.getURL('lastfm_128.png')});
+        chrome.browserAction.setIcon({path:chrome.extension.getURL('chromus_logo.png')});
       }
     }
 
@@ -89,6 +90,9 @@
     
     function updateTime(){
         var track = music_manager.playlist[music_manager.current_track]
+
+        if(track && !track.duration)
+          track.duration = music_manager.audio.duration
 
         if(!music_manager.audio.paused){
             if(music_manager.audio.duration && track && track.duration && music_manager.audio.currentTime){
@@ -149,7 +153,7 @@
                 } else if(msg.method == "pause") {
                     music_manager.pause()
                     
-                } else if(msg.method == "play"){
+                } else if(msg.method == "play") {
                     if(active_port && active_port != port && port.name != "popup")
                         active_port.postMessage({method:"stop"})                    
 
@@ -163,6 +167,27 @@
                     }
 
                     music_manager.play(msg.track)
+                } else if(msg.method == "add_to_playlist") {
+                   var track = msg.track;
+                   track.index = music_manager.playlist.length;
+                   music_manager.playlist.push(track);
+                   music_manager.updateID3Info(music_manager.playlist.length-1);
+
+                } else if(msg.method == "search") {
+                  Scrobbler.search(msg.search_text, function(response){                  
+                    port.postMessage({method:"searchResult", html:response.html});
+                  })
+
+                } else if(msg.method == "togglePlaying") {
+                    if(music_manager.audio.paused && music_manager.current_track) {
+                        music_manager.audio.playOrLoad();
+                    } else {
+                        music_manager.audio.pause();
+                    }
+                } else if(msg.method == "nextTrack") {
+                    music_manager.playNextTrack(true);
+                } else if(msg.method == "previousTrack") {
+                    music_manager.playNextTrack(true, true);
                 }
             })
 
@@ -189,6 +214,35 @@
         
        // _gaq.push(['_trackPageview']);
     }
+
+    function searchMenuClick(info, tab) {
+        console.log("info: ", info);
+        console.log("tab: ", tab);
+        console.log("Connected ports: ", connected_ports);
+
+        var port;
+
+        for(i in connected_ports)
+            if(connected_ports[i].tab && connected_ports[i].tab.id == tab.id){
+                port = connected_ports[i]
+                break;
+            }
+
+        Scrobbler.search(info.selectionText, function(response){ 
+            port.postMessage({method:"searchResult", html:response.html});
+        })
+    }
+
+
+    chrome.contextMenus.create({
+      "title": "Search in Chromus", 
+      "onclick": searchMenuClick,
+      "contexts":["selection"]
+    });
+
+    chrome.tabs.onSelectionChanged.addListener(function(tab_id, select_info){      
+        console.log("Tab selected", tab_id, select_info);
+    })
     </script>
     </head>
     <body onload="onLoad()">
@@ -209,7 +263,7 @@
       }
       </script>
 
-      <img id="lastfm_icon" src="lastfm_19.png" width="19" height="19"/>
+      <img id="lastfm_icon" src="chromus_logo.png" width="19" height="19"/>
       <canvas id="canvas" width="19" height="19" />
     </body>
 </html>

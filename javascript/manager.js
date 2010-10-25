@@ -182,7 +182,7 @@ MusicDomElement.prototype.generateLink = function(track){
 
 
 MusicDomElement.prototype.generateAudioLink = function(track){
-  var link = "<a href=\"javascript:;\" target='_blank' class='sm2_button' title='Play song' id='ex_button_"+manager.track_count+"' >"+track+"</a>"
+  var link = "<a href=\"javascript:;\" target='_blank' class='sm2_button' title='Play song' id='ex_button_"+manager.track_count+"' ></a>"
   
   manager.track_count += 1
 

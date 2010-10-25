@@ -59,7 +59,7 @@ Scrobbler.prototype.setNowPlaying = function(artist, track, album, duration, cal
         callback = function(){}
     
     this.callMethod("User.updateNowPlaying", 
-                   {artist:artist, track:track, album:album, duration:duration, sig_call:true, http_method:'POST'}, callback)
+                   {artist:artist, track:track, album:album, duration:parseInt(duration), sig_call:true, http_method:'POST'}, callback)
 }
 
 
@@ -82,7 +82,7 @@ Scrobbler.prototype.scrobble = function(artist, track, album, duration, callback
     var timestamp = parseInt(now.getTime()/1000.0)
     
     this.callMethod("Track.scrobble", 
-                   {artist:artist, track:track, album:album, duration:duration, timestamp: timestamp, sig_call:true, http_method:'POST'}, callback)
+                   {artist:artist, track:track, album:album, duration:parseInt(duration), timestamp: timestamp, sig_call:true, http_method:'POST'}, callback)
 }
 
 
@@ -199,7 +199,17 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
 **/
 Scrobbler.prototype.artistInfo = function(artist, callback){
     this.callMethod("artist.getinfo", {artist: artist}, function(response){
-        callback({image: response.artist.image[1]["#text"].replace(/serve\/([^\/]*)/,'serve/64s')})
+        console.log("artist info response:", response);
+
+        callback({
+            image: response.artist.image[1]["#text"].replace(/serve\/([^\/]*)/,'serve/64s'),
+            big_image: response.artist.image[1]["#text"].replace(/serve\/([^\/]*)/,'serve/252'),
+            bio_summary: response.artist.bio.summary,
+            bio: response.artist.bio.content,
+            similar: response.artist.similar,
+            tags: response.artist.tags,
+            stats: response.artist.stats
+        })
     })
 }
 
@@ -349,4 +359,107 @@ Scrobbler.prototype.radioGetPlaylist = function(callback){
 
             callback({url:url})            
         }.bind(this))
+}
+
+var LASTFM_RESTYPE = {
+  'Artist': 6,
+  'Album': 8,
+  'Track': 9,
+  'Tag': 32
+}
+
+Scrobbler.search = function(search_text, callback){
+  console.log("Search text after:", search_text)
+
+  search_text = search_text.stripHTML()
+                           .replace(/(^\s+|\s+$)/g,'')
+                           .replace(/\(.*\)/g,'')
+                           .replace(/\[.*\]/g,'')
+                           .replace(/[\n\-\.\,\\\/]/g,'')
+                           .replace(/[\u2000-\u206F\u2E00-\u2E7F]/,' ') //Punctuation symbols
+                           .replace(/\s+/g,' ')
+
+  if(search_text == "")
+    return false;
+
+  console.log("Search text after:", search_text)
+
+  xhrRequest("http://www.last.fm/search/autocomplete", 
+             "GET", 
+             "q="+encodeURIComponent(search_text)+"&force=1", 
+    function(response){
+      var json = JSON.parse(response.responseText)
+      var arr = json.response.docs
+      var html = "";
+      var title; 
+      var href;
+      var image;
+      var attrs;
+      var css_class;
+
+      for (i in arr) {
+        if(i > 4)
+            break;
+
+        title = "";
+        attrs = "";
+        css_class = "";
+        image = undefined;        
+
+        switch(arr[i].restype){
+          case LASTFM_RESTYPE.Artist:
+            title = arr[i].artist;
+            href = "music/"+encodeURIComponent(arr[i].artist);
+            attrs = 'data-artist="'+arr[i].artist+'"'
+            css_class = "ex_artist"
+            break;
+          case LASTFM_RESTYPE.Album:
+            title = arr[i].artist + " &ndash; " + arr[i].album;
+            href = "music/"+encodeURIComponent(arr[i].artist)+"/"+encodeURIComponent(arr[i].album);
+            attrs = 'data-artist="'+arr[i].artist+'" data-album="'+arr[i].album+'"'
+            css_class = "ex_album"
+            break;
+          case LASTFM_RESTYPE.Track:
+            title = arr[i].artist + " &ndash; " + arr[i].track;
+            href = "music/"+encodeURIComponent(arr[i].artist)+"/_/"+encodeURIComponent(arr[i].track);
+            attrs = 'data-artist="'+arr[i].artist+'" data-song="'+arr[i].track+'"'
+            break;
+/*            
+          case LASTFM_RESTYPE.Tag:
+            title = arr[i].tag;
+            image = "http://cdn.last.fm/flatness/icons/activity/tagged.png";
+            href = "tag/"+arr[i].tag;
+            break;
+*/            
+        }
+        
+        if (title == "")
+          continue;     
+
+        if (!image){
+          if (arr[i].image)
+            image = "http://userserve-ak.last.fm/serve/34s/"+arr[i].image;
+          else if (arr[i].restype == LASTFM_RESTYPE.Album)
+            image = "http://ws.audioscrobbler.com/2.0/?api_key=ceec2bb03d4c5929f0d6667fc266dc75&artist="+arr[i].artist+"&album="+arr[i].album+"&method=album.getImageRedirect&size=smallsquare"
+          else if (arr[i].restype == LASTFM_RESTYPE.Artist || arr[i].restype == LASTFM_RESTYPE.Track)
+            image = "http://ws.audioscrobbler.com/2.0/?api_key=ceec2bb03d4c5929f0d6667fc266dc75&artist="+arr[i].artist+"&method=artist.getImageRedirect&size=smallsquare"
+        }
+
+        var link_id = Math.floor(Math.random()*9999999999);
+        var play_link = "<a href=\"javascript:;\" target='_blank' class='sm2_button' title='Play song' id='ex_button_"+link_id+"' >"+title+"</a>"
+
+        html += "<li class='lfm_restype_"+arr[i].restype+" with_vk_search' data-index-number='"+link_id+"'>";
+        html += "  <div class='ex_container "+css_class+"' data-index-number='0' "+attrs+">";
+        html += "    <span class='play_link'>"+play_link+"</span>";
+        html += "    <span class='img'><img src='"+image+"' width='34'/></span>";
+        html += "    <span class='title'><a href=\"http://last.fm/"+href+"\" target='_blank'>"+title+"</a></span>";
+        html += "  </div>";
+        html += "</li>";
+      }
+
+      html = "<ul>"+html+"</ul>";
+  
+      callback({html:html, results:arr})
+    }.bind(this)
+  )
 }

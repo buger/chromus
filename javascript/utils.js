@@ -1,10 +1,51 @@
 function findParent(element, className){
     var parentNode = element.parentNode
 
+    if (!parentNode)
+      return false;
+
     if(parentNode.className && parentNode.className.match(className))
         return parentNode
     else
         return findParent(parentNode, className)
+}
+
+function findElementPosition(element){
+    var curleft = 0;
+    var curtop = 0;
+
+    if (element.offsetParent) {
+        while (element.offsetParent) {
+            curleft += element.offsetLeft - element.scrollLeft;
+            curtop += element.offsetTop - element.scrollTop;
+
+            var position='';
+
+            if (element.style && element.style.position)
+              position = element.style.position.toLowerCase();
+
+            if (!position)
+               if (element.currentStyle && element.currentStyle.position)
+                   position = element.currentStyle.position.toLowerCase();
+
+            if ((position=='absolute')||(position=='relative')) break;
+
+            while (element.parentNode != element.offsetParent) {   
+                element = element.parentNode;
+                curleft -= element.scrollLeft;
+                curtop -= element.scrollTop;
+            }
+
+            element = element.offsetParent;
+        }
+    } else {
+        if (obj.x)
+            curleft += obj.x;
+        if (obj.y)
+            curtop += obj.y;
+    }
+    
+    return {left:curleft,top:curtop};
 }
 
 function xhrRequest(url, method, data, callback){
@@ -27,7 +68,7 @@ function xhrRequest(url, method, data, callback){
 
     xhr.onreadystatechange = function(){
         if(xhr.readyState == 4){
-            console.log("Response on "+url+" :", xhr)
+            console.log("Response on "+url+" :", xhr, data)
 //            console.log("Response text:", xhr.responseText)
             callback(xhr)
         }
@@ -71,6 +112,12 @@ function timeToSeconds(time){
 
 String.prototype.replaceEntities = function(){
    return this.replace(/&amp;/g, '&').replace(/%27/g,"'") 
+}
+
+String.prototype.stripHTML = function(){
+   var tmp = document.createElement("DIV");
+   tmp.innerHTML = this;
+   return tmp.textContent||tmp.innerText;
 }
 
 Function.prototype.bind = function(scope) {

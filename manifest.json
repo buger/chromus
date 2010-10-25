@@ -1,26 +1,41 @@
 {
-   "name": "Last.fm free music player",
-   "version": "2.9.8",
-   "description": "!! Yes it plays music! Browser as a music player? Why not? Free music player for Google Chrome with Last.fm integration.",
+   "name": "Chromus",
+   "version": "3.0.0",
+   "description": "!! Yes it plays music! Browser as a music player? Why not? Music player for Google Chrome",
    "icons": {
-      "128": "lastfm_128.png"
+      "16": "chromus_logo.png",
+      "128": "chromus_logo.png"
    },
    "default_locale": "en",
    "browser_action": {
-     "default_icon": "lastfm_128.png", 
-     "default_title": "Last.fm free music player",      
+     "default_icon": "chromus_logo.png", 
+     "default_title": "Chromus",      
      "popup": "popup.html"        
    },
-   "content_scripts": [ {
+   "content_scripts": [{
       "css": [ "css/mp3_player_button.css", "css/style.css" ],
-      "js": [ "javascript/utils.js", "javascript/manager.js", "javascript/content_script.js" ],
+      "js": ["javascript/jquery.min.js", "javascript/scrobbler.js", "javascript/utils.js", "javascript/manager.js", "javascript/content_script.js" ],
       "matches": [ "http://*.last.fm/*", "http://*.lastfm.ru/*","http://*.lastfm.pt/*",  "http://*.lastfm.de/*", "http://*.lastfm.es/*", "http://*.lastfm.fr/*", "http://*.lastfm.it/*", "http://*.lastfm.jp/*", "http://*.lastfm.pl/*", "http://*.lastfm.com.br/*", "http://*.lastfm.se/*", "http://*.lastfm.com.tr/*"]
    },
    {
      "js": ["javascript/lastfm_auth_callback.js"],
      "matches": ["http://yandex.ru/white*"] 
-   }],
+   },
+   {
+     "css": ["css/mp3_player_button.css", "css/style.css"],
+     "js": [
+         "javascript/jquery.min.js", 
+         "javascript/utils.js", 
+         "javascript/content_script.js", 
+         "javascript/quick_search.js", 
+         "javascript/music_page_scanner.js", 
+         "javascript/enhanced_play_button.js",
+         "javascript/hotkeys.js"
+     ],
+     "matches": ["http://*/*","https://*/*"]
+   }
+   ],
    "background_page": "background.html",
    "options_page": "options.html",
-   "permissions": ["notifications", "tabs", "http://*/"]
+   "permissions": ["contextMenus","notifications", "tabs", "http://*/"]
 }

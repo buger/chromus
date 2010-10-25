@@ -73,6 +73,10 @@ a.sm2_button {
  /* safari 3.1+ fun (/W3 working draft extension, TBD.) */
  -webkit-transition-property: hover;
  -webkit-transition: background-color 0.15s ease-in-out;
+
+ z-index: 1;
+
+ margin-right: 5px;
 }
 
 a.sm2_button:focus {
@@ -117,3 +121,30 @@ a.sm2_button.playing {
     background-image:url(data:image/gif;base64,R0lGODlhEAAQAIAAAP///////yH+EUNyZWF0ZWQgd2l0aCBHSU1QACH5BAEKAAEALAAAAAAQABAAAAIkjI+pu+DogIrwJXpwldnuf3mB1nEGeYroqIqpycIvSMfMjTMFADs%3D);
 }
 
+
+a.chromus_button {
+    display:inline-block; /* If you worry old browser bugs, Firefox 2 might not like this and may need -moz-inline-box instead. :D */
+    width:13px;
+    height:13px;
+    text-indent:-9999px; /* don't show link text */
+    overflow:hidden; /* don't draw inner link text */
+    vertical-align:middle;
+    /* and, a bit of round-ness for the cool browsers. */
+    border-radius:13px;
+    margin-top:-1px; /* vertical align tweak */
+    /* safari 3.1+ fun (/W3 working draft extension, TBD.) */
+    -webkit-transition-property: hover;
+    -webkit-transition: background-color 0.15s ease-in-out;
+    z-index: 1;
+}
+
+
+a.add_to_queue {
+    background-color:#3399cc;
+    background-image: url(data:image/gif;base64,R0lGODlhDgAOAIAAAP///////yH5BAEKAAEALAAAAAAOAA4AAAIWjI+py20A3IsSNoixyvlSZ1WfRJZOAQA7);
+    background-position: 0px 0px;
+}
+
+a.add_to_queue:hover {
+    background-color:#cc3333;
+}

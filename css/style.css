@@ -153,3 +153,27 @@ ul.recentAlbums li a.sm2_button, #newReleases .release a.sm2_button {
     z-index: 2;
     position: absolute;
 }
+
+#cmp_quick_search_results {
+  padding: 4px; 
+  border-radius: 3px; 
+  background: white; 
+  position: absolute;
+  border: 1px solid #ccc;
+  text-align: left;
+  z-index: 999;  
+}
+
+#cmp_quick_search_results ul { margin:0; padding:0; }
+#cmp_quick_search_results li {
+  margin: 0;
+  padding:0;
+  list-style: none;
+  font-size: 12px;
+  height: 40px;
+  text-align: left;
+}
+
+#cmp_quick_search_results li a {
+  font-size: 12px;
+}
