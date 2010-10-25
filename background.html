@@ -26,6 +26,12 @@
     var canvas
 
     function animateFlip() {
+      try {
+          chrome.browserAction;
+      } catch(e) {
+          return false;
+      }
+
       rotation += 1/animationFrames;
       drawIconAtRotation();
 
@@ -39,6 +45,13 @@
     }
 
     function drawIconAtRotation() {
+      try {
+          chrome.browserAction;
+      } catch(e) {
+          return false;
+      }
+
+   
       canvasContext.save();
       canvasContext.clearRect(0, 0, canvas.width, canvas.height);
       canvasContext.translate(
@@ -53,7 +66,9 @@
       chrome.browserAction.setIcon({imageData:canvasContext.getImageData(0, 0, canvas.width,canvas.height)});
     }
 
+    try {
     chrome.browserAction.setBadgeBackgroundColor({color:[51,153,204,255]}) //blue
+    } catch(e) {}
     
     var scrobbler = new Scrobbler(window.localStorage["lastfm_session"], window.localStorage["lastfm_username"])
 
@@ -63,7 +78,9 @@
         var track = music_manager.playlist[music_manager.current_track]
 
         if(!track.not_found)
-            chrome.browserAction.setTitle({title: track.artist +' - '+ track.song})       
+            try {
+                chrome.browserAction.setTitle({title: track.artist +' - '+ track.song})       
+            } catch (e) {}            
 
         if(active_port){
             if(track.not_found)
@@ -74,7 +91,9 @@
     }, true)
 
     music_manager.audio.addEventListener('onEnded', function(){
-        chrome.browserAction.setBadgeText({text:''})
+        try {
+          chrome.browserAction.setBadgeText({text:''})
+        } catch(e){}
 
         if(active_port)
             active_port.postMessage({method:"stop"})
@@ -89,6 +108,12 @@
 
     
     function updateTime(){
+        try {
+          chrome.browserAction
+        } catch(e){
+            return false;
+        }
+
         var track = music_manager.playlist[music_manager.current_track]
 
         if(track && !track.duration)
