@@ -58,7 +58,7 @@ Scrobbler.prototype.setNowPlaying = function(artist, track, album, duration, cal
     if(!callback)
         callback = function(){}
     
-    this.callMethod("User.updateNowPlaying", 
+    this.callMethod("track.updateNowPlaying", 
                    {artist:artist, track:track, album:album, duration:duration, sig_call:true, http_method:'POST'}, callback)
 }
 
@@ -163,12 +163,7 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
     }
     
 
-    if (method == "User.updateNowPlaying" || method == "Track.scrobble")
-      var server_url = "http://post.audioscrobbler.com/2.0/"
-    else
-      var server_url = "http://ws.audioscrobbler.com/2.0/"
-
-    console.info("Using server url: ", server_url)
+    var server_url = "http://ws.audioscrobbler.com/2.0/"
 
     xhrRequest(server_url, http_method, query_string, function(xhr){
         if(!xhr.responseXML){
