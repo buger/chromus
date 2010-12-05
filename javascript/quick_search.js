@@ -1,6 +1,6 @@
 var qs = document.createElement('div');
 qs.id = 'cmp_quick_search_results';
-qs.className = 'cmp_quick_search';
+qs.className = 'cmp_quick_search triangle-border top';
 document.body.appendChild(qs);
 
 port.onMessage.addListener(function(msg){
@@ -19,7 +19,7 @@ port.onMessage.addListener(function(msg){
       qs.innerHTML = msg.html;
 
       qs.style.top = bounding_rect.top + document.body.scrollTop + bounding_rect.height + 'px';
-      qs.style.left = bounding_rect.left + document.body.scrollLeft + 'px';
+      qs.style.left = bounding_rect.left + document.body.scrollLeft - 20 + 'px';
       qs.innerHTML = "Searching '" + selected_text + "'";
 
     } else {
@@ -40,7 +40,7 @@ document.addEventListener("mouseup", function(evt){
     return false
   }
 
-  if (selected_text == "" || latest_search == selected_text || !evt.ctrlKey){
+  if (selected_text == "" || (latest_search == selected_text && qs.style.display != 'none') || !evt.ctrlKey){
     if(selected_text == "" || !evt.ctrlKey)
       qs.style.display = 'none';
 

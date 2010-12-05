@@ -6,9 +6,11 @@
     <link rel="stylesheet" href="css/main.css?rnd=5">
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
     <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
+    <link rel="stylesheet" href="css/jquery.lightbox.css" type="text/css">
 
     <script src="javascript/jquery.min.js"></script>
     <script src="javascript/jquery-ui.min.js"></script>
+    <script src="javascript/jquery.lightbox.min.js"></script>
 
     <script src="javascript/id3.js"></script>
     
@@ -19,6 +21,7 @@
       <div class="header dbg_r">      
             <div id="controls" class="float">
                 <div class="controls_container float">
+                    <img src="chromus_logo.png" width="50px" style="margin-bottom: 5px; margin-right: 20px;"/>
                     <a id="play" class="paused"><img src="images/play.png" alt="Play" width="58" height="58"/></a>
                     <a href="javascript:;" class="next" title="Next track"><img src="images/next_2.png" width="34px" style="margin-bottom: 12px;"/></a>
                     <a href="javascript:;" class="love" title="Love!" style="display: none"><img src="images/love.png" alt="Love!" width="28" /></a>
@@ -76,7 +79,8 @@
               <img src="images/logos/magnatune.gif" width="220px" style="margin-top: 15px;" />
           </div>
         </div>
-        <ul class="playlist dbg_r boxFlex1" id="tracks_container" style="padding:0; margin:0;"></ul>
+        <ul class="playlist dbg_r boxFlex1" id="tracks_container" style="padding:0; margin:0;">         
+        </ul>
         </div>
       </div>
     </section>
@@ -288,10 +292,24 @@
         }
         
         if(playlist.length == 0){
-            html = "<li class='empty' style='height: 90px; font-size: 16px;'>Find some tracks on <a target='_blank' href='http://www.last.fm/music/The+Beatles/+charts'>Last.fm</a></li>"            
+            html = "<li style='background: #fff; color: #333; padding: 10px;'>"+             
+            "<h1>What can Chromus?</h1>"+
+            "<h3 style='margin-top: 20px;'>Play local files (in left panel)</h3>"+
+           
+            "<h3 style='margin-top: 20px;'>Play music files from blogs or podcasts right in browser</h3>"+
+            "<div style='margin-top: 10px;'><a href='tutorial/mp3_1.jpg' class='lightbox'><img style='border: 1px solid #ccc' src='tutorial/mp3_1_s.jpg'/></a><a href='tutorial/podcast_1.png' class='lightbox' style='margin-left: 50px;'><img style='border: 1px solid #ccc' src='tutorial/podcast_1_s.png'/></a></div>"+
+
+            "<h3 style='margin-top: 20px;'>Quick music search on every page. Just select text and choose 'Search in Chromus' in context menu</h3>"+
+            "<div style='margin-top: 10px;'><a href='tutorial/quick_search.jpg' class='lightbox'><img style='border: 1px solid #ccc' src='tutorial/quick_search_s.jpg'/></a></div>"+
+
+            "<h3 style='margin-top: 20px;'>Integration with <a href='http://last.fm' style='font-size: 18px;'>www.last.fm</a></h3>"+
+            "<div style='margin-top: 10px;'><img style='border: 1px solid #ccc' src='tutorial/lastfm.png'/></div>"+
+            "</li>"
         }
 
         container.innerHTML = html
+
+        $("a.lightbox").lightBox();
                 
         if(music_manager.current_track != undefined && music_manager.current_track > 12)
             var playing_link = document.querySelector('a.sm2_button.playing, a.sm2_button.paused')
@@ -383,7 +401,7 @@
             //document.querySelector('.controls_container').style.visibility = 'hidden'
             //document.querySelector('.track_info').style.visibility = 'hidden'
 
-            document.querySelector('.track_info .track').innerHTML = "Track not selected"
+            document.querySelector('.track_info .track').innerHTML = ""
             document.querySelector('.track_info .container').style.visibility = 'hidden'
             document.querySelector('.controls_container .love').style.visibility = 'hidden'
 
