@@ -34,9 +34,7 @@ MusicManager.prototype.createAudio = function(){
     this.audio = new Audio();
     this.audio.addEventListener('canplaythrough', this.onStartPlaying.bind(this), true);
     this.audio.addEventListener('timeupdate', this.onTimeUpdate.bind(this), true);
-
     this.audio.addEventListener('progress', function(){ this.fireEvent('onProgress'); }.bind(this), true)
-    this.audio.addEventListener('timeupdate', function(){ this.fireEvent('onTimeupdate'); }.bind(this), true)
 }
 
 
