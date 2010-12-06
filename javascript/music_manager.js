@@ -18,12 +18,25 @@ Audio.prototype.playOrLoad = function(url){
 var MusicManager = function(scrobbler){
     this.playlist = []
 
-    this.scrobbler = scrobbler 
+    this.scrobbler = scrobbler;
 
-    this.audio = new Audio()    
+    this.createAudio();
 
-    this.audio.addEventListener('canplaythrough', this.onStartPlaying.bind(this), true)
-    this.audio.addEventListener('timeupdate', this.onTimeUpdate.bind(this), true)
+    this.dispatcher = new Audio();
+}
+
+MusicManager.prototype.createAudio = function(){
+    if(this.audio){
+        this.audio.pause();
+        delete this.audio;
+    }
+
+    this.audio = new Audio();
+    this.audio.addEventListener('canplaythrough', this.onStartPlaying.bind(this), true);
+    this.audio.addEventListener('timeupdate', this.onTimeUpdate.bind(this), true);
+
+    this.audio.addEventListener('progress', function(){ this.fireEvent('onProgress'); }.bind(this), true)
+    this.audio.addEventListener('timeupdate', function(){ this.fireEvent('onTimeupdate'); }.bind(this), true)
 }
 
 
@@ -71,7 +84,7 @@ MusicManager.prototype.onTimeUpdate = function(){
 MusicManager.prototype.fireEvent = function(event_name){
     var evt = document.createEvent("Events")
     evt.initEvent(event_name, true, true)
-    this.audio.dispatchEvent(evt)
+    this.dispatcher.dispatchEvent(evt)
 }
 
 
@@ -232,6 +245,8 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
                 this.current_track = trackIndex
 
                 this.fireEvent("onLoading")
+
+                this.createAudio()
                 this.audio.playOrLoad(this.scrobbler.previewURL(track.track_id))
 
                 this.setVolume()                
@@ -262,7 +277,9 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
             this.not_found_in_row = 0
             this.fireEvent("onLoading")
             
+            this.createAudio();
             this.audio.playOrLoad(response.url)
+
             this.setVolume()            
     
             track.duration = parseInt(response.duration)

@@ -58,7 +58,7 @@
 
     var music_manager = new MusicManager(scrobbler)
 
-    music_manager.audio.addEventListener('onPlay', function(){
+    music_manager.dispatcher.addEventListener('onPlay', function(){
         var track = music_manager.playlist[music_manager.current_track]
 
         if(!track.not_found)
@@ -72,14 +72,14 @@
         }
     }, true)
 
-    music_manager.audio.addEventListener('onEnded', function(){
+    music_manager.dispatcher.addEventListener('onEnded', function(){
         chrome.browserAction.setBadgeText({text:''})
 
         if(active_port)
             active_port.postMessage({method:"stop"})
     }, true)
 
-    music_manager.audio.addEventListener('onLoading', function(){
+    music_manager.dispatcher.addEventListener('onLoading', function(){
         var track = music_manager.playlist[music_manager.current_track]
 
         if(active_port && track.element_id)

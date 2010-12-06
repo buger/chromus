@@ -10,9 +10,9 @@ var VK = {
         console.log("Trying to determine search method")
 
         xhrRequest("http://vkontakte.ru", "GET", null, function(xhr){
-            if(xhr.responseText.match(/quickLogin/) || xhr.responseText.match(/quick_login_form/)){
+            if(!xhr.responseText.match(/quick_search/)){
                 xhrRequest("http://vk.com", "GET", null, function(xhr_vk){
-                    if(xhr_vk.responseText.match(/quickLogin/) || xhr_vk.responseText.match(/quick_login_form/)) {
+                    if(!xhr_vk.responseText.match(/quick_search/)) {
                         callback({search_method:'test_mode'})
                     } else {
                         callback({search_method:'vk.com'})
@@ -222,7 +222,7 @@ var VK = {
     **/    
     search: function(artist, song, duration, callback){
         console.log("Seaching:", artist, " - ", song)
-        console.log("Search method:", this.search_method)
+        console.log("Search method:", this.search_method)    
 
         if(this.search_method == undefined){
             this.determineSearchMethod(function(response){
@@ -254,5 +254,8 @@ var VK = {
             this._testmodeSearch(artist, song, duration, callback)
         else
             this._rawSearch(artist, song, duration, callback)
+        
+        console.log("Setting search method to null");
+        this.search_method = undefined;
     }
 }
