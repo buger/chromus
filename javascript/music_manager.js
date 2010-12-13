@@ -27,14 +27,25 @@ var MusicManager = function(scrobbler){
 
 MusicManager.prototype.createAudio = function(){
     if(this.audio){
-        this.audio.pause();
+        this.audio.removeEventListener('timeupdate', this.audio.tu_func);
+        this.audio.removeEventListener('canplaythrough', this.audio.cpt_func);
+        this.audio.removeEventListener('progress', this.audio.p_func);
+
+        this.audio.pause();        
+
         delete this.audio;
     }
 
     this.audio = new Audio();
-    this.audio.addEventListener('canplaythrough', this.onStartPlaying.bind(this), true);
-    this.audio.addEventListener('timeupdate', this.onTimeUpdate.bind(this), true);
-    this.audio.addEventListener('progress', function(){ this.fireEvent('onProgress'); }.bind(this), true)
+
+    this.audio.cpt_func = this.onStartPlaying.bind(this);    
+    this.audio.addEventListener('canplaythrough', this.audio.cpt_func, true);
+
+    this.audio.tu_func = this.onTimeUpdate.bind(this);
+    this.audio.addEventListener('timeupdate', this.audio.tu_func, true);
+
+    this.audio.p_func = function(){ this.fireEvent('onProgress'); }.bind(this);
+    this.audio.addEventListener('progress', this.audio.p_func, true)
 }
 
 
@@ -44,10 +55,16 @@ MusicManager.prototype.createAudio = function(){
 MusicManager.prototype.onTimeUpdate = function(){
     var track = this.playlist[this.current_track]
 
-    if(!track) return
+    if(!track || this.audio.paused || this.audio.src != track.audio_url) return;
+                
+    this.fireEvent('onTimeupdate');
 
-    if(this.audio.currentTime >= track.duration || this.audio.ended)
+
+    if(this.audio.currentTime >= track.duration || this.audio.ended){
+        console.log(this.audio.currentTime, track.duration, this.audio.ended, track, this.audio.src);
+
         this.onEnded()
+    }
 
     var percent_played = (this.audio.currentTime / track.duration)*100
 
@@ -58,7 +75,7 @@ MusicManager.prototype.onTimeUpdate = function(){
         console.log("Track scrobbled", track)
     }
     
-    if(this.audio.duration > 31 && percent_played > 90 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
+    if(this.audio.duration > 31 && percent_played > 80 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
       var next_track = this.playlist[this.current_track+1]
 
       track.next_song_prefetched = true
@@ -246,10 +263,11 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
 
                 this.createAudio()
                 this.audio.playOrLoad(this.scrobbler.previewURL(track.track_id))
-
+            
                 this.setVolume()                
 
                 track.duration = 30
+                track.audio_url = this.audio.src;
 
                 this.showNotification()
             } else {
@@ -284,6 +302,8 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
             track.scrobbled = false
             track.next_song_prefetched = false 
 
+            track.audio_url = response.url;
+            
             this.showNotification()
         }
     }.bind(this))
