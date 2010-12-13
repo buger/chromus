@@ -7,11 +7,6 @@
       "128": "chromus_logo.png"
    },
    "default_locale": "en",
-//   "app": {
-//        "launch": {
-//            "local_path": "index.html"
-//        }
-//    },
    "browser_action": {
      "default_icon": "chromus_logo.png", 
      "default_title": "Chromus",      
@@ -19,7 +14,12 @@
    },
    "content_scripts": [{
       "css": [ "css/mp3_player_button.css", "css/style.css" ],
-      "js": ["javascript/jquery.min.js", "javascript/scrobbler.js", "javascript/utils.js", "javascript/manager.js", "javascript/content_script.js" ],
+      "js": [
+          "javascript/jquery.min.js", 
+          "javascript/scrobbler.js", 
+          "javascript/utils.js", 
+          "javascript/manager.js", 
+          "javascript/content_script.js" ],
       "matches": [ "http://*.last.fm/*", "http://*.lastfm.ru/*","http://*.lastfm.pt/*",  "http://*.lastfm.de/*", "http://*.lastfm.es/*", "http://*.lastfm.fr/*", "http://*.lastfm.it/*", "http://*.lastfm.jp/*", "http://*.lastfm.pl/*", "http://*.lastfm.com.br/*", "http://*.lastfm.se/*", "http://*.lastfm.com.tr/*"]
    },
    {

@@ -66,21 +66,17 @@
       chrome.browserAction.setIcon({imageData:canvasContext.getImageData(0, 0, canvas.width,canvas.height)});
     }
 
-    try {
     chrome.browserAction.setBadgeBackgroundColor({color:[51,153,204,255]}) //blue
-    } catch(e) {}
     
     var scrobbler = new Scrobbler(window.localStorage["lastfm_session"], window.localStorage["lastfm_username"])
 
     var music_manager = new MusicManager(scrobbler)
 
-    music_manager.audio.addEventListener('onPlay', function(){
+    music_manager.dispatcher.addEventListener('onPlay', function(){
         var track = music_manager.playlist[music_manager.current_track]
 
         if(!track.not_found)
-            try {
-                chrome.browserAction.setTitle({title: track.artist +' - '+ track.song})       
-            } catch (e) {}            
+            chrome.browserAction.setTitle({title: track.artist +' - '+ track.song})       
 
         if(active_port){
             if(track.not_found)
@@ -90,16 +86,14 @@
         }
     }, true)
 
-    music_manager.audio.addEventListener('onEnded', function(){
-        try {
-          chrome.browserAction.setBadgeText({text:''})
-        } catch(e){}
+    music_manager.dispatcher.addEventListener('onEnded', function(){
+    chrome.browserAction.setBadgeText({text:''})
 
         if(active_port)
             active_port.postMessage({method:"stop"})
     }, true)
 
-    music_manager.audio.addEventListener('onLoading', function(){
+    music_manager.dispatcher.addEventListener('onLoading', function(){
         var track = music_manager.playlist[music_manager.current_track]
 
         if(active_port && track.element_id)

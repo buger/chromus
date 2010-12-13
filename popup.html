@@ -38,7 +38,7 @@
 
     var music_manager = chrome.extension.getBackgroundPage().music_manager
 
-    music_manager.audio.addEventListener('onPlay', function(){
+    music_manager.dispatcher.addEventListener('onPlay', function(){
         var track = music_manager.playlist[music_manager.current_track]
         stopCurrentTrack()
 
@@ -49,22 +49,22 @@
                 try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"}catch(e){}
     }, true)
 
-    music_manager.audio.addEventListener('onEnded', function(){
+    music_manager.dispatcher.addEventListener('onEnded', function(){
         stopCurrentTrack()
     }, true)
 
-    music_manager.audio.addEventListener('onLoading', function(){
+    music_manager.dispatcher.addEventListener('onLoading', function(){
         if(music_manager.current_track != undefined)
             try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button loading"}catch(e){}
 
         updateTrackInfo()
     }, true)
 
-    music_manager.audio.addEventListener('progress', function(){
+    music_manager.dispatcher.addEventListener('onProgress', function(){
         updateLoadProgress()
     })
 
-    music_manager.audio.addEventListener('timeupdate', function(){
+    music_manager.dispatcher.addEventListener('onTimeupdate', function(){
         updateProgress()
         updateLoadProgress()
     }, false)
