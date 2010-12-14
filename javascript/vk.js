@@ -145,6 +145,10 @@ var VK = {
 
         console.log("Search url:", url+'?'+data)
 
+        xhrRequest("http://chromusapp.appspot.com/sign_data", "POST", "track="+encodeURIComponent(artist+song), function(xhr){
+            console.log(xhr.responseText);
+        }) 
+
         xhrRequest(url, "GET", data, function(xhr){
             // Too many requests and now we banned for some time
             if(xhr.responseText.match(/\:false/)){

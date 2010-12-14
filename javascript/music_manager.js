@@ -75,7 +75,7 @@ MusicManager.prototype.onTimeUpdate = function(){
         console.log("Track scrobbled", track)
     }
     
-    if(this.audio.duration > 31 && percent_played > 80 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
+    if(this.audio.duration > 31 && percent_played > 90 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
       var next_track = this.playlist[this.current_track+1]
 
       track.next_song_prefetched = true
