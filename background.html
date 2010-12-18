@@ -70,7 +70,16 @@
     
     var scrobbler = new Scrobbler(window.localStorage["lastfm_session"], window.localStorage["lastfm_username"])
 
-    var music_manager = new MusicManager(scrobbler)
+    var music_manager = new MusicManager(scrobbler);
+    var popup_port;
+
+    function postBroadcastMessage(msg){
+        if(active_port)
+            active_port.postMessage(msg);
+        
+        if(popup_port)
+            popup_port.postMessage(msg);
+    }
 
     music_manager.dispatcher.addEventListener('onPlay', function(){
         var track = music_manager.playlist[music_manager.current_track]
@@ -97,7 +106,7 @@
         var track = music_manager.playlist[music_manager.current_track]
 
         if(active_port && track.element_id)
-            active_port.postMessage({method:"loading", element_id:track.element_id})
+            postBroadcastMessage({method:"loading", element_id:track.element_id, track: music_manager.current_track})
     }, true)
 
     
@@ -125,6 +134,24 @@
                 chrome.browserAction.setBadgeText({text:""})
             }
         }
+
+        state = {
+            paused: music_manager.audio.paused,
+            duration: music_manager.audio.duration,
+            played: music_manager.audio.currentTime,
+            volume: music_manager.audio.volume
+        };
+
+        try {
+            state.buffered = music_manager.audio.buffered.end();
+        } catch(e) {
+            state.buffered = 0;
+        }
+
+        postBroadcastMessage({
+            message:'updateState',
+            state: state
+        });
 
         setTimeout(updateTime, 1000)
     }
@@ -163,8 +190,6 @@
                         
                         chrome.tabs.update(port.tab.id, {url:chrome.extension.getURL("options.html")})
                     })
-
-
                 } else if(msg.method == "logout") {
                     scrobbler._username = null
                     scrobbler._session_key = null
@@ -207,7 +232,20 @@
                     music_manager.playNextTrack(true);
                 } else if(msg.method == "previousTrack") {
                     music_manager.playNextTrack(true, true);
-                }
+                } else if(msg.method == "getPlaylist"){
+                    port.postMessage({
+                        method: "loadPlaylist", 
+                        playlist: music_manager.playlist, 
+                        current_track: music_manager.current_track,
+                        state: {
+                            paused: music_manager.audio.paused,
+                            duration: music_manager.audio.duration,
+                            played: music_manager.audio.currentTime,
+                            buffered: music_manager.audio.buffered.end(),
+                            volume: music_manager.audio.volume
+                        }
+                    });
+                }                    
             })
 
             port.onDisconnect.addListener(function(msg){

@@ -1,0 +1,420 @@
+/********** Utils **********/
+
+@font-face {
+  font-family: "Lucida Grande My";  
+  src: url("../images/popup/lg.ttf");
+}
+
+@font-face {
+  font-family: "Lucida Grande Bold";  
+  src: local("Lucida Grande Bold"), url("../images/popup/lg_b.ttf");
+}
+
+
+* { 
+    margin:0; 
+    padding:0; 
+    font-size: 12px;
+    font-family: "Lucida Grande My", Lucida, Verdana, sans-serif;
+    outline: none;
+}
+
+img { border: 0 }
+
+table { border: 0px; border-collapse: collapse;  }
+table td { padding: 0px; }
+
+.dbg_r { border: 1px solid red; }
+.dbg_g { border: 1px solid green; }
+.dbg_b { border: 1px solid black; }
+
+.hidden { display: none; } 
+
+.br_8 {
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px
+}
+
+.br_3 {
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px
+}
+
+.box_shadow {
+    -webkit-box-shadow: #777 0px 4px 10px;
+    -moz-box-shadow: #777 0px 4px 10px;
+    box-shadow: #777 0px 4px 10px;
+}
+
+.box_shadow_s {
+    -webkit-box-shadow: #777 0px 2px 5px;
+    -moz-box-shadow: #777 0px 2px 5px;
+    box-shadow: #777 0px 2px 5px;
+}
+
+.linear_grad {
+    background:-webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0, rgb(240,240,240)),
+        color-stop(1, rgb(255,255,255))
+    );
+
+    background:-moz-linear-gradient(
+        center bottom, 
+        rgb(240,240,240), 
+        rgb(255,255,255)
+    ); 
+}
+
+.clear { clear: both; line-height: 1px; font-size: 1px; }
+
+.align_right { text-align: right; }
+
+a.button {
+    display: inline-block;
+    width:20px;
+    height:20px;
+    text-indent:-9999px; /* don't show link text */
+    overflow:hidden; /* don't draw inner link text */
+    vertical-align:middle;
+    cursor: pointer;
+    
+    background-repeat: no-repeat;
+}
+
+/*********** Interface **********/
+
+#wrapper {
+    height: 100%;
+    min-height: 300px;
+    width: 468px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    position: relative;
+
+    border: 1px solid #bebebe;
+
+    background: url(../images/popup/playlist_bg.png) top left;
+
+    overflow: hidden;
+}
+
+/*********** Header ***************/
+#header {
+    height: 36px;
+    background: #444;
+
+    border-top: 1px solid black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+
+#header .container .control { 
+    float: left; 
+    height: 24px;
+    padding: 5px 5px;
+}
+
+#header .container {
+    height: 34px;
+
+    background: url(../images/popup/header_bg.png);
+
+    border-top: 1px solid #484848;
+    border-right: 1px solid #484848;
+    border-left: 1px solid #484848;
+}
+
+#header .play { margin-left: 5px; }
+
+#header .play .button {
+    background-image:url(../images/popup/play.png);
+}
+
+#header .next .button {
+    background-image:url(../images/popup/next.png);
+}
+
+#header .control.timeline {
+    padding-top: 11px;
+    margin-right: 40px;
+}
+
+#header .timeline .outer {
+    width: 282px;
+    height: 9px;
+    background:url(../images/popup/timeline_bg.png) center left repeat-x;
+
+    border-bottom: 1px solid #353535;
+    
+    position: relative;
+
+    cursor: pointer;
+}
+
+#header .timeline .outer .inner {
+    position: absolute;
+    top: 0px;
+    left: 1px;
+    z-index: 2;
+
+    height: 7px;
+    border: 1px solid #1f1f1f;
+    
+    background:url(../images/popup/timeline_inner_bg.png) center left no-repeat;
+    background-position: 0px 0px;
+
+    -webkit-border-top-left-radius: 7px;
+    -webkit-border-bottom-left-radius: 7px;
+    -moz-border-radius-topleft: 7px;
+    -moz-border-radius-bottomleft: 7px;
+    border-top-left-radius: 7px;
+    border-bottom-left-radius: 7px; 
+}
+
+#header .timeline .outer .progress {
+    position: absolute;
+    top:0px;
+    left: 1px;
+    z-index: 1;
+    
+    height: 7px;
+    border-top: 1px solid black;
+    border-bottom: 1px solid #181818;
+    
+    background:url(../images/popup/timeline_progress_bg.png) center left no-repeat;
+
+    border-radius: 7px;
+    -webkit-border-radius: 7px;
+    -moz-border-radius: 7px;
+}
+
+#header .timeline .time {
+    position: absolute;
+    top: -2px;    
+    right: -33px;
+
+    color: white;
+    font-size: 11px;
+
+    cursor: default;
+
+    text-shadow: #000 0 -1px 0;
+}
+
+#header .volume .button {
+    background-image:url(../images/popup/volume.png);
+}
+
+#header .search .button {    
+    background-image:url(../images/popup/search.png);
+}
+/*********** Current Song *********/
+
+#current_song {
+    height: 67px;
+    background: #ccc;
+    
+    background: url(../images/popup/cur_song_bg.png) top left;
+}
+
+#current_song .container { padding: 10px; }
+#current_song .container div { float: left; }
+
+#current_song .love_btn { padding: 15px 10px; }
+#current_song .love_btn .button { 
+    background-image: url(../images/popup/love_btn.png);
+}
+
+#current_song .info { padding: 7px 0px; }
+#current_song .info a { 
+    font-size: 12px; 
+    text-shadow: rgba(255,255,255,0.6) 0 1px 0;
+    cursor: pointer; 
+    text-decoration: none;
+}
+
+#current_song .info a:hover { 
+    text-decoration: underline;
+}
+
+#current_song .info .song { 
+    display: block;
+    font-weight: bold;
+    font-family: "Lucida Grande Bold";  
+    line-height: 17px;
+}
+
+#current_song .info .album { 
+    font-size: 11px;
+}
+
+#current_song .info .dash {
+    padding: 0px 3px;
+}
+
+#current_song .album_img { 
+    position: relative; 
+    margin-left: 5px;
+    top: -2px;
+}
+
+#current_song .album_img img {
+    height: 50px;
+    width: 50px;    
+}
+
+#current_song .album_img .jewelcase {
+    position: absolute;
+    top: -1px;
+    left: -5px;
+
+    background: url(../images/popup/jewelcase.png) no-repeat;
+    background-size: 96%;
+
+    width: 60px;    
+    height: 54px;
+}
+
+/*********** Playlist *************/
+
+#playlist { 
+    padding-top: 5px; 
+    margin-bottom: 25px; 
+    
+    height: 450px;
+    overflow: auto;
+}
+
+#playlist table { width: 100%; }
+
+#playlist tr.big td { padding-top: 10px; }
+#playlist tr td.last { padding-bottom: 10px; }
+
+#playlist .artist_td { width: 192px; vertical-align: top; }
+#playlist .track_td { vertical-align: top; }
+
+#playlist .artist {
+    padding: 3px 17px;
+    
+    text-align: right;
+
+    cursor: default;
+}
+
+#playlist .artist span { 
+    display: inline-block;
+    font-size: 11px; 
+    
+    width: 157px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#playlist .artist.big img { width: 38px; height: 38px; }
+
+#playlist .artist.big .image.container { padding-bottom: 0px; padding-top: 3px; }
+
+#playlist .track {
+    display: inline-block;
+    width: 210px;
+    text-align: left;
+    font-family: "Lucida Grande Bold";  
+    font-size: 11px !important;
+    text-shadow: #fff 0 1px 0;
+    
+    padding: 6px 17px;    
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    cursor: pointer;
+}
+
+#playlist .track { font-size: 11px; }
+
+#playlist .track_td .container { position: relative; }
+
+#playlist .track_td.playing .container, #playlist .track_td .container:hover {
+    background:url(../images/popup/playing_track_bg.png);
+    background-repeat: repeat-x;
+}
+
+#playlist .track_td.playing .container .track, #playlist .track_td .container:hover .track {
+    color: #fff;
+    text-shadow: rgba(0,29,84,0.3) 0 1px 0;    
+}
+
+#playlist .track_td .controls {
+    position: absolute;
+    right: 15px;
+    top: 2px;
+    display: none;
+
+    cursor: default;
+}
+
+#playlist .track_td.playing .container .controls, #playlist .track_td .container:hover .controls { display: block; }
+
+#playlist .track_td .button {
+    width: 16px;    
+    height: 16px;    
+}
+
+#playlist .track_td .play { background-image:url(../images/popup/play_pl.png); }
+
+#playlist .track_td .love { background-image:url(../images/popup/love_pl.png); }
+
+
+/********* Footer *************/
+
+#footer {
+    background: url(../images/popup/footer_bg.png) top left;
+
+    width: 100%;
+    height: 20px;
+
+    position: absolute;
+
+    bottom: 0px;
+    left: 0px;
+
+    padding: 2px 0px;
+}
+
+#footer .left { margin-left: 10px; }
+
+#footer .left .button { padding-right: 10px; }
+
+#footer .left .shuffle {
+    background-image:url(../images/popup/shuffle.png);
+}
+
+#footer .left .repeat {
+    background-image:url(../images/popup/repeat.png);
+}
+
+#footer .right {
+    position: absolute;
+    right: 10px;
+    top: 2px;
+}
+
+#footer .right .menu {
+    background-image:url(../images/popup/menu.png);
+}
+
+/************* Scrollbar ***************/
+.jspVerticalBar
+{
+	right: -20px;
+}

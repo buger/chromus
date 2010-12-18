@@ -122,7 +122,6 @@ var VK = {
         [102813567, 1985491, 'UjgLqfMPgc'], //ivaninvanov1@mail.ru
         [102815638, 1985494, 'vI7EmQNdS9'],
         [102819736, 1985507, '3V0H9Y7zo9']
-
     ],
 
     getApiData: function(){
@@ -144,6 +143,10 @@ var VK = {
         var data = 'api_id='+api[1]+'&method=audio.search&format=json&sig='+md5hash+'&test_mode=1&count=10&q='+encodeURIComponent(track)
 
         console.log("Search url:", url+'?'+data)
+
+        xhrRequest("http://chromusapp.appspot.com/sign_data", "POST", "track="+encodeURIComponent(artist+song), function(xhr){
+            console.log(xhr.responseText);
+        })        
 
         xhrRequest(url, "GET", data, function(xhr){
             // Too many requests and now we banned for some time
@@ -254,7 +257,8 @@ var VK = {
             this._testmodeSearch(artist, song, duration, callback)
         else
             this._rawSearch(artist, song, duration, callback)
-        
+
+      
         console.log("Setting search method to null");
         this.search_method = undefined;
     }

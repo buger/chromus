@@ -2,6 +2,7 @@ var qs = document.createElement('div');
 qs.id = 'cmp_quick_search_results';
 qs.className = 'cmp_quick_search triangle-border top';
 document.body.appendChild(qs);
+qs.style.display = 'none';
 
 port.onMessage.addListener(function(msg){
     console.log("Received message:", msg)

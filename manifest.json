@@ -10,7 +10,7 @@
    "browser_action": {
      "default_icon": "chromus_logo.png", 
      "default_title": "Chromus",      
-     "popup": "popup.html"        
+     "popup": "new_popup.html"        
    },
    "content_scripts": [{
       "css": [ "css/mp3_player_button.css", "css/style.css" ],

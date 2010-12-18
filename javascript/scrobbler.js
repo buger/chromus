@@ -458,3 +458,21 @@ Scrobbler.search = function(search_text, callback){
     }.bind(this)
   )
 }
+
+Scrobbler.getImage = function(data){
+    var method_prefix = "";
+    var params = [];
+
+    params.push("artist="+encodeURIComponent(data.artist));
+
+    if(data.album){
+        method_prefix = "album";
+        params.push("album="+encodeURIComponent(data.album));
+    } else {
+        method_prefix = "artist";
+    }
+
+    var url = "http://ws.audioscrobbler.com/2.0/?api_key=ceec2bb03d4c5929f0d6667fc266dc75&method="+method_prefix+".getImageRedirect&size=mediumsquare&"+params.join('&');
+
+    return url
+}
