@@ -391,6 +391,7 @@ Scrobbler.search = function(search_text, callback){
       var image;
       var attrs;
       var css_class;
+      var result = [];
 
       for (i in arr) {
         if(i > 4)
@@ -431,30 +432,29 @@ Scrobbler.search = function(search_text, callback){
         if (title == "")
           continue;     
 
-        if (!image){
-          if (arr[i].image)
-            image = "http://userserve-ak.last.fm/serve/34s/"+arr[i].image;
-          else if (arr[i].restype == LASTFM_RESTYPE.Album)
-            image = "http://ws.audioscrobbler.com/2.0/?api_key=ceec2bb03d4c5929f0d6667fc266dc75&artist="+arr[i].artist+"&album="+arr[i].album+"&method=album.getImageRedirect&size=smallsquare"
-          else if (arr[i].restype == LASTFM_RESTYPE.Artist || arr[i].restype == LASTFM_RESTYPE.Track)
-            image = "http://ws.audioscrobbler.com/2.0/?api_key=ceec2bb03d4c5929f0d6667fc266dc75&artist="+arr[i].artist+"&method=artist.getImageRedirect&size=smallsquare"
-        }
+        if (arr[i].image)
+            arr[i].image = "http://userserve-ak.last.fm/serve/64s/"+arr[i].image;
+        else
+            arr[i].image = Scrobbler.getImage({artist: arr[i].artist, album: arr[i].album});
+        
 
         var link_id = Math.floor(Math.random()*9999999999);
         var play_link = "<a href=\"javascript:;\" target='_blank' class='sm2_button' title='Play song' id='ex_button_"+link_id+"' >"+title+"</a>"
 
         html += "<li class='lfm_restype_"+arr[i].restype+" with_vk_search' data-index-number='"+link_id+"'>";
         html += "  <div class='ex_container "+css_class+"' data-index-number='0' "+attrs+">";
-        html += "    <span class='img'><img src='"+image+"' width='34'/></span>";
+        html += "    <span class='img'><img src='"+arr[i].image+"' width='34'/></span>";
         html += "    <span class='play_link'>"+play_link+"</span>";
         html += "    <span class='title'><a href=\"http://last.fm/"+href+"\" target='_blank'>"+title+"</a></span>";
         html += "  </div>";
         html += "</li>";
+
+        result.push(arr[i]);
       }
 
       html = "<ul>"+html+"</ul>";
   
-      callback({html:html, results:arr})
+      callback({html:html, result:result})
     }.bind(this)
   )
 }
@@ -463,11 +463,11 @@ Scrobbler.getImage = function(data){
     var method_prefix = "";
     var params = [];
 
-    params.push("artist="+encodeURIComponent(data.artist));
+    params.push("artist="+encodeURIComponent(data.artist.replaceEntities()));
 
     if(data.album){
         method_prefix = "album";
-        params.push("album="+encodeURIComponent(data.album));
+        params.push("album="+encodeURIComponent(data.album.replaceEntities()));
     } else {
         method_prefix = "artist";
     }

@@ -351,6 +351,7 @@ MusicManager.prototype.play = function(track_info){
                 this.audio.playOrLoad()
             } else {
                 this.showNotification();
+
                 this.audio.playOrLoad(track_info.file_url);
             }
             
@@ -359,7 +360,9 @@ MusicManager.prototype.play = function(track_info){
             this.fireEvent("onLoading")
         }.bind(this)
 
-        if(!this.playlist[track_info.index].info){
+        if(!this.playlist[track_info.index].info){            
+            this.createAudio();
+
             this.updateTrackInfo(track_info.index, function(){
                 play_or_pause();
             }.bind(this))
@@ -379,6 +382,7 @@ MusicManager.prototype.play = function(track_info){
 
             this.fireEvent("onPlay")
         } else {
+            this.createAudio();
             this.searchTrack(track_info.index)
             
             _gaq.push(['_trackEvent', 'music_manager', 'play', track_info.artist+'-'+track_info.song]);
@@ -538,4 +542,29 @@ MusicManager.prototype.ban = function(){
 
     if(track)
         this.scrobbler.banTrack(track.artist, track.song)
+}
+
+
+MusicManager.prototype.getState = function(){
+    var state ={
+        paused: music_manager.audio.paused,
+        volume: music_manager.audio.volume
+    };
+    
+    if(this.current_track != undefined){
+        state.duration = this.audio.duration;
+        state.played = this.audio.currentTime;
+        
+        try {
+            state.buffered = this.audio.buffered.end();            
+        } catch(e){
+            state.buffered = 0;    
+        }
+    } else {
+        state.duration = 0;
+        state.played = 0;
+        state.buffered = 0;
+    }
+
+    return state;
 }

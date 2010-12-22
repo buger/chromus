@@ -15,43 +15,6 @@ if (!document.body.className.match(/cmp_initialized/)){
           $(current_playing).removeClass("playing paused loading")
   }
 
-  function getTrackInfo(button){
-      if (button.getAttribute('data-media-type') == 'raw-file'){
-        return {
-          file_url: button.getAttribute('data-url'),
-          song: button.innerHTML.stripHTML(),
-          element_id: button.id,
-          index: 0
-        }
-      }
-
-      var container = findParent(button, "ex_container")
-      
-      var streamable = false
-
-      if(container.className.match('fdl'))
-          streamable = 'free'
-      else if(container.className.match('streamable'))
-          streamable = true
-
-      var track_info = {
-          artist:     container.getAttribute('data-artist'),
-          song:       container.getAttribute('data-song'),
-          album:      container.getAttribute('data-album'),
-          track_id:   container.getAttribute('data-track-id'),
-          index:      parseInt(container.getAttribute('data-index-number')),
-          
-          element_id: button.id,
-          streamable: streamable
-      }
-
-      for(key in track_info)
-          if(track_info[key] == undefined) 
-              delete track_info[key]
-      
-      return track_info
-  }
-
 
   var tracks_cache = {}
 

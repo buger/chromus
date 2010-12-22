@@ -135,22 +135,9 @@
             }
         }
 
-        state = {
-            paused: music_manager.audio.paused,
-            duration: music_manager.audio.duration,
-            played: music_manager.audio.currentTime,
-            volume: music_manager.audio.volume
-        };
-
-        try {
-            state.buffered = music_manager.audio.buffered.end();
-        } catch(e) {
-            state.buffered = 0;
-        }
-
         postBroadcastMessage({
-            message:'updateState',
-            state: state
+            method:'updateState',
+            state: music_manager.getState()            
         });
 
         setTimeout(updateTime, 1000)
@@ -179,73 +166,105 @@
 
                 _gaq.push(['_trackEvent', 'msgReceived', msg.method]);
 
-                if(msg.method == "auth_token"){
-                    scrobbler.getSession(msg.token, function(response){
-                        console.log("Getting session:", response)
+                switch(msg.method){
+                    case "auth_token":
+                        scrobbler.getSession(msg.token, function(response){
+                            console.log("Getting session:", response)
 
-                        if(response.session){
-                            window.localStorage['lastfm_session'] = response.session
-                            window.localStorage['lastfm_username'] = response.username
+                            if(response.session){
+                                window.localStorage['lastfm_session'] = response.session
+                                window.localStorage['lastfm_username'] = response.username
+                            }
+                            
+                            chrome.tabs.update(port.tab.id, {url:chrome.extension.getURL("options.html")})
+                        });
+
+                        break;                        
+
+                    case "logout": 
+                        scrobbler._username = null;
+                        scrobbler._session_key = null;
+
+                        break;                    
+
+                    case "pause": 
+                        music_manager.pause();
+
+                        break;
+
+                    case "play":
+                        if(active_port && active_port != port && port.name != "popup")
+                            active_port.postMessage({method:"stop"})                    
+    
+                        if(port.name != "popup")
+                            active_port = port
+
+                        if(msg.playlist) {
+                            music_manager.playlist = msg.playlist
+                            delete music_manager.current_track
                         }
-                        
-                        chrome.tabs.update(port.tab.id, {url:chrome.extension.getURL("options.html")})
-                    })
-                } else if(msg.method == "logout") {
-                    scrobbler._username = null
-                    scrobbler._session_key = null
 
-                } else if(msg.method == "pause") {
-                    music_manager.pause()
+                        if(typeof(msg.track) == "number")
+                            msg.track = music_manager.playlist[msg.track];
+
+                        music_manager.play(msg.track)
+
+                        break;
+
+                    case "add_to_playlist":
+                        var track = msg.track;
+                        track.index = music_manager.playlist.length;
+
+                        music_manager.playlist.push(track);
+                        music_manager.updateID3Info(music_manager.playlist.length-1);
+
+                        break;
+        
+                    case "search":
+                        Scrobbler.search(msg.search_text, function(response){                  
+                            port.postMessage({method:"searchResult", html:response.html});
+                        });
+
+                        break;
+
+                    case "togglePlaying":
+                        if(music_manager.audio.paused && music_manager.current_track) {
+                            music_manager.audio.playOrLoad();
+                        } else {
+                            music_manager.audio.pause();
+                        }
+
+                        break;
+
+                    case "nextTrack": 
+                        music_manager.playNextTrack(true);
+
+                        break;
                     
-                } else if(msg.method == "play") {
-                    if(active_port && active_port != port && port.name != "popup")
-                        active_port.postMessage({method:"stop"})                    
+                    case "previousTrack":
+                        music_manager.playNextTrack(true, true);
 
-                    if(port.name != "popup")
-                        active_port = port
+                        break;
 
-                    if(msg.playlist) {
-                        animateFlip()
-                        music_manager.playlist = msg.playlist
-                        delete music_manager.current_track
-                    }
+                    case "getPlaylist":
+                        port.postMessage({
+                            method: "loadPlaylist", 
+                            playlist: music_manager.playlist, 
+                            current_track: music_manager.current_track,
+                            state: music_manager.getState()
+                        });
 
-                    music_manager.play(msg.track)
-                } else if(msg.method == "add_to_playlist") {
-                   var track = msg.track;
-                   track.index = music_manager.playlist.length;
-                   music_manager.playlist.push(track);
-                   music_manager.updateID3Info(music_manager.playlist.length-1);
+                        break;
+            
+                    case "setVolume":
+                        music_manager.setVolume(msg.volume);
 
-                } else if(msg.method == "search") {
-                  Scrobbler.search(msg.search_text, function(response){                  
-                    port.postMessage({method:"searchResult", html:response.html});
-                  })
+                        break;
 
-                } else if(msg.method == "togglePlaying") {
-                    if(music_manager.audio.paused && music_manager.current_track) {
-                        music_manager.audio.playOrLoad();
-                    } else {
-                        music_manager.audio.pause();
-                    }
-                } else if(msg.method == "nextTrack") {
-                    music_manager.playNextTrack(true);
-                } else if(msg.method == "previousTrack") {
-                    music_manager.playNextTrack(true, true);
-                } else if(msg.method == "getPlaylist"){
-                    port.postMessage({
-                        method: "loadPlaylist", 
-                        playlist: music_manager.playlist, 
-                        current_track: music_manager.current_track,
-                        state: {
-                            paused: music_manager.audio.paused,
-                            duration: music_manager.audio.duration,
-                            played: music_manager.audio.currentTime,
-                            buffered: music_manager.audio.buffered.end(),
-                            volume: music_manager.audio.volume
-                        }
-                    });
-                }                    
+                    default:
+                        console.log("Unknown message", msg);
+                        break;
+                }                  
             })
 
             port.onDisconnect.addListener(function(msg){
@@ -300,7 +319,8 @@
     chrome.tabs.onSelectionChanged.addListener(function(tab_id, select_info){      
         console.log("Tab selected", tab_id, select_info);
     })
-    </script>
+</script>
+
     </head>
     <body onload="onLoad()">
       <div id="vk_search"></div>

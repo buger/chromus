@@ -113,9 +113,6 @@ ul.artistRecs span.playButton {
     display: none;
 }
 
-.ex_artist a.sm2_button { background-color:#ccc; }
-.ex_album a.sm2_button { background-color:#ccc; }
-
 ul.artistsWithInfo a.sm2_button {
     position: absolute;
     left: 105px;

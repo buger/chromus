@@ -3,6 +3,7 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
+        <link rel="stylesheet" href="css/mp3_player_button.css?rnd=9" type="text/css">
         <link rel="stylesheet" href="css/new_popup.css?rnd=9" type="text/css">
         <link rel="stylesheet" href="css/jquery.jscrollpane.css?rnd=1" type="text/css">
 
@@ -10,10 +11,12 @@
         <script src="javascript/jquery.tmpl.min.js"></script>
         <script src="javascript/jquery.mousewheel.js"></script>
         <script src="javascript/jquery.jscrollpane.min.js"></script>
+        <script src="javascript/jquery.disable.text.select.pack.js"></script>
         
         <script src="javascript/utils.js"></script>        
         <script src="javascript/scrobbler.js"></script>
         <script src="javascript/new_popup.js"></script>
+        <script src="javascript/enhanced_play_button.js"></script>
 
         <script id="playlist_tmpl" type="text/x-jquery-tmpl">
         <table>
@@ -29,7 +32,7 @@
                     </div>
                 </td>           
                 {{/if}}
-                <td class="track_td {{if $value.last_row}}last{{/if}}">
+                <td class="track_td {{if $value.last_row}}last{{/if}}" data-index='${$index}'>
                     <div class="container">
                         <span class="track">${$value.song}</span>
                         <div class="controls">
@@ -62,19 +65,31 @@
                     </div>
                     <div class="control volume">
                         <a class="button"></a>
+                        <div class="volume_bar" style="display: none">
+                            <div class="bar_bg br_8">
+                                <div class="level"></div>
+                                <div class="bar br_8"></div>
+                            </div>
+                            <div class="handler"></div>
+                        </div>                        
                     </div>
                     <div class="control search">
                         <a class="button"></a>
                     </div>
+                    <div class="search_bar">
+                        <input type="search" class="text br_8" />
+                        <div class="result">
+                        </div>
+                    </div>                    
                 </div>
             </div>
             <div id="current_song">
-                <div class="container">
+                <div class="container" style="display: none;">
                     <div class="album_img"><span class="jewelcase"></span><img /></div>
                     <div class="love_btn"><a class='button'></a></div>
                     <div class="info">
                         <a class="song"></a>
-                        <a class="artist"></a><span class="dash">-</span><a class="album"></a>
+                        <a class="artist"></a><span class="dash" style="display:none">-</span><a class="album"></a>
                     </div>
                 </div>
             </div>
@@ -88,6 +103,7 @@
                     <a class="button menu"></a>
                 </div>
             </div>
+            
         </div>
     </body>
 </html>

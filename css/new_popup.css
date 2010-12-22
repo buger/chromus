@@ -208,13 +208,84 @@ a.button {
     text-shadow: #000 0 -1px 0;
 }
 
+#header .volume { position: relative; }
+
 #header .volume .button {
     background-image:url(../images/popup/volume.png);
+}
+
+#header .volume .volume_bar {
+    position: absolute;
+    top: 34px;
+    left: 0px;
+    width: 10px;
+    height: 100px;
+    padding: 10px;
+    padding-top: 5px;
+
+    background: #111;
+
+    cursor: pointer;
+
+    z-index: 1;
+    
+    overflow: hidden;
+}
+
+#header .volume .bar_bg {
+    background: #333;
+    height: 100%;
+    padding: 0;
+
+    vertical-align: bottom;
+
+    overflow: hidden;
+}
+
+#header .volume .bar {
+    background: blue;
+    height: 300px;
 }
 
 #header .search .button {    
     background-image:url(../images/popup/search.png);
 }
+
+#header .search_bar {
+    position: absolute;
+    left: 0px;
+    top: 1px;
+    width: 419px;
+    height: 24px;
+    
+    background: url(../images/popup/header_bg.png);
+
+    z-index: 2;
+
+    padding: 5px;
+}
+
+#header .search_bar .text {
+    width: 100%;
+    border: 1px solid #ccc;
+    font-size: 13px;
+    padding: 3px 6px;
+    color: #333;
+}
+
+#header .search_bar .result {
+    position: absolute;
+    top: 36px;
+    left: -1px;
+    width: 468px;
+    height: 40px;
+
+    background: white;
+    border: 1px solid #ccc;
+
+    z-index: 3;
+}
+
 /*********** Current Song *********/
 
 #current_song {

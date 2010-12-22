@@ -1,12 +1,8 @@
-port.onMessage.addListener(function(msg){
-    if(msg.method == "searchResult") {
-    
-    }
-})
-
-
 function showButtons(link){   
     var track_info = getTrackInfo(link);
+
+    console.log('track_info', track_info);
+
     var container = findParent(link, 'ex_container');
 
     var pos = $(link).offset();
@@ -18,8 +14,8 @@ function showButtons(link){
         add_to_queue.href = "javascript:;";
         add_to_queue.className = 'chromus_button add_to_queue';    
         add_to_queue.style.position = 'absolute';
-        add_to_queue.style.top = pos.top + 'px';
-        add_to_queue.style.left = pos.left + 15 + 'px';
+        add_to_queue.style.top = pos.top + 1+ 'px';
+        add_to_queue.style.left = pos.left + 18 + 'px';
         add_to_queue.style.zIndex = 1000;
         add_to_queue.addEventListener('click', function(){
             port.postMessage({method:'add_to_playlist', track:track_info})
@@ -51,7 +47,6 @@ function showButtons(link){
 
         }, 500)
     };
-
 
     for(i in buttons){
         buttons[i].addEventListener("mouseout", mouseout_func, false);
