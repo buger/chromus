@@ -16,6 +16,7 @@
       "css": [ "css/mp3_player_button.css", "css/style.css" ],
       "js": [
           "javascript/jquery.min.js", 
+          "javascript/browser_api.js", 
           "javascript/scrobbler.js", 
           "javascript/utils.js", 
           "javascript/manager.js", 
@@ -30,6 +31,7 @@
      "css": ["css/mp3_player_button.css", "css/style.css", "css/baloon.css"],
      "js": [
          "javascript/jquery.min.js", 
+         "javascript/browser_api.js", 
          "javascript/utils.js", 
          "javascript/content_script.js", 
          "javascript/quick_search.js", 

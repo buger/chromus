@@ -15,6 +15,7 @@
         
         <script src="javascript/utils.js"></script>        
         <script src="javascript/scrobbler.js"></script>
+        <script src="javascript/browser_api.js"></script>
         <script src="javascript/new_popup.js"></script>
         <script src="javascript/enhanced_play_button.js"></script>
 
@@ -76,24 +77,25 @@
                     <div class="control search">
                         <a class="button"></a>
                     </div>
-                    <div class="search_bar">
+                    <div class="search_bar" style="display: none">
                         <input type="search" class="text br_8" />
-                        <div class="result">
-                        </div>
+                        <div class="result"></div>
                     </div>                    
                 </div>
             </div>
             <div id="current_song">
                 <div class="container" style="display: none;">
+                    <div class="playing" title="Currently playing"></div>
                     <div class="album_img"><span class="jewelcase"></span><img /></div>
                     <div class="love_btn"><a class='button'></a></div>
                     <div class="info">
                         <a class="song"></a>
                         <a class="artist"></a><span class="dash" style="display:none">-</span><a class="album"></a>
-                    </div>
+                    </div>                
                 </div>
+                <div class="loader"></div>            
             </div>
-            <div id="playlist"></div>
+            <div id="playlist" style="visibility: hidden"></div>
             <div id="footer">
                 <div class="left">
                     <a class="button shuffle"></a>

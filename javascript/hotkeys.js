@@ -1,16 +1,20 @@
 document.addEventListener("keydown", function(evt){
-    if(evt.altKey){
-        console.log("Keydown")
+    if (evt.altKey) {
 
-        switch(evt.keyCode){
+        switch(evt.keyCode) {
             case 80: // Ctrl + P
-                port.postMessage({method:'togglePlaying'}); 
+                browser.postMessage({method:'togglePlaying'}); 
                 break;
+
             case 75: // Ctrl + K
-                port.postMessage({method:'nextTrack'});
+                browser.postMessage({method:'nextTrack'});
                 break;
+
             case 74: // Ctrl + J
-                port.postMessage({method:'previousTrack'});
+                browser.postMessage({method:'previousTrack'});
+                break;
+
+            default:
                 break;
         }
     }

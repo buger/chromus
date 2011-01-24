@@ -4,10 +4,10 @@ qs.className = 'cmp_quick_search triangle-border top';
 document.body.appendChild(qs);
 qs.style.display = 'none';
 
-port.onMessage.addListener(function(msg){
-    console.log("Received message:", msg)
+browser.addMessageListener(function(msg, source) {
+    if(msg.method == "searchResult") {        
+        console.log("Script::Received searchResult response");
 
-    if(msg.method == "searchResult") {
         var selected_text = window.getSelection().toString();  
         try{
             var bounding_rect = window.getSelection().getRangeAt(0).getBoundingClientRect();
@@ -21,17 +21,17 @@ port.onMessage.addListener(function(msg){
 
       qs.style.top = bounding_rect.top + document.body.scrollTop + bounding_rect.height + 'px';
       qs.style.left = bounding_rect.left + document.body.scrollLeft - 20 + 'px';
-      qs.innerHTML = "Searching '" + selected_text + "'";
+    } else if (msg.method == "updateState") {
 
     } else {
-      console.log("Unknown message:", msg);
+        console.log("Unknown message:", msg);
     }
-})
+});
 
 var latest_search;
 
 document.addEventListener("mouseup", function(evt){
-  if (findParent(evt.target, 'cmp_quick_search'))
+  if (window.findParent(evt.target, 'cmp_quick_search'))
     return false;
 
   var selected_text = window.getSelection().toString();
@@ -50,6 +50,6 @@ document.addEventListener("mouseup", function(evt){
 
   latest_search = selected_text;
 
-  port.postMessage({method:'search', search_text: selected_text})
-})
+  browser.postMessage({method:'search', search_text: selected_text})
+}, false)
 

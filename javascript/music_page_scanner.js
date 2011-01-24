@@ -1,12 +1,3 @@
-port.onMessage.addListener(function(msg){
-    if(msg.method == "searchResult") {
-      qs.style.display = 'block';          
-      qs.innerHTML = msg.html;
-    } else {
-      console.log("Unknown message:", msg);
-    }
-})
-
 var found_links = document.querySelectorAll('a[href$=".mp3"]');
 var mp3_links = [];
 for(i in found_links){

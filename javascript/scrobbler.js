@@ -166,14 +166,14 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
     var server_url = "http://ws.audioscrobbler.com/2.0/"
 
     xhrRequest(server_url, http_method, query_string, function(xhr){
-        if(!xhr.responseXML){
-          try{
-              var response = JSON.parse(xhr.responseText)
-          } catch(e) {
-              var response = {error: 'Parsing error'}
-          }
+        if (xhr.responseXML && xhr.responseXML.documentElement) {
+            var response = xhr.responseXML;
         } else {
-          var response = xhr.responseXML
+            try{
+                var response = JSON.parse(xhr.responseText)
+            } catch(e) {
+                var response = {error: 'Parsing error'}
+            }
         }
 
         if(!xhr.responseXML && response.error || xhr.responseXML && xhr.responseText && xhr.status != 200){

@@ -1,11 +1,13 @@
-var manager
-if(!manager)
-  manager = {}
+if (!window.manager) {
+    var manager = {}
+} else {
+    var manager = window.manager;
+}
 
-if (!document.body.className.match(/cmp_initialized/)){
-  var port_initialized = false
-  var port
+var $ = window.jQuery;
 
+
+if (!document.body.className.match(/cmp_initialized/)) {
   document.body.className += " cmp_initialized";
 
   function stopCurrentTrack(){
@@ -25,10 +27,10 @@ if (!document.body.className.match(/cmp_initialized/)){
   **/
   function getPlaylist(button){
       if(button.getAttribute('data-media-type') == 'raw-file'){
-          return [getTrackInfo(button)] 
+          return [window.getTrackInfo(button)] 
       }
 
-      var container = findParent(button, 'with_vk_search')
+      var container = window.findParent(button, 'with_vk_search')
 
       var tracks = []
 
@@ -41,7 +43,7 @@ if (!document.body.className.match(/cmp_initialized/)){
           var buttons = container.querySelectorAll("a.sm2_button")
 
           for(var i=0; i<buttons.length; i++){
-              track = getTrackInfo(buttons[i])
+              track = window.getTrackInfo(buttons[i])
               track.index = i
               
               tracks.push(track)
@@ -70,66 +72,55 @@ if (!document.body.className.match(/cmp_initialized/)){
   }
 
 
-  /**
-      initializePort() 
+    browser.addMessageListener( function(msg, sender) {
+        switch (msg.method) {
+            case "stop":
+                stopCurrentTrack();
+                break;
 
-      Connecting to background page and initializing callback listener
-  **/
-  function initializePort(){
-      port = chrome.extension.connect({name: "page", reconnect:port_initialized})
+            case "loading":
+                var button = document.getElementById(msg.element_id)
+                if(button)
+                    $(button).removeClass("playing").addClass("loading");
 
-      port.onMessage.addListener(function(msg){
-          console.log("Received message:", msg);
-
-          if(msg.method == "setSettings") {
-              preparePage(msg.search_pattern, msg.external_audio_search)
-
-          } else if(msg.method == "stop") {
-              stopCurrentTrack()
-
-          } else if(msg.method == "loading") {
-              var button = document.getElementById(msg.element_id)
-              if(button)
-                  $(button).removeClass("playing").addClass("loading");
-
-          } else if(msg.method == "readyToPlay") {
-              console.log("stopping current track")
-              stopCurrentTrack()
-
-              var button = document.getElementById(msg.element_id)
-
-              console.log("button:", button)
+                break;
               
-              if(button)
-                  if(msg.error){
-                      button.className = "sm2_button disabled"
-                      if(msg.error == 'not_found')
-                          button.title = "Track not found"
-                      else if (msg.error == 'overload') {
-                          button.title = "Server overload. Try later."                    
-                          button.className = "sm2_button"
+            case "readyToPlay":
+                console.log("stopping current track");
+                stopCurrentTrack();
 
-                          showOverloadWindow()
-                      } else {
-                          button.title = msg.error
-                      }
-                  } else {
-                      stopCurrentTrack()
+                var button = document.getElementById(msg.element_id);
+
+                if (button) {
+                    if (msg.error) {
+                        button.className = "sm2_button disabled";
+
+                        if (msg.error == 'not_found') {
+                            button.title = "Track not found";
+                        } else if (msg.error == 'overload') {
+                            button.title = "Server overload. Try later.";
+                            button.className = "sm2_button";
+
+                            showOverloadWindow();
+                        } else {
+                            button.title = msg.error;
+                        }
+                    } else {
+                        stopCurrentTrack();
                       
-                      $(button).removeClass('loading paused').addClass("playing")
-                  }
-          } else {
-            console.log("Received unknown message:",msg)
-          }
-      })
+                        $(button).removeClass('loading paused').addClass("playing");
+                    }
+                }
 
-      port.onDisconnect.addListener(function(msg){
-          port = null
-      })
+                break;
 
-      port_initilized = false
-  }
-  initializePort()
+            case "updateState":
+                break;
+
+            default:
+                console.log("Received unknown message:",msg);
+        }
+    });
 
 
   /**
@@ -142,37 +133,41 @@ if (!document.body.className.match(/cmp_initialized/)){
       customEvent.initEvent('ex_play', true, true);
 
       if(manager.wrapMusicElements) {
-        manager.search_pattern = search_pattern
-        manager.wrapMusicElements(external_audio_search == "true")
+        manager.wrapMusicElements(false)
       }
   }
 
-  document.addEventListener('click', function(evt){
-      if(!port)
-          initializePort() 
+  preparePage();
 
+  console.log('Window browser object', window.browser);
+
+  document.addEventListener('click', function(evt){
       var target = evt.target
       
       if(target.className.match('sm2_button')){              
           if(target.className.match('disabled'))
-              return
+              return false;
 
-          var track_info = getTrackInfo(target)
+          var track_info = window.getTrackInfo(target)
 
-          if(target.className.match('playing')){
-              port.postMessage({method:'pause', track: track_info})
+          if (target.className.match('playing')) {
+              browser.postMessage({method:'pause', track: track_info})
               $(target).removeClass('playing').addClass("paused")
           } else {
-              if(!target.className.match('paused'))
+              if (!target.className.match('paused'))
                   stopCurrentTrack()                          
               
-              if(target.className.match('paused'))
-                  port.postMessage({method:'play', track: track_info})
-              else
-                  port.postMessage({method:'play', track: track_info, playlist: getPlaylist(target)})
+              if (target.className.match('paused')) {
+                  browser.postMessage({method:'play', track: track_info});
+              } else {
+                  browser.postMessage({method:'play', track: track_info, playlist: getPlaylist(target)});
+              }
 
               $(target).removeClass('playing paused').addClass("sm2_button loading");
           }
+
+          evt.stop();
+          evt.stopPropagation();
       }
   }, false)
 

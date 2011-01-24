@@ -85,7 +85,8 @@ WrapperManager.prototype.registerWrapper = function(css_expr, wrapper){
     this.registred_wrappers[css_expr] = wrapper    
 }    
 
-var manager = new WrapperManager()
+var manager = new WrapperManager();
+window.manager = manager;
 
 
 /**

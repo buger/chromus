@@ -1,9 +1,11 @@
+var $ = window.jQuery;
+
 function showButtons(link){   
-    var track_info = getTrackInfo(link);
+    var track_info = window.getTrackInfo(link);
 
     console.log('track_info', track_info);
 
-    var container = findParent(link, 'ex_container');
+    var container = window.findParent(link, 'ex_container');
 
     var pos = $(link).offset();
 
@@ -17,14 +19,18 @@ function showButtons(link){
         add_to_queue.style.top = pos.top + 1+ 'px';
         add_to_queue.style.left = pos.left + 18 + 'px';
         add_to_queue.style.zIndex = 1000;
-        add_to_queue.addEventListener('click', function(){
-            port.postMessage({method:'add_to_playlist', track:track_info})
+        add_to_queue.title = 'Add to playlist';
+        add_to_queue.addEventListener('click', function(evt){
+            evt.stop();
+            evt.stopPropagation();
+
+            browser.postMessage({method:'add_to_playlist', track:track_info})
         }, false)
         
         document.body.appendChild(add_to_queue);
 
         buttons.push(add_to_queue);
-    }            
+    }           
 
     $(link).addClass('buttons_shown');
 
@@ -35,20 +41,29 @@ function showButtons(link){
 
     var mouseout_func = function(e){        
         this.hide_timer = setTimeout(function(){
-            for(i in buttons){
+            for (var i=0; i<buttons.length; i++) {
+                if (!buttons[i]) {
+                    continue;
+                }
+
                 buttons[i].removeEventListener("mouseout", mouseout_func, false);
                 buttons[i].removeEventListener("mouseover", mouseover_func, false);
 
-                if(!buttons[i].className.match(/buttons_shown/))
+                if (!buttons[i].className.match(/buttons_shown/)) {
                     document.body.removeChild(buttons[i]);
-                else
+                } else {
                     $(link).removeClass('buttons_shown');
+                }
             }
 
         }, 500)
     };
 
-    for(i in buttons){
+    for (var i=0; i<buttons.length; i++) {
+        if (!buttons[i]) {
+            continue;
+        }
+
         buttons[i].addEventListener("mouseout", mouseout_func, false);
         buttons[i].addEventListener("mouseover", mouseover_func, false);
     }

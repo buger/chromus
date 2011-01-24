@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets">
+	<name>Chromus</name>
+	<description>Music player for your web-browser</description>
+  	<author href="buger.github.com" email="leonsbox@gmail.com">Leonid Bugaev</author>
+    <icon src="chromus_logo.png"/>
+    <content src="background.html"/>
+
+    <access origin="*" />
+</widget>

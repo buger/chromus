@@ -167,3 +167,6 @@ function getTrackInfo(button){
 }
 
 
+// Exporting functions for injected scripts in opera
+window.getTrackInfo = getTrackInfo;
+window.findParent = findParent;

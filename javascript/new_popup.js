@@ -3,7 +3,6 @@ var PlayerUI = {
     state: {}
 }
 
-
 PlayerUI.loadPlaylist = function(data){    
     var html = '';
     var merge_rows = 0;
@@ -30,6 +29,8 @@ PlayerUI.loadPlaylist = function(data){
         
     }
     
+    console.log("DATA:", document.getElementById('playlist_tmpl'));    
+
     playlist_tmpl.tmpl({playlist: data}).appendTo("#playlist");
 
     this.playlist = data;
@@ -53,45 +54,49 @@ PlayerUI.artistInLine = function(start_from, arr){
     return counter;
 }
 
-PlayerUI.setCurrentTrack = function(track_number){
+PlayerUI.setCurrentTrack = function(track_number, update_info){
     var track = this.playlist[track_number];
 
     this.current_track = track_number;
 
     $("#playlist .playing").removeClass("playing");
-    
-    var cur_song = $('#current_song');
 
-    if(track){
-        cur_song.find('.container').show();
-
+    if(track)
         $($("#playlist .track_td").get(track_number)).addClass("playing");
+    
+    
+    if(update_info){
+        var cur_song = $('#current_song');
 
-        var track_img =  cur_song.find('.album_img img').get(0);
-        track_img.src = Scrobbler.getImage({artist: track.artist, album: track.album});
+        if(track){
+            cur_song.find('.container').show();
 
-        cur_song.find('.info .song').html(track.song);
-        cur_song.find('.info .artist').html(track.artist);
-    } else {
-        cur_song.find('.container').hide();
+            var track_img =  cur_song.find('.album_img img').get(0);
+            track_img.src = Scrobbler.getImage({artist: track.artist, album: track.album});
+
+            cur_song.find('.info .song').html(track.song);
+            cur_song.find('.info .artist').html(track.artist);
+        } else {
+            cur_song.find('.container').hide();
+        }
+
+
+        if(track && track.album){
+            cur_song.find('.info .album').html(track.album);
+            cur_song.find('.info .album, .info .dash').show();
+        } else {
+            cur_song.find('.info .album, .info .dash').hide();
+        }    
+
+        cur_song.css({visibility:'visible'});
     }
-
-
-    if(track && track.album){
-        cur_song.find('.info .album').html(track.album);
-        cur_song.find('.info .album, .info .dash').show();
-    } else {
-        cur_song.find('.info .album, .info .dash').hide();
-    }    
-
-    cur_song.css({visibility:'visible'});
 
     this.setState({
         played: 0,
         buffered: 0,
         played: 0,
         volume: PlayerUI.state.volume
-    });
+    }); 
 }
 
 PlayerUI.setState = function(state){
@@ -120,15 +125,15 @@ PlayerUI.setState = function(state){
 
 
 PlayerUI.setVolume = function(level, send_message){
-    if(level > 1) level = 1;
+    if(level > 100) level = 100;
     if(level < 0) level = 0;
     
-    $('#header .volume .level').css({height:((1-level)*100)+'%'});
+    $('#header .volume .level').css({height:(100-level)+'%'});
     
     this.state.volume = level;
 
     if(send_message)
-        port.postMessage({method:'setVolume', volume: level})
+        browser.postMessage({method:'setVolume', volume: level})
 }
 
 
@@ -151,9 +156,9 @@ PlayerUI.initialize = function(){
     
 
     $('#header .volume_bar').click(function(e){
-        var level = (e.clientY - 40)/100;
+        var level = (e.clientY - 40);
 
-        level = 1 - level;
+        level = 100 - level;
         
         PlayerUI.setVolume(level, true);
     });
@@ -161,7 +166,7 @@ PlayerUI.initialize = function(){
     $('#header').mousewheel(function(e, delta){
         console.log('delta:', delta);
         
-        var level = PlayerUI.state.volume + delta/10;
+        var level = PlayerUI.state.volume + delta*10;
 
         PlayerUI.setVolume(level, true);
     });
@@ -178,19 +183,17 @@ PlayerUI.initialize = function(){
     });
 
     $(document).click(function(e){
-
-
         var target = $(e.target);
 
         if(target.hasClass('sm2_button'))
-            port.postMessage({
+            browser.postMessage({
                 method:'play',
                 track: getTrackInfo(e.target),
                 playlist: [getTrackInfo(e.target)]
             });
 
         else if(target.hasClass('add_to_queue'))
-            port.postMessage({
+            browser.postMessage({
                 method: 'add_to_playlist',
                 track: getTrackInfo(e.target)
             });
@@ -205,7 +208,7 @@ PlayerUI.initialize = function(){
     });
 
     $('#header .control.next').click(function(){
-        port.postMessage({method: 'nextTrack'});
+        browser.postMessage({method: 'nextTrack'});
 
         PlayerUI.setCurrentTrack(PlayerUI.current_track + 1);
     });
@@ -217,7 +220,7 @@ PlayerUI.initialize = function(){
             var index = target.parents('.track_td')[0].getAttribute('data-index');            
             index = parseInt(index);
 
-            port.postMessage({method:'play', track: index});
+            browser.postMessage({method:'play', track: index});
             
             PlayerUI.setCurrentTrack(index);
         }
@@ -240,32 +243,43 @@ PlayerUI.search = function(){
 }
 
 
-$(document).ready(function(){
-    PlayerUI.initialize();        
-})
-
-/***************** Initilizing Port *************************/
-var port = chrome.extension.connect({name: "popup"});
-
-port.onMessage.addListener(function(msg){
-    switch(msg.method){
+browser.addMessageListener(function(msg){
+    switch(msg.method){        
         case 'loadPlaylist':
-            console.log(msg);
+            console.log("Loading Playlist: ", msg);
 
-            PlayerUI.loadPlaylist(msg.playlist, msg.current_track);
-            PlayerUI.setCurrentTrack(msg.current_track);
-
-            PlayerUI.setState(msg.state);
+            PlayerUI.loadPlaylist(msg.playlist);            
+                        
+            if($("#playlist").data('jsp'))
+                $("#playlist").reinitialize();
+            else
+                $("#playlist").jScrollPane({
+                    maintainPosition: true
+                });    
             
-            $("#playlist").jScrollPane({
-                verticalDragMinHeight: 50,
-                verticalDragMaxHeight: 100
-            });    
+            // Timeout for scroll pane initialization
+            if(msg.current_track != undefined){
+                    PlayerUI.setCurrentTrack(msg.current_track, true);
+
+                    var scroll_to = $("#playlist tr").get(msg.current_track).offsetTop-60;
+                    $("#playlist").data('jsp').scrollToY(scroll_to);
+            }
+
+            if(msg.state != undefined)
+                PlayerUI.setState(msg.state);
+
+            $('#playlist').css({'visibility': 'visible'})
 
             break;
 
         case 'loading':
             PlayerUI.setCurrentTrack(msg.track);
+            break;
+
+        case 'play':
+            PlayerUI.playlist[msg.track] = msg.track_info;
+
+            PlayerUI.setCurrentTrack(msg.track, true);
             break;
 
         case 'updateState':
@@ -275,6 +289,16 @@ port.onMessage.addListener(function(msg){
         default:
             console.log('Unknown method:', msg);
     }
-})
+});
 
-port.postMessage({method:'getPlaylist'});
+$(document).ready(function(){
+    if (browser.isOpera) {
+        document.getElementById('playlist').style.marginBottom = '40px';
+        document.getElementById('playlist').style.height = '445px';
+        document.getElementById('wrapper').style.marginTop = '5px';
+    }
+
+    PlayerUI.initialize();        
+    
+    browser.postMessage({method:'getPlaylist'});
+});

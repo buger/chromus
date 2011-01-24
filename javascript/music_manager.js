@@ -1,20 +1,5 @@
 var _gaq = _gaq || [];
 
-Audio.prototype.playOrLoad = function(url){
-    if(url){
-        if(!url.match(/data\:audio/))
-          console.log("Playing url:", url);
-        else
-          console.log("Playling local file");
-
-        this.src = url
-        this.load()
-    }
-
-    this.play()
-}
-
-
 /**
     Class MusicManager
 **/
@@ -23,62 +8,110 @@ var MusicManager = function(scrobbler){
 
     this.scrobbler = scrobbler;
 
+    this.state = {
+        duration: 0,
+        played: 0,
+        buffered: 0,
+        paused: true,
+        finished: true
+    };
+
+    this.player_url = "http://chromusapp.appspot.com/";
+
     this.createAudio();
 
     this.dispatcher = new Audio();
 }
 
-MusicManager.prototype.createAudio = function(){
-    if(this.audio){
-        this.audio.removeEventListener('timeupdate', this.audio.tu_func);
-        this.audio.removeEventListener('canplaythrough', this.audio.cpt_func);
-        this.audio.removeEventListener('progress', this.audio.p_func);
+MusicManager.prototype.createAudio = function() {
+    console.log("Creating frame for audio player");
 
-        this.audio.pause();        
+    document.body.innerHTML += '<iframe id="player_frame" src="'+this.player_url+'sm2_iframe"></iframe>';
+    this.player_frame = document.getElementById('player_frame');
+    this.player_ready = false;
 
-        delete this.audio;
+    if (window.addEventListener){
+        window.addEventListener("message", this.listener.bind(this), false);
+    } else {
+        window.attachEvent("onmessage", this.listener.bind(this));
     }
-
-    this.audio = new Audio();
-
-    this.audio.cpt_func = this.onStartPlaying.bind(this);    
-    this.audio.addEventListener('canplaythrough', this.audio.cpt_func, true);
-
-    this.audio.tu_func = this.onTimeUpdate.bind(this);
-    this.audio.addEventListener('timeupdate', this.audio.tu_func, true);
-
-    this.audio.p_func = function(){ this.fireEvent('onProgress'); }.bind(this);
-    this.audio.addEventListener('progress', this.audio.p_func, true)
 }
 
+MusicManager.prototype.listener = function(evt) {
+    //console.log("Received message:", evt);    
+    var msg = JSON.parse(evt.data);
 
-/**
-    MusicManager#onTimeUpdate
-**/
-MusicManager.prototype.onTimeUpdate = function(){
-    var track = this.playlist[this.current_track]
+    switch(msg.method){
+        case 'playerState':
+            this.updateState(msg.state);
 
-    if(!track || this.audio.paused || this.audio.src != track.audio_url) return;
+            break;
+
+        case 'ready':
+            this.player_ready = true;
+            break;
+
+        case 'startPlaying':
+            this.onStartPlaying();
+            break;
+
+        default:
+            console.log("Received unknown message:", msg);
+    }
+}
+
+MusicManager.prototype.postMessageToPlayer = function(data) {
+    this.player_frame.contentWindow.postMessage(JSON.stringify(data), this.player_url);
+}
+
+MusicManager.prototype.playTrack = function(url) {
+    var track = this.playlist[this.current_track];    
+
+    this.postMessageToPlayer({
+        'method': 'play',
+        'url': url,
+        'track': encodeURIComponent(track.artist + ' - ' + track.song).replace(/'/,"%27")
+    });
+}
+
+MusicManager.prototype.preloadTrack = function(track, url) {
+    this.postMessageToPlayer({
+        'method': 'preload',
+        'url': url,
+        'track': encodeURIComponent(track.artist + ' - ' + track.song).replace(/'/,"%27")
+    });
+}
+
+MusicManager.prototype.pause = function() {
+    this.state.paused = true;
+
+    this.postMessageToPlayer({'method': 'pause'});
+}
+
+MusicManager.prototype.updateState = function(state) {
+    this.state = state;
+    this.state.volume = this.volume;
+
+    var track = this.playlist[this.current_track];    
+
+    if (!track || this.state.paused || this.state.url != track.audio_url) return;
                 
-    this.fireEvent('onTimeupdate');
-
-
-    if(this.audio.currentTime >= track.duration || this.audio.ended){
-        console.log(this.audio.currentTime, track.duration, this.audio.ended, track, this.audio.src);
-
-        this.onEnded()
+    if (this.state.played >= track.duration || this.state.finished) {
+        console.log(this.state.played, track.duration, this.state.duration, track, this.state.url);
+        
+        this.onEnded();
     }
 
-    var percent_played = (this.audio.currentTime / track.duration)*100
+    var percent_played = (this.state.played / track.duration)*100;
 
-    if(this.audio.duration > 31 && percent_played > 50 && !track.scrobbled && track.artist){
+    if(this.state.duration > 31 && percent_played > 50 && !track.scrobbled && track.artist){
         this.scrobbler.scrobble(track.artist, track.song, track.album, track.duration)
         track.scrobbled = true
         
         console.log("Track scrobbled", track)
     }
     
-    if(this.audio.duration > 31 && percent_played > 80 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
+    if(this.state.duration > 31 && percent_played > 80 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
       var next_track = this.playlist[this.current_track+1]
 
       track.next_song_prefetched = true
@@ -238,7 +271,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
     console.log("Track:", track)
 
     if(track.file_url){
-        this.audio.playOrLoad(track.file_url);
+        this.playTrack(track.file_url);
         this.setVolume();
         
         this.fireEvent("onPlay");
@@ -270,27 +303,33 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
     if(playAfterSearch == undefined)
         playAfterSearch = true
 
-    VK.search(track.artist, track.song, track.info.duration, function(response){
-        if(!playAfterSearch)
-            return        
+    VK.search(track.artist, track.song, track.info.duration, function(response){        
+        if (!playAfterSearch) {
+            if (!response.error) {
+                this.preloadTrack(track, response.url);                
+            }
+
+            return;
+        }
 
         console.log("Resp",response)
 
-        if(response.error){
-            if(response.error == 'not_found' && track.track_id && track.streamable && this.playPreviews()) {
-                this.not_found_in_row = 0
+        if (response.error) {
+            if (response.error == 'not_found' && track.track_id && track.streamable && this.playPreviews()) {
+                this.not_found_in_row = 0;
 
-                this.current_track = trackIndex
+                this.current_track = trackIndex;
 
-                this.fireEvent("onLoading")
+                this.fireEvent("onLoading");
 
-                this.createAudio()
-                this.audio.playOrLoad(this.scrobbler.previewURL(track.track_id))
+                var url = this.scrobbler.previewURL(track.track_id);
+
+                this.playTrack();
             
-                this.setVolume()                
+                this.setVolume();
 
                 track.duration = 30
-                track.audio_url = this.audio.src;
+                track.audio_url = url;
 
                 this.showNotification()
             } else {
@@ -311,23 +350,22 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
                     this.not_found_in_row = 0
             }
         } else {
-            this.current_track = trackIndex
+            this.current_track = trackIndex;
 
-            this.not_found_in_row = 0
-            this.fireEvent("onLoading")
+            this.not_found_in_row = 0;
+            this.fireEvent("onLoading");
             
-            this.createAudio();
-            this.audio.playOrLoad(response.url)
+            this.playTrack(response.url);
 
-            this.setVolume()            
+            this.setVolume();
     
-            track.duration = parseInt(response.duration)
-            track.scrobbled = false
-            track.next_song_prefetched = false 
+            track.duration = parseInt(response.duration);
+            track.scrobbled = false;
+            track.next_song_prefetched = false;
 
             track.audio_url = response.url;
             
-            this.showNotification()
+            this.showNotification();
         }
     }.bind(this))
 }
@@ -337,52 +375,49 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
     MusicManager#play(track_info)
 **/
 MusicManager.prototype.play = function(track_info){
-    var track = this.playlist[this.current_track]
+    var track = this.playlist[this.current_track];
 
-    console.log("Playing:", track, track_info, this.current_track)
+    console.log("Playing:", track, track_info, this.current_track);
 
-    delete this.shuffle_tracks
+    delete this.shuffle_tracks;
 
-    if (track_info.file_url){
+    if (track_info.file_url) {
         var play_or_pause = function(){
             this.current_track = track_info.index
             
             if(track && track_info.song == track.song && track_info.artist == track.artist && track_info.index == track.index){
-                this.audio.playOrLoad()
+                this.playTrack();
             } else {
                 this.showNotification();
 
-                this.audio.playOrLoad(track_info.file_url);
+                this.playTrack(track_info.file_url);
             }
             
-            this.setVolume()
-            this.fireEvent("onPlay")
-            this.fireEvent("onLoading")
+            this.setVolume();
+            
+            this.fireEvent("onPlay");
+
+            this.fireEvent("onLoading");
         }.bind(this)
 
         if(!this.playlist[track_info.index].info){            
-            this.createAudio();
-
             this.updateTrackInfo(track_info.index, function(){
                 play_or_pause();
             }.bind(this))
         } else {
-          play_or_pause()
+            play_or_pause()
         }
-
-
     } else if (track_info.song){    
         // If resuming track
         track_info.song = track_info.song.replaceEntities()
         track_info.artist = track_info.artist.replaceEntities()
 
         if(track && track_info.song == track.song && track_info.artist == track.artist && track_info.index == track.index){
-            this.audio.playOrLoad()
+            this.playTrack()
             this.setVolume()            
 
             this.fireEvent("onPlay")
         } else {
-            this.createAudio();
             this.searchTrack(track_info.index)
             
             _gaq.push(['_trackEvent', 'music_manager', 'play', track_info.artist+'-'+track_info.song]);
@@ -392,33 +427,30 @@ MusicManager.prototype.play = function(track_info){
     } else {
         if(track_info.album)
             this.playAlbum(track_info.artist, track_info.album, function(){})
-        else
+        else {
+            console.log("Playing artist:", track_info, track);
+
             this.playArtist(track_info.artist, function(){})
+        }
     }
 }
 
 
 /**
-    MusicManager#pause()
-**/
-MusicManager.prototype.pause = function(){
-    this.audio.pause()
-}
-
-
-/**
     MusicManager#showNotification()
+
+    Currently works only on Chrome
 **/
 MusicManager.prototype.showNotification = function(){
-    var track = this.playlist[this.current_track]
-    var show_notification = window.localStorage["show_notifications"] == "true" || window.localStorage["show_notifications"] == undefined
+    var track = this.playlist[this.current_track];
+    var show_notification = window.localStorage["show_notifications"] == "true" || window.localStorage["show_notifications"] == undefined;
 
-    if(!show_notification || !track || !window.webkitNotifications) return
+    if(!show_notification || !track || !window.webkitNotifications) return;
 
 
-    var notification = window.webkitNotifications.createNotification(track.image, track.song, track.artist)
-    notification.show()
-    setTimeout(function(){notification.cancel()}, 6000)
+    var notification = window.webkitNotifications.createNotification(track.image, track.song, track.artist);
+    notification.show();
+    setTimeout(function(){notification.cancel()}, 6000);
 }
 
 
@@ -428,22 +460,22 @@ MusicManager.prototype.showNotification = function(){
 MusicManager.prototype.updateID3Info = function(trackIndex, callback){
     var track = this.playlist[trackIndex];
 
-    if(track.file_url && !track.file_url.match(/^data/))
+    if (track.file_url && !track.file_url.match(/^data/)) {
         ID3.loadTags(track.file_url, function(){
             var tags = ID3.getAllTags(track.file_url);
             
             console.log("ID3 Tags:", tags);
             
-            if(tags.title) {
+            if (tags.title) {
                 track.song = tags.title;
                 track.artist = tags.artist;
                 track.album = tags.album;
 
-                if(!track.song)
+                if (!track.song)
                     tack.song == "Untitled";
                 
-                if(trackIndex == this.current_track){
-                    this.scrobbler.setNowPlaying(track.artist, track.song, track.album, this.audio.duration);
+                if (trackIndex == this.current_track) {
+                    this.scrobbler.setNowPlaying(track.artist, track.song, track.album, this.state.duration);
                     this.showNotification();
                     this.fireEvent("onLoading");
                 }
@@ -453,7 +485,7 @@ MusicManager.prototype.updateID3Info = function(trackIndex, callback){
 
             callback()
         })
-
+    }
 }
 
 /**
@@ -504,11 +536,14 @@ MusicManager.prototype.updateTrackInfo = function(trackIndex, callback){
  * MusicManager#setVolume(value)
  */
 MusicManager.prototype.setVolume = function(volume){
-    if(volume != undefined)
-        this.volume = volume
+    if (volume != undefined) {
+        this.volume = volume;
+    }
 
-    this.audio.volume = 0.000001
-    this.audio.volume = this.getVolume()
+    this.postMessageToPlayer({
+        'method': 'setVolume', 
+        'volume': this.getVolume()
+    });
 }
 
 
@@ -516,10 +551,11 @@ MusicManager.prototype.setVolume = function(volume){
  * MusicManager#getVolume() -> Integer
 **/
 MusicManager.prototype.getVolume = function(){
-    if(this.volume == undefined)
-        this.volume = 1
+    if (this.volume == undefined) {
+        this.volume = 100;
+    }
 
-    return this.volume
+    return this.volume;
 }
 
 
@@ -545,26 +581,6 @@ MusicManager.prototype.ban = function(){
 }
 
 
-MusicManager.prototype.getState = function(){
-    var state ={
-        paused: music_manager.audio.paused,
-        volume: music_manager.audio.volume
-    };
-    
-    if(this.current_track != undefined){
-        state.duration = this.audio.duration;
-        state.played = this.audio.currentTime;
-        
-        try {
-            state.buffered = this.audio.buffered.end();            
-        } catch(e){
-            state.buffered = 0;    
-        }
-    } else {
-        state.duration = 0;
-        state.played = 0;
-        state.buffered = 0;
-    }
-
-    return state;
+MusicManager.prototype.getState = function(){    
+    return this.state;
 }
