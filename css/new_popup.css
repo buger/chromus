@@ -1,21 +1,69 @@
+/*
+Copyright (c) 2010, Yahoo! Inc. All rights reserved.
+Code licensed under the BSD License:
+http://developer.yahoo.com/yui/license.html
+version: 3.3.0
+build: 3167
+*/
+/**
+ * Percents could work for IE, but for backCompat purposes, we are using keywords.
+ * x-small is for IE6/7 quirks mode.
+ */
+body {
+	font:13px/1.231 arial,helvetica,clean,sans-serif;
+	*font-size:small; /* for IE */
+	*font:x-small; /* for IE in quirks mode */
+}
+
+/**
+ * Nudge down to get to 13px equivalent for these form elements
+ */ 
+select,
+input,
+button,
+textarea {
+	font:99% arial,helvetica,clean,sans-serif;
+}
+
+/**
+ * To help tables remember to inherit
+ */
+table {
+	font-size:inherit;
+	font:100%;
+}
+
+/**
+ * Bump up IE to get to 13px equivalent for these fixed-width elements
+ */
+pre,
+code,
+kbd,
+samp,
+tt {
+	font-family:monospace;
+	*font-size:108%;
+	line-height:100%;
+}
+
 /********** Utils **********/
 
 @font-face {
-  font-family: "Lucida Grande My";  
+  font-family: "Lucida Grande";  
   src: url("../images/popup/lg.ttf");
 }
 
 @font-face {
   font-family: "Lucida Grande Bold";  
-  src: local("Lucida Grande Bold"), url("../images/popup/lg_b.ttf");
+  src: url("../images/popup/lg_b.ttf");
+  font-weight: bold;
 }
 
 
 * { 
     margin:0; 
     padding:0; 
-    font-size: 12px;
-    font-family: "Lucida Grande My", Lucida, Verdana, sans-serif;
+    font-family: "Lucida Grande", sans-serif;
     outline: none;
 }
 
@@ -107,6 +155,9 @@ a.button {
     background: url(../images/popup/playlist_bg.png) top left;
 
     overflow: hidden;
+
+    font-size: 93%;
+    line-height: 77%;
 }
 
 /*********** Header ***************/
@@ -205,11 +256,11 @@ a.button {
     right: -33px;
 
     color: white;
-    font-size: 11px;
+    font-size: 85%;
 
     cursor: default;
 
-    text-shadow: #000 0 -1px 0;
+    text-shadow: 0 -1px 0 #000;
 }
 
 #header .volume { position: relative; }
@@ -272,7 +323,7 @@ a.button {
 #header .search_bar .text {
     width: 100%;
     border: 1px solid #ccc;
-    font-size: 13px;
+    font-size: 100%;
     padding: 3px 6px;
     color: #333;
 }
@@ -319,8 +370,8 @@ a.button {
     max-width: 300px;
 }
 #current_song .info a { 
-    font-size: 12px; 
-    text-shadow: rgba(255,255,255,0.6) 0 1px 0;
+    font-size: 93%; 
+    text-shadow:0 1px 0 rgba(255,255,255,0.6);
     cursor: pointer; 
     text-decoration: none;
 }
@@ -333,11 +384,12 @@ a.button {
     display: block;
     font-weight: bold;
     font-family: "Lucida Grande Bold";  
-    line-height: 17px;
+    line-height: 153.9%;
+    font-size: 100%;
 }
 
 #current_song .info .album { 
-    font-size: 11px;
+    font-size: 85%;    
 }
 
 #current_song .info .dash {
@@ -411,7 +463,8 @@ a.button {
 #playlist tr td.last { padding-bottom: 10px; }
 
 #playlist .artist_td { width: 192px; vertical-align: top; }
-#playlist .track_td { vertical-align: top; }
+#playlist .track_td { vertical-align: center; }
+    
 
 #playlist .artist {
     padding: 3px 17px;
@@ -423,7 +476,7 @@ a.button {
 
 #playlist .artist span { 
     display: inline-block;
-    font-size: 11px; 
+    font-size: 85%; 
     
     width: 157px;
 
@@ -434,17 +487,18 @@ a.button {
 
 #playlist .artist.big img { width: 38px; height: 38px; }
 
-#playlist .artist.big .image.container { padding-bottom: 0px; padding-top: 3px; }
+#playlist .artist.big .image.container { padding-bottom: 4px; padding-top: 3px; }
 
 #playlist .track {
     display: inline-block;
     width: 210px;
     text-align: left;
     font-family: "Lucida Grande Bold";  
-    font-size: 11px !important;
-    text-shadow: #fff 0 1px 0;
+    font-weight: bold;
+    font-size: 85% !important;
+    text-shadow: 0 1px 0 #fff;
     
-    padding: 6px 17px;    
+    padding: 6px 17px;   
 
     overflow: hidden;
     text-overflow: ellipsis;
@@ -453,9 +507,19 @@ a.button {
     cursor: pointer;
 }
 
-#playlist .track { font-size: 11px; }
+#playlist tr {
+    margin: 0;
+    padding: 0;
+}
 
-#playlist .track_td .container { position: relative; }
+#playlist .track { font-size: 85%; }
+
+#playlist .track_td {
+    margin: 0;
+    padding: 0;
+}
+
+#playlist .track_td .container { position: relative; margin:0; padding: 0; }
 
 #playlist .track_td.playing .container, #playlist .track_td .container:hover {
     background:url(../images/popup/playing_track_bg.png);
@@ -464,7 +528,7 @@ a.button {
 
 #playlist .track_td.playing .container .track, #playlist .track_td .container:hover .track {
     color: #fff;
-    text-shadow: rgba(0,29,84,0.3) 0 1px 0;    
+    text-shadow: 0 1px 0 rgba(0,29,84,0.3);    
 }
 
 #playlist .track_td .controls {

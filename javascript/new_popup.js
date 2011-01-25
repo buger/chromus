@@ -29,8 +29,6 @@ PlayerUI.loadPlaylist = function(data){
         
     }
     
-    console.log("DATA:", document.getElementById('playlist_tmpl'));    
-
     playlist_tmpl.tmpl({playlist: data}).appendTo("#playlist");
 
     this.playlist = data;
@@ -293,8 +291,7 @@ browser.addMessageListener(function(msg){
 
 $(document).ready(function(){
     if (browser.isOpera) {
-        document.getElementById('playlist').style.marginBottom = '40px';
-        document.getElementById('playlist').style.height = '445px';
+        document.getElementById('playlist').style.height = '460px';
         document.getElementById('wrapper').style.marginTop = '5px';
     }
 
