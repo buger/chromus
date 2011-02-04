@@ -21,10 +21,6 @@ browser.addMessageListener(function(msg, source) {
 
       qs.style.top = bounding_rect.top + document.body.scrollTop + bounding_rect.height + 'px';
       qs.style.left = bounding_rect.left + document.body.scrollLeft - 20 + 'px';
-    } else if (msg.method == "updateState") {
-
-    } else {
-        console.log("Unknown message:", msg);
     }
 });
 

@@ -174,3 +174,7 @@ ul.recentAlbums li a.sm2_button, #newReleases .release a.sm2_button {
 #cmp_quick_search_results li a {
   font-size: 12px;
 }
+
+#chromus_frame {
+    border: 0;
+}

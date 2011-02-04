@@ -21,7 +21,6 @@ function showButtons(link){
         add_to_queue.style.zIndex = 1000;
         add_to_queue.title = 'Add to playlist';
         add_to_queue.addEventListener('click', function(evt){
-            evt.stop();
             evt.stopPropagation();
 
             browser.postMessage({method:'add_to_playlist', track:track_info})

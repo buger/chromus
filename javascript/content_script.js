@@ -1,20 +1,20 @@
 if (!window.manager) {
-    var manager = {}
+    var manager = {};
 } else {
     var manager = window.manager;
 }
 
 var $ = window.jQuery;
 
-
 if (!document.body.className.match(/cmp_initialized/)) {
   document.body.className += " cmp_initialized";
 
-  function stopCurrentTrack(){
-      var current_playing = document.querySelector("a.sm2_button.playing, a.sm2_button.paused, a.sm2_button.loading")
+  function stopCurrentTrack() {
+      var current_playing = document.querySelector("a.sm2_button.playing, a.sm2_button.paused, a.sm2_button.loading");
 
-      if(current_playing)
-          $(current_playing).removeClass("playing paused loading")
+      if (current_playing) {
+          $(current_playing).removeClass("playing paused loading");
+      }
   }
 
 
@@ -116,9 +116,6 @@ if (!document.body.className.match(/cmp_initialized/)) {
 
             case "updateState":
                 break;
-
-            default:
-                console.log("Received unknown message:",msg);
         }
     });
 
@@ -133,11 +130,15 @@ if (!document.body.className.match(/cmp_initialized/)) {
       customEvent.initEvent('ex_play', true, true);
 
       if(manager.wrapMusicElements) {
-        manager.wrapMusicElements(false)
+          console.log("Wrapping music elements");
+      
+          manager.wrapMusicElements(false);
       }
   }
 
-  preparePage();
+  preparePage();  
+  
+  console.log("Manager:", manager);
 
   console.log('Window browser object', window.browser);
 
@@ -166,7 +167,6 @@ if (!document.body.className.match(/cmp_initialized/)) {
               $(target).removeClass('playing paused').addClass("sm2_button loading");
           }
 
-          evt.stop();
           evt.stopPropagation();
       }
   }, false)

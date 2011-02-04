@@ -1,6 +1,5 @@
-document.addEventListener("keydown", function(evt){
+document.addEventListener("keydown", function(evt) {
     if (evt.altKey) {
-
         switch(evt.keyCode) {
             case 80: // Ctrl + P
                 browser.postMessage({method:'togglePlaying'}); 
@@ -18,4 +17,4 @@ document.addEventListener("keydown", function(evt){
                 break;
         }
     }
-}, false)
+}, false);

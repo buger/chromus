@@ -63,8 +63,13 @@ tt {
 * { 
     margin:0; 
     padding:0; 
-    font-family: "Lucida Grande", sans-serif;
+    font-family: "Lucida Grande", Arial, sans-serif;
     outline: none;
+    -webkit-font-smoothing: subpixel-antialiased;
+}
+
+body.windows_xp_font_smoothing_fix  * {
+    font-family: Arial;
 }
 
 body {
@@ -493,9 +498,9 @@ a.button {
     display: inline-block;
     width: 210px;
     text-align: left;
-    font-family: "Lucida Grande Bold";  
+    font-family: "Lucida Grande Bold";      
     font-weight: bold;
-    font-size: 85% !important;
+    font-size: 93% !important;
     text-shadow: 0 1px 0 #fff;
     
     padding: 6px 17px;   
@@ -505,6 +510,11 @@ a.button {
     white-space: nowrap;
 
     cursor: pointer;
+}
+
+.windows_xp_font_smoothing_fix #playlist .track {
+    font-family: Arial;
+    font-size: 88% !important;
 }
 
 #playlist tr {
@@ -595,3 +605,5 @@ a.button {
 {
 	right: -20px;
 }
+
+

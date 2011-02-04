@@ -29,7 +29,19 @@ PlayerUI.loadPlaylist = function(data){
         
     }
     
-    playlist_tmpl.tmpl({playlist: data}).appendTo("#playlist");
+    var pane = $("#playlist").data('jsp');
+    
+    if (pane) {
+        pane.getContentPane().html(playlist_tmpl.tmpl({playlist: data}));
+        
+        pane.reinitialise();
+    } else {
+        playlist_tmpl.tmpl({playlist: data}).appendTo("#playlist");        
+        
+        $("#playlist").jScrollPane({
+            maintainPosition: true
+        }); 
+    }
 
     this.playlist = data;
 }
@@ -117,8 +129,9 @@ PlayerUI.setState = function(state){
     else
         controls.find('.time').html("");
 
-    if(state.volume != undefined && !$('#header .volume .level').is(':visible'))
-        this.setVolume(state.volume);        
+    if (state.volume != undefined && !$('#header .volume .level').is(':visible')) {
+        this.setVolume(state.volume);   
+    }        
 }
 
 
@@ -130,8 +143,9 @@ PlayerUI.setVolume = function(level, send_message){
     
     this.state.volume = level;
 
-    if(send_message)
+    if (send_message) {
         browser.postMessage({method:'setVolume', volume: level})
+    }
 }
 
 
@@ -241,20 +255,16 @@ PlayerUI.search = function(){
 }
 
 
-browser.addMessageListener(function(msg){
+browser.addMessageListener(function(msg) {
+    if (msg.method != 'updateState') 
+        console.log("Popup received message", msg);
+        
     switch(msg.method){        
         case 'loadPlaylist':
             console.log("Loading Playlist: ", msg);
 
             PlayerUI.loadPlaylist(msg.playlist);            
                         
-            if($("#playlist").data('jsp'))
-                $("#playlist").reinitialize();
-            else
-                $("#playlist").jScrollPane({
-                    maintainPosition: true
-                });    
-            
             // Timeout for scroll pane initialization
             if(msg.current_track != undefined){
                     PlayerUI.setCurrentTrack(msg.current_track, true);
@@ -290,12 +300,20 @@ browser.addMessageListener(function(msg){
 });
 
 $(document).ready(function(){
+    if (window.navigator.userAgent.match(/Windows NT 5/)) {
+        document.body.className += " windows_xp_font_smoothing_fix";
+    }
+        
     if (browser.isOpera) {
         document.getElementById('playlist').style.height = '460px';
-        document.getElementById('wrapper').style.marginTop = '5px';
+        document.getElementById('wrapper').style.marginTop = '5px';       
+    } else if (browser.isSafari) {
+        document.getElementById('playlist').style.height = '470px';    
     }
 
     PlayerUI.initialize();        
     
-    browser.postMessage({method:'getPlaylist'});
+    browser.onReady( function() {
+        browser.postMessage({method:'getPlaylist'});
+    })
 });

@@ -8,26 +8,38 @@ var MusicManager = function(scrobbler){
 
     this.scrobbler = scrobbler;
 
+    this.player_url = "http://chromusapp.appspot.com/";
+
+    this.setEmptyState();
+    this.createAudio();
+
+    this.dispatcher = document.createElement('input'); 
+}
+
+MusicManager.prototype.setEmptyState = function() {
     this.state = {
         duration: 0,
         played: 0,
         buffered: 0,
         paused: true,
-        finished: true
+        finished: true,
+        playing: false
     };
-
-    this.player_url = "http://chromusapp.appspot.com/";
-
-    this.createAudio();
-
-    this.dispatcher = new Audio();
 }
 
 MusicManager.prototype.createAudio = function() {
     console.log("Creating frame for audio player");
-
-    document.body.innerHTML += '<iframe id="player_frame" src="'+this.player_url+'sm2_iframe"></iframe>';
-    this.player_frame = document.getElementById('player_frame');
+    
+    this.player_frame = document.createElement("iframe");
+    this.player_frame.id = 'player_frame'; 
+    
+    if (!browser.isSafari) {
+        this.player_frame.src = this.player_url+"sm2_iframe";
+    } else {
+        this.player_frame.src = safari.extension.baseURI+"sm2/iframe.htm";
+    }
+    document.body.appendChild(this.player_frame);
+        
     this.player_ready = false;
 
     if (window.addEventListener){
@@ -37,8 +49,7 @@ MusicManager.prototype.createAudio = function() {
     }
 }
 
-MusicManager.prototype.listener = function(evt) {
-    //console.log("Received message:", evt);    
+MusicManager.prototype.listener = function(evt) {   
     var msg = JSON.parse(evt.data);
 
     switch(msg.method){
@@ -61,7 +72,7 @@ MusicManager.prototype.listener = function(evt) {
 }
 
 MusicManager.prototype.postMessageToPlayer = function(data) {
-    this.player_frame.contentWindow.postMessage(JSON.stringify(data), this.player_url);
+    this.player_frame.contentWindow.postMessage(JSON.stringify(data), '*');
 }
 
 MusicManager.prototype.playTrack = function(url) {
@@ -88,8 +99,8 @@ MusicManager.prototype.pause = function() {
     this.postMessageToPlayer({'method': 'pause'});
 }
 
-MusicManager.prototype.updateState = function(state) {
-    this.state = state;
+MusicManager.prototype.updateState = function(state) {    
+    this.state = state;    
     this.state.volume = this.volume;
 
     var track = this.playlist[this.current_track];    
@@ -112,19 +123,19 @@ MusicManager.prototype.updateState = function(state) {
     }
     
     if(this.state.duration > 31 && percent_played > 80 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
-      var next_track = this.playlist[this.current_track+1]
+        var next_track = this.playlist[this.current_track+1]
 
-      track.next_song_prefetched = true
+        track.next_song_prefetched = true
 
-      if(next_track){
-          console.log("Prefetching next track")
-          _gaq.push(['_trackEvent', 'music_manager', 'prefetchingTrack']);
+        if(next_track){
+            console.log("Prefetching next track")
+            _gaq.push(['_trackEvent', 'music_manager', 'prefetchingTrack']);
 
-          if(this.play_mode == "shuffle" && this.shuffle_tracks)
-              this.searchTrack(this.shuffle_tracks[0], false)
-          else
-              this.searchTrack(this.current_track+1, false)
-      }
+            if(this.play_mode == "shuffle" && this.shuffle_tracks)
+                this.searchTrack(this.shuffle_tracks[0], false)
+            else
+                this.searchTrack(this.current_track+1, false)
+        }
     }
 }
 
@@ -133,9 +144,9 @@ MusicManager.prototype.updateState = function(state) {
     MusicManager#fireEvent(event_name)
 **/
 MusicManager.prototype.fireEvent = function(event_name){
-    var evt = document.createEvent("Events")
-    evt.initEvent(event_name, true, true)
-    this.dispatcher.dispatchEvent(evt)
+    var evt = document.createEvent("Events");
+    evt.initEvent(event_name, true, true);
+    this.dispatcher.dispatchEvent(evt);
 }
 
 
@@ -158,30 +169,35 @@ MusicManager.prototype.onStartPlaying = function(){
     MusicManager#onEnded()
 **/
 MusicManager.prototype.onEnded = function(){
-    console.log("onEnded")
+    console.log("onEnded");
 
-    var track = this.playlist[this.current_track]
+    this.setEmptyState();
+    
+    var track = this.playlist[this.current_track];
 
-    if(this.stop_after_playing == "stop" || (this.play_mode != "shuffle" && this.repeat_mode != "repeat_one" && this.current_track == (this.playlist.length-1)))
-        delete this.current_track        
-    else
-        this.playNextTrack()
+    if (this.stop_after_playing == "stop" || (this.play_mode != "shuffle" && this.repeat_mode != "repeat_one" && this.current_track == (this.playlist.length-1))) {
+        delete this.current_track;
+    } else {
+        this.playNextTrack();
+    }
 
-    this.fireEvent("onEnded")
+    this.fireEvent("onEnded");
 }
 
 
 /**
     MusicManager#playArtist(artist, callback)
 **/
-MusicManager.prototype.playArtist = function(artist){
+MusicManager.prototype.playArtist = function (artist) {
     _gaq.push(['_trackEvent', 'music_manager', 'playArtist', artist]);
 
-    this.scrobbler.artistChart(artist, function(response){
-        this.playlist = response.tracks
-        delete this.current_track
+    this.scrobbler.artistChart(artist, function (response) {
+        this.playlist = response.tracks;
+        delete this.current_track;
     
-        this.playNextTrack()
+        this.playNextTrack();
+        
+        this.fireEvent('onPlaylistChanged');
     }.bind(this))
 }
 
@@ -189,14 +205,16 @@ MusicManager.prototype.playArtist = function(artist){
 /**
     MusicManager#playAlbum(artist, album, callback)
 **/
-MusicManager.prototype.playAlbum = function(artist, album){
+MusicManager.prototype.playAlbum = function (artist, album) {
     _gaq.push(['_trackEvent', 'music_manager', 'playAlbum', artist+'-'+album]);
 
     this.scrobbler.albumPlaylist(artist, album, function(response){
-        this.playlist = response.tracks
-        delete this.current_track
+        this.playlist = response.tracks;
+        delete this.current_track;
 
-        this.playNextTrack()
+        this.playNextTrack();
+        
+        this.fireEvent('onPlaylistChanged');
     }.bind(this))
 }
 
@@ -482,9 +500,11 @@ MusicManager.prototype.updateID3Info = function(trackIndex, callback){
             } else {
                 track.id3_empty = true;
             }
-
+            
+            this.fireEvent('onPlaylistChanged');
+            
             callback()
-        })
+        }.bind(this));
     }
 }
 
@@ -581,6 +601,6 @@ MusicManager.prototype.ban = function(){
 }
 
 
-MusicManager.prototype.getState = function(){    
+MusicManager.prototype.getState = function(){         
     return this.state;
 }

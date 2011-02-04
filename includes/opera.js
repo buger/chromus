@@ -69,7 +69,7 @@
                         if (event.data.source == 'background') {
                             background_page = event.source;
                             
-                            window.addEventListener('DOMContentLoaded', function(){
+                            window.addEventListener('load', function(){
                                 background_page.postMessage({method:'loadRecources'});
                             }, false);
 

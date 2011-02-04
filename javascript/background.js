@@ -57,15 +57,30 @@ music_manager.dispatcher.addEventListener('onPlay', function(){
     }
 }, true);
 
+music_manager.dispatcher.addEventListener('onPlaylistChanged', function() {
+    console.log("Playlist changed");
 
-function updateTime(){
+    browser.postMessage({
+        method: "loadPlaylist", 
+        playlist: music_manager.playlist, 
+        current_track: music_manager.current_track,
+        state: music_manager.getState()
+    });
+}, true);
+
+
+var previous_state;
+
+function updateState() {
     var track = music_manager.playlist[music_manager.current_track]
 
-    var state = music_manager.getState();
+    var state = music_manager.getState();        
 
-    if (!state) {
-        return setTimeout(updateTime, 500);
+    if (!state || (previous_state && previous_state == state)) {
+        return;
     }
+    
+    previous_state = state;
 
     if (track && !track.duration && music_manager.state.playing) {
       track.duration = music_manager.state.duration;
@@ -87,16 +102,15 @@ function updateTime(){
 
     browser.broadcastMessage({
         method:'updateState',
-        state: music_manager.getState()            
+        state: state
     });
-
-    setTimeout(updateTime, 500);
 }
 
-updateTime()
+setInterval(updateState, 1000);
+
 
 browser.addMessageListener(function(msg, sender) {
-    console.log(msg.method, msg)
+    console.log(msg.method, msg, sender)
 
     _gaq.push(['_trackEvent', 'msgReceived', msg.method]);
 
@@ -131,14 +145,17 @@ browser.addMessageListener(function(msg, sender) {
             browser.broadcastMessage({method:"stop"});
 
             if (msg.playlist) {
-                music_manager.playlist = msg.playlist
-                delete music_manager.current_track
+                music_manager.playlist = msg.playlist;
+                delete music_manager.current_track;
+                
+                music_manager.fireEvent('onPlaylistChanged');
             }
 
-            if(typeof(msg.track) == "number")
+            if (typeof(msg.track) == "number") {
                 msg.track = music_manager.playlist[msg.track];
+            }
 
-            music_manager.play(msg.track)
+            music_manager.play(msg.track);
 
             break;
 
@@ -148,11 +165,13 @@ browser.addMessageListener(function(msg, sender) {
 
             music_manager.playlist.push(track);
             music_manager.updateID3Info(music_manager.playlist.length-1);
+            
+            music_manager.fireEvent('onPlaylistChanged');
 
             break;
 
         case "search":
-            Scrobbler.search(msg.search_text, function(response){
+            Scrobbler.search(msg.search_text, function (response) {
                 console.log("Received response searchResult");
 
                 browser.postMessage({method:"searchResult", html:response.html});
@@ -161,7 +180,7 @@ browser.addMessageListener(function(msg, sender) {
             break;
 
         case "togglePlaying":
-            if(music_manager.state.paused && music_manager.current_track) {
+            if (music_manager.state.paused && music_manager.current_track) {
                 music_manager.playTrack();
             } else {
                 music_manager.pause();
@@ -180,7 +199,7 @@ browser.addMessageListener(function(msg, sender) {
             break;
 
         case "getPlaylist":
-            sender.postMessage({
+            browser.postMessage({
                 method: "loadPlaylist", 
                 playlist: music_manager.playlist, 
                 current_track: music_manager.current_track,

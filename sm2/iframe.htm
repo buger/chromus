@@ -1,0 +1,168 @@
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">        
+        <script src="iframe_files/soundmanager2.js"></script>
+        <script src="iframe_files/jquery.js"></script>
+        <script>
+            soundManager.url = '/swf/';
+            soundManager.flashVersion = 9; // optional: shiny features (default = 8)
+            soundManager.useFlashBlock = false; // optionally, enable when you're ready to dive in
+            // enable HTML5 audio support, if you're feeling adventurous. iPad/iPhone will always get this.
+            soundManager.useHTML5Audio = true;
+            soundManager.html5Test = /^(probably|maybe)$/i;
+
+            soundManager.onready(function() {
+                postMessageJSON({'method':'ready'});
+            }); 
+
+            var current_sound;
+        </script>
+        <script>          
+            var sounds = [];
+
+            function createSound(id, url) {
+                var sound = soundManager.createSound({
+                    id: id,
+                    url: url
+                });
+
+                sound.onposition(1, function() {
+                    postMessageJSON({method:'startPlaying', id: this.sID});
+                });
+
+                sound.onplay = function() { 
+                    this.finished = false; 
+                }
+
+                sound.onfinish = function() { 
+                    this.finished = true; 
+                    delete currentSound; 
+                }
+
+                sound.finished = false;
+                    
+                sounds.push(sound);
+                
+                // We don't want memory leaks, only 20 tracks can be stored in memory
+                if (sounds.length > 20) {
+                    sounds[0].destruct();
+
+                    sounds.splice(0,1);
+                }
+
+                return soundManager.getSoundById(id);
+            }
+            
+            function postMessageJSON(data) {
+                var json = JSON.stringify(data);
+
+                //console.log('Sending message:', json);
+
+                window.parent.postMessage(json, "*");                
+            }
+
+            function getState() {
+                var played, buffered, duration, paused;
+
+                if (current_sound) {
+                    return {
+                        duration: current_sound.durationEstimate / 1000,
+                        played: current_sound.position / 1000,
+                        buffered: ((current_sound.bytesLoaded/current_sound.bytesTotal)*current_sound.durationEstimate) / 1000.0,                        
+                        paused: current_sound.paused,
+                        finished: current_sound.finished,
+                        id: current_sound.sID,
+                        url: current_sound.url,
+                        playing: true
+                    }
+                } else {
+                    return {
+                        duration: 0,
+                        played: 0,
+                        buffered: 0,
+                        paused: true,
+                        finished: true,
+                        playing: false
+                    }
+                }
+            }
+
+            setInterval(function() {
+                postMessageJSON({method:'playerState', state:getState()});
+            }, 1000);
+
+
+            function listener(evt){
+                try {
+                    var msg = JSON.parse(evt.data);
+                } catch(e) {
+                    return postMessageJSON({'error':'Messages should be send in JSON'});            
+                }
+
+                switch (msg.method) {
+                    case "play":
+                        console.log("iFrame:::Play:", msg);
+
+                        if (!msg.url && current_sound) {
+                            var sound = current_sound;
+                        } else {
+                            var sound = soundManager.getSoundById(msg.track);
+                        }
+
+                        if (!sound) {
+                            sound = createSound(msg.track, msg.url); 
+                        }
+
+                        if (current_sound != sound) { 
+                            soundManager.stopAll();
+                        }
+
+                        current_sound = sound;
+                                                
+                        sound.play();
+
+                        break;
+
+                    case "preload":
+                        console.log("iFrame:::Preloading track:", msg);
+
+                        var sound = soundManager.getSoundById(msg.track);
+                        
+                        if (!sound) {
+                            sound = createSound(msg.track, msg.url); 
+                        }
+
+                        sound.load();
+
+                        break;                        
+
+                    case "pause":
+                        console.log("iFrame:::Pause:", msg);
+
+                        soundManager.pauseAll();                    
+
+                        break; 
+
+                    case "setVolume":
+                        console.log("iFrame::Setting volume:", msg.volume);
+                        
+                        if (current_sound) {
+                            current_sound.setVolume(msg.volume);
+                        }
+
+                        break;
+
+                    default:
+                        console.log("iFrame:::Unknown message:", evt.data);                        
+                }
+            }
+
+            if (window.addEventListener){
+                window.addEventListener("message", listener,false);
+            } else {
+                window.attachEvent("onmessage", listener);
+            }
+        </script>
+    </head>
+    <body>        
+    </body>
+</html>
