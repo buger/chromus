@@ -167,13 +167,22 @@
             })
 
             port.onDisconnect.addListener(function(msg){
-                if(port.name == "popup")
-                    delete popup_port
-                else {
-                    var index = connected_ports.indexOf(port)
-                    if(index >= 0)
-                        connected_ports.splice(index, 1)
+                var index;
+
+                for (var i=0; i<connected_ports.length; i++) {
+                    if (port.portId_ == connected_ports[i].portId_) {
+                        connected_ports.splice(i, 1);
+                    }
                 }
+
+                
+                if(port.name == "popup")
+                    popup_port = undefined;
+                    
+                if (active_port.portId_ == port.portId_)
+                    active_port = undefined;
+                    
+                console.log("Port disconnected", port, active_port.portId_ == port.portId_, active_port);
             })
 
 
