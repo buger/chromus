@@ -30,11 +30,11 @@ var WrapperManager = function(){
     }
 
         if(!this.artist){
-            this.artist = document.querySelector(".pagehead p a")
+            this.artist = document.querySelectorAll(".pagehead div a")
             
             if(this.artist){
                 try{
-                    this.artist = this.artist.childNodes[1].nodeValue.replace(/^\s+/,'')
+                    this.artist = this.artist[1].innerHTML.replace(/^\s+/,'')
                 } catch(e){}
             }
         }
@@ -85,7 +85,7 @@ WrapperManager.prototype.registerWrapper = function(css_expr, wrapper){
     this.registred_wrappers[css_expr] = wrapper    
 }    
 
-var manager = new WrapperManager();
+var manager = new WrapperManager()
 window.manager = manager;
 
 
@@ -247,10 +247,10 @@ SingleTrack.prototype = new MusicDomElement()
 SingleTrack.prototype.constructor = SingleTrack
 
 SingleTrack.prototype.getTrack = function(){
-    var artist = document.querySelector('.breadcrumb a').innerHTML
+//    var artist = document.querySelector('.breadcrumb a').innerHTML
     var song = document.querySelector('.breadcrumb span').innerHTML
 
-    return [artist, song]
+    return [this.artist, song]
 }
 
 SingleTrack.prototype.insertLink = function(el, track){
