@@ -10,9 +10,9 @@ var VK = {
         console.log("Trying to determine search method")
 
         xhrRequest("http://vkontakte.ru", "GET", null, function(xhr){
-            if(!xhr.responseText.match(/quick_search/)){
+            if(!xhr.responseText.match(/top_search/)){
                 xhrRequest("http://vk.com", "GET", null, function(xhr_vk){
-                    if(!xhr_vk.responseText.match(/quick_search/)) {
+                    if(!xhr_vk.responseText.match(/top_search/)) {
                         callback({search_method:'test_mode'})
                     } else {
                         callback({search_method:'vk.com'})
@@ -32,8 +32,8 @@ var VK = {
     _rawSearch: function(artist, song, duration, callback){    
         var track = artist + " " + song
 
-        var url  = "http://"+VK.search_method+"/gsearch.php?section=audio&name=1&ajax=1"
-        var data = "c%5Bq%5D="+encodeURIComponent(track)+"&ra=1&c%5Bsection%5D=audio"
+        var url  = "http://"+VK.search_method+"/al_search.php"
+        var data = "c%5Bq%5D="+encodeURIComponent(track)+"&al=1&c%5Bsection%5D=audio"
 
         xhrRequest(url, "POST", data, function(xhr){
             // User logged off from vkontakte
@@ -45,31 +45,31 @@ var VK = {
                 return
             }
 
-            var container = document.getElementById('vk_search')
-            container.innerHTML = xhr.responseText.match(/rows":"(.*)",/)[1].replace(/\n/g,'').replace(/\t/g,'').replace(/\\/g,'').replaceEntities()
+            var container = document.getElementById('vk_search');
+            container.innerHTML = xhr.responseText;
 
             var audio_data = []
-            var audio_rows = container.querySelectorAll('div.audioRow')
+            var audio_rows = container.querySelectorAll('div.audio')
 
             for(var i=0; i<audio_rows.length; i++){
                 if(i>10) break
 
-                var url_data = audio_rows[i].querySelector('img.playimg').outerHTML.toString().match(/\((.*)\)/)[1].replace(/'/g,'').split(',')
-                var url = "http://cs"+url_data[1]+".vkontakte.ru/u"+url_data[2]+"/audio/"+url_data[3]+".mp3"
+                var url_data = audio_rows[i].querySelector('input[type=hidden]').value.split(',');
+                var url = url_data[0];
+                var duration = url_data[1];
                 
-                var title = audio_rows[i].querySelectorAll('div.audioTitle span')[1]
-                if(title.querySelector('a'))
-                    title = title.querySelector('a').innerHTML
-                else
-                    title = title.innerHTML
+                var title = audio_rows[i].querySelector('td.info span');
+                title.removeChild(title.lastChild);
 
                 audio_data.push({
-                  artist: audio_rows[i].querySelector('div.audioTitle b').innerHTML,
-                  title: title,
-                  duration: timeToSeconds(audio_rows[i].querySelector('div.duration').innerHTML),
+                  artist: audio_rows[i].querySelector('td.info a').innerHTML,
+                  title: title.textContent.trim(),
+                  duration: duration,
                   url: url
                 })
             }
+
+            console.log("Tracks:", audio_data);
 
             if(audio_data.length > 0){                    
                 var vk_track
