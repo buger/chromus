@@ -1,31 +1,33 @@
 var _gaq = _gaq || [];
 
+(function(window){
 /**
     Class Scrobbler
 **/
+
 var Scrobbler = function(session_key, username){
-    this._api_key = "170909e77e67705570080196aca5040b"
-    this._secret = "516a97ba6f832d9184ae5b32c231a3af"
-    this._session_key = session_key
-    this._username = username
-    this.scrobbling  = true
+    this._session_key = session_key;
+    this._username = username;
+    this.scrobbling = true;
 }
+
+Scrobbler.api_key = "170909e77e67705570080196aca5040b";
+Scrobbler.secret = "516a97ba6f832d9184ae5b32c231a3af";
 
 /**
     Scrobbler#getSession(token, callback)
 **/
 Scrobbler.prototype.getSession = function(token, callback){
-    if(!token)
-        return false
+    if (!token) {
+        return false;
+    }
 
     console.log("Getting session")
 
-    var signature = MD5("api_key"+this._api_key+"methodauth.getSessiontoken"+token+this._secret)
-
-    console.log("TRIAM!")
+    var signature = MD5("api_key" + Scrobbler.api_key + "methodauth.getSessiontoken" + token + Scrobbler.secret);
 
     xhrRequest("http://ws.audioscrobbler.com/2.0/", "GET",
-               "method=auth.getSession&api_key="+this._api_key+"&api_sig="+signature+"&token="+token, 
+               "method=auth.getSession&api_key=" + Scrobbler.api_key + "&api_sig=" + signature + "&token=" + token, 
         function(xhr){
             console.log("Session info:", xhr.responseText)
 
@@ -58,7 +60,7 @@ Scrobbler.prototype.setNowPlaying = function(artist, track, album, duration, cal
     if(!callback)
         callback = function(){}
     
-    this.callMethod("User.updateNowPlaying", 
+    this.callMethod("track.updateNowPlaying", 
                    {artist:artist, track:track, album:album, duration:parseInt(duration), sig_call:true, http_method:'POST'}, callback)
 }
 
@@ -86,20 +88,6 @@ Scrobbler.prototype.scrobble = function(artist, track, album, duration, callback
 }
 
 
-/**
-    Scrobbler#auth()
-**/
-Scrobbler.prototype.auth = function(){
-    chrome.tabs.create({url:"http://www.last.fm/api/auth/?api_key="+this._api_key})
-}
-
-
-/**
-    Scrobbler#preview_mp3(track_id, callback)
-**/
-Scrobbler.prototype.previewURL = function(track_id){
-    return "http://ws.audioscrobbler.com/2.0/?method=track.previewmp3&trackid="+track_id+"&api_key="+this._api_key    
-}
 
 
 /**
@@ -115,30 +103,33 @@ Scrobbler.prototype.callMethod = function(method, params, callback){
     }
 
     params["method"] = method
-    params["api_key"] = this._api_key
+    params["api_key"] = Scrobbler.api_key
     params["format"] = 'json'
     
     for(key in params)
         if(params[key] != undefined && typeof(params[key]) == 'string')
             params[key] = params[key].replace(/&amp;/g,'and')
 
-    if(params['sig_call']){
+    if (params['sig_call']) {
         delete params['sig_call']
         delete params['format']
 
-        if(this._session_key){
+        if (this._session_key) {
             params['sk'] = this._session_key
             
-            var signature = []
-            for(key in params)
-                if(params[key] != undefined)
-                    signature.push(key+params[key])
+            var signature = [];
+            
+            for (key in params) {
+                if (params.hasOwnProperty(key)) {
+                    signature.push(key+params[key]);
+                }
+            }
 
             signature.sort()
 
-            console.log("Sig string:", signature.join('')+this._secret)
+            console.log("Sig string:", signature.join('') + Scrobbler.secret);
 
-            signature = MD5(signature.join('')+this._secret)
+            signature = MD5(signature.join('') + Scrobbler.secret);
 
             params['api_sig'] = signature
         }
@@ -476,3 +467,23 @@ Scrobbler.getImage = function(data){
 
     return url
 }
+
+/**
+    Scrobbler#authURL()
+**/
+Scrobbler.authURL = function(){
+    return "http://www.last.fm/api/auth/?api_key=" + this.api_key;    
+}
+
+
+/**
+    Scrobbler#preview_mp3(track_id, callback)
+**/
+Scrobbler.previewURL = function(track_id){
+    return "http://ws.audioscrobbler.com/2.0/?method=track.previewmp3&trackid="+track_id+"&api_key="+this.api_key;
+}
+
+
+window.Scrobbler = Scrobbler;
+
+}(window))

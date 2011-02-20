@@ -11,14 +11,15 @@ music_manager.dispatcher.addEventListener('onPlay', function(){
         browser.broadcastMessage({
             method:"readyToPlay", 
             error:'not_found', 
-            element_id: track.element_id
+            track: music_manager.playlist[music_manager.current_track]
         });
     } else {
         browser.toolbarItem.setTitle(track.artist +' - '+ track.song);
 
         browser.broadcastMessage({
             method:"readyToPlay", 
-            element_id:track.element_id
+            track_index: music_manager.current_track,
+            track: music_manager.playlist[music_manager.current_track]
         });
     }
 }, true);
@@ -34,27 +35,22 @@ music_manager.dispatcher.addEventListener('onEnded', function(){
 music_manager.dispatcher.addEventListener('onLoading', function(){
     var track = music_manager.playlist[music_manager.current_track];
 
-    if (track.element_id) {
-        browser.broadcastMessage({
-            method:"loading", 
-            element_id:track.element_id, 
-            track: music_manager.current_track
-        });
-    }
+    browser.broadcastMessage({
+        method:"loading", 
+        track_index: music_manager.current_track,
+        track: music_manager.playlist[music_manager.current_track]
+    });
 }, true);
 
 
 music_manager.dispatcher.addEventListener('onPlay', function(){
     var track = music_manager.playlist[music_manager.current_track];
 
-    if(track.element_id) {
-        browser.broadcastMessage({
-            method:"play", 
-            element_id:track.element_id, 
-            track: music_manager.current_track, 
-            track_info: track
-        });
-    }
+    browser.broadcastMessage({
+        method: "play", 
+        track_index: music_manager.current_track,
+        track: music_manager.playlist[music_manager.current_track]
+    });
 }, true);
 
 music_manager.dispatcher.addEventListener('onPlaylistChanged', function() {
@@ -208,13 +204,29 @@ browser.addMessageListener(function(msg, sender) {
 
             break;
 
+        case "getSettings":
+            browser.postMessage({
+                method: "setSettings",
+                settings: {
+                    scrobbling: music_manager.scrobbler.scrobbling,
+                    lastfm_username: music_manager.scrobbler._username
+                }
+            }, sender);
+
+            break;
+
         case "setVolume":
             music_manager.setVolume(msg.volume);
 
             break;
 
+        case "setScrobbling":
+            music_manager.scrobbler.scrobbling = msg.scrobbling;              
+
+            break;
+
         default:
-            console.log("Unknown message", msg);
+            console.error("Unknown message", msg);
             break;
     }
 })

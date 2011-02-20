@@ -19,11 +19,6 @@
     var browser_params = {};
 
     function injectJS(script) {
-    //    var scr = document.createElement('script');
-    //    scr.innerHTML = "<![CDATA[\n"+script+"]]>";
-
-    //   document.getElementsByTagName('head')[0].appendChild(scr);
-
         eval(script);
 
         if (!browser && window.browser) {
@@ -84,10 +79,11 @@
                         break;
 
                     case 'loadRecources':
+                        opera.postError("Loading scripts" + event.data.scripts.length);
+
                         event.data.scripts.forEach(function(script) {
                             injectJS(script);
                         });
-
 
                         event.data.styles.forEach(function(style) {
                             injectCSS(style);

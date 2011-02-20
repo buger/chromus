@@ -72,16 +72,20 @@ if (!document.body.className.match(/cmp_initialized/)) {
   }
 
 
-    browser.addMessageListener( function(msg, sender) {
+    browser.addMessageListener(function(msg, sender) {
         switch (msg.method) {
             case "stop":
                 stopCurrentTrack();
                 break;
 
             case "loading":
-                var button = document.getElementById(msg.element_id)
-                if(button)
-                    $(button).removeClass("playing").addClass("loading");
+                if (msg.track.page_id == window.pageID) {
+                    var button = document.getElementById(msg.track.element_id);
+
+                    if (button) {
+                        $(button).removeClass("playing").addClass("loading");                
+                    }
+                }
 
                 break;
               
@@ -89,9 +93,9 @@ if (!document.body.className.match(/cmp_initialized/)) {
                 console.log("stopping current track");
                 stopCurrentTrack();
 
-                var button = document.getElementById(msg.element_id);
+                var button = document.getElementById(msg.track.element_id);
 
-                if (button) {
+                if (button && msg.track.page_id == window.pageID) {
                     if (msg.error) {
                         button.className = "sm2_button disabled";
 
@@ -143,9 +147,11 @@ if (!document.body.className.match(/cmp_initialized/)) {
   console.log('Window browser object', window.browser);
 
   document.addEventListener('click', function(evt){
+      evt.stopPropagation();
+
       var target = evt.target
       
-      if(target.className.match('sm2_button')){              
+      if(target.className.match('sm2_button')) {              
           if(target.className.match('disabled'))
               return false;
 
@@ -167,7 +173,6 @@ if (!document.body.className.match(/cmp_initialized/)) {
               $(target).removeClass('playing paused').addClass("sm2_button loading");
           }
 
-          evt.stopPropagation();
       }
   }, false)
 

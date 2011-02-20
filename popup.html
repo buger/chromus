@@ -1,606 +1,133 @@
+<!DOCTYPE HTML>
 <html>
     <head>
-    <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=2" type="text/css">
-    <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-    <script src="javascript/browser_detect.js"></script>
-    <script src="javascript/utils.js"></script>
-    <script src="javascript/scrobbler.js?rnd=12"></script>
+        <link rel="stylesheet" href="css/mp3_player_button.css?rnd=9" type="text/css">
+        <link rel="stylesheet" href="css/popup.css?rnd=9" type="text/css">
+        <link rel="stylesheet" href="css/jquery.jscrollpane.css?rnd=1" type="text/css">
 
-    <script src="javascript/jquery.min.js"></script>
-    <script src="javascript/jquery-ui.min.js"></script>
-
-    <script>
-
-    function helpOnHover(element, help){
-        var help_func = function(){
-            var help_text;
-
-            if (typeof(help) == 'string'){
-                help_text = help
-            } else {
-                help_text = help.call(element)
-            }
-
-            $('#quick_help').get(0).innerHTML = help_text
-            $('#quick_help').show()
-
-            element.title = help_text
-        }
-
-        element.mouseenter(help_func);
-        element.click(help_func);
-        element.mouseleave(function(){
-            $('#quick_help').hide()
-        })
-    }
-
-    var music_manager = chrome.extension.getBackgroundPage().music_manager
-
-    music_manager.dispatcher.addEventListener('onPlay', function(){
-        var track = music_manager.playlist[music_manager.current_track]
-        stopCurrentTrack()
-
-        if(music_manager.current_track != undefined)
-            if(track.not_found)
-                try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button disabled"}catch(e){}
-            else
-                try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"}catch(e){}
-    }, true)
-
-    music_manager.dispatcher.addEventListener('onEnded', function(){
-        stopCurrentTrack()
-    }, true)
-
-    music_manager.dispatcher.addEventListener('onLoading', function(){
-        if(music_manager.current_track != undefined)
-            try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button loading"}catch(e){}
-
-        updateTrackInfo()
-    }, true)
-
-    music_manager.dispatcher.addEventListener('onProgress', function(){
-        updateLoadProgress()
-    })
-
-    music_manager.dispatcher.addEventListener('onTimeupdate', function(){
-        updateProgress()
-        updateLoadProgress()
-    }, false)
-
-    function updateProgress(){
-        var progress = 0
-        var loaded_progress = 0
-
-        var track = music_manager.playlist[music_manager.current_track]
-
-        if (track) {
-          if (!track.duration){
-            track.duration = music_manager.audio.duration;
-          }
-        }
-
-        if(track)
-            progress = (music_manager.audio.currentTime/track.duration)*100.0
-
-        document.getElementById('progress').style.width = progress+'%'
-
-        var track_time = document.querySelector('.controls_container .time')
-        if(track && track.duration)
-            track_time.innerHTML = prettyTime(music_manager.audio.currentTime)+' /'+prettyTime(track.duration)
-        else
-            track_time.innerHTML = ""
-
-    }
-
-    function updateLoadProgress(){
-        var track = music_manager.playlist[music_manager.current_track]
-
-        if(track)
-          try {
-            loaded_progress = (music_manager.audio.buffered.end()/track.duration)*100.0
-          } catch(e){
-            loaded_progress = 0
-          }
-
-        document.getElementById('progress_loaded').style.width = loaded_progress+'%'
-    }
-
-    function removeFromPlaylist(link){
-      var index = parseInt(link.getAttribute('data-index-number'))
-      music_manager.playlist.splice(index, 1)
-
-      link.parentNode.parentNode.removeChild(link.parentNode)
-
-      updatePlaylist()
-    }
-
-    function updatePlaylist(){
-        var container = document.getElementById('tracks_container')        
-        var html = ""
-        var state
+        <script src="javascript/jquery.min.js"></script>
+        <script src="javascript/jquery.tmpl.min.js"></script>
+        <script src="javascript/jquery.mousewheel.js"></script>
+        <script src="javascript/jquery.jscrollpane.min.js"></script>
+        <script src="javascript/jquery.disable.text.select.pack.js"></script>
         
-        var playlist = music_manager.playlist
+        <script src="javascript/utils.js"></script>        
+        <script src="javascript/scrobbler.js"></script>
+        <script src="javascript/browser_api.js"></script>
+        <script src="javascript/popup.js"></script>
+        <script src="javascript/enhanced_play_button.js"></script>
 
-        for(var i=0; i<playlist.length; i++){
-            if(music_manager.current_track != undefined && music_manager.current_track == i)
-                state = music_manager.audio.paused ? "paused" : "playing"
-            else
-                state = playlist[i].not_found ? "disabled" : ""
-
-                html += "<li>"+
-                            "<a id='ex_button_"+playlist[i].index+"' data-index-number='"+playlist[i].index+"' href='javascript:;' onclick='togglePlaying(this)' class='sm2_button "+state+"'></a>"+
-                            "<span class='track'>"
-
-                if (!playlist[i].artist && playlist[i].file_url)
-                  html += playlist[i].file_url
-                else
-                  html +=       "<a target='_blank' href='http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"'>"+playlist[i].artist + "</a>" +
-                                '  &ndash;  '+
-                                "<a target='_blank' href=\"http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"/_/"+(playlist[i].song||"").replace(/\s/g,'+')+"\">"+playlist[i].song+"</a>"+
-                            "</span>"+
-                            "<a href='javascript:;' title='Delete from playlist' data-index-number='"+playlist[i].index+"' onclick='removeFromPlaylist(this)' class='delete'></a>"
-                        "</li>"
-                
-        }
+        <script id="playlist_tmpl" type="text/x-jquery-tmpl">
+            <table>
+            {{each playlist}}
+                <tr class="{{if $value.merge_rows}}big{{/if}}">
+                    {{if !$value.hide_artist}}
+                    <td class="artist_td {{if $value.last_row}}last{{/if}}" rowspan="{{if $value.merge_rows}}${$value.merge_rows}{{/if}}">
+                        <div class="artist {{if $value.merge_rows}}big{{/if}}">
+                            {{if $value.merge_rows}}
+                            <div class="container image"><img src='${$value.artist_image}' /></div>
+                            {{/if}}
+                            <span title="${$value.artist}">${$value.artist}</span>
+                        </div>
+                    </td>           
+                    {{/if}}
+                    <td class="track_td {{if $value.last_row}}last{{/if}}" data-index='${$index}'>
+                        <div class="container">
+                            <span class="track">${$value.song}</span>
+                            <div class="controls">
+                                <a class="button play"></a>
+                                <a class="button love"></a>
+                            </div>
+                        </div>
+                    </td>
+                </tr>            
+            {{/each}}
+            </table>
+        </script>
         
-        if(playlist.length == 0){
-            html = "<li class='empty' style='height: 90px; font-size: 16px;'>Find some tracks on <a target='_blank' href='http://www.last.fm/music/The+Beatles/+charts'>Last.fm</a></li>"            
-        }
-
-        container.innerHTML = html
-                
-        if(music_manager.current_track != undefined && music_manager.current_track > 12)
-            var playing_link = document.querySelector('a.sm2_button.playing, a.sm2_button.paused')
-            
-            if(playing_link)
-                container.parentNode.scrollTop = playing_link.parentNode.offsetTop-120
-    }
-    
-
-    function toggleScrobbling(event){
-        var link = event.target
-        
-        if(link.className.match(/active/)){
-            link.className = 'toggle_lfm'
-        } else {
-            link.className = 'toggle_lfm active'
-        }
-        
-        music_manager.scrobbler.scrobbling = link.className.match(/active/)
-        
-        _gaq.push(['_trackEvent', 'controls', 'scrobbling', music_manager.scrobbler.scrobbling+'']);
-    }   
-
-
-    function trackLinks(track){
-        if (!track.artist && track.file_url)
-          return {}
-        
-
-        var artist_link = "http://last.fm/music/"+track.artist.replace(/\s/g,'+')
-        var song_link = artist_link+"/_/"+track.song.replace(/\s/g,'+')
-        if(track.album)
-            var album_link = artist_link+"/"+track.album.replace(/\s/g,'+')
-
-        return {
-            artist: artist_link,
-            track: song_link,
-            album: album_link
-        }
-    }
-
-    function updateTrackInfo(){
-        var track = music_manager.playlist[music_manager.current_track]
-        var play_btn = document.getElementById('play')
-
-        if(track){
-            document.querySelector('.track_info .container').style.visibility = 'visible'
-            document.querySelector('.controls_container .love').style.visibility = 'visible'
-
-            updateProgress()
-
-            play_btn.style.display = 'inline'
-            if(!music_manager.audio.paused){
-                play_btn.querySelector('img').src = "images/pause.png"
-                play_btn.className = "playing"
-            } else {
-                play_btn.querySelector('img').src = "images/play.png"
-                play_btn.className = "paused"
-            }
-
-            if(track.image)
-                document.querySelector("#controls #album_image").src = track.image
-
-            var container = document.querySelector("#controls .track_info")
-            var links = trackLinks(track)
-
-            container.querySelector(".track").innerHTML = track.song
-            container.querySelector(".track").href = links.track
-
-            container.querySelector(".artist").innerHTML = track.artist
-            container.querySelector(".artist").href = links.artist
-
-            if(track.album){
-                container.querySelector(".album").innerHTML = track.album
-                container.querySelector(".album").href = links.album
-
-                container.querySelector(".album_prefix").style.display = "inline"
-                container.querySelector(".album").style.display = "inline"
-            } else {
-                container.querySelector(".album_prefix").style.display = "none"
-                container.querySelector(".album").style.display = "none"
-            }
-        } else {
-            document.querySelector("#controls #album_image").src = "images/no_image.png"
-            play_btn.style.display = 'none'
-
-            //document.querySelector('.controls_container').style.visibility = 'hidden'
-            //document.querySelector('.track_info').style.visibility = 'hidden'
-
-            document.querySelector('.track_info .track').innerHTML = "Track not selected"
-            document.querySelector('.track_info .container').style.visibility = 'hidden'
-            document.querySelector('.controls_container .love').style.visibility = 'hidden'
-        }
-    }
-
-    function onMouseWheel(evt){
-      console.log(evt.wheelDelta)
-    }
-    window.addEventListener('DOMMouseScroll', onMouseWheel, false)
-
-    function onLoad(){
-        updatePlaylist()
-        updateTrackInfo()
-
-
-        /* Love & Ban buttons */
-        var love_btn = document.querySelector('.controls_container .love')
-        love_btn.addEventListener('click', function(evt){
-            music_manager.love()
-        }, false)
-
-        helpOnHover($(love_btn), "Love track")
-
-
-        if(music_manager.scrobbler._username){
-            var link = document.querySelector('#scrobbling .lfm_link')
-            link.innerHTML = music_manager.scrobbler._username
-            link.href = "http://last.fm/user/"+music_manager.scrobbler._username
-
-
-            var toggle_link = document.querySelector('#toggle_scrobbling')
-            
-            if(!music_manager.scrobbler.scrobbling)
-                $(toggle_link).addClass('disabled');
-            
-            link.style.display = 'inline'
-            toggle_link.style.display = 'inline'
-        } else {
-            var connect_lfm = document.querySelector('#scrobbling .connect_lfm')
-            connect_lfm.style.display = 'inline'
-            love_btn.style.display = 'none'
-
-            connect_lfm.addEventListener('click', function(){music_manager.scrobbler.auth()}, false)
-        }
-
-        var play_btn = document.getElementById('play')
-        play_btn.addEventListener('click', togglePlayingBig, false)
-        
-        helpOnHover($(play_btn), "Play/Pause")
-
-
-        var next_track = document.querySelector('.controls_container .next')
-        next_track.addEventListener('click', function(){
-            music_manager.playNextTrack(true)
-            
-            _gaq.push(['_trackEvent', 'controls', 'nextTrack']);
-        }, false)
-        
-        helpOnHover($(next_track), "Next track")
-
-
-        var volume_toggle = document.querySelector('.volume_control .volume_link')
-        volume_toggle.addEventListener('click', function(){
-            var volume_range = $('#volume-slider')
-            volume_range.slider("option", "value", 0)
-            music_manager.setVolume(0)
-            
-            _gaq.push(['_trackEvent', 'controls', 'muteVolume']);
-        })
-        helpOnHover($(volume_toggle), "Mute")
-
-        /* Progress bar */
-        var progress = document.getElementById('progress_bar')
-        progress.addEventListener('click', function(evt){
-            var track = music_manager.playlist[music_manager.current_track]
-            var progress = (evt.clientX/468)
-
-            console.log("X:", track.duration * progress)
-
-            if(track)
-                music_manager.audio.currentTime = track.duration * progress 
-            
-            _gaq.push(['_trackEvent', 'controls', 'progressChange']);
-        }, false)
-        
-
-        var play_mode = $('#play_mode_control')
-        var repeat_mode = $('#repeat_mode_control')
-        var stop_after = $('#stop_after_control')
-
-        if (music_manager.play_mode == "shuffle")
-            play_mode.removeClass('disabled')
-
-        if (music_manager.repeat_mode && music_manager.repeat_mode != "normal"){
-            repeat_mode.removeClass('disabled')
-
-            if (music_manager.repeat_mode == "repeat_all")
-                repeat_mode.addClass('all')
-        }
-
-        if (music_manager.stop_after_playing == "stop")
-            stop_after.removeClass('disabled')
-
-
-        var play_source = document.getElementById('play_source');
-        play_source.addEventListener('click', function(evt){
-            window.open("index.html")
-/*            
-              music_manager.scrobbler.radioTune('lastfm://user/buger_swamp/loved', function(response){            
-                music_manager.scrobbler.radioGetPlaylist(function(response){
-                    console.log("ZXCZXC")
-
-                    var xhr = new XMLHttpRequest()
-                    xhr.open("GET", response.url, true)
-                    xhr.send()
-                    
-                    console.log("Sending redirect response:", response.url)
-
-                    xhr.onreadystatechange = function(){
-                        console.log("Redirect response:", xhr)
-                    }
-
-                    music_manager.audio.playOrLoad(response.url)
-                })
-            })
-*/            
-        })
-    }
-
-    function togglePlayingBig(evt){
-        if(evt.target.nodeName == 'A'){
-            var img = evt.target.querySelector('img')
-            var button = evt.target
-        } else {
-            var img = evt.target
-            var button = evt.target.parentNode
-        }
-
-        if(button.className.match(/playing/)){
-            button.className = "paused"
-            img.src = "images/play.png"
-            music_manager.pause()
-        } else {
-            button.className = "playing"
-            img.src = "images/pause.png"
-            music_manager.audio.playOrLoad()
-        }
-
-        updatePlaylist()
-        
-        _gaq.push(['_trackEvent', 'controls', 'togglePlaying', 'big']);
-    }
-
-    function stopCurrentTrack(){
-        var current_playing = document.querySelectorAll("a.sm2_button.playing, a.sm2_button.paused, a.sm2_button.loading")
-
-        if(current_playing.length > 0)
-            for(i in current_playing)
-                current_playing[i].className = "sm2_button"
-    }    
-    
-    function togglePlaying(link){
-        if(link.className.match(/disabled/))
-            return false
-    
-        if(link.className.match('playing')){
-            link.className = "sm2_button paused"
-
-            music_manager.pause()
-        } else {
-            if(link.className.match(/paused/)){
-                link.className = "sm2_button playing"
-            } else {                
-                stopCurrentTrack()
-
-                link.className = "sm2_button loading"                        
-            }
-            
-            music_manager.play(music_manager.playlist[link.getAttribute('data-index-number')])
-            
-            _gaq.push(['_trackEvent', 'controls', 'togglePlaying', 'playlist']);
-        }        
-
-        updateTrackInfo()
-    }
-
-    </script>
-    </head>    
-    <body>
-    <!-- BuySellAds.com Ad Code -->
-    <script type="text/javascript">
-    (function(){
-      var bsa = document.createElement('script');
-         bsa.type = 'text/javascript';
-         bsa.async = true;
-         bsa.src = 'http://s3.buysellads.com/ac/bsa.js';
-      (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);
-    })();
-    </script>
-    <!-- END BuySellAds.com Ad Code -->        
-        <div id="controls">
-            <div class="buttons float">
-                <div class="album_image">
-                    <img src="" alt="Album image" id="album_image" width="80" />
-                    <a id="play" class="paused"><img src="images/play.png" alt="Play" width="58" height="58"/></a>
-                </div>
-            </div>
-            <div class="float track_info">
-                <a href="javascript:;" class="track" target="_blank"></a>
+        <script id="main_menu_tmpl" type="text/x-jquery-tmpl">
+            {{if settings.lastfm_username}}
+                {{if settings.scrobbling}}
+                    <li class='scrobbling enabled'>Scrobbling</li>
+                {{else}}
+                    <li class='scrobbling disabled'>Scrobbling</li>
+                {{/if}}
+                <li class='lastfm'>
+                    Last.fm
+                    <ul class="menu_container">
+                        <li class="header">Logged as ${settings.lastfm_username}</li>
+                        <li><a href="http://last.fm/user/${settings.lastfm_username}" target="_blank">Profile page</a></li>
+                        <li class="loved_radio">Listen loved tracks radio (Free)</li>
+                        <li class="logout">Logout<li>
+                    </ul>
+                </li>
+            {{else}}
+                <li class='scrobbling not_logged'>Want scrobbling?</li>
+            {{/if}}
+            <li class='options'>Options</li>
+        </script>
+    </head>
+    <body oncontextmenu="return false" >
+        <div id="wrapper">
+            <div id="header">
                 <div class="container">
-                    <a href="javascript:;" class="artist" target="_blank"></a><span class="album_prefix">&nbsp;from</span>
-                    <a href="javascript:;" class="album" target="_blank"></a>
-                </div>
-                <div class="controls_container">
-                    <a href="javascript:;" class="next" title="Next track"><img src="images/next_2.png" width="34px"/></a>
-                    <a href="javascript:;" class="love" title="Love!"><img src="images/love.png" alt="Love!" width="28" /></a>
-                    <!--<a href="javascript:;" class="ban" title="Ban track"><img src="/images/ban_2.png" alt="Ban" width="16" /></a>-->
-                    <span class="time"></span>
+                    <div class="control play">
+                        <a class="button"></a>
+                    </div>
+                    <div class="control next">
+                        <a class="button"></a>
+                    </div>
+                    <div class="control timeline">
+                        <div class="outer br_8">
+                            <div class="inner"></div>
+                            <div class="progress"></div>
+                            <div class="time"></div>
+                        </div>
+                    </div>
+                    <div class="control volume">
+                        <a class="button"></a>
+                        <div class="volume_bar" style="display: none">
+                            <div class="bar_bg br_8">
+                                <div class="level"></div>
+                                <div class="bar br_8"></div>
+                            </div>
+                            <div class="handler"></div>
+                        </div>                        
+                    </div>
+                    <div class="control search">
+                        <a class="button"></a>
+                    </div>
+                    <div class="search_bar" style="display: none">
+                        <input type="search" class="text br_8" />
+                        <div class="result"></div>
+                    </div>                    
                 </div>
             </div>
-            <div class="float volume_control" style="width: 15px; padding-top: 10px;">
-                <div id="volume-slider" style="height: 50px;"></div>
-                <a href="javascript:;" class="volume_link"><img src="images/volume_2.png" alt="Volume" /></a>
+            <div id="current_song">
+                <div class="container" style="display: none;">
+                    <div class="playing" title="Currently playing"></div>
+                    <div class="album_img"><span class="jewelcase"></span><img /></div>
+                    <div class="love_btn"><a class='button'></a></div>
+                    <div class="info">
+                        <a class="song"></a>
+                        <a class="artist"></a><span class="dash" style="display:none">-</span><a class="album"></a>
+                    </div>                
+                </div>
+                <div class="loader"></div>            
             </div>
+            <div id="playlist" style="visibility: hidden"></div>
+            <div id="footer">
+                <div class="left">
+                    <a class="button shuffle"></a>
+                    <a class="button repeat"></a>
+                </div>
+                <div class="right">
+                    <a class="button menu"></a>
+                </div>
+            </div>
+            <ul id="main_menu" class="menu_container" style="display:none"></ul>
         </div>
-        <div id="progress_bar">
-            <div id="progress"></div>
-            <div id="progress_loaded"></div>
-        </div>
-        <!-- End BuySellAds.com Zone Code -->
-<script type="text/javascript"><!--
-google_ad_client = "pub-3092640050663224";
-/* 468x60, создано 16.12.10 */
-google_ad_slot = "8487374198";
-google_ad_width = 468;
-google_ad_height = 60;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-
-        <div class="wrapper">
-            <ul style="white-space:nowrap" id="tracks_container">
-            </ul>
-            <div id="quick_help" class="ui-corner-tr" style="position: absolute; background: #ddd; color: #666; bottom: 27px; left: 0px; padding: 3px;display: none; max-width: 200px; overflow:hidden;text-overflow: ellipsis; z-index: 9999"></div>
-        </div>
-        <div style="height: 26px; border-top: 1px solid #ccc"></div>
-        <div class="play_mode_controls">
-            <button id="play_source" class="ui-toggler ui-corner-all play_source"></button>
-            <button id="play_mode_control" class="ui-toggler ui-corner-left shuffle disabled"></button>
-            <button id="stop_after_control" class="ui-toggler stop_after_playing disabled"></button>
-            <button id="repeat_mode_control" class="ui-toggler ui-corner-right repeat_mode disabled"></button>
-
-            <div id='scrobbling'>
-                <button id="toggle_scrobbling" class="ui-toggler ui-corner-all toggle_scrobbling" style="display:none"></button>
-                <a href="#" class="lfm_link" target="_blank" style="display:none">buger_swamp</a>
-                <a href="javascript:;" class='connect_lfm' style="display:none">Want scrobbling?</a>
-            </div>            
-        </div>
-        <script>
-            onLoad()
-        </script>
-        <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-16810054-3']);
-        _gaq.push(['_trackPageview']);
-        _gaq.push(['_trackEvent', 'pageLoad', 'popup']);
-
-        if(BrowserDetect.OS != 'Mac' && BrowserDetect.OS != 'Linux'){        
-          (function() {
-            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-            ga.src = 'https://ssl.google-analytics.com/ga.js';
-            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
-          })();
-        }
-        </script>
-        <script>
-$(function() {
-  $("#volume-slider").slider({
-    orientation: "vertical",
-    range: "min",
-    min: 0,
-    max: 100,
-    value: music_manager.getVolume()*100,
-    slide: function(event, ui) {
-      music_manager.setVolume(ui.value/100)
-    }
-  });
-
-
-  $('button#play_mode_control').click(function(){
-      $(this).toggleClass('disabled');
-
-      music_manager.play_mode = $(this).hasClass('disabled') ? "normal" : "shuffle";
-      
-      _gaq.push(['_trackEvent', 'controls', 'playMode', music_manager.play_mode]);
-  });
-
-  helpOnHover($('button#play_mode_control'), function(){
-      if ($(this).hasClass('disabled'))
-          return "Shuffle mode disabled"
-      else
-          return "Shuffle mode enabled"
-  })
-
-  $('button#stop_after_control').click(function(){
-      $(this).toggleClass('disabled');
-
-      music_manager.stop_after_playing = $(this).hasClass('disabled') ? "normal" : "stop";
-
-      _gaq.push(['_trackEvent', 'controls', 'playMode', music_manager.stop_after_playing]);
-  });
-
-  helpOnHover($('button#stop_after_control'), function(){
-      if ($(this).hasClass('disabled'))
-          return "Playing without stopping"
-      else
-          return "Stop after playing"
-  })
-
-    
-    
-  $('button#repeat_mode_control').click(function(){
-      if ($(this).hasClass('all')){
-        $(this).removeClass('all').addClass('disabled');
-        music_manager.repeat_mode = "normal";
-      } else if ($(this).hasClass('disabled')){
-        $(this).removeClass('disabled all')
-        music_manager.repeat_mode = "repeat_one";
-      } else {
-        $(this).removeClass('disabled').addClass('all');
-          music_manager.repeat_mode = "repeat_all";
-      }
-
-      _gaq.push(['_trackEvent', 'controls', 'repeatMode', music_manager.repeat_mode]);
-  });
-
-  helpOnHover($('button#repeat_mode_control'), function(){
-      if($(this).hasClass('all'))
-        return "Repeat playlist"
-      else if($(this).hasClass('disabled'))
-        return "Don't repeat"
-      else
-        return "Repeat track"
-  })
-
-
-  $('button#toggle_scrobbling').click(function(){
-      $(this).toggleClass('disabled')
-
-      music_manager.scrobbler.scrobbling = !$(this).hasClass('disabled')
-  })
-
-  helpOnHover($('button#toggle_scrobbling'), function(){
-      if($(this).hasClass('disabled'))
-        return "Scrobbling disabled"
-      else
-        return "Scrobbling enabled"
-  })
-});        
-        </script>
     </body>
 </html>

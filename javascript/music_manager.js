@@ -340,7 +340,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
 
                 this.fireEvent("onLoading");
 
-                var url = this.scrobbler.previewURL(track.track_id);
+                var url = Scrobbler.previewURL(track.track_id);
 
                 this.playTrack();
             
@@ -601,6 +601,6 @@ MusicManager.prototype.ban = function(){
 }
 
 
-MusicManager.prototype.getState = function(){         
+MusicManager.prototype.getState = function(){ 
     return this.state;
 }

@@ -148,12 +148,17 @@ function getTrackInfo(button){
   else if(container.className.match('streamable'))
       streamable = true
 
+  if (!window.pageID) {
+      window.pageID = new Date().getTime();
+  }
+
   var track_info = {
       artist:     container.getAttribute('data-artist'),
       song:       container.getAttribute('data-song'),
       album:      container.getAttribute('data-album'),
       track_id:   container.getAttribute('data-track-id'),
       index:      parseInt(container.getAttribute('data-index-number')),
+      page_id:    window.pageID,
       
       element_id: button.id,
       streamable: streamable

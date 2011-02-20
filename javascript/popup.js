@@ -26,7 +26,6 @@ PlayerUI.loadPlaylist = function(data){
                 merge_rows = 0;
             }
         }
-        
     }
     
     var pane = $("#playlist").data('jsp');
@@ -100,13 +99,6 @@ PlayerUI.setCurrentTrack = function(track_number, update_info){
 
         cur_song.css({visibility:'visible'});
     }
-
-    this.setState({
-        played: 0,
-        buffered: 0,
-        played: 0,
-        volume: PlayerUI.state.volume
-    }); 
 }
 
 PlayerUI.setState = function(state){
@@ -254,6 +246,43 @@ PlayerUI.search = function(){
     });
 }
 
+PlayerUI.showMainMenu = function() {
+    var template = $('#main_menu_tmpl');
+
+    $('#main_menu').html(template.tmpl({
+        settings: PlayerUI.settings
+    })).show();
+    
+    $('#main_menu .search_lyrics').click(function() {        
+        // I'm feeling lucky
+        var track = PlayerUI.playlist[PlayerUI.current_track];
+        browser.tabs.create({url: "http://google.com/search?sourceid=navclient&btnI=I%27m+Feeling+Lucky&q="+track.artist+' '+track.song + ' lyrics'});
+    });
+
+    $('#main_menu .options').click(function() {
+        browser.tabs.create({url: browser.extension.getURL('options.html')});
+    });
+    
+    $('#main_menu .scrobbling').click(function() {        
+        if ($(this).hasClass('not_logged')) {
+            browser.tabs.create({url: Scrobbler.authURL()});
+
+        } else if ($(this).hasClass('disabled')) {
+            $(this).removeClass('disabled');
+            
+            PlayerUI.settings.scrobbling = true;
+
+            browser.postMessage({ method: "setScrobbling", scrobbling: true });
+        } else {
+            $(this).addClass('disabled');
+
+            PlayerUI.settings.scrobbling = false;
+
+            browser.postMessage({ method: "setScrobbling", scrobbling: false });
+        }
+    });
+}
+
 
 browser.addMessageListener(function(msg) {
     if (msg.method != 'updateState') 
@@ -281,17 +310,23 @@ browser.addMessageListener(function(msg) {
             break;
 
         case 'loading':
-            PlayerUI.setCurrentTrack(msg.track);
+            PlayerUI.setCurrentTrack(msg.track_index);
             break;
 
         case 'play':
-            PlayerUI.playlist[msg.track] = msg.track_info;
+            PlayerUI.playlist[msg.track_index] = msg.track;
 
-            PlayerUI.setCurrentTrack(msg.track, true);
+            PlayerUI.setCurrentTrack(msg.track_index, true);
             break;
 
         case 'updateState':
             PlayerUI.setState(msg.state);
+            break;
+
+        case 'setSettings':
+            PlayerUI.settings = msg.settings;
+
+            PlayerUI.showMainMenu();
             break;
 
         default:
@@ -300,10 +335,6 @@ browser.addMessageListener(function(msg) {
 });
 
 $(document).ready(function(){
-    if (window.navigator.userAgent.match(/Windows NT 5/)) {
-        document.body.className += " windows_xp_font_smoothing_fix";
-    }
-        
     if (browser.isOpera) {
         document.getElementById('playlist').style.height = '460px';
         document.getElementById('wrapper').style.marginTop = '5px';       
@@ -315,5 +346,6 @@ $(document).ready(function(){
     
     browser.onReady( function() {
         browser.postMessage({method:'getPlaylist'});
+        browser.postMessage({method:'getSettings'});        
     })
 });
