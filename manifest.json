@@ -1,0 +1,27 @@
+{
+   "background_page": "background.html",
+   "browser_action": {
+      "default_icon": "lastfm_128.png",
+      "default_title": "Last.fm free music player",
+      "popup": "popup.html"
+   },
+   "content_scripts": [ {
+      "css": [ "css/mp3_player_button.css", "css/style.css" ],
+      "js": [ "javascript/utils.js", "javascript/manager.js", "javascript/content_script.js" ],
+      "matches": [ "http://*.last.fm/*", "http://*.lastfm.ru/*", "http://*.lastfm.pt/*", "http://*.lastfm.de/*", "http://*.lastfm.es/*", "http://*.lastfm.fr/*", "http://*.lastfm.it/*", "http://*.lastfm.jp/*", "http://*.lastfm.pl/*", "http://*.lastfm.com.br/*", "http://*.lastfm.se/*", "http://*.lastfm.com.tr/*" ]
+   }, {
+      "js": [ "javascript/lastfm_auth_callback.js" ],
+      "matches": [ "http://yandex.ru/white*" ]
+   } ],
+   "default_locale": "en",
+   "description": "!! Yes it plays music! Browser as a music player? Why not? Free music player for Google Chrome with Last.fm integration.",
+   "icons": {
+      "128": "lastfm_128.png"
+   },
+   "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDd0p6VIH7QR2tXpvuTOiQxh3/Wc1HBMXAhn0x7V/qI6TSRJBYi1H54L41e7l/eqhJK1B4lgd3/gTXufuzQ37Wp6XDA6e4eKWnK5bMTQ/a2UxyMXsgjpo8Ts5U4UVLJ550fLOYo8aUcBv3Ri1Y2H14M7LJGv+WOvXLVJpXOx61tHQIDAQAB",
+   "name": "Last.fm free music player",
+   "options_page": "options.html",
+   "permissions": [ "notifications", "tabs", "http://*/" ],
+   "update_url": "http://clients2.google.com/service/update2/crx",
+   "version": "2.9.15"
+}

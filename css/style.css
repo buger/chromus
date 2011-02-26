@@ -1,0 +1,155 @@
+table.candyStriped.chart td.multibuttonCell, table.candyStriped.chart td.multibuttonCell  {
+    width: 50px;
+}
+
+table.candyStriped.chart .vk_search_button,
+table.candyStriped.chart .sm2.button {
+    vertical-align:middle;
+    display: inline-block;
+}
+
+table.mediumImageChart .vk_search_button, 
+#friendsLoved .vk_search_button,
+#friendsLoved .sm2_button,
+#nowPlaying .vk_search_button,
+#nowPlaying .sm2_button,
+table.mediumImageChart .sm2_button,
+ul.artistsWithInfo .vk_search_button,
+ul.artistsWithInfo .sm2_button {
+    vertical-align:middle;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+#nowPlaying .sm2_button,
+ul.artistsWithInfo .sm2_button,
+ul.artistsWithInfo .vk_search_button {
+    margin-right: 0px;
+}
+
+ul.mediumChartWithImages .vk_search_button, ul.mediumChartWithImages .sm2_button {
+    vertical-align:middle;
+    display: inline;
+    margin-right: 5px;
+    padding-left: 0px;
+}
+
+td.playbuttonCell a.previewbutton {
+}
+
+a.vk_search_button {
+    position:relative;
+    display:inline-block; /* If you worry old browser bugs, Firefox 2 might not like this and may need -moz-inline-box instead. :D */
+    width:16px;
+    height:14px;
+    text-indent:-9999px; /* don't show link text */
+    overflow:hidden; /* don't draw inner link text */
+    vertical-align:middle;
+    margin-top:-1px; /* vertical align tweak */
+    /* safari 3.1+ fun (/W3 working draft extension, TBD.) */
+    -webkit-transition-property: hover;
+    -webkit-transition: background-color 0.15s ease-in-out;
+
+    background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAABIAAAASABGyWs+AAACwklEQVQ4y32T20sUYRjGn2/mm9POtoepNNzKcDXMA4XrAbS9ECq6iOwPMLQU+hP6H7wIiqSLkKALrW4CDQzsxkSEVlcSXRfMw8XYuptou7rMzuzMfF2k5akeeHgvHvjxvg+8BHt6+fwplpeX5Su19ZWKqpZYZmF7ZWlpqfN+526kpRXb2SxOEnevowOMMfCK2tB2++6rYFXdRxoKvz9VUTMaab/1bvLLzI2dbJY86Oo6EUBGR0exrutNocs1rx1PoNolHBgAlwE8GMRCbiP1bfFRd3f3cGtrK6ampg4BeImDpzna/sRbej5aqvnh98jwKtKfyUmKl4JVDbzoHw5XVeUnJiYOAWhDU3O9JxC8fk7zQxYFOC4DA4NpO7AdF7IggGmn6y+FK5sDgcDI0ROoIEohURR9DgNcxsAA5M0idgsWHJeB5ziIkiypXu+FinD4WAc0l8tlieuYluPKlmECABgDFFEAASDyHHaNrLu7k8vqun4csLAwP1939VqytCzUwvEUbL9dMFACEMagb2b01dW16VRq4xiAj01P5z+MjBia33ez5OwZSRUFSDwHWeBBCbC2soy3Q4Nbn8fHh9fX178Hg0Gk0+m/gLm5OXwaG1sMBgI/XMeu5Qn8jl0kP7e3WDKxmHkzNGgmEokySmmjbdsxVVU3fD4fMpnM3qYAqqurkUwmSW9PT+XF8vKooigh0zQ3dV2fjMfjlYqiPKOUhmzbjluW1SvL8mw6nUYikfgN+JcikQhmZmbQ1tbWIUlSP6U0VCwW44VCodfj8czquv5/AAA0NjYiFoshGo12KIrSLwhCyLKsuGEYD3me/7oPIAB4AMIBUwDcXu4CKEYikTuapvWJoliaz+cfa5rWx+8/FQAJgALAA8B7wOpeJqZSqSW/37/IcdyqYRgDqqrmjp5ATvC+GACXEOJyHEcAMMdx8As6nhlfAosvgwAAACJ6VFh0U29mdHdhcmUAAHjaKy8v18vMyy5OTixI1csvSgcANtgGWBBTylwAAAAASUVORK5CYII%3D);
+    background-repeat:no-repeat;
+    background-position:0px 50%;
+    background-size: 90%;
+}
+
+table.tracklist .smallmultibuttonCell {
+    width: 50px !important;
+}
+
+
+div.ex_overload_window {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    width: 500px;
+    height: 200px;
+    margin-left: -250px;
+    background: #fff;
+    z-index: 999;
+
+    opacity: 1; 
+    -webkit-transition: opacity 2s ease-out;
+}
+
+div.ex_overload_window h3.ex_header {
+    background-position: 10px 3px;
+    background-repeat: no-repeat;
+    background-size: 8%;
+
+    font-size: 22px;
+    
+    padding-left: 60px;
+    padding-top: 10px;
+    padding-bottom: 10px;    
+
+    cursor: default;
+}
+
+div.ex_overload_window p.ex_title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;   
+    padding-top: 0px;
+    margin-top: 0px;
+}
+
+ul.artistsLarge li a.sm2_button {
+    position: absolute;
+    top: 81px;
+    left: 105px;
+}
+
+ul.artistRecs a.sm2_button {
+    position: absolute;
+    left: 45px;
+    top: 34px;
+}
+ul.artistRecs span.playButton {
+    display: none;
+}
+
+.ex_artist a.sm2_button { background-color:#ccc; }
+.ex_album a.sm2_button { background-color:#ccc; }
+
+ul.artistsWithInfo a.sm2_button {
+    position: absolute;
+    left: 105px;
+    top: 80px;
+}
+
+ul.albumsMedium a.sm2_button {
+    position: absolute;
+    left: 54px;
+    top:47px;
+}
+
+ul.albumsLarge a.sm2_button {
+    position: absolute;
+    left: 115px;
+    top: 105px;
+}
+
+#albumstrip li a.sm2_button {
+    height: 13px !important;
+    width: 13px !important;
+    display: inline-block !important;
+    padding: 0px !important;
+
+    position: absolute;
+    right: 10px;
+    bottom: 5px;
+
+    z-index: 1;
+}
+
+ul.recentAlbums li a.sm2_button, #newReleases .release a.sm2_button {
+    left: 50px;
+    top: 47px;
+    z-index: 2;
+    position: absolute;
+}
