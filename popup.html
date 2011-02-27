@@ -44,9 +44,15 @@
 
         if(music_manager.current_track != undefined)
             if(track.not_found)
-                try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button disabled"}catch(e){}
+                try{
+                    document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button disabled"
+                    document.getElementById("rs_button_"+music_manager.current_track).style.display = "none"
+                }catch(e){}
             else
-                try{document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"}catch(e){}
+                try{
+                    document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"
+                    document.getElementById("rs_button_"+music_manager.current_track).style.display = "inline-block"
+                }catch(e){}
     }, true)
 
     music_manager.dispatcher.addEventListener('onEnded', function(){
@@ -111,25 +117,30 @@
     }
 
     function updatePlaylist(){
-        var container = document.getElementById('tracks_container')        
+        var container = document.getElementById('tracks_container')
         var html = ""
         var state
+        var rs_state
         
         var playlist = music_manager.playlist
 
         for(var i=0; i<playlist.length; i++){
-            if(music_manager.current_track != undefined && music_manager.current_track == i)
+            rs_state = ""
+            if(music_manager.current_track != undefined && music_manager.current_track == i){
                 state = music_manager.audio.paused ? "paused" : "playing"
+                rs_state = "style='display:inline-block;'"
+            }
             else
                 state = playlist[i].not_found ? "disabled" : ""
 
                 html += "<li>"+
-                            "<a id='ex_button_"+playlist[i].index+"' data-index-number='"+playlist[i].index+"' href='javascript:;' onclick='togglePlaying(this)' class='sm2_button "+state+"'></a>"+
+                            "<a id='ex_button_"+playlist[i].index+"' data-index-number='"+playlist[i].index+"' href='javascript:;' onclick='togglePlaying(this)' class='sm2_button "+state+"'></a>"+                            
                             "<span class='track'>"+
                                 "<a target='_blank' href='http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"'>"+playlist[i].artist + "</a>" +
                                 '  &ndash;  '+
-                                "<a target='_blank' href=\"http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"/_/"+(playlist[i].song||"").replace(/\s/g,'+')+"\">"+playlist[i].song+"</a>"+
+                                "<a target='_blank' href=\"http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"/_/"+(playlist[i].song||"").replace(/\s/g,'+')+"\">"+playlist[i].song+"</a>"+                                                  
                             "</span>"+
+                            "<a id='rs_button_"+playlist[i].index+"' href='javascript:;' title='Research track' data-index-number='"+playlist[i].index+"' onclick='researchTrack(this)' class='research' " + rs_state + "></a>"+
                             "<a href='javascript:;' title='Delete from playlist' data-index-number='"+playlist[i].index+"' onclick='removeFromPlaylist(this)' class='delete'></a>"
                         "</li>"
         }
@@ -330,10 +341,11 @@
 
 
         var play_source = document.getElementById('play_source');
-        play_source.addEventListener('click', function(evt){
-            music_manager.scrobbler.radioTune('lastfm://user/buger_swamp/loved', function(response){            
-                music_manager.scrobbler.radioGetPlaylist(function(response){
-                    console.log("ZXCZXC")
+        if(play_source)
+            play_source.addEventListener('click', function(evt){
+                music_manager.scrobbler.radioTune('lastfm://user/buger_swamp/loved', function(response){
+                    music_manager.scrobbler.radioGetPlaylist(function(response){
+                        console.log("ZXCZXC")
 /*
                     var xhr = new XMLHttpRequest()
                     xhr.open("GET", response.url, true)
@@ -379,8 +391,13 @@
         var current_playing = document.querySelectorAll("a.sm2_button.playing, a.sm2_button.paused, a.sm2_button.loading")
 
         if(current_playing.length > 0)
-            for(i in current_playing)
-                current_playing[i].className = "sm2_button"
+            for(i in current_playing){
+                current_playing[i].className = "sm2_button";
+                try{
+                    document.getElementById('rs_button_' + current_playing[i].
+                        getAttribute('id').replace(/ex_button_/, '')).style.display = "none";
+                }catch(e){}
+            }
     }    
     
     function togglePlaying(link){
@@ -397,15 +414,39 @@
             } else {                
                 stopCurrentTrack()
 
-                link.className = "sm2_button loading"                        
+                link.className = "sm2_button loading"
             }
             
             music_manager.play(music_manager.playlist[link.getAttribute('data-index-number')])
             
             _gaq.push(['_trackEvent', 'controls', 'togglePlaying', 'playlist']);
-        }        
+        }
+
+        var rs_b = document.getElementById('rs_button_' + link.getAttribute('id').replace(/ex_button_/, ''));
+        if(rs_b) {
+            rs_b.style.display = "inline-block";
+        }
 
         updateTrackInfo()
+    }
+
+    function researchTrack(link){
+        if(!music_manager.canResearch)
+            link.className = 'research disabled'
+
+        if(link.className.match(/disabled/))
+            return false
+
+        var ex_b = document.getElementById('ex_button_' + link.getAttribute('id').replace(/rs_button_/, ''));
+        if(ex_b) {
+            music_manager.research(music_manager.playlist[link.getAttribute('data-index-number')])
+
+            _gaq.push(['_trackEvent', 'controls', 'researchTrack', 'playlist']);
+
+            updateTrackInfo()
+        }
+        else
+            link.className = 'research disabled'
     }
 
     </script>
@@ -546,9 +587,8 @@ $(function() {
         music_manager.repeat_mode = "repeat_one";
       } else {
         $(this).removeClass('disabled').addClass('all');
-          music_manager.repeat_mode = "repeat_all";
+        music_manager.repeat_mode = "repeat_all";
       }
-
       _gaq.push(['_trackEvent', 'controls', 'repeatMode', music_manager.repeat_mode]);
   });
 

@@ -57,6 +57,7 @@ function getPlaylist(button){
         for(var i=0; i<buttons.length; i++){
             track = getTrackInfo(buttons[i])
             track.index = i
+            track.lastIndex = 0
             
             tracks.push(track)
         }

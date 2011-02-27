@@ -17,6 +17,7 @@ Audio.prototype.playOrLoad = function(url){
 **/
 var MusicManager = function(scrobbler){
     this.playlist = []
+    this.canResearch = true;
 
     this.scrobbler = scrobbler;
 
@@ -214,7 +215,7 @@ MusicManager.prototype.playPreviews = function(){
 /**
     MusicManager#searchTrack(trackIndex)
 **/
-MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
+MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch, getNextResult){
     console.log("Searching track:", trackIndex)
 
     trackIndex = parseInt(trackIndex)
@@ -235,7 +236,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
 
     if(!track.info){
         this.updateTrackInfo(trackIndex, function(){
-            this.searchTrack(trackIndex, playAfterSearch)
+            this.searchTrack(trackIndex, playAfterSearch, getNextResult)
         }.bind(this))
 
         return
@@ -243,6 +244,9 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
 
     track.song = track.song.replaceEntities()
     track.artist = track.artist.replaceEntities()
+    
+    if(getNextResult == undefined)
+        getNextResult = false;
 
     if(playAfterSearch == undefined)
         playAfterSearch = true
@@ -254,6 +258,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
         console.log("Resp",response)
 
         if(response.error){
+            this.canResearch = false;
             if(response.error == 'not_found' && track.track_id && track.streamable && this.playPreviews()) {
                 this.not_found_in_row = 0
 
@@ -288,21 +293,36 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
                     this.not_found_in_row = 0
             }
         } else {
+            this.canResearch = response.length > 1;
             this.current_track = trackIndex
 
             this.not_found_in_row = 0
             this.fireEvent("onLoading")
             
+            if(track.lastIndex == undefined){
+                this.playlist[trackIndex].lastIndex = response.lastIndex;
+                track = this.playlist[trackIndex]
+            }            
+            
+            if(this.canResearch && getNextResult){   
+                this.playlist[trackIndex].lastIndex++                
+                if(this.playlist[trackIndex].lastIndex == response.length)
+                    this.playlist[trackIndex].lastIndex = 0;
+                track = this.playlist[trackIndex];
+            }
+            
+            console.log("nextIndex", track.lastIndex)
+            
             this.createAudio();
-            this.audio.playOrLoad(response.url)
+            this.audio.playOrLoad(response[track.lastIndex].url)
 
             this.setVolume()            
     
-            track.duration = parseInt(response.duration)
+            track.duration = parseInt(response[track.lastIndex].duration)
             track.scrobbled = false
             track.next_song_prefetched = false 
 
-            track.audio_url = response.url;
+            track.audio_url = response[track.lastIndex].url;
             
             this.showNotification()
         }
@@ -346,7 +366,29 @@ MusicManager.prototype.play = function(track_info){
     }
 }
 
+/**
+    MusicManager#play(track_info)
+**/
+MusicManager.prototype.research = function(track_info){
 
+    var track = this.playlist[this.current_track]
+    
+    console.log("Research:", track, track_info, this.current_track)
+
+    delete this.shuffle_tracks
+
+    if(track_info.song){
+        // If resuming track
+        track_info.song = track_info.song.replaceEntities()
+        track_info.artist = track_info.artist.replaceEntities()
+
+        this.searchTrack(track_info.index, true, true)
+            
+        _gaq.push(['_trackEvent', 'music_manager', 'play', track_info.artist+'-'+track_info.song]);
+
+        _gaq.push(['_trackEvent', 'music_manager', 'play_artist_chart', track_info.artist]);
+    }
+}
 /**
     MusicManager#pause()
 **/

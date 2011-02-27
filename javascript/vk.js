@@ -6,7 +6,7 @@ var _gaq = _gaq || [];
     Module for working with vk.com
 **/
 var VK = {
-    determineSearchMethod: function(callback){        
+    determineSearchMethod: function(callback){
         console.log("Trying to determine search method")
 
         xhrRequest("http://vkontakte.ru", "GET", null, function(xhr){
@@ -71,31 +71,29 @@ var VK = {
 
             console.log("Tracks:", audio_data);
 
-            if(audio_data.length > 0){                    
-                var vk_track
+            if(audio_data.length > 0){
+
+                audio_data.lastIndex = 0
 
                 for(var i=0;i<audio_data.length; i++){
                     console.log(audio_data[i], Math.abs(parseInt(audio_data[i].duration) - duration))
 
                     if(audio_data[i].artist.toLowerCase() == artist && audio_data[i].title.toLowerCase() == song){
                         if(!duration || Math.abs(parseInt(audio_data[i].duration) - duration) <= 2){
-                            vk_track = audio_data[i]
+                            audio_data.lastIndex = i
                             break
                         }
                     } else if(!audio_data[i].title.toLowerCase().match(/(remix|mix)/) &&
                                audio_data[i].artist.toLowerCase() == artist &&
                                audio_data[i].title.toLowerCase() == song){
-                        vk_track = audio_data[i]
+                        audio_data.lastIndex = i
                     }
                 }
 
-                if(!vk_track)
-                    vk_track = audio_data[0]
-
                 //Caching for 3 hours
-                CACHE.set(track, vk_track, 1000*60*60*2)                                
+                CACHE.set(track, audio_data, 1000*60*60*2)
 
-                callback(vk_track)
+                callback(audio_data)
             } else {
                 callback({error:'not_found'})
             }
@@ -174,7 +172,7 @@ var VK = {
             if(results.response){
                 var vk_track
 
-                if(results.response[1]){                                
+                if(results.response[1]){
                     for(var i=1; i<results.response.length; i++){
                         var audio = results.response[i].audio
 
@@ -183,7 +181,7 @@ var VK = {
                         if(audio.artist.toLowerCase() == artist && audio.title.toLowerCase() == song){
                             if(!duration || Math.abs((parseInt(audio.duration) - duration) <= 2)){
                                 vk_track = audio
-                                
+
                                 break
                             }
                         } else if(!audio.title.toLowerCase().match(/(remix|mix)/) && audio.artist.toLowerCase() == artist){
@@ -250,7 +248,6 @@ var VK = {
 
         if(CACHE.get(track))
             return callback(CACHE.get(track))
-        
 
         _gaq.push(['_trackEvent', 'vkontakte_search', this.search_method, artist+'-'+song]);
 
