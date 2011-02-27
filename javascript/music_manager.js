@@ -300,7 +300,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch, getNe
             this.fireEvent("onLoading")
             
             if(track.lastIndex == undefined){
-                this.playlist[trackIndex].lastIndex = response.lastIndex;
+                this.playlist[trackIndex].lastIndex >= response.lastIndex;
                 track = this.playlist[trackIndex]
             }            
             

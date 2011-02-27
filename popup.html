@@ -46,11 +46,13 @@
             if(track.not_found)
                 try{
                     document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button disabled"
+                    document.getElementById("rs_button_"+music_manager.current_track).className = "research"
                     document.getElementById("rs_button_"+music_manager.current_track).style.display = "none"
                 }catch(e){}
             else
                 try{
                     document.getElementById("ex_button_"+music_manager.current_track).className = "sm2_button playing"
+                    document.getElementById("rs_button_"+music_manager.current_track).className = "research"
                     document.getElementById("rs_button_"+music_manager.current_track).style.display = "inline-block"
                 }catch(e){}
     }, true)
@@ -439,6 +441,7 @@
 
         var ex_b = document.getElementById('ex_button_' + link.getAttribute('id').replace(/rs_button_/, ''));
         if(ex_b) {
+            link.className = "research disabled"
             music_manager.research(music_manager.playlist[link.getAttribute('data-index-number')])
 
             _gaq.push(['_trackEvent', 'controls', 'researchTrack', 'playlist']);
