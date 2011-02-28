@@ -299,14 +299,15 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch, getNe
             this.not_found_in_row = 0
             this.fireEvent("onLoading")
             
-            if(track.lastIndex == undefined){
-                this.playlist[trackIndex].lastIndex >= response.lastIndex;
+            console.log("response.lastIndex", response.lastIndex)
+            if(track.lastIndex == undefined || track.lastIndex == -1){
+                this.playlist[trackIndex].lastIndex = response.lastIndex;
                 track = this.playlist[trackIndex]
             }            
             
             if(this.canResearch && getNextResult){   
                 this.playlist[trackIndex].lastIndex++                
-                if(this.playlist[trackIndex].lastIndex == response.length)
+                if(this.playlist[trackIndex].lastIndex >= response.length)
                     this.playlist[trackIndex].lastIndex = 0;
                 track = this.playlist[trackIndex];
             }

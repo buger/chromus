@@ -89,6 +89,7 @@ var VK = {
                         audio_data.lastIndex = i
                     }
                 }
+                console.log("audio_data.lastIndex", audio_data.lastIndex)
 
                 //Caching for 3 hours
                 CACHE.set(track, audio_data, 1000*60*60*2)
