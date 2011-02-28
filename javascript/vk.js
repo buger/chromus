@@ -171,37 +171,36 @@ var VK = {
             console.log(results)
          
             if(results.response){
-                var vk_track
+                var vk_tracks
 
                 if(results.response[1]){
+                    vk_tracks.lastIndex = 0
                     for(var i=1; i<results.response.length; i++){
                         var audio = results.response[i].audio
 
                         console.log(audio)
+                        vk_tracks.push(audio)
 
                         if(audio.artist.toLowerCase() == artist && audio.title.toLowerCase() == song){
                             if(!duration || Math.abs((parseInt(audio.duration) - duration) <= 2)){
-                                vk_track = audio
+                                vk_tracks.lastIndex = vk_tracks.length - 1
 
                                 break
                             }
                         } else if(!audio.title.toLowerCase().match(/(remix|mix)/) && audio.artist.toLowerCase() == artist){
-                            vk_track = audio
+                            vk_tracks.lastIndex = vk_tracks.length - 1
                         }
                     }
-                    console.log("Selected track:", vk_track)
-                    
-                    if(!vk_track)
-                        vk_track = results.response[1].audio
+                    console.log("Selected track:", vk_tracks[vk_tracks.lastIndex])
                 }
                  
-                if(vk_track){
-                    vk_track.duration = parseInt(vk_track.duration)
+                if(vk_tracks && vk_tracks.length > 0){
+                    //vk_track.duration = parseInt(vk_track.duration)
 
                     //Caching for 3 hours
-                    CACHE.set(track, vk_track, 1000*60*60*3)
+                    CACHE.set(track, vk_tracks, 1000*60*60*3)
                     
-                    callback(vk_track)
+                    callback(vk_tracks)
                 } else {
                     callback({error:'not_found'})
                 }
