@@ -48,6 +48,7 @@
         </script>
         
         <script id="main_menu_tmpl" type="text/x-jquery-tmpl">
+            <li class="clear_playlist">Clear playlist</li>
             {{if settings.lastfm_username}}
                 {{if settings.scrobbling}}
                     <li class='scrobbling enabled'>Scrobbling</li>
@@ -59,7 +60,12 @@
                     <ul class="menu_container">
                         <li class="header">Logged as ${settings.lastfm_username}</li>
                         <li><a href="http://last.fm/user/${settings.lastfm_username}" target="_blank">Profile page</a></li>
-                        <li class="loved_radio">Listen loved tracks radio (Free)</li>
+                        <li class="loved_radio">Loved Tracks Radio (Free)</li>
+                        <li class="header">Subscribers radio</li>
+                        <li class="lastfm_radio" data-radio="lastfm://user/${settings.lastfm_username}/personal">Library Radio</li>
+                        <li class="lastfm_radio" data-radio="lastfm://user/${settings.lastfm_username}/mix">Mix Radio</li>
+                        <li class="lastfm_radio" data-radio="lastfm://user/${settings.lastfm_username}/recommended">Recommendation Radio</li>
+                        <li class="lastfm_radio" data-radio="lastfm://user/${settings.lastfm_username}/neighbours">Neighbours Radio</li>
                         <li class="logout">Logout<li>
                     </ul>
                 </li>
@@ -113,8 +119,9 @@
                     <div class="info">
                         <a class="song"></a>
                         <a class="artist"></a><span class="dash" style="display:none">-</span><a class="album"></a>
-                    </div>                
+                    </div>
                 </div>
+                <div class="source"></div>
                 <div class="loader"></div>            
             </div>
             <div id="playlist" style="visibility: hidden"></div>
@@ -127,6 +134,7 @@
                     <a class="button menu"></a>
                 </div>
             </div>
+
             <ul id="main_menu" class="menu_container" style="display:none"></ul>
         </div>
     </body>

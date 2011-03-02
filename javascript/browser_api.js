@@ -1,5 +1,5 @@
 ﻿(function(window){
-    if (window.opera) {
+    if (window.opera && window.opera.postError) {
         window.console = {};
         
         function joinArgs(args) {

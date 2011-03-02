@@ -1,3 +1,4 @@
+
 var _gaq = _gaq || [];
 
 /**
@@ -9,11 +10,14 @@ var MusicManager = function(scrobbler){
     this.scrobbler = scrobbler;
 
     this.player_url = "http://chromusapp.appspot.com/";
+    //this.player_url = "http://localhost:8080/";
 
     this.setEmptyState();
     this.createAudio();
 
-    this.dispatcher = document.createElement('input'); 
+    this.dispatcher = document.createElement('input');
+
+    this.playmode = "playlist";
 }
 
 MusicManager.prototype.setEmptyState = function() {
@@ -31,14 +35,29 @@ MusicManager.prototype.createAudio = function() {
     console.log("Creating frame for audio player");
     
     this.player_frame = document.createElement("iframe");
-    this.player_frame.id = 'player_frame'; 
-    
+    this.player_frame.id = 'player_frame';
+
+    this.player_frame.onload = function(){
+        console.log(this, this.document, this.readyState);
+    }
+
     if (!browser.isSafari) {
         this.player_frame.src = this.player_url+"sm2_iframe";
     } else {
-        this.player_frame.src = safari.extension.baseURI+"sm2/iframe.htm";
+        this.player_frame.src = safari.extension.baseURI+"sm2/iframe.htm";    
     }
-    document.body.appendChild(this.player_frame);
+
+    var a = new Audio();
+    var html5_mp3 = '#html5';
+    a.onerror = function(){
+        html5_mp3 = '';
+    }
+    a.src = "images/test.mp3";
+
+    setTimeout(function(){
+        this.player_frame.src += html5_mp3;
+        document.body.appendChild(this.player_frame);
+    }.bind(this), 1000)
         
     this.player_ready = false;
 
@@ -81,7 +100,8 @@ MusicManager.prototype.playTrack = function(url) {
     this.postMessageToPlayer({
         'method': 'play',
         'url': url,
-        'track': encodeURIComponent(track.artist + ' - ' + track.song).replace(/'/,"%27")
+        'track': encodeURIComponent(track.artist + ' - ' + track.song).replace(/'/,"%27"),
+        'use_flash': track.use_flash
     });
 }
 
@@ -89,7 +109,8 @@ MusicManager.prototype.preloadTrack = function(track, url) {
     this.postMessageToPlayer({
         'method': 'preload',
         'url': url,
-        'track': encodeURIComponent(track.artist + ' - ' + track.song).replace(/'/,"%27")
+        'track': encodeURIComponent(track.artist + ' - ' + track.song).replace(/'/,"%27"),
+        'use_flash': track.use_flash
     });
 }
 
@@ -107,7 +128,7 @@ MusicManager.prototype.updateState = function(state) {
 
     if (!track || this.state.paused || this.state.url != track.audio_url) return;
                 
-    if (this.state.played >= track.duration || this.state.finished) {
+    if (Math.round(this.state.played) >= Math.round(track.duration) || this.state.finished) {
         console.log(this.state.played, track.duration, this.state.duration, track, this.state.url);
         
         this.onEnded();
@@ -123,18 +144,27 @@ MusicManager.prototype.updateState = function(state) {
     }
     
     if(this.state.duration > 31 && percent_played > 80 && this.stop_after_playing != "stop" && !track.next_song_prefetched){
-        var next_track = this.playlist[this.current_track+1]
 
-        track.next_song_prefetched = true
+        if (this.radio) {
+            if (this.radio.use_prefethching) {
+                track.next_song_prefetched = true;
 
-        if(next_track){
-            console.log("Prefetching next track")
-            _gaq.push(['_trackEvent', 'music_manager', 'prefetchingTrack']);
+                this.getNextTrack(false);
+            }
+        } else {
+            track.next_song_prefetched = true;
 
-            if(this.play_mode == "shuffle" && this.shuffle_tracks)
-                this.searchTrack(this.shuffle_tracks[0], false)
-            else
-                this.searchTrack(this.current_track+1, false)
+            var next_track = this.playlist[this.current_track+1]
+
+            if(next_track){
+                console.log("Prefetching next track")
+                _gaq.push(['_trackEvent', 'music_manager', 'prefetchingTrack']);
+
+                if(this.play_mode == "shuffle" && this.shuffle_tracks)
+                    this.searchTrack(this.shuffle_tracks[0], false)
+                else
+                    this.searchTrack(this.current_track+1, false)
+            }
         }
     }
 }
@@ -156,8 +186,6 @@ MusicManager.prototype.fireEvent = function(event_name){
 MusicManager.prototype.onStartPlaying = function(){
     var track = this.playlist[this.current_track]
 
-    console.log("Album:", track.album)
-    
     if(track.artist)
       this.scrobbler.setNowPlaying(track.artist, track.song, track.album, track.duration)
 
@@ -175,7 +203,7 @@ MusicManager.prototype.onEnded = function(){
     
     var track = this.playlist[this.current_track];
 
-    if (this.stop_after_playing == "stop" || (this.play_mode != "shuffle" && this.repeat_mode != "repeat_one" && this.current_track == (this.playlist.length-1))) {
+    if (this.stop_after_playing == "stop" || (!this.radio && this.play_mode != "shuffle" && this.repeat_mode != "repeat_one" && this.current_track == (this.playlist.length-1))) {
         delete this.current_track;
     } else {
         this.playNextTrack();
@@ -219,42 +247,80 @@ MusicManager.prototype.playAlbum = function (artist, album) {
 }
 
 
+MusicManager.prototype.getNextTrack = function(playAfterSearch) {
+    this.radio.getNext(function(track) {
+        console.log("Getting new track", playAfterSearch);
+
+        track.index = this.playlist.length;
+
+        if (playAfterSearch) {
+            this.current_track = track.index;
+        }
+
+        this.playlist.push(track);           
+        
+        if (track.audio_url && playAfterSearch) {
+            this.not_found_in_row = 0;
+            this.fireEvent("onLoading");
+            
+            this.playTrack(track.audio_url);
+            this.setVolume();
+    
+            track.scrobbled = false;
+            track.next_song_prefetched = false;
+
+            this.showNotification();
+        } else {
+            this.searchTrack(track.index, playAfterSearch);
+        }
+        
+        this.fireEvent('onPlaylistChanged');
+
+    }.bind(this));
+}
+
 /**
     MusicManager#playNextTrack()
 **/
 MusicManager.prototype.playNextTrack = function(ignore_repeat, previous_track){
-    console.log("Next track:", this.current_track)
+    var track = this.playlist[this.current_track];
 
-    if(this.play_mode == "shuffle" && this.repeat_mode != "repeat_one"){
-        if(this.shuffle_tracks == undefined){
-            this.shuffle_tracks = []
+    if (this.radio && !(track && track.next_song_prefetched)) {
+        this.getNextTrack(true);
+    } else {
+        console.log("Next track:", this.current_track)
 
-            for(i in this.playlist)
-                this.shuffle_tracks.push(i)
+        if(this.play_mode == "shuffle" && this.repeat_mode != "repeat_one"){
+            if(this.shuffle_tracks == undefined){
+                this.shuffle_tracks = []
 
-            this.shuffle_tracks.sort(function() {return 0.5 - Math.random()})
-        }
+                for(i in this.playlist)
+                    this.shuffle_tracks.push(i)
 
-        if(this.shuffle_tracks.length == 0){
-            if(this.playlist.length != 0 && (this.repeat_mode == "repeat_all" || ignore_repeat)){
-                delete this.shuffle_tracks                
-                this.playNextTrack(ignore_repeat, previous_track)
+                this.shuffle_tracks.sort(function() {return 0.5 - Math.random()})
             }
 
-            return
+            if(this.shuffle_tracks.length == 0){
+                if(this.playlist.length != 0 && (this.repeat_mode == "repeat_all" || ignore_repeat)){
+                    delete this.shuffle_tracks                
+                    this.playNextTrack(ignore_repeat, previous_track)
+                }
+
+                return
+            }
+
+            this.current_track = this.shuffle_tracks[0]        
+            this.shuffle_tracks.splice(0,1)
+        } else {
+            if(this.current_track != undefined && (this.repeat_mode != "repeat_one" || ignore_repeat))
+                this.current_track += previous_track ? -1 : 1
         }
+        
+        if(!this.current_track || this.current_track > (this.playlist.length-1))
+            this.current_track = 0    
 
-        this.current_track = this.shuffle_tracks[0]        
-        this.shuffle_tracks.splice(0,1)
-    } else {
-        if(this.current_track != undefined && (this.repeat_mode != "repeat_one" || ignore_repeat))
-            this.current_track += previous_track ? -1 : 1
+        this.searchTrack(this.current_track);
     }
-    
-    if(!this.current_track || this.current_track > (this.playlist.length-1))
-        this.current_track = 0    
-
-    this.searchTrack(this.current_track)    
 }
 
 
@@ -262,7 +328,7 @@ MusicManager.prototype.playNextTrack = function(ignore_repeat, previous_track){
     MusicManager#playPreviews()
 **/
 MusicManager.prototype.playPreviews = function(){
-    return window.localStorage["skip_previews"] == "false" || window.localStorage["skip_previews"] == undefined
+    return !this.radio && (window.localStorage["skip_previews"] == "false" || window.localStorage["skip_previews"] == undefined)
 }
 
 
@@ -292,8 +358,6 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
         this.playTrack(track.file_url);
         this.setVolume();
         
-        this.fireEvent("onPlay");
-
         if(!track.info)
             this.updateTrackInfo(track.index, function(){
                 this.fireEvent("onLoading");
@@ -349,6 +413,12 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
                 track.duration = 30
                 track.audio_url = url;
 
+                if (!track.source_icon)
+                    track.source_icon = "http://cdn.last.fm/flatness/favicon.2.ico";
+
+                if (!track.source_titile)
+                    track.source_title = "Last.fm preview";
+
                 this.showNotification()
             } else {
                 this.current_track = trackIndex
@@ -380,6 +450,12 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch){
             track.duration = parseInt(response.duration);
             track.scrobbled = false;
             track.next_song_prefetched = false;
+                
+            if (!track.source_icon)
+                track.source_icon = "http://vk.com/favicon.ico";
+
+            if (!track.source_title)
+                track.source_title = "vkontakte.ru";
 
             track.audio_url = response.url;
             
@@ -400,31 +476,30 @@ MusicManager.prototype.play = function(track_info){
     delete this.shuffle_tracks;
 
     if (track_info.file_url) {
-        var play_or_pause = function(){
-            this.current_track = track_info.index
-            
-            if(track && track_info.song == track.song && track_info.artist == track.artist && track_info.index == track.index){
-                this.playTrack();
-            } else {
-                this.showNotification();
+        this.current_track = track_info.index
+        
+        if(track && track_info.song == track.song && track_info.artist == track.artist && track_info.index == track.index){
+            this.playTrack();
+        } else {
+            this.playTrack(track_info.file_url);
+        }
+        
+        this.setVolume();
+        
+        this.fireEvent("onLoading");
+        this.fireEvent("onPlay");
 
-                this.playTrack(track_info.file_url);
-            }
-            
-            this.setVolume();
-            
-            this.fireEvent("onPlay");
-
-            this.fireEvent("onLoading");
-        }.bind(this)
-
-        if(!this.playlist[track_info.index].info){            
+         if(!this.playlist[track_info.index].info && !this.playlist[track_info.index].id3_empty){            
             this.updateTrackInfo(track_info.index, function(){
-                play_or_pause();
+                this.fireEvent("onPlaylistChanged");
+                
+                this.showNotification();
             }.bind(this))
         } else {
-            play_or_pause()
-        }
+            this.showNotification();
+        }           
+
+
     } else if (track_info.song){    
         // If resuming track
         track_info.song = track_info.song.replaceEntities()
@@ -479,6 +554,9 @@ MusicManager.prototype.updateID3Info = function(trackIndex, callback){
     var track = this.playlist[trackIndex];
 
     if (track.file_url && !track.file_url.match(/^data/)) {
+        var file_name = track.file_url.substring(track.file_url.lastIndexOf("/")+1)
+                            .replace(/\.\w{3}$/,'');
+
         ID3.loadTags(track.file_url, function(){
             var tags = ID3.getAllTags(track.file_url);
             
@@ -486,11 +564,11 @@ MusicManager.prototype.updateID3Info = function(trackIndex, callback){
             
             if (tags.title) {
                 track.song = tags.title;
-                track.artist = tags.artist;
+                track.artist = tags.artist || "Unknown";
                 track.album = tags.album;
 
                 if (!track.song)
-                    tack.song == "Untitled";
+                    tack.song == file_name;
                 
                 if (trackIndex == this.current_track) {
                     this.scrobbler.setNowPlaying(track.artist, track.song, track.album, this.state.duration);
@@ -498,12 +576,16 @@ MusicManager.prototype.updateID3Info = function(trackIndex, callback){
                     this.fireEvent("onLoading");
                 }
             } else {
+                track.artist = "Unknown";
+                track.song = file_name;
                 track.id3_empty = true;
             }
             
             this.fireEvent('onPlaylistChanged');
-            
-            callback()
+           
+            if (callback) {
+                callback();
+            }
         }.bind(this));
     }
 }
@@ -514,7 +596,7 @@ MusicManager.prototype.updateID3Info = function(trackIndex, callback){
 MusicManager.prototype.updateTrackInfo = function(trackIndex, callback){
     var track = this.playlist[trackIndex]
 
-    if(!track.artist){
+    if(track.artist === undefined){
         if(track.file_url && !track.id3_empty)
             this.updateID3Info(trackIndex, function(){
                 this.updateTrackInfo(trackIndex, callback)         
@@ -552,6 +634,14 @@ MusicManager.prototype.updateTrackInfo = function(trackIndex, callback){
 }
 
 
+MusicManager.prototype.playRadio = function(radio) {
+    this.radio = radio;
+
+    this.playlist = [];
+
+    this.playNextTrack();
+}
+
 /**
  * MusicManager#setVolume(value)
  */
@@ -565,6 +655,7 @@ MusicManager.prototype.setVolume = function(volume){
         'volume': this.getVolume()
     });
 }
+
 
 
 /**

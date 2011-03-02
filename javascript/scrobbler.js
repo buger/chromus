@@ -335,17 +335,49 @@ Scrobbler.prototype.radioTune = function(station, callback){
         this.callMethod("radio.tune", {station:station, sig_call:true, http_method:'POST', use_cache:false}, callback)
 }
 
+function getNodeValue(parent_node, node_name) {
+    try {
+        return parent_node.getElementsByTagName(node_name)[0].firstChild.nodeValue
+    } catch (e) {
+        console.log("Can't get property '%s' from", node_name, parent_node);
+    }
+}
+
+Scrobbler.parseXSPFPlaylist = function(xml) {
+    var track_items = xml.getElementsByTagName("track");
+    var tracks = [];    
+
+    for(var i=0; i<track_items.length; i++) {
+        var item = track_items[i];
+
+        tracks.push({
+            artist: getNodeValue(item, "creator"),
+            song: getNodeValue(item, "title"),
+            album: getNodeValue(item, "album"),
+            image: getNodeValue(item, "image"),
+            duration: parseInt(getNodeValue(item, "duration"))/1000,
+            audio_url: getNodeValue(item, "location"),
+            use_flash: true,
+
+            info: {} 
+        });
+    }
+
+    return tracks;
+}
+
 Scrobbler.prototype.radioGetPlaylist = function(callback){
 
     if(this._username)
         this.callMethod("radio.getPlaylist", {sig_call:true, http_method:'POST', use_cache: false}, function(response){            
-            var url = response.getElementsByTagName("location")[0].firstChild.nodeValue
-
-            console.log("radioGetPlaylist response:", url)
-
-            callback({url:url})            
+            var tracks = Scrobbler.parseXSPFPlaylist(response);
+            console.log("radioGetPlaylist:", tracks);
+            
+            callback(tracks);
         }.bind(this))
 }
+
+
 
 var LASTFM_RESTYPE = {
   'Artist': 6,

@@ -54,7 +54,7 @@ PlayerUI.artistInLine = function(start_from, arr){
         return counter;
 
     for(var i=start_from+1; i<length; i++){
-        if(arr[i].artist.replaceEntities() === arr[start_from].artist.replaceEntities())
+        if(arr[i].artist && arr[start_from].artist && arr[i].artist.replaceEntities() === arr[start_from].artist.replaceEntities())
             counter += 1;
         else
             return counter;
@@ -98,6 +98,16 @@ PlayerUI.setCurrentTrack = function(track_number, update_info){
         }    
 
         cur_song.css({visibility:'visible'});
+
+        if (track && track.source_title || track.source_url) {
+            var source_title = track.source_title || track.source_host;
+            var source_icon = track.source_icon || "http://"+track.source_host + "/favicon.ico";
+            var source_url = track.source_url || "javascript:;";
+            
+            cur_song.find('.source').html("<a href='"+source_url+"'><img width='11px;' height='11px;' src='"+source_icon+"'/>&nbsp;"+source_title+"</a>");            
+        } else {
+            cur_song.find('.source').html('');
+        }
     }
 }
 
@@ -280,6 +290,19 @@ PlayerUI.showMainMenu = function() {
 
             browser.postMessage({ method: "setScrobbling", scrobbling: false });
         }
+    });
+    
+    $('#main_menu .loved_radio').click(function() {
+        browser.postMessage({ method: "lovedRadio" });
+    });
+
+    $('#main_menu .clear_playlist').click(function() {
+        PlayerUI.loadPlaylist([]);
+        browser.postMessage({ method: "clearPlaylist" });
+    });
+    
+    $('#main_menu .lastfm_radio').click(function() {
+        browser.postMessage({ method: "lastfmRadio", url: $(this).attr('data-radio') });
     });
 }
 

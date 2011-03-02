@@ -128,11 +128,20 @@ Function.prototype.bind = function(scope) {
   }
 }
 
+Array.prototype.diff = function(a) {
+    return this.filter(function(i) {return !(a.indexOf(i) > -1);});
+};
+
+Array.prototype.random = function() {
+    return this[Math.floor(Math.random()*this.length)];
+}
 
 function getTrackInfo(button){
   if (button.getAttribute('data-media-type') == 'raw-file'){
     return {
       file_url: button.getAttribute('data-url'),
+      source_url: document.location.href,      
+      source_host: document.location.host,      
       song: button.innerHTML.stripHTML(),
       element_id: button.id,
       index: 0
@@ -159,6 +168,8 @@ function getTrackInfo(button){
       track_id:   container.getAttribute('data-track-id'),
       index:      parseInt(container.getAttribute('data-index-number')),
       page_id:    window.pageID,
+      source_url: document.location.href,      
+      source_host: document.location.host,      
       
       element_id: button.id,
       streamable: streamable

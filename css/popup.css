@@ -437,6 +437,26 @@ a.button {
     background: url(/images/popup/loader.gif) center no-repeat;
 }
 
+#current_song .source {
+    position: absolute;
+    right: 7px;
+    bottom: 3px;    
+
+    font-size:93%;
+
+    color: #666;
+
+    cursor: default;    
+}
+
+#current_song .source a {
+    color: #666;
+    text-decoration: none;
+}
+#current_song .source img {
+    vertical-align: top;
+}
+
 
 /*********** Playlist *************/
 

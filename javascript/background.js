@@ -152,6 +152,8 @@ browser.addMessageListener(function(msg, sender) {
             }
 
             music_manager.play(msg.track);
+            
+            music_manager.radio = undefined;
 
             break;
 
@@ -162,6 +164,8 @@ browser.addMessageListener(function(msg, sender) {
             music_manager.playlist.push(track);
             music_manager.updateID3Info(music_manager.playlist.length-1);
             
+            music_manager.radio = undefined;
+
             music_manager.fireEvent('onPlaylistChanged');
 
             break;
@@ -222,7 +226,20 @@ browser.addMessageListener(function(msg, sender) {
 
         case "setScrobbling":
             music_manager.scrobbler.scrobbling = msg.scrobbling;              
+            break;
 
+        case "lovedRadio":
+            music_manager.playRadio(new LastfmLovedRadio(music_manager.scrobbler));
+            break;
+
+        case "lastfmRadio":
+            music_manager.playRadio(new LastfmRadio(music_manager.scrobbler, msg.url));
+            break;
+
+        case "clearPlaylist":
+            music_manager.radio = undefined;
+            music_manager.playlist = [];
+            music_manager.fireEvent("onPlaylistChanged");
             break;
 
         default:
