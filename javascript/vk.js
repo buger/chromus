@@ -57,9 +57,8 @@ var VK = {
                 var url_data = audio_rows[i].querySelector('input[type=hidden]').value.split(',');
                 var url = url_data[0];
                 var duration = url_data[1];
-                
+
                 var title = audio_rows[i].querySelector('td.info span');
-                title.removeChild(title.lastChild);
 
                 audio_data.push({
                   artist: audio_rows[i].querySelector('td.info a').innerHTML,

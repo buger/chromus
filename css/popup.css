@@ -272,6 +272,17 @@ a#play {
     margin-right: 20px;
 }
 
+.buy_track {
+    margin-top: 5px;
+    margin-right: 10px;
+
+    opacity: 1 !important;
+}
+
+.buy_track img {
+    margin-right: 2px;
+}
+
 .volume_control {
     position: relative;
 }
@@ -431,4 +442,9 @@ li.empty a {
 .bsap a {
     margin: 0px !important;
     padding: 0px !important;
+}
+
+.banner {
+    width: 468px;
+    height: 60px;
 }

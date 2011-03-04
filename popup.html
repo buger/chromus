@@ -1,7 +1,7 @@
 <html>
     <head>
     <link rel="stylesheet" href="css/mp3_player_button.css" type="text/css">
-    <link rel="stylesheet" href="css/popup.css?rnd=99" type="text/css">
+    <link rel="stylesheet" href="css/popup.css?rnd=9" type="text/css">
     <link rel="stylesheet" href="css/smoothness/jquery-ui.css" type="text/css">
 
     <script src="javascript/browser_detect.js"></script>
@@ -36,7 +36,8 @@
         })
     }
 
-    var music_manager = chrome.extension.getBackgroundPage().music_manager
+    var music_manager = chrome.extension.getBackgroundPage().music_manager;
+    var banner_manager = chrome.extension.getBackgroundPage().bannerManager;
 
     music_manager.dispatcher.addEventListener('onPlay', function(){
         var track = music_manager.playlist[music_manager.current_track]
@@ -142,8 +143,7 @@
                                 '  &ndash;  '+
                                 "<a target='_blank' href=\"http://last.fm/music/"+playlist[i].artist.replace(/\s/g,'+')+"/_/"+(playlist[i].song||"").replace(/\s/g,'+')+"\">"+playlist[i].song+"</a>"+                                                  
                             "</span>"+
-                            "<a id='rs_button_"+playlist[i].index+"' href='javascript:;' title='Research track' data-index-number='"+playlist[i].index+"' onclick='researchTrack(this)' class='research' " + rs_state + "></a>"+
-                            "<a href='javascript:;' title='Delete from playlist' data-index-number='"+playlist[i].index+"' onclick='removeFromPlaylist(this)' class='delete'></a>"
+                            "<a id='rs_button_"+playlist[i].index+"' href='javascript:;' title='Search another track version' data-index-number='"+playlist[i].index+"' onclick='researchTrack(this)' class='research' " + rs_state + "></a>"+
                         "</li>"
         }
         
@@ -196,6 +196,7 @@
         if(track){
             document.querySelector('.track_info .container').style.visibility = 'visible'
             document.querySelector('.controls_container .love').style.visibility = 'visible'
+            document.querySelector('.controls_container .buy_track').style.visibility = 'visible';
 
             updateProgress()
 
@@ -219,6 +220,7 @@
 
             container.querySelector(".artist").innerHTML = track.artist
             container.querySelector(".artist").href = links.artist
+            
 
             if(track.album){
                 container.querySelector(".album").innerHTML = track.album
@@ -240,6 +242,8 @@
             document.querySelector('.track_info .track').innerHTML = "Track not selected"
             document.querySelector('.track_info .container').style.visibility = 'hidden'
             document.querySelector('.controls_container .love').style.visibility = 'hidden'
+            
+            document.querySelector('.controls_container .buy_track').style.visibility = 'hidden'
         }
     }
 
@@ -363,7 +367,56 @@
                 })
             })
         })
+
+        $('.buy_track').live('click', function(){
+            _gaq.push(['_trackEvent', 'controls', 'buyTrack']);
+
+            var track = music_manager.playlist[music_manager.current_track]
+
+            if (track) {
+                var keywords = track.artist + ' ' + track.song;
+                keywords = encodeURIComponent(keywords);
+
+                if (banner_manager.country === 'US') {
+                    var url = "http://www.amazon.com/gp/search?ie=UTF8&keywords="+keywords+"&tag=chromus-20&index=digital-music&linkCode=ur2&camp=1789&creative=9325";
+                } else {
+                    var url = "http://www.7digital.com/search/tracks?search="+keywords+"&searchtype=global&submit=Search&page=1";
+                    url = "http://scripts.affiliatefuture.com/AFClick.asp?affiliateID=231381&merchantID=2473&programmeID=6574&mediaID=0&tracking=&url=" + url;
+                }
+
+                chrome.tabs.create({url: url});
+
+                return true;
+            } else {
+                return false;
+            }
+        });
+
     }
+
+    function getBanner() {
+        var banner = banner_manager.getBanner();
+        
+        if (banner) {
+            if (banner.match(/\<script/)) {
+                var script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.innerHTML = banner;
+                $('.banner')[0].appendChild(script);
+            } else { 
+                $('.banner').html(banner);
+            }
+        } else {
+            $('.banner').remove();
+        }
+
+        $('.banner').live('.click', function(){
+            _gaq.push(['_trackEvent', 'banners', banner]);
+                
+            return true;
+        })
+    }
+
 
     function togglePlayingBig(evt){
         if(evt.target.nodeName == 'A'){
@@ -455,17 +508,6 @@
     </script>
     </head>    
     <body>
-    <!-- BuySellAds.com Ad Code -->
-    <script type="text/javascript">
-    (function(){
-      var bsa = document.createElement('script');
-         bsa.type = 'text/javascript';
-         bsa.async = true;
-         bsa.src = 'http://s3.buysellads.com/ac/bsa.js';
-      (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);
-    })();
-    </script>
-    <!-- END BuySellAds.com Ad Code -->        
         <div id="controls">
             <div class="buttons float">
                 <div class="album_image">
@@ -482,7 +524,7 @@
                 <div class="controls_container">
                     <a href="javascript:;" class="next" title="Next track"><img src="images/next_2.png" width="34px"/></a>
                     <a href="javascript:;" class="love" title="Love!"><img src="images/love.png" alt="Love!" width="28" /></a>
-                    <!--<a href="javascript:;" class="ban" title="Ban track"><img src="/images/ban_2.png" alt="Ban" width="16" /></a>-->
+                    <a href="javascript:;" class="buy_track" target="_blank" title="Buy track"><img src='images/buy.png?3'/>Buy It!</a>
                     <span class="time"></span>
                 </div>
             </div>
@@ -495,13 +537,15 @@
             <div id="progress"></div>
             <div id="progress_loaded"></div>
         </div>
-        <!-- BuySellAds.com Zone Code -->
-        <div id="bsap_1250075" class="bsarocks bsap_0e440463f3a541a54a8e6c18177114d6"></div>
-        <!-- END BuySellAds.com Zone Code -->        
         <div class="wrapper">
             <ul style="white-space:nowrap" id="tracks_container">
             </ul>
             <div id="quick_help" class="ui-corner-tr" style="position: absolute; background: #ddd; color: #666; bottom: 27px; left: 0px; padding: 3px;display: none; max-width: 200px; overflow:hidden;text-overflow: ellipsis;"></div>
+        </div>
+        <div class="banner">
+            <script>
+                getBanner();
+            </script>
         </div>
         <div style="height: 26px; border-top: 1px solid #ccc"></div>
         <div class="play_mode_controls">
@@ -534,8 +578,8 @@
             (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
           })();
         }
-        </script>
-        <script>
+    </script>
+    <script>
 $(function() {
   $("#volume-slider").slider({
     orientation: "vertical",
