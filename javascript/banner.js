@@ -63,6 +63,7 @@
     window.bannerManager = bannerManager;
 }(window))
 
+/*
 // Fotocash
 bannerManager.addBanner({
     country: ["RU","UA"],
@@ -90,38 +91,7 @@ bannerManager.addBanner({
 })
 
 
-// Barners & Noble
-bannerManager.addBanner({
-    country: ["-RU", "-UA", "*"],
-    html: '<a target="_blank" href="http://gan.doubleclick.net/gan_click?lid=41000000035057956&pubid=21000000000343434"><img src="http://gan.doubleclick.net/gan_impression?lid=41000000035057956&pubid=21000000000343434"/></a>'
-})
 
-bannerManager.addBanner({
-    country: ["-RU","*"],
-    html: '<a target="_blank" href="http://gan.doubleclick.net/gan_click?lid=41000000034500805&pubid=21000000000343434"><img src="http://gan.doubleclick.net/gan_impression?lid=41000000034500805&pubid=21000000000343434"/></a>'
-})
-
-
-// Cellhub
-bannerManager.addBanner({
-    country: ["-RU", "-UA", "*"],
-    html: '<a target="_blank" href="http://gan.doubleclick.net/gan_click?lid=41000000035004521&pubid=21000000000343434"><img src="http://gan.doubleclick.net/gan_impression?lid=41000000035004521&pubid=21000000000343434"/></a>'
-})
-
-bannerManager.addBanner({
-    country: ["US"],
-    html: '<a target="_blank" href="http://gan.doubleclick.net/gan_click?lid=41000000034989899&pubid=21000000000343434"><img src="http://gan.doubleclick.net/gan_impression?lid=41000000034989899&pubid=21000000000343434"/></a>'
-});
-
-bannerManager.addBanner({
-    country: ["US"],
-    html: '<a target="_blank" href="http://gan.doubleclick.net/gan_impression?lid=41000000034989899&pubid=21000000000343434"><img src="http://gan.doubleclick.net/gan_impression?lid=41000000034931463&pubid=21000000000343434"/></a>'
-});
-
-bannerManager.addBanner({
-    country: ["US"],
-    html: '<a target="_blank" href="http://gan.doubleclick.net/gan_impression?lid=41000000034931463&pubid=21000000000343434"><img src="http://gan.doubleclick.net/gan_impression?lid=41000000034716287&pubid=21000000000343434"/></a>'
-});
 
 // 7digital
 bannerManager.addBanner({
@@ -133,3 +103,16 @@ bannerManager.addBanner({
     country: ["UK", "DE"],
     html: "<a target='_blank' href='http://scripts.affiliatefuture.com/AFClick.asp?affiliateID=231381&merchantID=2473&programmeID=6574&mediaID=46651&tracking=&url=http://www.7digital.com/artists/radiohead/'><img border=0 src='http://banners.affiliatefuture.com/2473/46651.jpg'></a>"
 });
+
+/*
+bannerManager.addBanner({
+    country: ["RU"],
+    html: "var RndNum4NoCash = Math.round(Math.random() * 1000000000); var ar_Tail='unknown';"+
+          "if (document.referrer) ar_Tail = escape(document.referrer);"+
+          "document.write("+
+          "'<iframe src=\"http://ad.adriver.ru/cgi-bin/erle.cgi?sid=171169&bn=0&target=blank&bt=1&pz=0&tail256='"+
+          " + ar_Tail + '&rnd=' + RndNum4NoCash +" +
+          "'\" frameborder=0 vspace=0 hspace=0 width=468 height=60"+
+          " marginwidth=0 marginheight=0 scrolling=no></iframe>');"
+});
+*/

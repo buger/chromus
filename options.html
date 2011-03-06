@@ -31,25 +31,12 @@ function restore_options() {
         var search_pattern = window.localStrorage["search_pattern"];
     } catch(e){}
 
-    if(search_provider)
-        document.getElementById(search_provider).checked = true;
-    else
-        document.getElementById('vkontakte_ru').checked = true;
-
-    if(search_provider == 'other' && search_pattern){
-        document.getElementById('search_pattern').value = search_pattern;        
-    }
 
     if(!window.localStorage['lastfm_session']){
         document.getElementById('not_logged').style.display = ''    
     }
 
 
-    if(window.localStorage["external_search"] == "true"){
-        toggle_external_search(true, false)
-        document.getElementById('external_audio_search').checked = true
-    }
-    
     if(window.localStorage["skip_previews"] == "false" || window.localStorage["skip_previews"] == undefined){
         document.getElementById('play_previews').checked = true
     }
@@ -58,6 +45,9 @@ function restore_options() {
         document.getElementById('show_notifications').checked = true
     }
 
+    if(window.localStorage["show_banner"] == "true" || window.localStorage["show_banner"] == undefined){
+        document.getElementById('toggle_banner').checked = true
+    }
 }
 
 function showError(msg){
@@ -78,8 +68,6 @@ function lastfm_logout(){
 function onLoad(){
     console.log("Token:", window.localStorage['lastfm_tesssion'])
     
-    search_settings.style.backgroundImage = "url("+chrome.extension.getURL('external_search.png')+")"
-    
     if(scrobbler._username){
         document.getElementById("logged").style.display = ''
         document.getElementById("username_display").innerHTML = scrobbler._username
@@ -88,28 +76,6 @@ function onLoad(){
     restore_options()
 }
 
-function toggle_external_search(disable, update_storage){
-    if(update_storage == undefined)
-        update_storage = true
-
-    var elements = document.getElementById('options').querySelectorAll("input")
-
-    for(var i=0; i<elements.length; i++){
-        console.log(elements[i].disabled)
-
-        elements[i].disabled = !disable
-    }
-
-    var search_settings = document.getElementById('search_settings')
-    search_settings.style.color = disable ? "#333" : "#ccc"
-
-    document.forms[0].submit.disabled = !disable
-
-    console.log("Updating storage:", !disable)
-
-    if(update_storage)
-        window.localStorage["external_search"] = disable
-}
 
 function toggle_play_previews(play){
     window.localStorage["skip_previews"] = !play
@@ -117,6 +83,15 @@ function toggle_play_previews(play){
 
 function toggle_notifications(show){    
     window.localStorage["show_notifications"] = show
+}
+
+function toggle_banner_func(show){ 
+    if (!show && confirm('This banner supports our project and helps us to develop it. Do you still want to disable banner?')) {
+        window.localStorage["show_banner"] = show
+    } else {
+        window.localStorage["show_banner"] = true
+        document.getElementById('toggle_banner').checked = true                                
+    }
 }
 
 
@@ -165,6 +140,41 @@ background: -webkit-gradient(
 #search_settings {
     background-position: 165px right;
     background-repeat: no-repeat;
+}
+
+.helpus {
+    font-size: 28px;
+    color: blue;
+}
+
+.helpus a {
+    display: inline-block; 
+    width: 260px;
+
+    font-size: 40px;
+
+    color: #333;
+    
+    text-decoration: none;
+}
+
+h2.banner {
+    font-size: 16px;
+    font-weight: none;
+    padding: 0px;
+    margin: 0px;
+    color: #333;
+    padding-bottom: 10px;
+}
+
+.helpus h2 {
+    font-size: 30px;
+    color: #333;
+    text-align: center;
+}
+
+.helpus a:hover {
+    text-decoration: underline;
 }
 
 </style>
@@ -226,49 +236,22 @@ background: -webkit-gradient(
             <label style="font-size: 18px; margin-right: 0px; color: #333;" for="show_notifications">Display notifications:</label>
             <input type="checkbox" id="show_notifications" onclick="toggle_notifications(this.checked)"/>
         </div>
-        <div style="margin-bottom: 30px;">
+        <div style="margin-bottom: 20px;">
             <label style="font-size: 18px; margin-right: 0px; color: #333;" for="play_previews">Try to play previews if track not found:</label>
             <input type="checkbox" id="play_previews" onclick="toggle_play_previews(this.checked)"/>
         </div>
-        <div>
-            <label style="font-size: 18px; margin-right: 0px; color: #333;" for="external_audio_search">Use external audio search:</label>
-            <input type="checkbox" id="external_audio_search" onclick="toggle_external_search(this.checked)"/>
+        <div style="border: 1px solid #ccc; width: 300px; padding: 5px; border-radius: 5px;">
+            <h2 class="banner">By showing banner you supporting our project. However you can disable it.</h2>
+            <label style="font-size: 18px; margin-right: 0px; color: #333;" for="toggle_banner">Show banner:</label>
+            <input type="checkbox" id="toggle_banner" onclick="toggle_banner_func(this.checked)" />
         </div>
-        <h3>Choose search provider:</h3>
-        <ul id="options">
-            <li>
-              <input type="radio" name="search_provider" id="vkontakte_ru" value="http://vkontakte.ru/gsearch.php?section=audio&q=%s" disabled="disabled"/>
-              <img src="http://www.vkontakte.ru/favicon.ico" />
-              <label for="vkontakte_ru">vkontakte.ru</label>
-            </li>
-            <li>
-              <input type="radio" name="search_provider" id="vk_com" value="http://vk.com/gsearch.php?section=audio&q=%s" disabled="disabled"/>
-              <img src="http://www.vk.com/images/faviconvk.ico" />
-              <label for="vk_com">vk.com</label>
-            </li>
-            <li>
-              <input type="radio" name="search_provider" id="vpleer_ru" value="http://vpleer.ru/?q=%s" disabled="disabled"/>
-              <label for="vpleer_ru">vpleer.ru</label>
-            </li>
-            <li>
-              <input type="radio" name="search_provider" id="prostopleer_com" value="http://prostopleer.com/#/search?q=%s" disabled="disabled"/>
-              <img src="http://prostopleer.com/favicon.ico"/>
-              <label for="prostopleer_com">prostopleer.com</label>
-            </li>
-            <li>
-              <input type="radio" name="search_provider" id="grooveshark_com" value="http://listen.grooveshark.com/#/search/songs/?query=%s" disabled="disabled"/>
-              <img src="http://www.grooveshark.com/favicon.ico"/>
-              <label for="grooveshark_com">grooveshark.com</label>
-            </li>
-            <li>
-              <input type="radio" name="search_provider" id="other" disabled="disabled"/>
-              <input type="text"  disabled="disabled" id="search_pattern" name="search_pattern" style="width: 300px; border: 1px solid #ccc" onfocus="document.getElementById('other').checked = true"/>
-              <br/>
-              <span style="margin-left: 25px; color: #666; font-size: 12px">http://mysite.com/search?q=%s</span>
-            </li>
-        </ul>
-        <input type="submit" value="Save" name="submit" onclick="this.value = 'Saving...';" style="width: 100px; padding: 5px;" disabled="disabled"/>
+        <div style="position: absolute; top: 230px; left: 50px" class="helpus">
+            <h2>Your support keeps us on the air!</h2>
+            <div><a target="_blank" href="http://money.yandex.ru/">Yandex.Money</a> 41001903998889</div>
+            <div><a target="_blank" href="http://www.webmoney.ru/">Webmoney</a> Z466954938255, R296708374313</div>
+            <div><a target="_blank" href="http://www.moneybookers.com/" title="Moneybrookers">Moneybrookers</a> leonsbox@gmail.com</div>
         </div>
+    </div>
     </form>
 <div style="clear: both">&nbsp;</div>
 

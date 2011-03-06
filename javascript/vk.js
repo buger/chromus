@@ -170,7 +170,7 @@ var VK = {
             console.log(results)
          
             if(results.response){
-                var vk_tracks
+                var vk_tracks = []
 
                 if(results.response[1]){
                     vk_tracks.lastIndex = 0

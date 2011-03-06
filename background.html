@@ -10,10 +10,10 @@
     <script src="javascript/cache.js"></script>
     <script src="javascript/utils.js?rnd=6"></script>    
     <script src="javascript/scrobbler.js?rnd=13"></script>
-    <script src="javascript/vk.js?rnd=16"></script>
+    <script src="javascript/vk.js?rnd=17"></script>
     <script src="javascript/music_manager.js?rnd=20"></script>
     <script src="javascript/browser_detect.js?rnd=1"></script>
-    <script src="javascript/banner.js?rnd=9"></script>
+    <script src="javascript/banner.js?rnd=15"></script>
     <script> 
     function ease(x) {
       return (1-Math.sin(Math.PI/2+x*Math.PI))/2;
@@ -196,7 +196,13 @@
                                   search_pattern: search_pattern, 
                                   external_audio_search: window.localStorage["external_search"]})
         })
-        
+
+
+        if (!window.localStorage["show_options_first_time_1"]) {
+            window.localStorage["show_options_first_time_1"] = true;
+
+            chrome.tabs.create({url: chrome.extension.getURL("options.html")});
+        }
        // _gaq.push(['_trackPageview']);
     }
     </script>

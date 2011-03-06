@@ -375,13 +375,12 @@
 
             if (track) {
                 var keywords = track.artist + ' ' + track.song;
-                keywords = encodeURIComponent(keywords);
+                keywords = encodeURIComponent(keywords).replace("'",'');
 
                 if (banner_manager.country === 'US') {
                     var url = "http://www.amazon.com/gp/search?ie=UTF8&keywords="+keywords+"&tag=chromus-20&index=digital-music&linkCode=ur2&camp=1789&creative=9325";
                 } else {
-                    var url = "http://www.7digital.com/search/tracks?search="+keywords+"&searchtype=global&submit=Search&page=1";
-                    url = "http://scripts.affiliatefuture.com/AFClick.asp?affiliateID=231381&merchantID=2473&programmeID=6574&mediaID=0&tracking=&url=" + url;
+                    var url = "http://www.amazon.com/gp/search?ie=UTF8&keywords="+keywords+"&tag=chromus-20&index=music&linkCode=ur2&camp=1789&creative=9325";
                 }
 
                 chrome.tabs.create({url: url});
@@ -395,10 +394,11 @@
     }
 
     function getBanner() {
-        var banner = banner_manager.getBanner();
+        var show_banner = window.localStorage["show_banner"] == "true" || window.localStorage["show_banner"] == undefined;
         
-        if (banner) {
-            if (banner.match(/\<script/)) {
+        var banner = banner_manager.getBanner();
+        if (show_banner && banner) {
+            if (banner.match(/\<script/) || banner.match(/document\.write/)) {
                 var script = document.createElement('script');
                 script.type = 'text/javascript';
                 script.innerHTML = banner;
@@ -408,7 +408,7 @@
             }
         } else {
             $('.banner').remove();
-        }
+        } 
 
         $('.banner').live('.click', function(){
             _gaq.push(['_trackEvent', 'banners', banner]);
@@ -579,6 +579,15 @@
           })();
         }
     </script>
+<script type="text/javascript">
+(function(){
+  var bsa = document.createElement('script');
+     bsa.type = 'text/javascript';
+     bsa.async = true;
+     bsa.src = '//s3.buysellads.com/ac/bsa.js';
+  (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(bsa);
+})();
+</script>    
     <script>
 $(function() {
   $("#volume-slider").slider({
