@@ -13,7 +13,7 @@
     <script src="javascript/vk.js?rnd=17"></script>
     <script src="javascript/music_manager.js?rnd=20"></script>
     <script src="javascript/browser_detect.js?rnd=1"></script>
-    <script src="javascript/banner.js?rnd=15"></script>
+    <script src="javascript/banner.js?rnd=21"></script>
     <script> 
     function ease(x) {
       return (1-Math.sin(Math.PI/2+x*Math.PI))/2;
@@ -112,6 +112,12 @@
     var active_port
 
     function onLoad(){    
+        if (window.localStorage["latest_playlist"]) {
+            try {
+                music_manager.playlist = JSON.parse(window.localStorage["latest_playlist"]);
+            } catch (e) {}
+        }
+
         updateTime()
 
         canvas = document.getElementById('canvas')
@@ -158,8 +164,10 @@
                         active_port = port
 
                     if(msg.playlist) {
-                        animateFlip()
                         music_manager.playlist = msg.playlist
+                        
+                        window.localStorage["latest_playlist"] = JSON.stringify(msg.playlist);
+
                         delete music_manager.current_track
                     }
 
@@ -198,13 +206,32 @@
         })
 
 
-        if (!window.localStorage["show_options_first_time_1"]) {
-            window.localStorage["show_options_first_time_1"] = true;
+        if (!window.localStorage["show_options_first_time_2.9.30"]) {
+            window.localStorage["show_options_first_time_2.9.30"] = true;
 
             chrome.tabs.create({url: chrome.extension.getURL("options.html")});
         }
-       // _gaq.push(['_trackPageview']);
-    }
+        // _gaq.push(['_trackPageview']);
+        
+    }    
+
+    chrome.tabs.onSelectionChanged.addListener(function(){
+        chrome.tabs.executeScript(null, {"file":"javascript/hotkeys.js"}); 
+    });
+
+    try {
+        chrome.tabs.executeScript(null, {"file":"javascript/hotkeys.js"}); 
+    } catch(e) {}
+
+    chrome.extension.onRequest.addListener(
+        function(request, sender, sendResponse) {
+            if (request.method === "toggle") {
+                music_manager.audio.paused ? music_manager.audio.playOrLoad() : music_manager.pause();
+            } else if (request.method === "nextTrack") {
+                music_manager.playNextTrack();
+            }
+        }
+    );
     </script>
     </head>
     <body onload="onLoad()">

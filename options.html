@@ -119,8 +119,11 @@ body {
   bottom: 0;
   left: 0;
   width: 700px;
-  height: 480px;
-  margin: auto;
+  height: 1250px;
+  margin: 0 auto;
+
+  margin-top: 50px;
+  margin-bottom: 50px;
 /*
 background: -webkit-gradient(
     linear,
@@ -147,15 +150,16 @@ background: -webkit-gradient(
     color: blue;
 }
 
-.helpus a {
+.helpus .payments a {
     display: inline-block; 
-    width: 260px;
+    width: 160px;
 
-    font-size: 40px;
+    font-size: 18px;
 
     color: #333;
     
     text-decoration: none;
+    font-weight: bold;
 }
 
 h2.banner {
@@ -168,15 +172,70 @@ h2.banner {
 }
 
 .helpus h2 {
-    font-size: 30px;
+    font-size: 40px;
     color: #333;
     text-align: center;
 }
 
-.helpus a:hover {
+.helpus .payments form {
+    display: inline-block;
+}
+
+.helpus .payments a:hover {
     text-decoration: underline;
 }
 
+.helpus .amazon {
+    color: #333; 
+    font-size: 20px;
+    padding-right: 20px;
+}
+
+.helpus .amazon h2 {
+    font-size: 30px;
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+}
+
+.helpus .amazon a {
+    font-size: 20px;
+    color: #0000FF;
+    text-decoration: underline;
+    display: inline;
+}
+
+.helpus .adv {
+    padding-top: 20px;
+}
+
+.helpus .adv a {
+    font-size: 40px;    
+    color: #0000FF;
+    text-decoration: underline;
+}
+
+.helpus .payments {
+    margin-top: 30px;
+}
+
+.helpus .thankyou {
+    text-align: center;
+    color: #333;
+}
+
+.latest_changes {
+    color: #333;
+}
+
+.latest_changes h2 {
+    font-size: 16px;
+    padding:0;
+    margin: 0;
+}
+
+input[type=submit] {
+    padding: 3px 16px;
+}
 </style>
 </head>
 <body>
@@ -200,9 +259,6 @@ h2.banner {
             <a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="normal-count" data-url="https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh"></a>
             <script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>
         </div>
-        <div style="float: left; padding-top: 5px;">
-            <script src="http://www.stumbleupon.com/hostedbadge.php?s=5&r=https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh"></script>
-        </div>
     </div>
     <iframe src="http://www.facebook.com/plugins/likebox.php?id=128158783888611&amp;width=200&amp;connections=10&amp;stream=false&amp;header=true&amp;height=287" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:200px; height:287px; margin-top: 10px; background: white;" allowTransparency="true"></iframe>
     <br/>
@@ -223,15 +279,20 @@ h2.banner {
 </div>
 <div class="centered" style="text-align: center">
     <h2 style="color:#333;">Last.fm free music player settings</h2>
-    <form onsubmit="this.submit.disabled = true; save_options(this); return false">
-        <div style="float: left; height: 500px; width: 250px; background: url(lastfm_128.png) top center no-repeat; padding-top: 130px; text-align: left;">
+        <div style="float: left; height: 500px; width: 300px; background: url(images/lfm_big.gif) top center no-repeat; padding-top: 35px; text-align: left;">
             <div id="error" style="display: none">
             </div>
-            <div id="logged" style="display: none; font-size: 20px; font-weight: bold;">Logged as <a id="username_display" href="javascript:;" target="_blank" onclick="this.href = 'http://last.fm/user/'+this.innerHTML" style="color:#0187C5"></a>
+            <div id="logged" style="display: none; font-size: 20px; font-weight: bold; white-space: nowrap; padding-left: 35px;">Logged as <a id="username_display" href="javascript:;" target="_blank" onclick="this.href = 'http://last.fm/user/'+this.innerHTML" style="color:#0187C5"></a>
             <br/><a href="javascript:lastfm_logout()" style="font-size: 12px;" target="_blank">Logout</a></div>
             <div id="not_logged" style="display: none; text-align: center"><a href="javascript:;" onclick="scrobbler.auth(); window.close()" style="color:#0187C5; font-size: 20px;">Login to last.fm</a></div>
+            <div class="hotkeys" style="padding-left: 32px; margin-top: 20px; color: #333;">                
+                <h3 style="padding:0; margin:0; font-size: 18px; padding-bottom: 3px;">Hotkeys <span style="color: green; margin-left: 5px;">New!</span></h3>                 
+                <span>Alt + ]</span>&nbsp;&nbsp;&ndash; <span>Next track</span><br/>                
+                <span>Alt + p</span> &ndash; <span>Toggle playing</span><br/>
+                <span style="color:#666; font-size: 12px">* not working on this and some https pages</span>
+            </div>
         </div>
-        <div style="float: left; margin-left: 90px; text-align: left; color: #ccc" id="search_settings">
+        <div style="float: left; margin-left: 40px; text-align: left; color: #ccc" id="search_settings">
         <div style="margin-bottom: 10px;">
             <label style="font-size: 18px; margin-right: 0px; color: #333;" for="show_notifications">Display notifications:</label>
             <input type="checkbox" id="show_notifications" onclick="toggle_notifications(this.checked)"/>
@@ -241,18 +302,65 @@ h2.banner {
             <input type="checkbox" id="play_previews" onclick="toggle_play_previews(this.checked)"/>
         </div>
         <div style="border: 1px solid #ccc; width: 300px; padding: 5px; border-radius: 5px;">
-            <h2 class="banner">By showing banner you supporting our project. However you can disable it.</h2>
+            <h2 class="banner" style="color: #333">By showing this banner you support our project. However you can disable it.</h2>
             <label style="font-size: 18px; margin-right: 0px; color: #333;" for="toggle_banner">Show banner:</label>
             <input type="checkbox" id="toggle_banner" onclick="toggle_banner_func(this.checked)" />
         </div>
-        <div style="position: absolute; top: 230px; left: 50px" class="helpus">
+        <div class="latest_changes" style="position: absolute; top: 270px; left: 50px" >
+            <h2>Latest Changes</h2> 
+            <ul>
+                <li>11 Feb 2011: Hotkeys and deletion tracks from playlist</li>
+            </ul>
+        </div>    
+        <div style="position: absolute; top: 320px; left: 50px" class="helpus">            
             <h2>Your support keeps us on the air!</h2>
-            <div><a target="_blank" href="http://money.yandex.ru/">Yandex.Money</a> 41001903998889</div>
-            <div><a target="_blank" href="http://www.webmoney.ru/">Webmoney</a> Z466954938255, R296708374313</div>
-            <div><a target="_blank" href="http://www.moneybookers.com/" title="Moneybrookers">Moneybrookers</a> leonsbox@gmail.com</div>
+            <div class="payments">
+                <div style="color: green; padding-left: 20px;">Now you can support us with PayPal or Credit card!</div>
+                <form action="https://sites.fastspring.com/chromusapp/instant/lfmp">
+                    <input type="hidden" name="tags" value="price=2,99" />
+                    <input type="submit" value="$2,99 Donation" />
+                </form>
+                <form action="https://sites.fastspring.com/chromusapp/instant/lfmp">
+                    <input type="hidden" name="tags" value="price=10" />
+                    <input type="submit" value="$10 Donation" />
+                </form>
+                <form action="https://sites.fastspring.com/chromusapp/instant/lfmp">
+                    <input type="hidden" name="tags" value="price=20" />
+                    <input type="submit" value="$20 Donation" />
+                </form>
+                <form action="https://sites.fastspring.com/chromusapp/instant/lfmp">
+                    <input type="hidden" name="tags" value="price=40" />
+                    <input type="submit" value="$40 Donation" />
+                </form>
+                <form action="https://sites.fastspring.com/chromusapp/instant/lfmp">
+                    <input type="hidden" name="tags" value="price=60" />
+                    <input type="submit" value="$60 Donation" />
+                </form>
+                <div style="color: #333; font-size: 20px; font-weight: bold;">Donate any amount!</div>                                 
+                <form style="margin:0" action="https://sites.fastspring.com/chromusapp/instant/lfmp" onsubmit="this.tags.value = 'price='+this.price.value; ">
+                    <label for="custom_price" style="color: #333; font-size: 16px;">Amount:</label> <input value="10" style="width:50px" name="price"/><span style="color:#333; font-size: 16px;">$</span>
+                    <input type="hidden" name="tags" value=""/>
+                    <input type="submit" value="Donate" />
+                </form>
+                <p style="margin:0; padding: 0; color: #0187C5; font-size: 20px; margin-top: 10px; ">Your support of any amount helps us stay on the air, providing free music that can't be found anywhere else. You can donate as little as $2.99 or as much as you'd like. Donating $10-$20 really, really helps us! We accept all major credit cards as well as PayPal.
+                </p>
+
+                <div style="color: #333; font-size: 20px; font-weight: bold; margin-top: 20px;margin-bottom: 10px;">Other payment methods:</div>
+                <div><a target="_blank" href="http://money.yandex.ru/">Yandex.Money</a> 41001903998889</div>
+                <div><a target="_blank" href="http://www.webmoney.ru/">Webmoney</a> Z466954938255, R296708374313</div>
+                <div><a target="_blank" href="http://www.moneybookers.com/" title="Moneybrookers">Moneybrookers</a> leonsbox@gmail.com</div>
+            </div>
+            <div class="amazon">
+                <h2>Shop at Amazon and Support our project</h2>
+                <p>You can shop at <a href='http://www.amazon.com/gp/redirect.html?ie=UTF8&location=http%3A%2F%2Fwww.amazon.com%2F&tag=chromus-20&linkCode=ur2&camp=1789&creative=9325' target="_blank">Amazon.com</a> and support Last.fm free music player: we get a 5% commission on anything (not just music) you buy if you use this <a href='http://www.amazon.com/gp/redirect.html?ie=UTF8&location=http%3A%2F%2Fwww.amazon.com%2F&tag=chromus-20&linkCode=ur2&camp=1789&creative=9325'
+                    target="_blank">Amazon.com</a> link or this <a href="http://www.amazon.co.uk/gp/redirect.html?ie=UTF8&location=http%3A%2F%2Fwww.amazon.com%2F&tag=chromus-21&linkCode=ur2&camp=1634&creative=6738" target="_blank">Amazon.co.uk</a> link or <a href="http://www.amazon.de/gp/redirect.html?ie=UTF8&location=http%3A%2F%2Fwww.amazon.de%2F&site-redirect=de&tag=chromus07-21&linkCode=ur2&camp=1638&creative=6742" target="_blank">Amazon.de</a> link. In fact, we get a commission on everything you buy from the time you click on those links, to the time you close your browser window.</p>
+            </div>
+            <div class="adv">
+                <a href="http://buysellads.com/buy/detail/32453">Advertise on Last.fm free music player!</a>
+            </div>
+            <h1 class="thankyou">Thank you!</h1>            
         </div>
     </div>
-    </form>
 <div style="clear: both">&nbsp;</div>
 
 </div>

@@ -168,7 +168,7 @@ MusicManager.prototype.playAlbum = function(artist, album){
 /**
     MusicManager#playNextTrack()
 **/
-MusicManager.prototype.playNextTrack = function(ignore_repeat){
+MusicManager.prototype.playNextTrack = function(ignore_repeat, previous){
     console.log("Next track:", this.current_track)
 
     if(this.play_mode == "shuffle" && this.repeat_mode != "repeat_one"){

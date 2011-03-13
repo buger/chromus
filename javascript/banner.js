@@ -116,3 +116,8 @@ bannerManager.addBanner({
           " marginwidth=0 marginheight=0 scrolling=no></iframe>');"
 });
 */
+
+bannerManager.addBanner({
+    country: ["*"],
+    html: 'document.write(\'<div id="bsap_1254329" class="bsarocks bsap_0e440463f3a541a54a8e6c18177114d6"></div>\');'
+});
