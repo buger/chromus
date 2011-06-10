@@ -14,14 +14,14 @@ var scrobbler = chrome.extension.getBackgroundPage().scrobbler
 // Saves options to localStorage.
 function save_options(form) {
     for(var i=0; i< form.search_provider.length; i++){
-	if(form.search_provider[i].checked){
-	    window.localStorage["search_provider"] = form.search_provider[i].id
-	    
-	    if(form.search_provider[i].id == "other")
-		window.localStorage["search_pattern"] = form.search_pattern.value
-	    else
-		window.localStorage["search_pattern"] = form.search_provider[i].value
-	}
+        if(form.search_provider[i].checked){
+            window.localStorage["search_provider"] = form.search_provider[i].id
+            
+            if(form.search_provider[i].id == "other")
+            window.localStorage["search_pattern"] = form.search_pattern.value
+            else
+            window.localStorage["search_pattern"] = form.search_provider[i].value
+        }
     }
 
     window.location.reload()
