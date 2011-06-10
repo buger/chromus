@@ -10,9 +10,9 @@ var VK = {
         console.log("Trying to determine search method")
 
         xhrRequest("http://vkontakte.ru", "GET", null, function(xhr){
-            if(!xhr.responseText.match(/top_search/)){
+            if(!xhr.responseText.match(/logout/)){
                 xhrRequest("http://vk.com", "GET", null, function(xhr_vk){
-                    if(!xhr_vk.responseText.match(/top_search/)) {
+                    if(!xhr_vk.responseText.match(/logout/)) {
                         callback({search_method:'test_mode'})
                     } else {
                         callback({search_method:'vk.com'})
