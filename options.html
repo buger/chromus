@@ -46,7 +46,7 @@ function restore_options() {
     }
 
     if(window.localStorage["show_banner"] == "true" || window.localStorage["show_banner"] == undefined){
-        document.getElementById('toggle_banner').checked = true
+//        document.getElementById('toggle_banner').checked = true
     }
 }
 
@@ -90,7 +90,7 @@ function toggle_banner_func(show){
         window.localStorage["show_banner"] = show
     } else {
         window.localStorage["show_banner"] = true
-        document.getElementById('toggle_banner').checked = true                                
+//        document.getElementById('toggle_banner').checked = true                                
     }
 }
 
@@ -286,7 +286,7 @@ input[type=submit] {
             <br/><a href="javascript:lastfm_logout()" style="font-size: 12px;" target="_blank">Logout</a></div>
             <div id="not_logged" style="display: none; text-align: center"><a href="javascript:;" onclick="scrobbler.auth(); window.close()" style="color:#0187C5; font-size: 20px;">Login to last.fm</a></div>
             <div class="hotkeys" style="padding-left: 32px; margin-top: 20px; color: #333;">                
-                <h3 style="padding:0; margin:0; font-size: 18px; padding-bottom: 3px;">Hotkeys <span style="color: green; margin-left: 5px;">New!</span></h3>                 
+                <h3 style="padding:0; margin:0; font-size: 18px; padding-bottom: 3px;">Hotkeys </h3>                 
                 <span>Alt + ]</span>&nbsp;&nbsp;&ndash; <span>Next track</span><br/>                
                 <span>Alt + p</span> &ndash; <span>Toggle playing</span><br/>
                 <span style="color:#666; font-size: 12px">* not working on this and some https pages</span>
@@ -301,15 +301,18 @@ input[type=submit] {
             <label style="font-size: 18px; margin-right: 0px; color: #333;" for="play_previews">Try to play previews if track not found:</label>
             <input type="checkbox" id="play_previews" onclick="toggle_play_previews(this.checked)"/>
         </div>
+        <!--
         <div style="border: 1px solid #ccc; width: 300px; padding: 5px; border-radius: 5px;">
             <h2 class="banner" style="color: #333">By showing this banner you support our project. However you can disable it.</h2>
             <label style="font-size: 18px; margin-right: 0px; color: #333;" for="toggle_banner">Show banner:</label>
             <input type="checkbox" id="toggle_banner" onclick="toggle_banner_func(this.checked)" />
         </div>
+        -->
         <div class="latest_changes" style="position: absolute; top: 270px; left: 50px" >
             <h2>Latest Changes</h2> 
             <ul>
-                <li><b>10 Jun 2011: Fixed bugs with music playing</b></li>
+                <li style="color:green"><b>26 Jun 2011: Improved search quality. Removed banner :)</b></li>
+                <li>10 Jun 2011: Fixed bugs with music playing</li>
             </ul>
         </div>    
         <div style="position: absolute; top: 320px; left: 50px" class="helpus">            

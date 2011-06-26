@@ -412,10 +412,10 @@
             }
         });
 
-        if (!window.localStorage["new_changes_2.9.57"]) {
+        if (!window.localStorage["new_changes_2.9.60"]) {
             $('.new_changes').show()
             .bind('click', function() {                    
-                    window.localStorage["new_changes_2.9.57"] = true;
+                    window.localStorage["new_changes_2.9.60"] = true;
 
                     chrome.tabs.create({url: chrome.extension.getURL("options.html")});
                 });
@@ -425,6 +425,7 @@
     function getBanner() {
         var banner = banner_manager.getBanner();
         var show_banner = window.localStorage["show_banner"] == "true" || window.localStorage["show_banner"] == undefined;
+        show_banner = false;
         
         if (show_banner && banner) {
             if (banner.match(/\<script/) || banner.match(/document\.write/)) {
@@ -586,9 +587,11 @@
             </ul>
             <div id="quick_help" class="ui-corner-tr" style="position: absolute; background: #ddd; color: #666; bottom: 27px; left: 0px; padding: 3px;display: none; max-width: 200px; overflow:hidden;text-overflow: ellipsis;"></div>
         </div>
+        <!--
         <div class="banner">
             <div id="bsap_1254329" class="bsarocks bsap_0e440463f3a541a54a8e6c18177114d6"></div>
         </div>
+        -->
         <div style="height: 26px; border-top: 1px solid #ccc"></div>
         <div class="play_mode_controls">
             <!--
