@@ -33,7 +33,7 @@ var VK = {
         var track = artist + " " + song
 
         var url  = "http://"+VK.search_method+"/al_search.php"
-        var data = "c%5Bq%5D="+encodeURIComponent(track)+"&al=1&c%5Bsection%5D=audio"
+        var data = "c%5Bq%5D="+encodeURIComponent(track)+"&al=1&c%5Bsection%5D=audio&c%5Bsort%5D=2"
 
         xhrRequest(url, "POST", data, function(xhr){
             // User logged off from vkontakte
@@ -140,8 +140,8 @@ var VK = {
         var api = VK.getApiData()
         var url = "http://api.vk.com/api.php"
 
-        md5hash = MD5(api[0]+'api_id='+api[1]+'count=10format=jsonmethod=audio.searchq='+track+'test_mode=1'+api[2])
-        var data = 'api_id='+api[1]+'&method=audio.search&format=json&sig='+md5hash+'&test_mode=1&count=10&q='+encodeURIComponent(track)
+        md5hash = MD5(api[0]+'api_id='+api[1]+'count=10format=jsonmethod=audio.searchq='+track+'sort=2test_mode=1'+api[2])
+        var data = 'api_id='+api[1]+'&method=audio.search&format=json&sig='+md5hash+'&sort=2&test_mode=1&count=10&q='+encodeURIComponent(track)
 
         console.log("Search url:", url+'?'+data)
 
