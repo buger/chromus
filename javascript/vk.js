@@ -10,6 +10,8 @@ var VK = {
         console.log("Trying to determine search method")
 
         xhrRequest("http://vkontakte.ru", "GET", null, function(xhr){
+            console.log(xhr.responseText.match(/logout/));
+            
             if(!xhr.responseText.match(/logout/)){
                 xhrRequest("http://vk.com", "GET", null, function(xhr_vk){
                     if(!xhr_vk.responseText.match(/logout/)) {
@@ -36,6 +38,7 @@ var VK = {
         var data = "c%5Bq%5D="+encodeURIComponent(track)+"&al=1&c%5Bsection%5D=audio&c%5Bsort%5D=2"
 
         xhrRequest(url, "POST", data, function(xhr){
+
             // User logged off from vkontakte
             if(xhr.responseText.match(/progress\.gif/)){
                 delete VK.search_method
@@ -46,10 +49,10 @@ var VK = {
             }
 
             var container = document.getElementById('vk_search');
-            container.innerHTML = xhr.responseText;
+            container.innerHTML = xhr.responseText.substring( xhr.responseText.indexOf("<div class=\"audios_row clear_fix\">")); 
 
             var audio_data = []
-            var audio_rows = container.querySelectorAll('div.audio')
+            var audio_rows = container.querySelectorAll('div.audio') 
 
             for(var i=0; i<audio_rows.length; i++){
                 if(i>10) break
@@ -115,7 +118,7 @@ var VK = {
         [4824199, 1915951, 'pvHpN0V001'],
         [5573107, 1914989, 'CChij669jU'],
 
-        [6240007, 1972474, 'DMXPeITyti'], // От вконтакт пользователя  
+        [6240007, 1972474, 'DMXPeITyti'], // ÐžÑ‚ Ð²ÐºÐ¾Ð½Ñ‚Ð°ÐºÑ‚ Ð¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ñ‚ÐµÐ»Ñ  
         [102802046, 1985438, 'sPZCZS5YxJ'], //ivaninvanov@mail.ru
         [102813567, 1985491, 'UjgLqfMPgc'], //ivaninvanov1@mail.ru
         [102815638, 1985494, 'vI7EmQNdS9'],
