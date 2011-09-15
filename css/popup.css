@@ -179,6 +179,13 @@ a.button {
     background-image:url(../images/popup/play.png);
 }
 
+#header .pause { margin-left: 5px; }
+
+#header .pause .button {
+    background-image:url(../images/popup/pause.png);
+}
+
+
 #header .next .button {
     background-image:url(../images/popup/next.png);
 }
@@ -272,6 +279,13 @@ a.button {
     z-index: 1;
     
     overflow: hidden;
+
+    -webkit-border-bottom-right-radius: 5px;
+    -webkit-border-bottom-left-radius: 5px;
+    -moz-border-radius-bottomright: 5px;
+    -moz-border-radius-bottomleft: 5px;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
 }
 
 #header .volume .bar_bg {
@@ -285,7 +299,7 @@ a.button {
 }
 
 #header .volume .bar {
-    background: blue;
+    background: #154ea2;
     height: 300px;
 }
 
@@ -326,6 +340,26 @@ a.button {
     border: 1px solid #ccc;
 
     z-index: 3;
+}
+
+#header .search_bar .result ul {
+    margin-top: 5px;
+    background: white;
+    border-bottom: 1px solid #ccc;
+}
+
+#header .search_bar .result li {
+    padding: 5px;
+}
+
+#header .search_bar .result img {
+    vertical-align: middle;
+}
+
+#header .search_bar .result a {
+    text-decoration: none;
+    color: #000;
+    opacity: 0.8;
 }
 
 /*********** Current Song *********/

@@ -23,7 +23,7 @@ function showButtons(link){
         add_to_queue.addEventListener('click', function(evt){
             evt.stopPropagation();
 
-            browser.postMessage({method:'add_to_playlist', track:track_info})
+            browser.postMessage({ method:'add_to_playlist', track:track_info });
         }, false)
         
         document.body.appendChild(add_to_queue);

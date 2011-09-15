@@ -1,19 +1,24 @@
-var found_links = document.querySelectorAll('a[href$=".mp3"]');
-var mp3_links = [];
-for(i in found_links){
-  if ((!found_links[i].className || 
-        found_links[i].className && !found_links[i].className.match(/(ymp-tray-track|powerpress_link_pinw)/)) &&       
+var links = document.querySelectorAll('a');
 
-      !(found_links[i].href && found_links[i].href.match(/freedownloads\.last\.fm/))
-       ) {
-    mp3_links.push(found_links[i]);
-  }
+var audio_links = []
+
+for (var i=0; i<links.length; i++) {
+    if (links[i].href.match(/\.(mp3|ogg)($|\?)/)) {
+
+        if (!links[i].className ||
+           ((links[i].className && !links[i].className.match(/(ymp-tray-track|powerpress_link_pinw)/)) && // Yahoo music player
+             !links[i].href.match(/freedownloads\.last\.fm/))) // Last.fm free downloads
+        {
+            audio_links.push(links[i]);
+        }
+    }
 }
 
-for(i in mp3_links){
-  var p = mp3_links[i].parentNode;
-  
-  var play_link = "<a href='javascript:;' class='sm2_button' id='ex_button_"+i+"' data-url='"+mp3_links[i].href+"' data-media-type='raw-file'></a>";
 
-  mp3_links[i].outerHTML = play_link + mp3_links[i].outerHTML;
+for (var i=0; i<audio_links.length; i++) {
+  var p = audio_links[i].parentNode;
+  
+  var play_link = "<a href='javascript:;' class='sm2_button' id='ex_button_"+i+"' data-url='"+audio_links[i].href+"' data-media-type='raw-file'></a>";
+
+  audio_links[i].outerHTML = play_link + audio_links[i].outerHTML;
 }

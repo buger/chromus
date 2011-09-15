@@ -1,6 +1,6 @@
 {
    "name": "Chromus",
-   "version": "3.0.0",
+   "version": "3.0.0",   
    "description": "!! Yes it plays music! Browser as a music player? Why not? Music player for Google Chrome",
    "icons": {
       "16": "chromus_logo.png",
@@ -13,7 +13,7 @@
      "popup": "popup.html"        
    },
    "content_scripts": [{
-      "css": [ "css/mp3_player_button.css", "css/style.css" ],
+      "css": [ "css/mp3_player_button.css", "css/style.css", "css/reset-context-min.css" ],
       "js": [
           "javascript/jquery.min.js", 
           "javascript/browser_api.js", 

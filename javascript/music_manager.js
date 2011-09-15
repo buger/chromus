@@ -1,4 +1,4 @@
-
+var emptyFunc = function(){};
 var _gaq = _gaq || [];
 
 /**
@@ -129,7 +129,7 @@ MusicManager.prototype.updateState = function(state) {
     if (!track || this.state.paused || this.state.url != track.audio_url) return;
                 
     if (Math.round(this.state.played) >= Math.round(track.duration) || this.state.finished) {
-        console.log(this.state.played, track.duration, this.state.duration, track, this.state.url);
+        console.log(this.state.played, track.duration, this.state.duration, track, this.state.url, this.state);
         
         this.onEnded();
     }
@@ -552,6 +552,7 @@ MusicManager.prototype.showNotification = function(){
  */
 MusicManager.prototype.updateID3Info = function(trackIndex, callback){
     var track = this.playlist[trackIndex];
+    calback = callback || emptyFunc;
 
     if (track.file_url && !track.file_url.match(/^data/)) {
         var file_name = track.file_url.substring(track.file_url.lastIndexOf("/")+1)
@@ -583,9 +584,7 @@ MusicManager.prototype.updateID3Info = function(trackIndex, callback){
             
             this.fireEvent('onPlaylistChanged');
            
-            if (callback) {
-                callback();
-            }
+            callback();
         }.bind(this));
     }
 }
@@ -594,42 +593,40 @@ MusicManager.prototype.updateID3Info = function(trackIndex, callback){
  * MusicManager#getTrackInfo()
  */
 MusicManager.prototype.updateTrackInfo = function(trackIndex, callback){
-    var track = this.playlist[trackIndex]
+    var track = this.playlist[trackIndex];
+    callback = callback || emptyFunc;
 
     if(track.artist === undefined){
         if(track.file_url && !track.id3_empty)
             this.updateID3Info(trackIndex, function(){
-                this.updateTrackInfo(trackIndex, callback)         
+                this.updateTrackInfo(trackIndex, callback);
             }.bind(this))
         else {
-            track.info = {}
-            callback()
-        }
-    } else if(!track.info)
-        this.scrobbler.trackInfo(track.artist, track.song, function(response){
-            if(response.track_info){
-                track.info = response.track_info
+            track.info = {};
 
-                if(track.info.album){
-                    track.album = track.info.album.title                    
-                    track.image = track.info.album.image
+            callback();
+        }
+    } else if (!track.info)
+        this.scrobbler.trackInfo(track.artist, track.song, function(response) {
+            if (response.track_info) {
+                track.info = response.track_info;
+
+                if (track.info.album) {
+                    track.album = track.info.album.title;
+                    track.image = track.info.album.image;
                 }
             }
             
-            if(!track.image)
-                this.scrobbler.artistInfo(track.artist, function(resp){
-                    track.image = resp.image
-
-                    if(callback)
-                        callback()
-                }.bind(this))
+            if (!track.image)
+                this.scrobbler.artistInfo(track.artist, function(resp) {
+                    track.image = resp.image;
+                    callback();                    
+                }.bind(this));
             else
-                if(callback)
-                    callback()
-        }.bind(this))
+                callback();
+        }.bind(this));
     else{
-        if(callback)
-            callback()
+        callback();
     }
 }
 

@@ -76,6 +76,7 @@ a.sm2_button {
  background-color: transparent !important;
  text-decoration: none !important;
  border:0 !important;
+ background-repeat: no-repeat !important;
 }
 
 a.sm2_button:hover { 

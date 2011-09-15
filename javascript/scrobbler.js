@@ -466,7 +466,7 @@ Scrobbler.search = function(search_text, callback){
 
         html += "<li class='lfm_restype_"+arr[i].restype+" with_vk_search' data-index-number='"+link_id+"'>";
         html += "  <div class='ex_container "+css_class+"' data-index-number='0' "+attrs+">";
-        html += "    <span class='img'><img src='"+arr[i].image+"' width='34'/></span>";
+        html += "    <span class='img'><img src='"+arr[i].image+"' width='34' height='34' /></span>";
         html += "    <span class='play_link'>"+play_link+"</span>";
         html += "    <span class='title'><a href=\"http://last.fm/"+href+"\" target='_blank'>"+title+"</a></span>";
         html += "  </div>";

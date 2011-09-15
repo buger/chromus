@@ -137,49 +137,48 @@ Array.prototype.random = function() {
 }
 
 function getTrackInfo(button){
-  if (button.getAttribute('data-media-type') == 'raw-file'){
-    return {
-      file_url: button.getAttribute('data-url'),
-      source_url: document.location.href,      
-      source_host: document.location.host,      
-      song: button.innerHTML.stripHTML(),
-      element_id: button.id,
-      index: 0
+    if (button.getAttribute('data-media-type') == 'raw-file'){
+        return {
+            file_url: button.getAttribute('data-url'),
+            source_url: document.location.href,      
+            source_host: document.location.host,      
+            song: button.innerHTML.stripHTML().trim() || "Loading track info...",
+            element_id: button.id,
+            index: 0
+        }
     }
-  }
 
-  var container = findParent(button, "ex_container")
-  
-  var streamable = false
+    var container = findParent(button, "ex_container");
+    var streamable = false;
 
-  if(container.className.match('fdl'))
-      streamable = 'free'
-  else if(container.className.match('streamable'))
-      streamable = true
+    if (container.className.match('fdl'))
+        streamable = 'free';
+    else if (container.className.match('streamable'))
+        streamable = true;
 
-  if (!window.pageID) {
-      window.pageID = new Date().getTime();
-  }
+    if (!window.pageID) {
+        window.pageID = new Date().getTime();
+    }
 
-  var track_info = {
-      artist:     container.getAttribute('data-artist'),
-      song:       container.getAttribute('data-song'),
-      album:      container.getAttribute('data-album'),
-      track_id:   container.getAttribute('data-track-id'),
-      index:      parseInt(container.getAttribute('data-index-number')),
-      page_id:    window.pageID,
-      source_url: document.location.href,      
-      source_host: document.location.host,      
+    var track_info = {
+        artist:     container.getAttribute('data-artist'),
+        song:       container.getAttribute('data-song'),
+        album:      container.getAttribute('data-album'),
+        track_id:   container.getAttribute('data-track-id'),
+        index:      parseInt(container.getAttribute('data-index-number')),
+        page_id:    window.pageID,
+        source_url: document.location.href,      
+        source_host: document.location.host,      
       
-      element_id: button.id,
-      streamable: streamable
-  }
+        element_id: button.id,
+        streamable: streamable
+    };
 
-  for(key in track_info)
-      if(track_info[key] == undefined) 
-          delete track_info[key]
+    for (var i; i < track_info.length; i++)
+        if (track_info[i] == undefined) 
+            delete track_info[i];
   
-  return track_info
+    return track_info
 }
 
 

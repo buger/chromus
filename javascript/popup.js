@@ -133,7 +133,8 @@ PlayerUI.setState = function(state){
 
     if (state.volume != undefined && !$('#header .volume .level').is(':visible')) {
         this.setVolume(state.volume);   
-    }        
+    }   
+
 }
 
 
@@ -146,7 +147,7 @@ PlayerUI.setVolume = function(level, send_message){
     this.state.volume = level;
 
     if (send_message) {
-        browser.postMessage({method:'setVolume', volume: level})
+        browser.postMessage({ method:'setVolume', volume: level });
     }
 }
 
@@ -222,10 +223,22 @@ PlayerUI.initialize = function(){
     });
 
     $('#header .control.next').click(function(){
-        browser.postMessage({method: 'nextTrack'});
+        browser.postMessage({ method: 'nextTrack' });
 
         PlayerUI.setCurrentTrack(PlayerUI.current_track + 1);
     });
+
+    $('#header *[data-role=toggle]').bind('click', function(){
+        $(this).toggleClass('pause')
+               .toggleClass('play');
+        
+        if ($(this).hasClass('pause')) {
+            browser.postMessage({ method:'play', track: PlayerUI.current_track });
+        } else {
+            browser.postMessage({ method:'pause' });
+        }
+    });
+
 
     $('#playlist').click(function(e){
         var target = $(e.target);
@@ -244,15 +257,18 @@ PlayerUI.initialize = function(){
         this.interval = setTimeout(PlayerUI.search, 300);
     }).keydown(function(evt){
         clearInterval(this.interval);
-    });
+    });    
 }
 
 
 PlayerUI.search = function(){
     var text = $('#header .search_bar .text').val();
-
-    Scrobbler.search(text, function(response){
-        $('#header .search_bar .result').html(response.html);
+    
+    if (!text.trim())
+        $('#header .search_bar .result').html('');
+    else
+        Scrobbler.search(text, function(response){
+            $('#header .search_bar .result').html(response.html);
     });
 }
 
@@ -325,8 +341,15 @@ browser.addMessageListener(function(msg) {
                     $("#playlist").data('jsp').scrollToY(scroll_to);
             }
 
-            if(msg.state != undefined)
+            if(msg.state != undefined) {
                 PlayerUI.setState(msg.state);
+
+                if (msg.state.paused) {
+                    $('#header *[data-role=toggle]').removeClass('play').addClass('pause');
+                } else {
+                    $('#header *[data-role=toggle]').removeClass('pause').addClass('play');
+                }
+            }
 
             $('#playlist').css({'visibility': 'visible'})
 
