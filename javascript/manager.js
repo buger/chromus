@@ -210,9 +210,9 @@ TrackList.prototype.getTrack = function(row){
 
     // If inside artist page
     if(this.artist && !this.element.className.match('big') && !document.getElementById('thePlaylist') && (!this.element.className.match('tracklist') && (track_info.length == 1 || track_info[1].href.match(/\.mp3/)) || document.getElementById('libraryBreadcrumb')))
-        return [this.artist, track_info[0].innerHTML]
+        return [this.artist, track_info[0].innerText]
     else
-        return [track_info[0].innerHTML, track_info[1] ? track_info[1].innerHTML : undefined]
+        return [track_info[0].innerText, track_info[1] ? track_info[1].innerText : undefined]
 }
 
 TrackList.prototype.insertLink = function(row, track) {
@@ -247,7 +247,7 @@ SingleTrack.prototype.constructor = SingleTrack
 
 SingleTrack.prototype.getTrack = function(){
 //    var artist = document.querySelector('.breadcrumb a').innerHTML
-    var song = document.querySelector('.breadcrumb span').innerHTML
+    var song = document.querySelector('.breadcrumb span').innerText
 
     return [this.artist, song]
 }
@@ -342,7 +342,7 @@ FriendsLoved.prototype.constructor = FriendsLoved
 FriendsLoved.prototype.getTrack = function(li){
     var track_info = li.querySelectorAll('.object strong a')
 
-    return [track_info[track_info.length-2].innerHTML, track_info[track_info.length-1].innerHTML]
+    return [track_info[track_info.length-2].innerText, track_info[track_info.length-1].innerText]
 }
 
 FriendsLoved.prototype.insertLink = function(li, track){
@@ -371,7 +371,7 @@ NowPlaying.prototype.constructor = NowPlaying
 NowPlaying.prototype.getTrack = function(li){
     var track_info = li.querySelectorAll('.track a')
 
-    return [track_info[track_info.length-2].innerHTML, track_info[track_info.length-1].innerHTML]
+    return [track_info[track_info.length-2].innerText, track_info[track_info.length-1].innerText]
 }
 
 NowPlaying.prototype.insertLink = function(li, track){
@@ -395,8 +395,8 @@ ArtistsWithInfo.prototype = new MusicDomElement()
 ArtistsWithInfo.prototype.constructor = ArtistsWithInfo
 
 ArtistsWithInfo.prototype.getTrack = function(li){
-    var track = li.querySelector('strong a').innerHTML
-    var artist = li.querySelector('a.artist').innerHTML
+    var track = li.querySelector('strong a').innerText;
+    var artist = li.querySelector('a.artist').innerText;
 
     return [artist, track]
 }
