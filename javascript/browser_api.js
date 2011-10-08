@@ -1,26 +1,31 @@
 ﻿(function(window){
-    if (window.opera && window.opera.postError) {
-        window.console = {};
-        
-        function joinArgs(args) {
-            var result = [], length = args.length, i;
+    if (window.browser && window.browser.isChrome) {
+        window.browser.removeListeners();
+        delete window.browser;
+    }
 
-            for (i = 0; i < length; i++) {
-                if (args[i] !== undefined) {
-                    if (typeof (args[i]) === 'object') {
-                        try {
-                            result.push(JSON.stringify(args[i]));
-                        } catch (e) {
-                            result.push(args[i].toString());
-                        }
-                    } else {
+    function joinArgs(args) {
+        var result = [], length = args.length, i;
+
+        for (i = 0; i < length; i++) {
+            if (args[i] !== undefined) {
+                if (typeof (args[i]) === 'object') {
+                    try {
+                        result.push(JSON.stringify(args[i]));
+                    } catch (e) {
                         result.push(args[i].toString());
                     }
+                } else {
+                    result.push(args[i].toString());
                 }
             }
-            
-            return result.join(', ');
         }
+        
+        return result.join(', ');
+    }
+
+    if (window.opera) {
+        window.console = {};
         
         function getErrorObject() {
             try { throw new Error(''); } catch (err) { return err; }
@@ -40,6 +45,8 @@
         });
     }
 
+
+
     Array.prototype.unique = function() {
         var r = new Array(), i, x;    
         o:for (i = 0, n = this.length; i < n; i++) {
@@ -55,11 +62,62 @@
         return r;
     }
 
+    function extend(destination, source) {
+        for (var property in source) {
+            if (source.hasOwnProperty(property)) {
+                destination[property] = source[property];
+            }
+        }
+        return destination;
+    }
+
+    var FFStore = {
+        synced:false,
+
+        data: {},
+       
+        sync: function() {
+            browser.broadcastMessage({ _api: true, method: 'updateStorage', data: FFStore.data },
+                function(msg) {
+                    extend(FFStore.data, msg.response);
+
+                    FFStore.synced = true;
+                    
+                    console.log('Synced!', FFStore.data);
+                }
+            )
+        },
+
+        set: function(key, value) {
+            FFStore.data[key] = value;
+
+            FFStore.sync();
+        },
+
+        get: function(key) {
+            console.log("Getting key", key);
+            return FFStore.data[key];
+        },
+
+        remove: function(key) {
+            FFStore.data[key] = null;
+
+            FFStore.sync();
+        }
+    }
+
+
 
     var browser = {
-        isChrome: window.chrome != undefined,
-        isOpera:  window.opera != undefined,
-        isSafari: window.safari != undefined,
+        isChrome: typeof(window.chrome) === "object",
+        isOpera:  typeof(window.opera) === "object",
+        isSafari: typeof(window.safari) === "object",
+        isFirefox: navigator.userAgent.match('Firefox') != undefined,
+
+        isPlatform: function(operationSystem){
+            return navigator.userAgent.toLowerCase().indexOf(operationSystem) > -1;
+        },
+
 
         _o_toolbarButton: null,
 
@@ -80,7 +138,12 @@
                 }
             },
 
-            setIcon: function(icon){
+            setIcon: function(options){
+                if (browser.isChrome) {
+                    chrome.browserAction.setIcon(options);
+                } else {
+                    browser.postMessage({ method: "setIcon", _api: true, imageData: options.imageData });
+                }
             },
 
             setBackgroundColor: function(color) {
@@ -93,12 +156,62 @@
         },
 
         tabs: {
-            create: function(options) {
+            create: function(options, callback) {
                 if (browser.isChrome) {
                     chrome.tabs.create(options);                    
+                } else if (browser.isSafari) {
+                    var tab = safari.application.activeBrowserWindow.openTab();
+                    tab.url = options.url;
+                } else if (browser.isFirefox) {
+                    browser.postMessage({ method: "createTab", _api: true, url: options.url }, null, function(msg){
+                        if (callback)
+                            callback(msg.response);
+                    })                    
+                }
+            },
+
+            getSelected: function(windowID, callback) {
+                if (browser.isChrome) {
+                    chrome.tabs.getSelected(windowID, callback);
+                } else if (browser.isSafari) {
+                    callback(safari.application.activeBrowserWindow.activeTab)
+                } else if (browser.isFirefox) {
+                    browser.postMessage({ method: "activeTab", _api: true }, null, function(msg){
+                        callback(msg.response);
+                    })
+                }
+            },
+
+            postMessage: function(tab, message) {               
+                browser.postMessage(message, tab);
+            },
+
+            captureVisibleTab: function(windowID, options, callback) {
+                if (browser.isChrome) {
+                    chrome.tabs.captureVisibleTab(windowID, options, callback);
+                } else if (browser.isSafari) {
+                    callback(safari.application.activeBrowserWindow.activeTab.visibleContentsAsDataURL());
+                } else if (browser.isFirefox) {
+                    browser.postMessage({ _api:true, method: "captureVisibleTab" }, null, function(msg) {
+                        callback(msg.response);
+                    });
                 }
             }
-        },        
+        },     
+
+        contextMenus: {
+            create: function(options) {
+                if (browser.isChrome) {
+                    chrome.contextMenus.create(options)
+                } else if (browser.isFirefox) {
+                    browser.postMessage({ _api:true, method: "createContextMenus", event_listener: true, options: options }, null, function(msg) {
+                        console.log('calling on click');
+                        if (options.onclick)
+                            options.onclick(msg.response);
+                    });
+                }
+            }
+        },
 
         extension: {
             getURL: function(url) {
@@ -117,33 +230,33 @@
         },
 
         isBackgroundPage: null,
+        page_type: null,
 
-        getPageType: function(){        
-            var page_type;
+        getPageType: function(){   
+            if (browser.page_type)
+                return browser.page_type;
 
             if (browser.isChrome) {
                 try {
-                    page_type = chrome.extension.getBackgroundPage() == window ? 'background' : 'script';
+                    browser.page_type = chrome.extension.getBackgroundPage() == window ? 'background' : 'script';
                 } catch(e) {
                     page_type = 'script';
                 }
             } else if (browser.isOpera) {
-                if (opera.extension) {
-                    page_type = opera.extension.broadcastMessage ? 'background' : 'script';
-                } else {
-                    page_type = 'injected';
-                }
+                browser.page_type = opera.extension.broadcastMessage ? 'background' : 
+                                    window.isContentScript ? 'injected' : 
+                                    'popup';
             } else if (browser.isSafari) {
-                page_type = safari.extension.globalPage ? 'background' : 'script';
+                browser.page_type = safari.extension.globalPage ? 'background' : 'script';
             }
 
-            if (page_type == 'background') {
+            if (browser.page_type == 'background') {
                 browser.isBackgroundPage = true;
 
                 console.log("Background page");
             }
 
-            return page_type;        
+            return browser.page_type;        
         },    
         
         _isNetworkInitialized: false,
@@ -157,14 +270,29 @@
 
                 if (browser._isNetworkInitialized) {
                     console.log("Calling onReady callback", browser._isNetworkInitialized);
-                    browser._onReadyCallback();
+
+                    if (!browser.isFirefox || FFStore.synced) {
+                        browser._onReadyCallback();
+                    } else {
+                        setTimeout(function() {
+                            browser.onReady();
+                        }, 50);
+                    }
                 }
             } else {             
-                browser._isNetworkInitialized = true;
-
+                browser._isNetworkInitialized = true;                
                 if (browser._onReadyCallback) {
                     console.log("Calling onReady callback", browser._isNetworkInitialized);
-                    browser._onReadyCallback();
+                    
+                    if (!browser.isFirefox || FFStore.synced) {
+
+                        console.log('')
+                        browser._onReadyCallback();
+                    } else {
+                        setTimeout(function() {
+                            browser.onReady();
+                        }, 50);
+                    }
                 }
             }
         },
@@ -233,53 +361,143 @@
                 browser._o_addMessageListener(listener);    
             } else if (browser.isSafari) {
                 browser._s_addMessageListener(listener);
+            } else if (browser.isFirefox) {
+                browser._ff_addMessageListener(listener);
             }
         },
+        
+        // TODO
+        removeListeners: function(){
+            if (browser.isChrome) {
+                browser._c_removeMessageListeners();
+            } else if (browser.isOpera) {
+            } else if (browser.isSafari) {
+            } else if (browser.isFirefox) {
+            }                         
+        },
+
+        //Call stack for Opera, Chrome and Safari 
+        _listeners: [],
 
         _c_addMessageListener: function(listener) {
-            if (browser.isBackgroundPage) {
-                chrome.extension.onConnect.addListener(function(port) {
-                    console.log("Port connected:", port.name, port);
+            chrome.extension.onRequest.addListener(listener);
+            
+            
+            if (!browser._isNetworkInitialized) {
+                browser.onReady();
+            }
+        },
 
-                    browser.connected_ports.push(port);
+        _c_removeMessageListeners: function() {
+            console.log("Removing listeners:", this._listeners.length);
 
-                    port.onMessage.addListener(function(message) {
-                        listener(message, port);
-                    });
+            for (var i=0; i<this._listener.length; i++) {
+                chrome.extension.onRequest.removeListener(this._listeners[i]);
+            }
+        },
 
-                    port.onDisconnect.addListener(function() {
-                        for (var i=0; i<browser.connected_ports.length; i++) {
-                            console.log('Port disconnected', browser.connected_ports[i].portId_, port.portId_);
+        _listener_initialized: false,
+        
+        _ff_message_in: null,
+        _ff_message_out: null,
 
-                            if (browser.connected_ports[i].portId_ == port.portId_) {
-                                browser.connected_ports.splice(i, 1);
-
-                                break;
-                            }
-                        }
-                    });                
-                });
+        _ff_addMessageListener: function(listener) {
+            browser._listeners.push(listener);
+            
+            if (browser._listener_initialized) {
+                return;
             } else {
-                if (browser.connected_ports.length == 0) {
-                    var port = chrome.extension.connect();
-                    browser.connected_ports.push(port);
-                } else {
-                    port = browser.connected_ports[0];
+                browser._listener_initialized = true;
+            }
+                        
+            function waitForDispatcher() {
+                browser._ff_message_bridge = document.getElementById('ff_message_bridge');
+
+                if (!browser._ff_message_bridge) {
+                     var el = document.createElement('div');
+                     el.id = 'ff_message_bridge';
+                     el.style.display = 'none';
+                     document.body.appendChild(el);
+                    
+                     browser._ff_message_bridge = el;
+                }
+
+                if (document.body.className.match(/background/)) {
+                    browser.page_type = "background";
+                    browser.isBackgroundPage = true;
+
+                    console.log("I Am background page!");
+                } else if (document.body.className.match(/popup/)) {
+                    browser.page_type = "popup";
+
+                    document.addEventListener('click', function(evt) {
+                        if (evt.target.nodeName == 'A' && evt.target.target == "_blank") {
+                            if (evt && evt.preventDefault)
+                                evt.preventDefault();
+
+                            evt.stopPropagation();
+                            evt.returnValue = false;
+
+                            browser.tabs.create({ url:evt.target.href });
+
+                            return false;
+                        }
+                    }, false);
                 }
                 
-                port.onMessage.addListener(function(message){
-                    listener(message, port);
-                });
-            }
-            
-            browser.onReady();
-        },
-        
+                FFStore.sync();
 
-        //Call stack for Opera and Safari
-        _listeners: [],
+                setInterval(function(){
+                    var messages = browser._ff_message_bridge.querySelectorAll('.to_page');    
+                    var length = messages.length;
+
+                    if (length > 0) {
+                        for(var i=0; i<length; i++) {
+                            var msg = messages[i].innerHTML;                            
+                            msg = msg[0] == '{' ? JSON.parse(msg) : msg;
+                            browser._ff_message_bridge.removeChild(messages[i]);
+
+                            browser._listeners.forEach(function(fn) {
+                                fn(msg, browser);                
+                            })
+                        }
+                    }
+                }, 50);
+
+                browser.onReady();
+
+                console.log("Document:", document.body.className, browser.page_type);
         
-        _listener_initialized: false,
+                if (browser.page_type == "popup") {
+                    
+                    var l = function (evt) {
+                        if (browser._width  === document.body.offsetWidth &&
+                            browser._height === document.body.offsetHeight)
+                            return setTimeout(l, 500);
+
+                        browser.resizePopup();
+                        
+                        setTimeout(l, 500);
+                    }
+
+                    l();    
+                }
+            };
+
+            waitForDispatcher();            
+        },
+
+        resizePopup: function() {                        
+            browser._width = document.body.offsetWidth;
+            browser._height = document.body.offsetHeight;
+
+            browser.postMessage({
+                _api: true,
+                method: 'popupResize', 
+                width: browser._width,
+                height: browser._height
+            });            
+        },
         
         _s_addMessageListener: function(listener) {
             browser._listeners.push(listener);
@@ -323,7 +541,7 @@
                     console.log("Received command", event);
                     
                     if (event.command == "toggle_popup") {
-                        safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("toggle_popup");
+                        safari.application.activeBrowserWindow.activeTab.page.dispatchMessage("toggle_popup", {popup_url: browser.config.browser_action.popup});
                     }
                 }, false);                        
                 
@@ -343,10 +561,21 @@
                 
                 // In page is iframe (safair popup emulation), don't initialize it two times
                 if (window.top == window) {            
-                    browser.connected_ports.push(safari.self.tab);             
+                    browser.connected_ports.push(safari.self.tab);
                     safari.self.tab.dispatchMessage("connect");
                 } else {
                     browser.onReady();
+                    
+                    var listener = function () {
+                        window.top.postMessage({
+                            method: 'popup_resize', 
+                            width: document.body.offsetWidth,
+                            height: document.body.offsetHeight
+                        }, '*');
+                    }
+                                        
+                    document.addEventListener('DOMNodeInserted', listener, false);
+                    document.addEventListener('DOMNodeRemoved', listener, false);
                 }
             }		
         },
@@ -363,7 +592,7 @@
             }
             
             // if background page
-            if (browser.isBackgroundPage) {
+            if (browser.isBackgroundPage) {                
                 opera.extension.onconnect = function(event){
                     event.source.postMessage({
                         method: 'connected', 
@@ -371,7 +600,6 @@
                         config: browser.config, 
                         extension_url: browser.extension_url
                     });
-
                     opera.postError("sent message to popup");
                 }
                 
@@ -388,6 +616,11 @@
                             scripts: recources.scripts,
                             styles: recources.styles
                         });
+                    } else if (typeof(event.data) == 'object' && event.data.method == 'popupSize') {
+                        if (browser._o_toolbarButton) {
+                            browser._o_toolbarButton.popup.height = event.data.height;
+                            browser._o_toolbarButton.popup.width = event.data.width;
+                        }
                     } else {
                         browser._listeners.forEach(function(fn) {
                             fn(event.data, event.source);
@@ -398,6 +631,7 @@
                 browser.onReady();
             } else {
                 opera.extension.onmessage = function(event) {                        
+                    console.log("Script::Received message: ", JSON.stringify(event.data));
                     if (typeof(event.data) == 'object' && event.data.method == 'connected' && event.data.source == 'background') {
                         browser._background_page = event.source;
                         browser.config = event.data.config;
@@ -409,26 +643,65 @@
                         });
                     }
                 }
+                if (browser.getPageType() === "popup") {
+                    function listener() {
+                        if (document.body.previousClientHeight !== document.body.clientHeight ||
+                            document.body.previousClientWidth  !== document.body.clientWidth) {
+                            browser.postMessage({ method: 'popupSize', width: document.body.clientWidth, height: document.body.clientHeight });
+
+                            document.body.previousClientHeight = document.body.clientHeight;
+                            document.body.previousClientWidth = document.body.clientWidth;
+                        }
+                    }
+                    
+                    document.addEventListener('DOMNodeInserted', listener, false);
+                    document.addEventListener('DOMNodeRemoved', listener, false);
+                }
             }	
         },
 
-        postMessage: function(message, dest) {
-            if (dest) {
+        postMessage: function(message, dest, callback) {
+            if (dest && !browser.isFirefox) {
+                message.__id = new Date().getTime();
+
                 console.log("Posting message ", message, " to ", dest);
             
-                browser.isSafari ? dest.dispatchMessage("_method", message) : dest.postMessage(message);            
+                if (browser.isSafari) {
+                    dest.dispatchMessage("_method", message) 
+                } else {
+                    if (browser.isBackgroundPage) {
+                        chrome.tabs.sendRequest(dest.id, message, callback);
+                    } else {
+                        chrome.extension.sendRequest(message, callback);
+                    }
+                }
             } else {
-                browser.broadcastMessage(message);
+                browser.broadcastMessage(message, callback);
             }
         },
 
-        broadcastMessage: function(message) {
-            if (browser.isChrome) {
-                var length = browser.connected_ports.length;
+        broadcastMessage: function(message, callback) {
+            if (!callback) callback = function(){};
 
-                for(var i=0; i<length; i++) {
-                    browser.connected_ports[i].postMessage(message);
+            message.__id = new Date().getTime();
+
+            if (browser.isChrome) {
+                if (browser.isBackgroundPage) {
+                    chrome.windows.getAll(null, function(wins) {
+                        for (var j = 0; j < wins.length; ++j) {
+                            chrome.tabs.getAllInWindow(wins[j].id, function(tabs) {
+                                for (var i = 0; i < tabs.length; ++i) {
+                                    chrome.tabs.sendRequest(tabs[i].id, message, callback);
+                                }
+                            });
+                        }
+                    });
+
+                    chrome.extension.sendRequest(message, callback);
+                } else {
+                    chrome.extension.sendRequest(message, callback);
                 }
+
             } else if (browser.isOpera) {
                 if (browser.isBackgroundPage) {
                     opera.extension.broadcastMessage(message);
@@ -445,6 +718,35 @@
                 } else {
                     safari.self.tab.dispatchMessage("_message", message);
                 }
+            } else if (browser.isFirefox) {
+                if (!browser._ff_message_bridge)
+                    return setTimeout(function(){ browser.broadcastMessage(message, callback) }, 50);
+                
+                if (callback) {
+                    console.log("Adding message listener", message, callback);
+
+                    if (!message.event_listener)
+                        message.reply = true;
+
+                    var l = function(_msg, _sender) {
+                        if (_msg.__id === message.__id) {
+                            callback(_msg, _sender);
+
+                            if (!message.event_listener) {
+                                console.log("Deleting message listener:", _msg);
+                                var idx = browser._listeners.indexOf(l);                            
+                                browser._listeners.splice(idx, 1);
+                            }
+                        }
+                    }              
+                    
+                    browser.addMessageListener(l);
+                }
+
+                var _m = document.createElement('textarea');
+                _m.className = 'from_page';
+                _m.innerHTML = typeof(message) == "string" ? message : JSON.stringify(message);
+                browser._ff_message_bridge.appendChild(_m);                                
             }
         },
 
@@ -524,8 +826,7 @@
                     icon: browser.config.browser_action.default_icon,
                     popup: {
                         href: browser.config.browser_action.popup,
-                        width: 470,
-                        height: 600
+                        height: 100
                     },
 
                     badge: {
@@ -542,20 +843,127 @@
             }
         }
     }
-
+    
     browser.getPageType();
 
     if (browser.isBackgroundPage) {
-        browser.loadConfiguration(function() {
-            if (browser.isOpera) {
-                browser._initializePopup();
-                browser._cacheMediaFiles();
-            } else if (browser.isSafari) {
-                browser._cacheMediaFiles();
+        setTimeout(function() {
+            browser.loadConfiguration(function() {
+                if (browser.isOpera) {
+                    browser._initializePopup();
+                    browser._cacheMediaFiles();
+                } else if (browser.isSafari) {
+                    browser._cacheMediaFiles();
+                }
+            });
+        }, 100);
+    }
+
+    document.getElementsByTagName('html')[0].className += " " + (function(){         
+        return browser.isChrome ? "chrome" :
+               browser.isSafari ? "safari" :
+               browser.isOpera ? "opera" :
+               "";
+    }())
+    
+    window.browser = browser;
+
+    
+    var FakeXMLHttpRequest = function() {
+        this.requestHeaders = {};
+        this.binary = false;
+        this.status = 0,
+        this.readyState = 1,
+
+        this.open = function(method, url, async) {
+            this.method = method;
+            this.url = url;
+            this.async = async;
+        }
+
+        this.send = function(data) {
+            var self = this;
+
+            browser.postMessage({ 
+                method: '_ajax',
+
+                _api: true,
+
+                httpOptions: {
+                    method: this.method,
+                    url: this.url,
+                    async: this.async,
+                    binary: this.binary,
+                    headers: this.requestHeaders,
+                    mime_type: this.mime_type,
+                    data: data
+                }
+            }, null, 
+                function(resp) {
+                    resp = resp.response;
+
+                    console.log("Ajax response", resp.response);
+
+                    self.readyState = 4;
+                    self.responseText = resp.responseText;
+                    self.responseHeaders = resp.responseHeaders;
+                    self.status = resp.status;
+
+                    if (self.onreadystatechange) {
+                        self.onreadystatechange();
+                    }
+                }
+            );
+        }
+
+        this.sendAsBinary = function(data) {
+            this.binary = true;
+
+            this.send(data);
+        }
+        
+        this.overrideMimeType = function(mime_type) {
+            this.mime_type = mime_type;
+        }
+
+        this.abort = function() {                   
+        }
+
+        this.setRequestHeader = function(header, value) {
+            this.requestHeaders[header] = value;
+        }
+        
+        this.getResponseHeader = function(header) {
+            return this.responseHeaders[header];            
+        }
+
+        this.getAllResponseHeaders = function() {
+            var headers = '';
+
+            for (key in this.responseHeaders) {
+                headers += key + ': ' + this.responseHeaders[key] + "\n";
             }
-        });
+
+            return headers;
+        }
     }
 
     
-    window.browser = browser;
+    window.FFStore = FFStore;
+
+    if (browser.isFirefox) {
+        window.store = FFStore;    
+
+        if (!browser.isBackgroundPage) {
+            window.XMLHttpRequest = FakeXMLHttpRequest;
+        }        
+    }
+
+
+    if (browser.isFirefox) {
+        document.body.className += " firefox";
+    }
+
+    // Needed for proper initialization
+    browser.addMessageListener(function(){});
 }(window));                    

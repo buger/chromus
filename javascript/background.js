@@ -105,7 +105,7 @@ function updateState() {
 setInterval(updateState, 1000);
 
 
-browser.addMessageListener(function(msg, sender) {
+browser.addMessageListener(function(msg, sender, sendResponse) {
     console.log(msg.method, msg, sender)
 
     _gaq.push(['_trackEvent', 'msgReceived', msg.method]);
@@ -215,7 +215,7 @@ browser.addMessageListener(function(msg, sender) {
                     scrobbling: music_manager.scrobbler.scrobbling,
                     lastfm_username: music_manager.scrobbler._username
                 }
-            }, sender);
+            });
 
             break;
 
