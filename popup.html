@@ -3,51 +3,33 @@
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
 
-        <link rel="stylesheet" href="css/mp3_player_button.css?rnd=9" type="text/css">
-        <link rel="stylesheet" href="css/popup.css?rnd=9" type="text/css">
-        <link rel="stylesheet" href="css/jquery.jscrollpane.css?rnd=1" type="text/css">
-
-        <script src="javascript/jquery.min.js"></script>
-        <script src="javascript/jquery.tmpl.min.js"></script>
-        <script src="javascript/jquery.mousewheel.js"></script>
-        <script src="javascript/jquery.jscrollpane.min.js"></script>
-        <script src="javascript/jquery.disable.text.select.pack.js"></script>
-        
-        <script src="javascript/underscore-min.js"></script>
-        <script src="javascript/backbone-min.js"></script>
-
-        <script src="javascript/utils.js"></script>        
-        <script src="javascript/scrobbler.js"></script>
-        <script src="javascript/browser_api.js"></script>
-        <script src="javascript/popup.js"></script>
-        <script src="javascript/enhanced_play_button.js"></script>
+        <link rel="stylesheet" href="css/popup.css" type="text/css">
 
         <script id="playlist_tmpl" type="text/x-jquery-tmpl">
-            <table>
             {{each playlist}}
-                <tr class="{{if $value.merge_rows}}big{{/if}}">
-                    {{if !$value.hide_artist}}
-                    <td class="artist_td {{if $value.last_row}}last{{/if}}" rowspan="{{if $value.merge_rows}}${$value.merge_rows}{{/if}}">
-                        <div class="artist {{if $value.merge_rows}}big{{/if}}">
-                            {{if $value.merge_rows}}
-                            <div class="container image"><img src='${$value.artist_image}' /></div>
-                            {{/if}}
+                {{if !$value.previous || $value.previous.artist != $value.artist}}
+                <div class="artist_playlist {{if $value.artist_playlist_count > 2}}large{{/if}}">
+                {{/if}}
+                    <div class="track_container">
+                        <div class="artist">
+                            <div class="image">
+                                <img src='${$value.artist_image}' />
+                            </div>
+                                
                             <span title="${$value.artist}">${$value.artist}</span>
                         </div>
-                    </td>           
-                    {{/if}}
-                    <td class="track_td {{if $value.last_row}}last{{/if}}" data-index='${$index}'>
-                        <div class="container">
-                            <span class="track">${$value.song}</span>
+                        <div class="song" data-index='${$index}'>                        
+                            <span class="title">${$value.song}</span>
                             <div class="controls">
                                 <a class="button play"></a>
-                                <a class="button love"></a>
                             </div>
                         </div>
-                    </td>
-                </tr>            
+                        <div class="clearfix"></div>
+                    </div>
+                {{if !$value.next || $value.next.artist != $value.artist}}
+                </div>
+                {{/if}}
             {{/each}}
-            </table>
         </script>
         
         <script id="main_menu_tmpl" type="text/x-jquery-tmpl">
@@ -77,12 +59,42 @@
             {{/if}}
             <li class='options'>Options</li>
         </script>
+
+        <script id="track_info_tmpl" type="text/x-jquery-tmpl">
+            <div class="container">                                
+                <div class="playing" title="Currently playing"></div>
+                <div class="album_img">
+                    <span class="jewelcase"></span>
+                    <img src="${image}" />
+                </div>
+                <div class="love_btn"><a class='button'></a></div>
+                <div class="info">
+                    <a class="song" href="${song_url}" target="_blank">${song}</a>
+                    <a class="artist" href="${artist_url}" target="_blank">${artist}</a>
+                    {{if album}}
+                    <span class="dash">-</span>
+                    <a class="album" href="${album_url}" target="_blank">${album}</a>
+                    {{/if}}
+                </div>
+            </div>
+            
+            <div class="source">
+                {{if typeof(source_title) != "undefined" && source_title !== 'vkontakte.ru'}}
+                <a href="${source_url}" target="_blank">
+                    <img src="${source_icon}" />
+                    <span> ${source_title}</span>
+                </a>
+                {{/if}}
+            </div>
+            <div class="loader"></div>
+        </script>
+
     </head>
-    <body oncontextmenu="return false" >
+    <body oncontextmenu="return false" class="yui3-cssreset">
         <div id="wrapper">
             <div id="header">
                 <div class="container">
-                    <div class="control play">
+                    <div class="control toggle play">
                         <a class="button"></a>
                     </div>
                     <div class="control next">
@@ -115,17 +127,6 @@
                 </div>
             </div>
             <div id="current_song">
-                <div class="container" style="display: none;">
-                    <div class="playing" title="Currently playing"></div>
-                    <div class="album_img"><span class="jewelcase"></span><img /></div>
-                    <div class="love_btn"><a class='button'></a></div>
-                    <div class="info">
-                        <a class="song"></a>
-                        <a class="artist"></a><span class="dash" style="display:none">-</span><a class="album"></a>
-                    </div>
-                </div>
-                <div class="source"></div>
-                <div class="loader"></div>            
             </div>
             <div id="playlist" style="visibility: hidden"></div>
             <div id="footer">
@@ -138,7 +139,24 @@
                 </div>
             </div>
 
-            <ul id="main_menu" class="menu_container" style="display:none"></ul>
-        </div>
+            <ul id="main_menu" class="menu_container" style="display:none">
+                
+            </ul>
+        </div>            
+
+        <script src="javascript/jquery.min.js"></script>
+        <script src="javascript/jquery.tmpl.min.js"></script>
+        <script src="javascript/jquery.mousewheel.js"></script>
+        <script src="javascript/jquery.jscrollpane.min.js"></script>
+        <script src="javascript/jquery.disable.text.select.pack.js"></script>
+        
+        <script src="javascript/underscore-min.js"></script>
+        <script src="javascript/backbone-min.js"></script>
+
+        <script src="javascript/utils.js"></script>        
+        <script src="javascript/scrobbler.js"></script>
+        <script src="javascript/browser_api.js"></script>
+        <script src="javascript/popup.js"></script>
+        <script src="javascript/enhanced_play_button.js"></script>        
     </body>
 </html>

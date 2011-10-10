@@ -1,0 +1,79 @@
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Lucida Grande", Arial, sans-serif;
+  outline: none;
+  -webkit-font-smoothing: subpixel-antialiased;
+}
+body {
+  overflow: hidden;
+}
+img {
+  border: 0;
+}
+.br_8 {
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  border-radius: 8px;
+}
+.br_3 {
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+.box_shadow {
+  -webkit-box-shadow: #777 0px 4px 10px;
+  -moz-box-shadow: #777 0px 4px 10px;
+  box-shadow: #777 0px 4px 10px;
+}
+.box_shadow_s {
+  -webkit-box-shadow: #777 0px 2px 5px;
+  -moz-box-shadow: #777 0px 2px 5px;
+  box-shadow: #777 0px 2px 5px;
+}
+.linear_grad {
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #f0f0f0), color-stop(1, white));
+  background: -moz-linear-gradient(center bottom, #f0f0f0, white);
+}
+.clear {
+  clear: both;
+  line-height: 1px;
+  font-size: 1px;
+}
+.align_right {
+  text-align: right;
+}
+a.button {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  text-indent: -9999px;
+  /* don't show link text */
+
+  overflow: hidden;
+  /* don't draw inner link text */
+
+  vertical-align: middle;
+  cursor: pointer;
+  background-repeat: no-repeat;
+}
+/*********** Interface **********/
+#wrapper {
+  height: 100%;
+  min-height: 300px;
+  width: 468px;
+  margin-left: 0;
+  margin-right: 0;
+  position: relative;
+  background: url(/images/popup/playlist_bg.png) top left;
+  overflow: hidden;
+  font-size: 93%;
+  line-height: 77%;
+}
+.clearfix {
+  clear: both;
+}
+/************* Scrollbar ***************/
+.jspVerticalBar {
+  right: 2px;
+}

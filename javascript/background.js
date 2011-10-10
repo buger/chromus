@@ -146,10 +146,12 @@ browser.addMessageListener(function(msg, sender, sendResponse) {
                 
                 music_manager.fireEvent('onPlaylistChanged');
             }
-
+                        
             if (typeof(msg.track) == "number") {
                 msg.track = music_manager.playlist[msg.track];
             }
+
+            console.log(msg.track)
 
             music_manager.play(msg.track);
             
@@ -266,7 +268,7 @@ if(window.chrome) {
       "contexts":["selection"]
     });
 
-    chrome.tabs.onSelectionChanged.addListener(function(tab_id, select_info){      
+    chrome.tabs.onSelectionChanged.addListener(function(tab_id, select_info){
         console.log("Tab selected", tab_id, select_info);
     })
 }

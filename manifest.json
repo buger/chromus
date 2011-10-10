@@ -3,12 +3,12 @@
    "version": "3.0.0",   
    "description": "!! Yes it plays music! Browser as a music player? Why not? Music player for Google Chrome",
    "icons": {
-      "16": "chromus_logo.png",
+      "16": "chromus_logo_16.png",
       "128": "chromus_logo.png"
    },
    "default_locale": "en",
    "browser_action": {
-     "default_icon": "chromus_logo.png", 
+     "default_icon": "chromus_logo_16.png",
      "default_title": "Chromus",      
      "popup": "popup.html"        
    },

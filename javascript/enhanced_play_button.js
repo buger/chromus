@@ -3,8 +3,6 @@ var $ = window.jQuery;
 function showButtons(link){   
     var track_info = window.getTrackInfo(link);
 
-    console.log('track_info', track_info);
-
     var container = window.findParent(link, 'ex_container');
 
     var pos = $(link).offset();
