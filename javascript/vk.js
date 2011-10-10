@@ -49,7 +49,9 @@ var VK = {
             }
 
             var container = document.getElementById('vk_search');
-            container.innerHTML = xhr.responseText.substring( xhr.responseText.indexOf("<div class=\"audios_row clear_fix\">")); 
+            response = xhr.responseText.replace(/^<!--/, '').replace(/->->/g, '-->');
+
+            container.innerHTML = response.split('<!>').join('');
 
             var audio_data = []
             var audio_rows = container.querySelectorAll('div.audio') 
@@ -78,7 +80,7 @@ var VK = {
                 audio_data.lastIndex = 0
 
                 for(var i=0;i<audio_data.length; i++){
-                    console.log(audio_data[i], Math.abs(parseInt(audio_data[i].duration) - duration))
+                    console.log(audio_data[i], Math.abs(parseInt(audio_data[i].duration) - duration), artist, song, audio_data[i].artist.toLowerCase(), artist.toLowerCase() == audio_data[i].artist.toLowerCase())
 
                     if(audio_data[i].artist.toLowerCase() == artist && audio_data[i].title.toLowerCase() == song){
                         if(!duration || Math.abs(parseInt(audio_data[i].duration) - duration) <= 2){
@@ -91,7 +93,9 @@ var VK = {
                         audio_data.lastIndex = i
                     }
                 }
-                console.log("audio_data.lastIndex", audio_data.lastIndex)
+
+                if(!vk_track)
+                    vk_track = audio_data[0]
 
                 //Caching for 3 hours
                 CACHE.set(track, audio_data, 1000*60*60*2)
