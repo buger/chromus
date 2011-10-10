@@ -92,10 +92,7 @@ var VK = {
                                audio_data[i].title.toLowerCase() == song){
                         audio_data.lastIndex = i
                     }
-                }
-
-                if(!vk_track)
-                    vk_track = audio_data[0]
+                }                
 
                 //Caching for 3 hours
                 CACHE.set(track, audio_data, 1000*60*60*2)
