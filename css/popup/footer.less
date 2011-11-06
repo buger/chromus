@@ -1,30 +1,40 @@
+@asset_path: "../../images/popup";
+
+@import "mixins.less";
 
 #footer {
-  background: url(/images/popup/footer_bg.png) top left;
-  width: 100%;
-  height: 20px;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  padding: 2px 0px;
-}
-#footer .left {
-  margin-left: 10px;
-}
-#footer .left .button {
-  padding-right: 10px;
-}
-#footer .left .shuffle {
-  background-image: url(/images/popup/shuffle.png);
-}
-#footer .left .repeat {
-  background-image: url(/images/popup/repeat.png);
-}
-#footer .right {
-  position: absolute;
-  right: 10px;
-  top: 2px;
-}
-#footer .right .menu {
-  background-image: url(/images/popup/menu.png);
+    background: url("@{asset_path}/footer_bg.png") top left;
+    width: 100%;
+    height: 20px;
+    padding: 2px 0px;
+
+    .box();
+  
+    .left {
+        .box-flex(1);
+
+        padding-left: 10px;
+    
+        .button {
+            padding-right: 10px;
+        }
+        
+        .shuffle {
+            background-image: url("@{asset_path}/shuffle.png");
+        }
+        
+        .repeat {
+            background-image: url("@{asset_path}/repeat.png");
+        }
+    }
+
+    .right {
+        .box-flex(0);
+
+        padding-right: 10px;
+
+        .menu {
+            background-image: url("@{asset_path}/menu.png");
+        }
+    }
 }

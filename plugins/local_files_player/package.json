@@ -1,0 +1,9 @@
+{
+	"dependencies": ["iframe_player"],
+
+	"name": "Local files audio player",
+
+	"background": ["local_files_player.js"],
+
+	"popup": ["popup.js"]
+}

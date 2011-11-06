@@ -1,3 +1,7 @@
+@asset_path: "../../images/popup";
+
+@import "mixins.less";
+
 #header {
     height: 36px;
     background: #444;
@@ -13,7 +17,7 @@
   
     .container {
         height: 34px;
-        background: url(/images/popup/header_bg.png);
+        background: url("@{asset_path}/header_bg.png");
         border-top: 1px solid #484848;
         border-right: 1px solid #484848;
         border-left: 1px solid #484848;
@@ -23,7 +27,7 @@
         margin-left: 5px;
         
         .button {
-            background-image: url(/images/popup/play.png);
+            background-image: url("@{asset_path}/play.png");
         }
     }
 
@@ -31,12 +35,12 @@
         margin-left: 5px;
 
         .button {
-            background-image: url(/images/popup/pause.png);
+            background-image: url("@{asset_path}/pause.png");
         }
     }
 
     .next .button {
-        background-image: url(/images/popup/next.png);
+        background-image: url("@{asset_path}/next.png");
     }
 
     .control.timeline {
@@ -48,7 +52,7 @@
         .outer {
             width: 282px;
             height: 9px;
-            background: url(/images/popup/timeline_bg.png) center left repeat-x;
+            background: url("@{asset_path}/timeline_bg.png") center left repeat-x;
             border-bottom: 1px solid #353535;
             position: relative;
             cursor: pointer;
@@ -60,7 +64,7 @@
                 z-index: 2;
                 height: 7px;
                 border: 1px solid #1f1f1f;
-                background: url(/images/popup/timeline_inner_bg.png) center left no-repeat;
+                background: url("@{asset_path}/timeline_inner_bg.png") center left no-repeat;
                 background-position: 0px 0px;
                 -webkit-border-top-left-radius: 7px;
                 -webkit-border-bottom-left-radius: 7px;
@@ -79,7 +83,7 @@
             height: 7px;
             border-top: 1px solid black;
             border-bottom: 1px solid #181818;
-            background: url(/images/popup/timeline_progress_bg.png) center left no-repeat;
+            background: url("@{asset_path}/timeline_progress_bg.png") center left no-repeat;
             border-radius: 7px;
             -webkit-border-radius: 7px;
             -moz-border-radius: 7px;
@@ -99,7 +103,7 @@
     .volume {  
         position: relative; 
 
-        .button { background-image: url(/images/popup/volume.png); }
+        .button { background-image: url("@{asset_path}/volume.png"); }
 
         .volume_bar {
             position: absolute;
@@ -136,7 +140,7 @@
     }
 
     .search .button {
-        background-image: url(/images/popup/search.png);
+        background-image: url("@{asset_path}/search.png");
     }
 
     .search_bar {
@@ -145,7 +149,7 @@
         top: 1px;
         width: 419px;
         height: 24px;
-        background: url(/images/popup/header_bg.png);
+        background: url("@{asset_path}/header_bg.png");
         z-index: 2;
         padding: 5px;    
 
@@ -159,28 +163,78 @@
 
         .result {
             position: absolute;
+
             top: 36px;
             left: -1px;
-            width: 468px;
-            height: 0px;
+            width: 448px;
+            height: auto;
             background: white;
             border: 1px solid #ccc;
             z-index: 3;
 
+            padding: 10px;
+
+            h3 {
+                font-family: tahoma;
+                font-size: 16px;
+                font-weight: bold;                    
+                clear: both; 
+                color: #333;               
+            }
+            
             ul {
                 margin-top: 5px;
-                background: white;
-                border-bottom: 1px solid #ccc;
-            }        
+                margin-bottom: 10px;
 
-            li { padding: 5px; }
+                .clearfix();
 
-            img { vertical-align: middle; }
+                li {
+                    .box-sizing(border-box);
 
-            a {
-                text-decoration: none;
-                color: #000;
-                opacity: 0.8;
+                    &.loader { padding: 15px; }
+
+                    a {
+                        .box();
+                        .box-align(center);                                             
+                        font-size: 14px;
+                        line-height: 1.4em;                        
+                        overflow: hidden;
+                        
+                        height: 34px;
+                        padding: 5px 10px;
+                        cursor: pointer;
+                        border: 1px solid transparent;
+
+                        .opacity(90);
+                        color: #333;
+
+                        &:hover {
+                            background-color: #eee;
+                            .border-radius(5px);
+                            border: 1px solid #ccc;
+                        }
+
+                        span { 
+                            display: block; 
+                            .box-flex(1); 
+                        }
+
+                        .image {
+                            height: 34px;
+                            width: 34px;
+
+                            .box-flex(0);
+
+                            margin-right: 10px;
+
+                            background-position: left center;
+                            background-repeat: no-repeat;
+                            background-size: 34px;
+
+                            .border-radius(2px);
+                        }         
+                    }
+                }
             }
         }
     }

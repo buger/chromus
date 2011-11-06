@@ -1,4 +1,6 @@
 ﻿(function(window){
+    window.debug = true;
+    
     if (window.browser && window.browser.isChrome) {
         window.browser.removeListeners();
         delete window.browser;
@@ -109,7 +111,8 @@
 
 
     var browser = {
-        isChrome: typeof(window.chrome) === "object",
+        isFrame: !!window.location.protocol.match(/^http/),
+        isChrome: !window.location.protocol.match(/^http/) && typeof(window.chrome) === "object",
         isOpera:  typeof(window.opera) === "object",
         isSafari: typeof(window.safari) === "object",
         isFirefox: navigator.userAgent.match('Firefox') != undefined,
@@ -213,6 +216,8 @@
             }
         },
 
+        _base_url: ".",
+
         extension: {
             getURL: function(url) {
                 if (!url) {
@@ -223,24 +228,31 @@
                     url = "/" + url;
                 }
 
-                return browser.isChrome ? chrome.extension.getURL(url) : 
-                       browser.isSafari ? safari.extension.baseURI.slice(0, -1) :
-                       browser.isOpera  ? "widget://" + document.location.host + url : url;
+                if (browser.isChrome)
+                    return chrome.extension.getURL(url)
+                else if (browser.isSafari)
+                    return safari.extension.baseURI.slice(0, -1)
+                else if (browser.isOpera) 
+                    return "widget://" + document.location.host + url
+                else if (browser.isFrame)
+                    return browser._base_url + url;
             }
         },
 
         isBackgroundPage: null,
         page_type: null,
 
-        getPageType: function(){   
+        getPageType: function(){
+            browser.page_type = browser.page_type || window.override_page_type;
+
             if (browser.page_type)
                 return browser.page_type;
 
             if (browser.isChrome) {
                 try {
-                    browser.page_type = chrome.extension.getBackgroundPage() == window ? 'background' : 'script';
+                    browser.page_type = chrome.extension.getBackgroundPage() == window ? 'background' : 'popup';
                 } catch(e) {
-                    page_type = 'script';
+                    page_type = 'popup';
                 }
             } else if (browser.isOpera) {
                 browser.page_type = opera.extension.broadcastMessage ? 'background' : 
@@ -248,12 +260,14 @@
                                     'popup';
             } else if (browser.isSafari) {
                 browser.page_type = safari.extension.globalPage ? 'background' : 'script';
+            } else if (browser.isFrame) {                
+                browser.page_type = window.parent === window ? 'popup' : 'background';                
             }
 
             if (browser.page_type == 'background') {
                 browser.isBackgroundPage = true;
 
-                console.log("Background page");
+                console.log("Background page", window.location.toString());
             }
 
             return browser.page_type;        
@@ -355,7 +369,11 @@
         addMessageListener: function(listener) {
             if (!listener) return;        
 
-            if (browser.isChrome) {
+            console.log('adding listener', window.location.toString())
+
+            if (browser.isFrame) {
+                browser._frame_addMessageListener(listener);          
+            } else if (browser.isChrome) {
                 browser._c_addMessageListener(listener);
             } else if (browser.isOpera) {
                 browser._o_addMessageListener(listener);    
@@ -376,12 +394,49 @@
             }                         
         },
 
+        _frame_addMessageListener: function(listener) {
+            if (!browser._bg_page && browser.page_type == 'popup') {
+                console.log('adding listener', window.location);
+
+                browser._bg_page = document.createElement('iframe');
+                browser._bg_page.src = "background.html?" + (+new Date());
+                document.body.appendChild(browser._bg_page);
+                browser._bg_page.style.display = 'none';
+                
+                browser._bg_page.onload = function(){
+                    console.log('loaded');
+                    
+                    browser.onReady();
+                }
+            } else if (browser.page_type == 'background') {
+                if (!browser._isNetworkInitialized)
+                    browser.onReady();
+            }
+
+            browser._listeners.push(listener);
+
+            if (window.messageListener) return false;
+
+            console.log('Adding message listener', browser.page_type, window.location.toString())
+            
+            window.addEventListener("message", function(evt){
+                if (!evt.data) return;
+                
+                msg = JSON.parse(evt.data);
+                
+                for (var i=0; i<browser._listeners.length; i++) {
+                    browser._listeners[i](msg);
+                }
+            }, false);
+
+            window.messageListener = true;
+        },
+
         //Call stack for Opera, Chrome and Safari 
         _listeners: [],
 
         _c_addMessageListener: function(listener) {
             chrome.extension.onRequest.addListener(listener);
-            
             
             if (!browser._isNetworkInitialized) {
                 browser.onReady();
@@ -661,7 +716,7 @@
         },
 
         postMessage: function(message, dest, callback) {
-            if (dest && !browser.isFirefox) {
+            if (dest && !browser.isFirefox && !browser.isFrame) {
                 message.__id = new Date().getTime();
 
                 console.log("Posting message ", message, " to ", dest);
@@ -723,8 +778,6 @@
                     return setTimeout(function(){ browser.broadcastMessage(message, callback) }, 50);
                 
                 if (callback) {
-                    console.log("Adding message listener", message, callback);
-
                     if (!message.event_listener)
                         message.reply = true;
 
@@ -747,6 +800,35 @@
                 _m.className = 'from_page';
                 _m.innerHTML = typeof(message) == "string" ? message : JSON.stringify(message);
                 browser._ff_message_bridge.appendChild(_m);                                
+            } else if (browser.isFrame) {
+                if (browser.page_type === "popup") {
+                    console.log('sending message to bg', JSON.stringify(message));
+                    browser._bg_page.contentWindow.postMessage(JSON.stringify(message), "*");
+                } else {
+                    if (window.parent) {
+                        console.log('sending message popup', message);
+                        window.parent.postMessage(JSON.stringify(message), "*");
+                    }
+                }
+
+                if (callback) {
+                    if (!message.event_listener)
+                        message.reply = true;
+
+                    var l = function(_msg, _sender) {
+                        if (_msg.__id === message.__id) {
+                            callback(_msg, _sender);
+
+                            if (!message.event_listener) {
+                                console.log("Deleting message listener:", _msg);
+                                var idx = browser._listeners.indexOf(l);                            
+                                browser._listeners.splice(idx, 1);
+                            }
+                        }
+                    }              
+                    
+                    browser.addMessageListener(l);
+                }
             }
         },
 
@@ -769,6 +851,11 @@
                 browser.extension_url = chrome.extension.getURL("/");
             } else if (browser.isSafari) {
                 browser.extension_url = safari.extension.baseURI.slice(0, -1);
+            } else if (browser.isFrame) {
+                if (file[0] == '/')
+                    file = file.substr(1);
+
+                browser.extension_url = "";
             }
 
             var xhr = new XMLHttpRequest();

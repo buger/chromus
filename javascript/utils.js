@@ -1,13 +1,11 @@
 function findParent(element, className){
-    var parentNode = element.parentNode
-
-    if (!parentNode)
+    if (!element)
       return false;
 
-    if(parentNode.className && parentNode.className.match(className))
-        return parentNode
+    if(element.className && element.className.match(className))
+        return element
     else
-        return findParent(parentNode, className)
+        return findParent(element.parentNode, className)
 }
 
 function findElementPosition(element){
@@ -151,9 +149,9 @@ function getTrackInfo(button){
     var container = findParent(button, "ex_container");
     var streamable = false;
 
-    if (container.className.match('fdl'))
+    if (container.className && container.className.match('fdl'))
         streamable = 'free';
-    else if (container.className.match('streamable'))
+    else if (container.className && container.className.match('streamable'))
         streamable = true;
 
     if (!window.pageID) {
@@ -173,6 +171,17 @@ function getTrackInfo(button){
         element_id: button.id,
         streamable: streamable
     };
+
+    if (!track_info.song) {
+        if (!track_info.album) {
+            track_info.type = "artist"
+        } else {
+            track_info.type = "album"
+        }
+    } else {
+        track_info.type = "track"
+    }
+
 
     for (var i; i < track_info.length; i++)
         if (track_info[i] == undefined) 

@@ -1,0 +1,7 @@
+{
+	"name": "EchoNest",
+
+	"background": ["echonest.js"],
+
+	"popup": ["echonest.js"]
+}

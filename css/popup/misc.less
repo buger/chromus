@@ -1,3 +1,5 @@
+@import "mixins.less";
+
 * {
     margin: 0;
     padding: 0;
@@ -7,17 +9,21 @@
 }
 
 body {
-  overflow: hidden;
+    overflow: hidden;
+}
+
+html, body {
+    height: 100%;
 }
 
 img {
-  border: 0;
+    border: 0;
 }
 
-.br_8 {
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
+.br_8 {    
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
 }
 .br_3 {
   -webkit-border-radius: 3px;
@@ -69,11 +75,18 @@ a.button {
   margin-left: 0;
   margin-right: 0;
   position: relative;
-  background: url(/images/popup/playlist_bg.png) top left;
+  background: url(../../images/popup/playlist_bg.png) top left;
   overflow: hidden;
   font-size: 93%;
   line-height: 77%;
+
+  .box();
+  .box-orient(vertical);
 }
+
+#header, #current_song, #footer { .box-flex(0); }
+#playlist { .box-flex(1); }
+
 
 .clearfix { clear: both; }
 

@@ -482,9 +482,15 @@ Scrobbler.search = function(search_text, callback){
   )
 }
 
-Scrobbler.getImage = function(data){
+Scrobbler.getImage = function(data, size){    
     var method_prefix = "";
     var params = [];
+
+    if (!size)
+        size = "mediumsquare"
+
+    if (!data.artist)
+        return false
 
     params.push("artist="+encodeURIComponent(data.artist.replaceEntities()));
 
@@ -495,7 +501,7 @@ Scrobbler.getImage = function(data){
         method_prefix = "artist";
     }
 
-    var url = "http://ws.audioscrobbler.com/2.0/?api_key=ceec2bb03d4c5929f0d6667fc266dc75&method="+method_prefix+".getImageRedirect&size=mediumsquare&"+params.join('&');
+    var url = "http://ws.audioscrobbler.com/2.0/?api_key=ceec2bb03d4c5929f0d6667fc266dc75&method="+method_prefix+".getImageRedirect&size="+size+"&"+params.join('&');
 
     return url
 }

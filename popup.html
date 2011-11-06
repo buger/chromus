@@ -5,35 +5,36 @@
 
         <link rel="stylesheet" href="css/popup.css" type="text/css">
 
-        <script id="playlist_tmpl" type="text/x-jquery-tmpl">
-            {{each playlist}}
-                {{if !$value.previous || $value.previous.artist != $value.artist}}
-                <div class="artist_playlist {{if $value.artist_playlist_count > 2}}large{{/if}}">
-                {{/if}}
+        <script id="playlist_tmpl" type="text/template">
+            {{#each playlist}}
+                {{#is_previous}}
+                <div class="artist_playlist {{#more_then_two}}large{{/more_then_two}}">
+                {{/is_previous}}
                     <div class="track_container">
                         <div class="artist">
                             <div class="image">
-                                <img src='${$value.artist_image}' />
+                                <img src='{{artist_image}}' />
                             </div>
                                 
-                            <span title="${$value.artist}">${$value.artist}</span>
+                            <span title="{{artist}}">{{artist}}</span>
                         </div>
-                        <div class="song" data-index='${$index}'>                        
-                            <span class="title">${$value.song}</span>
+                        <div class="song {{#is_current}}playing{{/is_current}}" data-id='{{id}}'>                        
+                            <span class="title">{{{title}}}</span>
                             <div class="controls">
                                 <a class="button play"></a>
                             </div>
                         </div>
                         <div class="clearfix"></div>
                     </div>
-                {{if !$value.next || $value.next.artist != $value.artist}}
+                {{#is_next}}
                 </div>
-                {{/if}}
+                {{/is_next}}
             {{/each}}
         </script>
         
         <script id="main_menu_tmpl" type="text/x-jquery-tmpl">
             <li class="clear_playlist">Clear playlist</li>
+            <li class="open_local_files">Add files<input type="file"/></li>
             {{if settings.lastfm_username}}
                 {{if settings.scrobbling}}
                     <li class='scrobbling enabled'>Scrobbling</li>
@@ -89,8 +90,61 @@
             <div class="loader"></div>
         </script>
 
+        <script id="search_result_tmpl" type="text/template">
+            {{#show_artists}}
+            <h3>Artists</h3>
+            <ul>
+                {{#artists}}
+                    <li>
+                        <a class="ex_container" data-artist="{{name}}">
+                            <span class="image" style='background-image: url({{lfm_img "smallsquare" this}})'></span>
+                            <span>{{name}}</span>
+                        </a>
+                    </li>
+                {{/artists}}
+                {{^artists}}
+                    <li class="loader"></li>
+                {{/artists}}
+            </ul>
+            {{/show_artists}}
+
+            {{#show_tracks}}
+            <h3>Tracks</h3>
+            <ul>
+                {{#tracks}}
+                    <li>
+                        <a class="ex_container" data-artist="{{artist}}" data-song="{{name}}">
+                            <span class="image" style='background-image: url({{lfm_img "smallsquare" this}})'></span>
+                            <span>{{artist}} &mdash; {{name}}</span>
+                        </a>
+                    </li>
+                {{/tracks}}
+                {{^tracks}}
+                    <li class="loader"></li>
+                {{/tracks}}
+            </ul>
+            {{/show_tracks}}
+
+            {{#show_albums}}
+            <h3>Albums</h3>
+            <ul>
+                {{#albums}}
+                    <li>
+                        <a class="ex_container" data-artist="{{artist}}" data-album="{{name}}">
+                            <span class="image" style='background-image: url({{lfm_img "smallsquare" this}})'></span>
+                            <span>{{artist}} &mdash; {{name}}</span>
+                        </a>
+                    </li>
+                {{/albums}}
+                {{^albums}}
+                    <li class="loader"></li>
+                {{/albums}}
+            </ul>
+            {{/show_albums}}
+        </script>
+
     </head>
-    <body oncontextmenu="return false" class="yui3-cssreset">
+    <body class="yui3-cssreset">
         <div id="wrapper">
             <div id="header">
                 <div class="container">
@@ -142,21 +196,27 @@
             <ul id="main_menu" class="menu_container" style="display:none">
                 
             </ul>
-        </div>            
+        </div>
 
-        <script src="javascript/jquery.min.js"></script>
-        <script src="javascript/jquery.tmpl.min.js"></script>
-        <script src="javascript/jquery.mousewheel.js"></script>
-        <script src="javascript/jquery.jscrollpane.min.js"></script>
-        <script src="javascript/jquery.disable.text.select.pack.js"></script>
+        <script src="lib/jquery.min.js"></script>
+        <script src="lib/jquery.tmpl.min.js"></script>
+        <script src="lib/jquery.mousewheel.js"></script>
+        <script src="lib/jquery.jscrollpane.min.js"></script>
+        <script src="lib/jquery.disable.text.select.pack.js"></script>
+
+        <script src="lib/handlebars.js"></script>
+
+        <script src="lib/spin.min.js"></script>
         
-        <script src="javascript/underscore-min.js"></script>
-        <script src="javascript/backbone-min.js"></script>
+        <script src="lib/underscore-min.js"></script>
+        <script src="lib/backbone-min.js"></script>
+        
+        <script src="lib/yepnope.js"></script>
 
-        <script src="javascript/utils.js"></script>        
-        <script src="javascript/scrobbler.js"></script>
+        <script src="javascript/utils.js"></script>
         <script src="javascript/browser_api.js"></script>
-        <script src="javascript/popup.js"></script>
-        <script src="javascript/enhanced_play_button.js"></script>        
+        <script src="javascript/enhanced_play_button.js"></script>
+
+        <script src="javascript/chromus.js?1"></script>
     </body>
 </html>

@@ -1,0 +1,8 @@
+{
+	"name": "Vkontakte",
+	"description": "Vkontakte integration",
+
+	"background": ["vkontakte.js"],
+
+	"spec": ["vkontakte_spec.js"]
+}

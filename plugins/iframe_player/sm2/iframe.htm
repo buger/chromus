@@ -30,11 +30,10 @@
                 });
 
                 sound.onplay = function() { 
-                    this.finished = false; 
                 }
 
                 sound.onfinish = function() { 
-                    this.finished = true; 
+                    postMessageJSON({ method:'finished' });
                     delete currentSound; 
                 }
 
@@ -67,21 +66,13 @@
                     return {
                         duration: current_sound.durationEstimate / 1000,
                         played: current_sound.position / 1000,
-                        buffered: ((current_sound.bytesLoaded/current_sound.bytesTotal)*current_sound.durationEstimate) / 1000.0,                        
-                        paused: current_sound.paused,
-                        finished: current_sound.finished,
-                        id: current_sound.sID,
-                        url: current_sound.url,
-                        playing: true
+                        buffered: ((current_sound.bytesLoaded/current_sound.bytesTotal)*current_sound.durationEstimate) / 1000.0
                     }
                 } else {
                     return {
                         duration: 0,
                         played: 0,
-                        buffered: 0,
-                        paused: true,
-                        finished: true,
-                        playing: false
+                        buffered: 0
                     }
                 }
             }
@@ -139,6 +130,13 @@
                         console.log("iFrame:::Pause:", msg);
 
                         soundManager.pauseAll();                    
+
+                        break; 
+
+                    case "stop":
+                        console.log("iFrame:::Stop:", msg);
+
+                        soundManager.stopAll();
 
                         break; 
 

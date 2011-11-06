@@ -1,0 +1,38 @@
+<html>
+<head>
+	<title>Chromus Test Runner</title>
+	<!-- Jasmine includes -->
+
+	<link rel="stylesheet" type="text/css" href="lib/jasmine/jasmine.css">
+	<script type="text/javascript" src="lib/jasmine/jasmine.js"></script>
+	<script type="text/javascript" src="lib/jasmine/jasmine-html.js"></script>
+
+	<!-- Source files -->	
+    <script src="../lib/jquery.min.js"></script>
+    <script src="../lib/underscore-min.js"></script>
+    <script src="../lib/backbone-min.js"></script>        
+
+    <script src="../lib/yepnope.js"></script>
+
+    <script>window.override_page_type = 'background'</script>
+
+    <script src="../javascript/browser_api.js?3"></script>    
+
+    <script>browser._base_url = ".."</script>    
+
+    <script src="../javascript/chromus.js?7"></script>
+
+    <script src="../javascript/utils.js?7"></script>
+</head>
+
+<body>
+
+<script type="text/javascript">
+	chromus.pluginsLoadedCallback = function(){
+		jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+		jasmine.getEnv().execute();
+	};
+</script>
+
+</body>
+</html>

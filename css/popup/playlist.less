@@ -1,9 +1,11 @@
+@asset_path: "../../images/popup";
+
 /*********** Playlist *************/
 #playlist {
     padding-top: 5px;
     margin-bottom: 25px;
-    height: 450px;
-    overflow: auto;
+    overflow: auto;    
+
 
     .artist_playlist {
         margin-bottom: 5px;
@@ -79,7 +81,7 @@
             }
 
             &:hover, &.playing {
-                background:url(/images/popup/playing_track_bg.png) repeat-x;
+                background:url("@{asset_path}/playing_track_bg.png") repeat-x;
 
                 .title {
                     color: #fff;

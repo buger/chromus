@@ -12,7 +12,7 @@
 }
 #header .container {
   height: 34px;
-  background: url(/images/popup/header_bg.png);
+  background: url("../../images/popup/header_bg.png");
   border-top: 1px solid #484848;
   border-right: 1px solid #484848;
   border-left: 1px solid #484848;
@@ -21,16 +21,16 @@
   margin-left: 5px;
 }
 #header .play .button {
-  background-image: url(/images/popup/play.png);
+  background-image: url("../../images/popup/play.png");
 }
 #header .pause {
   margin-left: 5px;
 }
 #header .pause .button {
-  background-image: url(/images/popup/pause.png);
+  background-image: url("../../images/popup/pause.png");
 }
 #header .next .button {
-  background-image: url(/images/popup/next.png);
+  background-image: url("../../images/popup/next.png");
 }
 #header .control.timeline {
   padding-top: 11px;
@@ -39,7 +39,7 @@
 #header .timeline .outer {
   width: 282px;
   height: 9px;
-  background: url(/images/popup/timeline_bg.png) center left repeat-x;
+  background: url("../../images/popup/timeline_bg.png") center left repeat-x;
   border-bottom: 1px solid #353535;
   position: relative;
   cursor: pointer;
@@ -51,7 +51,7 @@
   z-index: 2;
   height: 7px;
   border: 1px solid #1f1f1f;
-  background: url(/images/popup/timeline_inner_bg.png) center left no-repeat;
+  background: url("../../images/popup/timeline_inner_bg.png") center left no-repeat;
   background-position: 0px 0px;
   -webkit-border-top-left-radius: 7px;
   -webkit-border-bottom-left-radius: 7px;
@@ -68,7 +68,7 @@
   height: 7px;
   border-top: 1px solid black;
   border-bottom: 1px solid #181818;
-  background: url(/images/popup/timeline_progress_bg.png) center left no-repeat;
+  background: url("../../images/popup/timeline_progress_bg.png") center left no-repeat;
   border-radius: 7px;
   -webkit-border-radius: 7px;
   -moz-border-radius: 7px;
@@ -86,7 +86,7 @@
   position: relative;
 }
 #header .volume .button {
-  background-image: url(/images/popup/volume.png);
+  background-image: url("../../images/popup/volume.png");
 }
 #header .volume .volume_bar {
   position: absolute;
@@ -119,7 +119,7 @@
   height: 300px;
 }
 #header .search .button {
-  background-image: url(/images/popup/search.png);
+  background-image: url("../../images/popup/search.png");
 }
 #header .search_bar {
   position: absolute;
@@ -127,7 +127,7 @@
   top: 1px;
   width: 419px;
   height: 24px;
-  background: url(/images/popup/header_bg.png);
+  background: url("../../images/popup/header_bg.png");
   z-index: 2;
   padding: 5px;
 }
@@ -142,25 +142,86 @@
   position: absolute;
   top: 36px;
   left: -1px;
-  width: 468px;
-  height: 0px;
+  width: 448px;
+  height: auto;
   background: white;
   border: 1px solid #ccc;
   z-index: 3;
+  padding: 10px;
+}
+#header .search_bar .result h3 {
+  font-family: tahoma;
+  font-size: 16px;
+  font-weight: bold;
+  clear: both;
+  color: #333;
 }
 #header .search_bar .result ul {
   margin-top: 5px;
-  background: white;
-  border-bottom: 1px solid #ccc;
+  margin-bottom: 10px;
+  zoom: 1;
 }
-#header .search_bar .result li {
-  padding: 5px;
+#header .search_bar .result ul:before, #header .search_bar .result ul:after {
+  display: table;
+  content: "";
+  zoom: 1;
+  *display: inline;
 }
-#header .search_bar .result img {
-  vertical-align: middle;
+#header .search_bar .result ul:after {
+  clear: both;
 }
-#header .search_bar .result a {
-  text-decoration: none;
-  color: #000;
-  opacity: 0.8;
+#header .search_bar .result ul li {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#header .search_bar .result ul li.loader {
+  padding: 15px;
+}
+#header .search_bar .result ul li a {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  box-align: center;
+  font-size: 14px;
+  line-height: 1.4em;
+  overflow: hidden;
+  height: 34px;
+  padding: 5px 10px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  filter: alpha(opacity=90);
+  -khtml-opacity: 0.9;
+  -moz-opacity: 0.9;
+  opacity: 0.9;
+  color: #333;
+}
+#header .search_bar .result ul li a:hover {
+  background-color: #eee;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+#header .search_bar .result ul li a span {
+  display: block;
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  box-flex: 1;
+}
+#header .search_bar .result ul li a .image {
+  height: 34px;
+  width: 34px;
+  -webkit-box-flex: 0;
+  -moz-box-flex: 0;
+  box-flex: 0;
+  margin-right: 10px;
+  background-position: left center;
+  background-repeat: no-repeat;
+  background-size: 34px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
 }

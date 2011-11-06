@@ -1,8 +1,6 @@
-/*********** Playlist *************/
-#playlist {
+/*********** Playlist *************/#playlist {
   padding-top: 5px;
   margin-bottom: 25px;
-  height: 450px;
   overflow: auto;
 }
 #playlist .artist_playlist {
@@ -63,7 +61,7 @@
   display: none;
 }
 #playlist .artist_playlist .song:hover, #playlist .artist_playlist .song.playing {
-  background: url(/images/popup/playing_track_bg.png) repeat-x;
+  background: url("../../images/popup/playing_track_bg.png") repeat-x;
 }
 #playlist .artist_playlist .song:hover .title, #playlist .artist_playlist .song.playing .title {
   color: #fff;

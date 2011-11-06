@@ -1,0 +1,7 @@
+{
+	"name": "Music manager",
+
+	"background": ["music_manager.js"],
+
+	"spec": ["music_manager_spec.js"]
+}

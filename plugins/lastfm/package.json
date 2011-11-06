@@ -1,0 +1,10 @@
+{
+	"name": "Last.fm",
+	"description": "Last.fm integration",
+
+	"background": ["api.js", "lastfm.js"],
+
+	"popup": ["lastfm.js"],
+
+	"spec": ["lastfm_spec.js"]
+}

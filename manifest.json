@@ -15,9 +15,8 @@
    "content_scripts": [{
       "css": [ "css/mp3_player_button.css", "css/style.css", "css/reset-context-min.css" ],
       "js": [
-          "javascript/jquery.min.js", 
+          "lib/jquery.min.js", 
           "javascript/browser_api.js", 
-          "javascript/scrobbler.js", 
           "javascript/utils.js", 
           "javascript/manager.js", 
           "javascript/content_script.js" ],
@@ -30,7 +29,7 @@
    {
      "css": ["css/mp3_player_button.css", "css/style.css", "css/baloon.css"],
      "js": [
-         "javascript/jquery.min.js", 
+         "lib/jquery.min.js", 
          "javascript/browser_api.js", 
          "javascript/utils.js", 
          "javascript/content_script.js", 

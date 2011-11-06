@@ -1,0 +1,7 @@
+{
+	"name": "iFrame audio player",
+
+	"background": ["iframe_player.js"],
+
+	"spec": ["spec.js"]
+}

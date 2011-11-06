@@ -1,7 +1,7 @@
 #current_song {
   height: 67px;
   background: #ccc;
-  background: url(/images/popup/cur_song_bg.png) top left;
+  background: url("../../images/popup/cur_song_bg.png") top left;
   position: relative;
 }
 #current_song .container {
@@ -15,7 +15,7 @@
   padding: 15px 10px;
 }
 #current_song .love_btn .button {
-  background-image: url(/images/popup/love_btn.png);
+  background-image: url("../../images/popup/love_btn.png");
 }
 #current_song .info {
   padding: 7px 0px;
@@ -63,7 +63,7 @@
   position: absolute;
   top: -1px;
   left: -5px;
-  background: url(/images/popup/jewelcase.png) no-repeat;
+  background: url("../../images/popup/jewelcase.png") no-repeat;
   background-size: 96%;
   width: 60px;
   height: 54px;
@@ -74,7 +74,7 @@
   right: 5px;
   width: 12px;
   height: 12px;
-  background: url(/images/popup/playing.gif) top left no-repeat;
+  background: url("../../images/popup/playing.gif") top left no-repeat;
   cursor: help;
 }
 #current_song .loader {
@@ -90,7 +90,7 @@
   left: 0px;
   width: 468px;
   height: 65px;
-  background: url(/images/popup/loader.gif) center no-repeat;
+  background: url("../../images/popup/loader.gif") center no-repeat;
 }
 #current_song .source {
   position: absolute;
