@@ -163,12 +163,14 @@
             return this.playTrack(this.playlist.first().id);
           }, this));
         case 'album':
-          break;
+          return this.lastfm.album.getInfo(track.get('artist'), track.get('album'), __bind(function(tracks) {
+            this.playlist.reset(tracks);
+            return this.playTrack(this.playlist.first().id);
+          }, this));
         default:
           this.set({
             'current_track': track.id
           });
-          console.warn(track);
           if (track.get('file_url')) {
             return this.play(track);
           } else {
@@ -179,91 +181,6 @@
               return this.playTrack(track);
             }, this));
           }
-      }
-    };
-    MusicManager.prototype.showNotification = function() {
-      var notification, show_notification, track;
-      track = this.currentTrack();
-      show_notification = window.localStorage["show_notifications"] === "true" || window.localStorage["show_notifications"] === void 0;
-      if (!show_notification || !track || !window.webkitNotifications) {
-        return;
-      }
-      notification = window.webkitNotifications.createNotification(track.image, track.song, track.artist);
-      notification.show();
-      return setTimeout(function() {
-        return notification.cancel();
-      }, 6000);
-    };
-    MusicManager.prototype.updateID3Info = function(trackIndex, callback) {
-      var file_name, track;
-      if (callback == null) {
-        callback = function() {};
-      }
-      track = this.playlist[trackIndex];
-      if (track.file_url && !track.file_url.match(/^data/)) {
-        file_name = track.file_url.substring(track.file_url.lastIndexOf("/") + 1).replace(/\.\w{3}$/, '');
-        return ID3.loadTags(track.file_url, function() {
-          var tags;
-          tags = ID3.getAllTags(track.file_url);
-          console.log("ID3 Tags:", tags);
-          if (tags.title) {
-            track.song = tags.title;
-            track.artist = tags.artist || "Unknown";
-            track.album = tags.album;
-            if (!track.song) {
-              tack.song = file_name;
-            }
-            if (trackIndex === this.current_track) {
-              this.lastfm.setNowPlaying(track.artist, track.song, track.album, this.state.get('duration'));
-              this.showNotification();
-              this.state.set({
-                name: "loading"
-              });
-            }
-          } else {
-            track.artist = "Unknown";
-            track.song = file_name;
-            track.id3_empty = true;
-          }
-          return callback();
-        });
-      }
-    };
-    MusicManager.prototype.updateTrackInfo = function(trackIndex, callback) {
-      var track;
-      track = this.currentTrack();
-      if (callback == null) {
-        callback = function() {};
-      }
-      if (track.artist === void 0) {
-        if (track.file_url === !track.id3_empty) {
-          return this.updateID3Info(trackIndex, __bind(function() {
-            return this.updateTrackInfo(trackIndex, callback);
-          }, this));
-        } else {
-          track.info = {};
-          return callback();
-        }
-      } else if (!track.info) {
-        return this.lastfm.trackInfo(track.artist, track.song, __bind(function(response) {
-          if (response.track_info) {
-            track.info = response.track_info;
-            if (track.info.album) {
-              track.album = track.info.album.title;
-              track.image = track.info.album.image;
-            }
-          }
-          if (!track.image) {
-            return this.lastfm.artistInfo(track.artist, function(resp) {
-              track.image = resp.image;
-              return callback();
-            });
-          } else {
-            return callback();
-          }
-        }, this));
-      } else {
-        return callback();
       }
     };
     MusicManager.prototype.playRadio = function(radio) {

@@ -5,9 +5,6 @@
   outline: none;
   -webkit-font-smoothing: subpixel-antialiased;
 }
-body {
-  overflow: hidden;
-}
 html, body {
   height: 100%;
 }
@@ -60,7 +57,7 @@ a.button {
 }
 /*********** Interface **********/#wrapper {
   height: 100%;
-  min-height: 300px;
+  min-height: 350px;
   width: 468px;
   margin-left: 0;
   margin-right: 0;

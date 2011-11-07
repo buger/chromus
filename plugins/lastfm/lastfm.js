@@ -43,9 +43,9 @@
           return callback((_ref = resp.results.artistmatches) != null ? _ref.artist : void 0);
         });
       },
-      getTopTracks: function(string, callback) {
+      getTopTracks: function(artist, callback) {
         return LastFM.callMethod("artist.getTopTracks", {
-          artist: string
+          "artist": artist
         }, function(resp) {
           var tracks;
           tracks = resp.toptracks.track;
@@ -61,12 +61,29 @@
       }
     },
     album: {
-      search: function(string, callback) {
+      search: function(album, callback) {
         return LastFM.callMethod("album.search", {
-          album: string
+          "album": album
         }, function(resp) {
           var _ref;
           return callback((_ref = resp.results.albummatches) != null ? _ref.album : void 0);
+        });
+      },
+      getInfo: function(artist, album, callback) {
+        return LastFM.callMethod("album.getInfo", {
+          "album": album,
+          "artist": artist
+        }, function(resp) {
+          var tracks;
+          tracks = resp.album.tracks.track;
+          tracks = _.map(tracks, function(track) {
+            return {
+              artist: track.artist.name,
+              song: track.name,
+              duration: parseInt(track.duration)
+            };
+          });
+          return callback(tracks);
         });
       }
     },

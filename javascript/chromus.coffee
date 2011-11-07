@@ -1,3 +1,21 @@
+yepnope.addPrefix 'bg', (resource) ->
+	resource.bypass = browser.page_type isnt "background"
+	resource
+
+yepnope.addPrefix 'popup', (resource) ->
+	resource.bypass = browser.page_type isnt "popup"
+	resource
+
+yepnope.addPrefix 'bg_spec', (resource) ->
+	resource.bypass = !(window.jasmine && browser.page_type is "background")
+	resource
+
+yepnope.addPrefix 'popup_spec', (resource) ->
+	resource.bypass = !(window.jasmine && browser.page_type is "popup")
+	resource
+
+
+
 class Chromus
 	
 	audio_players: {}
@@ -32,13 +50,9 @@ class Chromus
 		files = []
 
 		for plugin, meta of @plugins_info
-			plugin_files = meta[browser.page_type] or []
-
-			if window.jasmine
-				plugin_files = _.union(plugin_files, meta['spec'] or [])
-
-			files.push _.map plugin_files, (file) -> 
-				"#{meta.path}/#{file}?#{+new Date()}"			
+			files.push _.map meta['files'], (file) ->
+				match = file.match(/(.*!)?(.*)/)				
+				"#{match[1]}#{meta.path}/#{match[2]}?#{+new Date()}"
 		
 		yepnope
 			load: _.flatten files
@@ -51,7 +65,6 @@ class Chromus
 		for plugin in @plugins_list						
 			do (plugin) =>
 				plugin_path = browser.extension.getURL "/plugins/#{plugin}"			
-					
 				package_path = "#{plugin_path}/package.json"
 
 				$.getJSON package_path, (package) =>					

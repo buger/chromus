@@ -1,9 +1,11 @@
 {
 	"name": "Popup UI",
 
-	"background": ["ui_background.js"],
+	"files": [
+		"bg!ui_background.js",
 
-	"popup": ["ui_popup.js"],
+		"popup!ui_popup.js",
 
-	"spec": ["ui_spec.js"]
+		"bg_spec!ui_spec.js"
+	]
 }

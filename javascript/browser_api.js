@@ -47,6 +47,12 @@
         });
     }
 
+    if (!window.debug) {
+        window.console.log = function(){}
+        window.console.warn = function(){}
+        window.console.error = function(){}
+    }
+
 
 
     Array.prototype.unique = function() {
@@ -108,11 +114,10 @@
         }
     }
 
-
-
     var browser = {
+        isPokki: typeof(window.pokki) === "object",
         isFrame: !!window.location.protocol.match(/^http/),
-        isChrome: !window.location.protocol.match(/^http/) && typeof(window.chrome) === "object",
+        isChrome: typeof(window.chrome) === "object" && window.chrome.extension,
         isOpera:  typeof(window.opera) === "object",
         isSafari: typeof(window.safari) === "object",
         isFirefox: navigator.userAgent.match('Firefox') != undefined,
@@ -234,7 +239,7 @@
                     return safari.extension.baseURI.slice(0, -1)
                 else if (browser.isOpera) 
                     return "widget://" + document.location.host + url
-                else if (browser.isFrame)
+                else if (browser.isFrame || browser.isPokki)
                     return browser._base_url + url;
             }
         },
@@ -262,6 +267,8 @@
                 browser.page_type = safari.extension.globalPage ? 'background' : 'script';
             } else if (browser.isFrame) {                
                 browser.page_type = window.parent === window ? 'popup' : 'background';                
+            } else if (browser.isPokki) {
+                browser.page_type = window.location.toString().match('popup.html') ? 'popup' : 'background'
             }
 
             if (browser.page_type == 'background') {
@@ -369,10 +376,12 @@
         addMessageListener: function(listener) {
             if (!listener) return;        
 
-            console.log('adding listener', window.location.toString())
+            console.log('adding listener', window.location.toString(), browser)
 
             if (browser.isFrame) {
-                browser._frame_addMessageListener(listener);          
+                browser._frame_addMessageListener(listener);
+            } else if (browser.isPokki) {
+                browser._pokki_addMessageListener(listener);
             } else if (browser.isChrome) {
                 browser._c_addMessageListener(listener);
             } else if (browser.isOpera) {
@@ -393,6 +402,36 @@
             } else if (browser.isFirefox) {
             }                         
         },
+
+        _receiveMessage: function(msg) {
+            if (msg[0] === "{")
+                msg = JSON.parse(msg)
+
+            for (var i=0; i<browser._listeners.length; i++) {
+                browser._listeners[i](msg);
+            }
+        },
+
+        _pokki_addMessageListener: function(listener) {            
+            browser._listeners.push(listener);
+
+            if (browser.page_type === 'popup') {
+                if (!browser._background_page_listener) {
+                    var poll = function() {                        
+                        console.warn("POLLING")
+                        if (pokki.rpc('browser._isNetworkInitialized') === true) {
+                            clearInterval(browser._background_page_listener);
+                            browser.onReady();
+                        }
+                    }
+                    
+                    browser._background_page_listener = setInterval(poll, 50);
+                }
+            } else {
+                browser.onReady();
+            }
+        },
+
 
         _frame_addMessageListener: function(listener) {
             if (!browser._bg_page && browser.page_type == 'popup') {
@@ -716,7 +755,7 @@
         },
 
         postMessage: function(message, dest, callback) {
-            if (dest && !browser.isFirefox && !browser.isFrame) {
+            if (dest && !browser.isFirefox && !browser.isFrame && !browser.isPokki) {
                 message.__id = new Date().getTime();
 
                 console.log("Posting message ", message, " to ", dest);
@@ -740,7 +779,23 @@
 
             message.__id = new Date().getTime();
 
-            if (browser.isChrome) {
+            if (browser.isPokki) {
+                pokki.rpcArgs('browser._receiveMessage', JSON.stringify(message));
+
+                var l = function(_msg, _sender) {
+                    if (_msg.__id === message.__id) {
+                        callback(_msg, _sender);
+
+                        if (!message.event_listener) {  
+                            var idx = browser._listeners.indexOf(l);      
+                            browser._listeners.splice(idx, 1);
+                        }
+                    }
+                }      
+                
+                browser.addMessageListener(l);
+
+            } else if (browser.isChrome) {
                 if (browser.isBackgroundPage) {
                     chrome.windows.getAll(null, function(wins) {
                         for (var j = 0; j < wins.length; ++j) {
@@ -843,23 +898,10 @@
                 return;
             } else {
                 browser._files_cache[file] = 'loading'
-            }
-
-            if (browser.isOpera) {
-                browser.extension_url = "widget://" + document.location.host;
-            } else if (browser.isChrome) {
-                browser.extension_url = chrome.extension.getURL("/");
-            } else if (browser.isSafari) {
-                browser.extension_url = safari.extension.baseURI.slice(0, -1);
-            } else if (browser.isFrame) {
-                if (file[0] == '/')
-                    file = file.substr(1);
-
-                browser.extension_url = "";
-            }
+            }            
 
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', browser.extension_url + file, true);
+            xhr.open('GET', browser.extension.getURL(file), true);
             xhr.send(null);
 
             xhr.onreadystatechange = function() {

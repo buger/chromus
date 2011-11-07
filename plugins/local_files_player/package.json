@@ -3,7 +3,9 @@
 
 	"name": "Local files audio player",
 
-	"background": ["local_files_player.js"],
+	"files": [
+		"bg!local_files_player.js",
 
-	"popup": ["popup.js"]
+		"popup!popup.js"
+	]
 }

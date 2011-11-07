@@ -18,11 +18,13 @@ LastFM =
                 console.log "Lastfm response:", resp
                 callback resp
 
+
     track:
         search: (string, callback) ->
             LastFM.callMethod "track.search",
                 track: string
             , (resp) -> callback resp.results.trackmatches?.track
+
     
     artist:
         search: (string, callback) ->
@@ -30,9 +32,9 @@ LastFM =
                 artist: string
             , (resp) -> callback resp.results.artistmatches?.artist
 
-        getTopTracks: (string, callback) ->
+        getTopTracks: (artist, callback) ->
             LastFM.callMethod "artist.getTopTracks",
-                artist: string
+                "artist": artist
             , (resp) -> 
                 tracks = resp.toptracks.track
                 tracks = _.map tracks, (track) ->
@@ -43,10 +45,24 @@ LastFM =
                 callback tracks
         
     album:
-        search: (string, callback) ->
+        search: (album, callback) ->
             LastFM.callMethod "album.search",
-                album: string
+                "album": album
             , (resp) -> callback resp.results.albummatches?.album
+
+        getInfo: (artist, album, callback) ->
+            LastFM.callMethod "album.getInfo",
+                "album": album
+                "artist": artist
+            , (resp) -> 
+                tracks = resp.album.tracks.track
+                
+                tracks = _.map tracks, (track) ->
+                    artist: track.artist.name
+                    song: track.name
+                    duration: parseInt(track.duration)
+
+                callback tracks
 
 
     image: (options) ->     

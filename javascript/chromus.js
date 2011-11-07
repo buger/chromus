@@ -1,6 +1,22 @@
 (function() {
   var Chromus;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  yepnope.addPrefix('bg', function(resource) {
+    resource.bypass = browser.page_type !== "background";
+    return resource;
+  });
+  yepnope.addPrefix('popup', function(resource) {
+    resource.bypass = browser.page_type !== "popup";
+    return resource;
+  });
+  yepnope.addPrefix('bg_spec', function(resource) {
+    resource.bypass = !(window.jasmine && browser.page_type === "background");
+    return resource;
+  });
+  yepnope.addPrefix('popup_spec', function(resource) {
+    resource.bypass = !(window.jasmine && browser.page_type === "popup");
+    return resource;
+  });
   Chromus = (function() {
     Chromus.prototype.audio_players = {};
     Chromus.prototype.audio_sources = {};
@@ -13,18 +29,16 @@
       this.loadPlugins();
     }
     Chromus.prototype.injectPluginFiles = function() {
-      var files, meta, plugin, plugin_files, _ref;
+      var files, meta, plugin, _ref;
       console.log('injecting files');
       files = [];
       _ref = this.plugins_info;
       for (plugin in _ref) {
         meta = _ref[plugin];
-        plugin_files = meta[browser.page_type] || [];
-        if (window.jasmine) {
-          plugin_files = _.union(plugin_files, meta['spec'] || []);
-        }
-        files.push(_.map(plugin_files, function(file) {
-          return "" + meta.path + "/" + file + "?" + (+new Date());
+        files.push(_.map(meta['files'], function(file) {
+          var match;
+          match = file.match(/(.*!)?(.*)/);
+          return "" + match[1] + meta.path + "/" + match[2] + "?" + (+new Date());
         }));
       }
       return yepnope({

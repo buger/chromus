@@ -2,7 +2,9 @@
 	"name": "Vkontakte",
 	"description": "Vkontakte integration",
 
-	"background": ["vkontakte.js"],
+	"files": [
+		"bg!vkontakte.js",
 
-	"spec": ["vkontakte_spec.js"]
+		"bg_spec!vkontakte_spec.js"
+	]
 }

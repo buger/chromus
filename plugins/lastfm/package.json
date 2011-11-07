@@ -2,9 +2,12 @@
 	"name": "Last.fm",
 	"description": "Last.fm integration",
 
-	"background": ["api.js", "lastfm.js"],
+	"files": [
+		"bg!api.js",
+		"bg!lastfm.js",
 
-	"popup": ["lastfm.js"],
+		"popup!lastfm.js",
 
-	"spec": ["lastfm_spec.js"]
+		"bg_spec!lastfm_spec.js"
+	]
 }
