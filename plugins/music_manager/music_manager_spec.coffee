@@ -69,28 +69,26 @@ describe "Music manager", ->
     it "should change player state", ->
         manager.playlist.reset(fixtures.playlist)
         expect(manager.state.get('name')).toBe "stopped"
-
-        state_spy = jasmine.createSpy()   
-                 
-        play_spy = spyOn(manager, "play")
+                         
+        play_spy = spyOn(manager.player, "play")
 
         vk_spy = spyOn(chromus.audio_sources.vkontakte, "search")
             .andCallFake (track, callback) -> callback fixtures.searchResults
 
-        manager.state.bind 'change', state_spy
-        manager.playTrack manager.playlist.first()
-
-        expect(state_spy).toHaveBeenCalled()
-        expect(manager.state.get('name')).toBe 'loading'
-
-        manager.player.state.set name:"playing"
-        expect(manager.state.get('name')).toBe 'playing'
+        state_spy = jasmine.createSpy()           
+        callback = (state) -> state_spy(state.toJSON())
         
-        manager.stop()
-        expect(manager.state.get('name')).toBe 'stopped'
+        manager.state.bind 'change', callback
 
-        manager.pause()
-        expect(manager.state.get('name')).toBe 'paused'
+        manager.playTrack manager.playlist.first()
+        manager.pause()        
+        manager.stop()
+
+        manager.state.unbind 'change', callback
+
+        states = _.map state_spy.calls, (call) -> call.args[0].name
+
+        expect(states).toEqual ['loading','playing','paused','stopped']
 
 
     it "should change state to paused", ->
@@ -123,7 +121,7 @@ describe "Music manager", ->
         vk_spy = spyOn(chromus.audio_sources.vkontakte, "search")
             .andCallFake (track, callback) -> callback fixtures.searchResults
         
-        play_spy = spyOn(manager, "play").andCallFake ->
+        play_spy = spyOn(manager.player, "play").andCallFake ->
             manager.player.state.unset 'name', silent:true
 
         manager.player.state.set name:"stopped"
@@ -138,10 +136,12 @@ describe "Music manager", ->
 
         expect(manager.get('current_track')).toBe manager.playlist.models[2].id
 
+        expect(manager.state.get('name')).toBe "playing"
+
 
     it "should stop if song ended", ->
         play_track_spy = spyOn(manager, "playTrack")
-        
+
         manager.playlist.reset(fixtures.playlist)
         manager.set 'current_track': manager.playlist.first().id
         manager.state.set 'name':'playing'
@@ -150,5 +150,6 @@ describe "Music manager", ->
         manager.updateState "played":100
 
         expect(play_track_spy).toHaveBeenCalled()
+
         expect(manager.state.get('name')).toBe "stopped"
 

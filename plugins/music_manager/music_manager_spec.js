@@ -69,26 +69,26 @@
       return expect(play_spy).toHaveBeenCalled();
     });
     it("should change player state", function() {
-      var play_spy, state_spy, vk_spy;
+      var callback, play_spy, state_spy, states, vk_spy;
       manager.playlist.reset(fixtures.playlist);
       expect(manager.state.get('name')).toBe("stopped");
-      state_spy = jasmine.createSpy();
-      play_spy = spyOn(manager, "play");
+      play_spy = spyOn(manager.player, "play");
       vk_spy = spyOn(chromus.audio_sources.vkontakte, "search").andCallFake(function(track, callback) {
         return callback(fixtures.searchResults);
       });
-      manager.state.bind('change', state_spy);
+      state_spy = jasmine.createSpy();
+      callback = function(state) {
+        return state_spy(state.toJSON());
+      };
+      manager.state.bind('change', callback);
       manager.playTrack(manager.playlist.first());
-      expect(state_spy).toHaveBeenCalled();
-      expect(manager.state.get('name')).toBe('loading');
-      manager.player.state.set({
-        name: "playing"
-      });
-      expect(manager.state.get('name')).toBe('playing');
-      manager.stop();
-      expect(manager.state.get('name')).toBe('stopped');
       manager.pause();
-      return expect(manager.state.get('name')).toBe('paused');
+      manager.stop();
+      manager.state.unbind('change', callback);
+      states = _.map(state_spy.calls, function(call) {
+        return call.args[0].name;
+      });
+      return expect(states).toEqual(['loading', 'playing', 'paused', 'stopped']);
     });
     it("should change state to paused", function() {
       manager.playlist.reset(fixtures.playlist);
@@ -122,7 +122,7 @@
       vk_spy = spyOn(chromus.audio_sources.vkontakte, "search").andCallFake(function(track, callback) {
         return callback(fixtures.searchResults);
       });
-      play_spy = spyOn(manager, "play").andCallFake(function() {
+      play_spy = spyOn(manager.player, "play").andCallFake(function() {
         return manager.player.state.unset('name', {
           silent: true
         });
@@ -137,7 +137,8 @@
       manager.player.state.set({
         name: "stopped"
       });
-      return expect(manager.get('current_track')).toBe(manager.playlist.models[2].id);
+      expect(manager.get('current_track')).toBe(manager.playlist.models[2].id);
+      return expect(manager.state.get('name')).toBe("playing");
     });
     return it("should stop if song ended", function() {
       var play_track_spy;

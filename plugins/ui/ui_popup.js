@@ -121,7 +121,7 @@
     Controls.prototype.updateState = function(state) {
       var _ref;
       state = state.toJSON();
-      this.$('.toggle').removeClass('play pause').addClass(state.name === "playing" ? 'play' : 'pause');
+      this.$('.toggle').removeClass('play pause').addClass(state.name === "playing" ? 'pause' : 'play');
       if (state.duration) {
         this.$('.inner').width(276.0 * state.played / state.duration);
         this.$('.time').html(prettyTime(state.played));

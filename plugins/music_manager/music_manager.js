@@ -8,9 +8,6 @@
     child.__super__ = parent.prototype;
     return child;
   }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  if (typeof _gaq === "undefined" || _gaq === null) {
-    _gaq = [];
-  }
   Track = (function() {
     __extends(Track, Backbone.Model);
     function Track() {
@@ -65,6 +62,9 @@
       return this.player.pause();
     };
     MusicManager.prototype.play = function(track) {
+      this.state.set({
+        'name': 'playing'
+      });
       return this.player.play(track.toJSON());
     };
     MusicManager.prototype.preload = function(track) {
@@ -182,11 +182,6 @@
         }, this));
       }
     };
-    MusicManager.prototype.playRadio = function(radio) {
-      this.radio = radio;
-      this.playlist.reset();
-      return this.playNextTrack();
-    };
     MusicManager.prototype.setVolume = function(volume) {
       if (volume != null) {
         this.volume = volume;
@@ -198,20 +193,6 @@
         this.volume = 100;
       }
       return this.volume;
-    };
-    MusicManager.prototype.love = function() {
-      var track;
-      track = this.currentTrack();
-      if (track) {
-        return this.lastfm.loveTrack(track.artist, track.song);
-      }
-    };
-    MusicManager.prototype.ban = function() {
-      var track;
-      track = this.currentTrack();
-      if (track) {
-        return this.lastfm.banTrack(track.artist, track.song);
-      }
     };
     MusicManager.prototype.getState = function() {
       return this.state.toJSON();

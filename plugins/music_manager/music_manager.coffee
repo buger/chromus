@@ -1,6 +1,3 @@
-_gaq ?= []
-
-
 class Track extends Backbone.Model
 
     initialize: -> @set 'id': chromus.utils.uid()
@@ -39,7 +36,10 @@ class MusicManager extends Backbone.Model
         @state.set 'name':'paused'
         @player.pause()
 
-    play: (track) -> @player.play track.toJSON()
+    play: (track) -> 
+        @state.set 'name':'playing'
+        @player.play track.toJSON()
+
     preload: (track) -> @player.preload track.toJSON()    
 
     stop: -> 
@@ -73,8 +73,7 @@ class MusicManager extends Backbone.Model
             buffered: 0
             name: "stopped"
 
-
-    updateState: (state) ->  
+    updateState: (state) ->
         @state.set state
 
         track = @currentTrack()
@@ -120,7 +119,7 @@ class MusicManager extends Backbone.Model
 
         if track isnt @currentTrack()
             @stop()
-        
+                    
 
         unless track.get('type')?
             @set 'current_track': track.id
@@ -138,14 +137,6 @@ class MusicManager extends Backbone.Model
                 @playTrack @playlist.first().id                
                                 
 
-    playRadio: (radio) ->
-        @radio = radio
-
-        @playlist.reset()
-
-        @playNextTrack()    
-
-
     setVolume: (volume) ->
         if volume?
             @volume = volume        
@@ -159,18 +150,6 @@ class MusicManager extends Backbone.Model
 
         @volume    
 
-    love: ->
-        track = @currentTrack()
-
-        if(track)
-            @lastfm.loveTrack track.artist, track.song    
-
-
-    ban: ->
-        track = @currentTrack()
-
-        if track
-            @lastfm.banTrack track.artist, track.song    
 
     getState: ->
         @state.toJSON()

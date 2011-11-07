@@ -89,7 +89,7 @@ class Controls extends Backbone.View
         @$('.toggle')
             .removeClass('play pause')
             .addClass(
-                if state.name is "playing" then 'play' else 'pause'
+                if state.name is "playing" then 'pause' else 'play'
             )
         
         if state.duration        
