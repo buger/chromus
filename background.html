@@ -9,28 +9,10 @@
 
         <script src="lib/yepnope.js"></script>
 
-        <script src="javascript/browser_api.js?3"></script>
+        <script src="src/browser_api.js?3"></script>
 
-        <script src="javascript/chromus.js?4"></script>
+        <script src="src/chromus.js?4"></script>
         
-        <script src="javascript/utils.js?rnd=6"></script>    
-        
-        <script src="lib/browser_detect.js?rnd=1"></script>        
-        
-
-        <script type="text/javascript">
-        var _gaq = _gaq || [];
-        _gaq.push(['_setAccount', 'UA-16810054-3']);
-        _gaq.push(['_trackPageview']);
-        _gaq.push(['_trackEvent', 'pageLoad', 'background', '3.0.0']);      
-
-        if(BrowserDetect.OS != 'Mac' && BrowserDetect.OS != 'Linux'){      
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = 'https://ssl.google-analytics.com/ga.js';
-                (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ga);
-            })();
-        }
-        </script>
+        <script src="src/utils.js?rnd=6"></script>
     </body>
 </html>

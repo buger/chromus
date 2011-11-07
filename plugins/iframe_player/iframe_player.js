@@ -27,7 +27,7 @@
       if (!browser.isFrame && !browser.isSafari) {
         this.player_frame.src = this.player_url + "sm2_iframe";
       } else {
-        this.player_frame.src = "" + this.path + "/sm2/iframe.htm";
+        this.player_frame.src = "" + this.path + "/lib/iframe.htm";
       }
       document.body.appendChild(this.player_frame);
       this.player_ready = false;

@@ -36,7 +36,6 @@ class Chromus
 		'ui'
 	]
 
-
 	constructor: ->		
 		_.bindAll @
 
