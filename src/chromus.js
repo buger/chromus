@@ -20,6 +20,7 @@
   Chromus = (function() {
     Chromus.prototype.audio_players = {};
     Chromus.prototype.audio_sources = {};
+    Chromus.prototype.media_types = {};
     Chromus.prototype.plugins = {};
     Chromus.prototype.plugins_info = {};
     Chromus.prototype.plugins_list = ['echonest', 'lastfm', 'iframe_player', 'local_files_player', 'vkontakte', 'music_manager', 'ui'];
@@ -74,6 +75,9 @@
     };
     Chromus.prototype.registerAudioSource = function(name, context) {
       return this.audio_sources[name] = context;
+    };
+    Chromus.prototype.registerMediaType = function(name, context) {
+      return this.media_types[name] = context;
     };
     return Chromus;
   })();

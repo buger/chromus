@@ -21,7 +21,7 @@ class Player extends Backbone.Model
         if not browser.isFrame and not browser.isSafari            
             @player_frame.src = @player_url + "sm2_iframe"
         else
-            @player_frame.src = "#{@path}/lib/iframe.htm"            
+            @player_frame.src = "#{@path}/lib/iframe.htm?1" 
                                                             
         document.body.appendChild @player_frame
             
@@ -36,17 +36,14 @@ class Player extends Backbone.Model
         msg = JSON.parse(evt.data)
 
         switch msg.method
-            when 'playerState'
+            when 'sm2:playerState'
                 @state.set msg.state
 
-            when 'ready'
+            when 'sm2:ready'
                 @player_ready = true
 
-            when 'finished'
-                @state.set name:"stopped"
-                
-            else
-                console.log "Received unknown message:", msg
+            when 'sm2:finished'
+                @state.set name:"stopped"                
 
 
     postMessageToPlayer: (data) ->

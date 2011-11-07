@@ -78,7 +78,7 @@
     };
     Player.prototype.listener = function(msg) {
       var _ref;
-      if (msg.method !== 'updateState') {
+      if (!msg.method.match('(playerState|updateState)')) {
         console.log("Popup received message", msg.method, msg);
       } else {
         if ((_ref = msg.state.name) === "playing" || _ref === "loading") {

@@ -4,8 +4,6 @@
 	"files": [
 		"bg!ui_background.js",
 
-		"popup!ui_popup.js",
-
-		"bg_spec!ui_spec.js"
+		"popup!ui_popup.js"
 	]
 }

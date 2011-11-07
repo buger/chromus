@@ -8,8 +8,8 @@ fixtures =
             ]
 
     searchResults: [
-        { 'song': 'Help', 'artist': 'Beatles', 'file_url': 'http://a/1.mp3' }
-        { 'song': 'Song 2', 'artist': 'Chuck Berry', 'file_url': 'http://a/2.mp3' }
+        { 'song': 'Help', 'artist': 'Beatles', 'file_url': 'http://a/1.mp3', 'duration': 100 }
+        { 'song': 'Song 2', 'artist': 'Chuck Berry', 'file_url': 'http://a/2.mp3', 'duration':200 }
     ]
 
 
@@ -122,16 +122,33 @@ describe "Music manager", ->
 
         vk_spy = spyOn(chromus.audio_sources.vkontakte, "search")
             .andCallFake (track, callback) -> callback fixtures.searchResults
+        
+        play_spy = spyOn(manager, "play").andCallFake ->
+            manager.player.state.unset 'name', silent:true
 
         manager.player.state.set name:"stopped"
 
         expect(play_track_spy).toHaveBeenCalled()
         expect(search_spy).toHaveBeenCalled()
         expect(vk_spy).toHaveBeenCalled()
-
         
         expect(manager.get('current_track')).toBe manager.playlist.models[1].id
 
         manager.player.state.set name:"stopped"
 
         expect(manager.get('current_track')).toBe manager.playlist.models[2].id
+
+
+    it "should stop if song ended", ->
+        play_track_spy = spyOn(manager, "playTrack")
+        
+        manager.playlist.reset(fixtures.playlist)
+        manager.set 'current_track': manager.playlist.first().id
+        manager.state.set 'name':'playing'
+        manager.currentTrack().set 'duration':100
+                            
+        manager.updateState "played":100
+
+        expect(play_track_spy).toHaveBeenCalled()
+        expect(manager.state.get('name')).toBe "stopped"
+

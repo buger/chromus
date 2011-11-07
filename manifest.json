@@ -6,7 +6,7 @@
    "popup": "popup.html",
    "background_page": "background.html",
 
-   "icon-19x19": "icons/sq-19x19.png",
-   "icon-29x29": "icons/sq-29x29.png",
-   "icon-42x42": "icons/sq-42x42.png"
+   "icon-19x19": "assets/icons/sq-19x19.png",
+   "icon-29x29": "assets/icons/sq-29x29.png",
+   "icon-42x42": "assets/icons/sq-42x42.png"
 }

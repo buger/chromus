@@ -82,20 +82,22 @@ class MusicManager extends Backbone.Model
         if @state.get('name') is "stopped"
             return @playTrack @nextTrack()
 
-        if track? and Math.round(@state.get('played')) >= Math.round(track.duration)
-            return updateState name:"stopped"        
+        if track? and Math.round(@state.get('played')) >= Math.round(track.get('duration'))
+            return @updateState name:"stopped"        
 
 
     searchTrack: (track, callback = ->) ->        
         results = []
 
         searchCallback = -> 
-            # TODO: Should chouse best matching song
-            match = results[0]
+            unless _.isEmpty results
+                # TODO: Should chouse best matching song
+                match = results[0]
 
-            track.set 'file_url': match.file_url
+                track.set 'file_url': match.file_url
+                track.set 'duration': match.duration
 
-            callback track
+                callback track
 
         for name, obj of chromus.audio_sources            
             obj.search 
@@ -118,28 +120,22 @@ class MusicManager extends Backbone.Model
 
         if track isnt @currentTrack()
             @stop()
+        
 
-        switch track.get('type')
-            when 'artist'
-                @lastfm.artist.getTopTracks track.get('artist'), (tracks) =>
-                    @playlist.reset tracks
-                    @playTrack @playlist.first().id
+        unless track.get('type')?
+            @set 'current_track': track.id
 
-            when 'album'
-                @lastfm.album.getInfo track.get('artist'), track.get('album'), (tracks) =>
-                    @playlist.reset tracks
-                    @playTrack @playlist.first().id
-                
+            if track.get('file_url')
+                @play track
             else
-                @set 'current_track': track.id
+                @state.set 'name':'loading'
 
-                if track.get('file_url')
-                    @play track
-                else
-                    @state.set 'name':'loading'
-
-                    @searchTrack track, =>                        
-                        @playTrack track
+                @searchTrack track, =>
+                    @playTrack track
+        else
+            chromus.media_types[track.get('type')] track.toJSON(), (tracks) =>
+                @playlist.reset tracks
+                @playTrack @playlist.first().id                
                                 
 
     playRadio: (radio) ->

@@ -27,7 +27,7 @@
       if (!browser.isFrame && !browser.isSafari) {
         this.player_frame.src = this.player_url + "sm2_iframe";
       } else {
-        this.player_frame.src = "" + this.path + "/lib/iframe.htm";
+        this.player_frame.src = "" + this.path + "/lib/iframe.htm?1";
       }
       document.body.appendChild(this.player_frame);
       this.player_ready = false;
@@ -40,16 +40,14 @@
       }
       msg = JSON.parse(evt.data);
       switch (msg.method) {
-        case 'playerState':
+        case 'sm2:playerState':
           return this.state.set(msg.state);
-        case 'ready':
+        case 'sm2:ready':
           return this.player_ready = true;
-        case 'finished':
+        case 'sm2:finished':
           return this.state.set({
             name: "stopped"
           });
-        default:
-          return console.log("Received unknown message:", msg);
       }
     };
     Player.prototype.postMessageToPlayer = function(data) {

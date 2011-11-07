@@ -109,8 +109,8 @@
       if (this.state.get('name') === "stopped") {
         return this.playTrack(this.nextTrack());
       }
-      if ((track != null) && Math.round(this.state.get('played')) >= Math.round(track.duration)) {
-        return updateState({
+      if ((track != null) && Math.round(this.state.get('played')) >= Math.round(track.get('duration'))) {
+        return this.updateState({
           name: "stopped"
         });
       }
@@ -123,11 +123,16 @@
       results = [];
       searchCallback = function() {
         var match;
-        match = results[0];
-        track.set({
-          'file_url': match.file_url
-        });
-        return callback(track);
+        if (!_.isEmpty(results)) {
+          match = results[0];
+          track.set({
+            'file_url': match.file_url
+          });
+          track.set({
+            'duration': match.duration
+          });
+          return callback(track);
+        }
       };
       _ref = chromus.audio_sources;
       _results = [];
@@ -156,31 +161,25 @@
       if (track !== this.currentTrack()) {
         this.stop();
       }
-      switch (track.get('type')) {
-        case 'artist':
-          return this.lastfm.artist.getTopTracks(track.get('artist'), __bind(function(tracks) {
-            this.playlist.reset(tracks);
-            return this.playTrack(this.playlist.first().id);
-          }, this));
-        case 'album':
-          return this.lastfm.album.getInfo(track.get('artist'), track.get('album'), __bind(function(tracks) {
-            this.playlist.reset(tracks);
-            return this.playTrack(this.playlist.first().id);
-          }, this));
-        default:
-          this.set({
-            'current_track': track.id
+      if (track.get('type') == null) {
+        this.set({
+          'current_track': track.id
+        });
+        if (track.get('file_url')) {
+          return this.play(track);
+        } else {
+          this.state.set({
+            'name': 'loading'
           });
-          if (track.get('file_url')) {
-            return this.play(track);
-          } else {
-            this.state.set({
-              'name': 'loading'
-            });
-            return this.searchTrack(track, __bind(function() {
-              return this.playTrack(track);
-            }, this));
-          }
+          return this.searchTrack(track, __bind(function() {
+            return this.playTrack(track);
+          }, this));
+        }
+      } else {
+        return chromus.media_types[track.get('type')](track.toJSON(), __bind(function(tracks) {
+          this.playlist.reset(tracks);
+          return this.playTrack(this.playlist.first().id);
+        }, this));
       }
     };
     MusicManager.prototype.playRadio = function(radio) {

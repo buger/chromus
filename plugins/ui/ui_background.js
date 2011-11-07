@@ -29,7 +29,7 @@
     });
   });
   browser.addMessageListener(function(msg, sender, sendResponse) {
-    if (msg.method !== 'playerState') {
+    if (!msg.method.match('(playerState|updateState)')) {
       console.log(msg.method, msg, sender);
     }
     switch (msg.method) {

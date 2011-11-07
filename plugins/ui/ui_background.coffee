@@ -30,7 +30,7 @@ music_manager.playlist.bind 'all', ->
 
 
 browser.addMessageListener (msg, sender, sendResponse) ->
-    if msg.method isnt 'playerState'
+    if !msg.method.match('(playerState|updateState)')
         console.log(msg.method, msg, sender)
 
     switch msg.method

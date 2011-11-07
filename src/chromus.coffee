@@ -22,6 +22,8 @@ class Chromus
 
 	audio_sources: {}
 
+	media_types: {}
+
 	plugins: {}
 
 	plugins_info: {}
@@ -81,6 +83,10 @@ class Chromus
 
 	registerAudioSource: (name, context) ->
 		@audio_sources[name] = context
+
+	registerMediaType: (name, context) ->
+		@media_types[name] = context
+
 
 
 @chromus = new Chromus()

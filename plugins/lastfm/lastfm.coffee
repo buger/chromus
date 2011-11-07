@@ -82,4 +82,10 @@ LastFM =
         "#{LastFM.settings.baseURL}?api_key=#{LastFM.settings.api_key}&method=#{method_prefix}.getImageRedirect&size=#{options.size}&#{params.join('&')}"     
 
 
-@chromus.registerPlugin("lastfm", LastFM)
+@chromus.registerPlugin "lastfm", LastFM
+
+@chromus.registerMediaType "artist", (track, callback) ->
+    LastFM.artist.getTopTracks track.artist, callback
+
+@chromus.registerMediaType "album", (track, callback) ->
+    LastFM.album.getInfo track.artist, track.album, callback

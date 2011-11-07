@@ -19,11 +19,13 @@
       {
         'song': 'Help',
         'artist': 'Beatles',
-        'file_url': 'http://a/1.mp3'
+        'file_url': 'http://a/1.mp3',
+        'duration': 100
       }, {
         'song': 'Song 2',
         'artist': 'Chuck Berry',
-        'file_url': 'http://a/2.mp3'
+        'file_url': 'http://a/2.mp3',
+        'duration': 200
       }
     ]
   };
@@ -105,8 +107,8 @@
       expect(manager.state.get('name')).toBe('stopped');
       return expect(manager.state.get('current_track')).toBeUndefined();
     });
-    return it("should change next track after stopping", function() {
-      var play_track_spy, search_spy, update_state_spy, vk_spy;
+    it("should change next track after stopping", function() {
+      var play_spy, play_track_spy, search_spy, update_state_spy, vk_spy;
       manager.playlist.reset(fixtures.playlist);
       manager.set({
         'current_track': manager.playlist.first().id
@@ -120,6 +122,11 @@
       vk_spy = spyOn(chromus.audio_sources.vkontakte, "search").andCallFake(function(track, callback) {
         return callback(fixtures.searchResults);
       });
+      play_spy = spyOn(manager, "play").andCallFake(function() {
+        return manager.player.state.unset('name', {
+          silent: true
+        });
+      });
       manager.player.state.set({
         name: "stopped"
       });
@@ -131,6 +138,25 @@
         name: "stopped"
       });
       return expect(manager.get('current_track')).toBe(manager.playlist.models[2].id);
+    });
+    return it("should stop if song ended", function() {
+      var play_track_spy;
+      play_track_spy = spyOn(manager, "playTrack");
+      manager.playlist.reset(fixtures.playlist);
+      manager.set({
+        'current_track': manager.playlist.first().id
+      });
+      manager.state.set({
+        'name': 'playing'
+      });
+      manager.currentTrack().set({
+        'duration': 100
+      });
+      manager.updateState({
+        "played": 100
+      });
+      expect(play_track_spy).toHaveBeenCalled();
+      return expect(manager.state.get('name')).toBe("stopped");
     });
   });
 }).call(this);

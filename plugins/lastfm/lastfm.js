@@ -107,4 +107,10 @@
     }
   };
   this.chromus.registerPlugin("lastfm", LastFM);
+  this.chromus.registerMediaType("artist", function(track, callback) {
+    return LastFM.artist.getTopTracks(track.artist, callback);
+  });
+  this.chromus.registerMediaType("album", function(track, callback) {
+    return LastFM.album.getInfo(track.artist, track.album, callback);
+  });
 }).call(this);
