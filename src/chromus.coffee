@@ -29,12 +29,12 @@ class Chromus
 	plugins_info: {}
 
 	plugins_list: [
-		'echonest'
-		'lastfm'
 		'iframe_player'
+		'music_manager'
+		'echonest'
+		'lastfm'		
 		'local_files_player'
 		'vkontakte'
-		'music_manager'
 		'ui'
 	]
 

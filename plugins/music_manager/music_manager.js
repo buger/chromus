@@ -36,7 +36,6 @@
     function MusicManager() {
       MusicManager.__super__.constructor.apply(this, arguments);
     }
-    MusicManager.prototype.lastfm = chromus.plugins.lastfm;
     MusicManager.prototype.initialize = function() {
       _.bindAll(this, "onPlaylistReset", "updateState");
       this.playlist = new Playlist();

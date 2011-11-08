@@ -22,14 +22,14 @@ img {
   border-radius: 3px;
 }
 .box_shadow {
-  -webkit-box-shadow: #777 0px 4px 10px;
-  -moz-box-shadow: #777 0px 4px 10px;
-  box-shadow: #777 0px 4px 10px;
+  -webkit-box-shadow: #777777 0px 4px 10px;
+  -moz-box-shadow: #777777 0px 4px 10px;
+  box-shadow: #777777 0px 4px 10px;
 }
 .box_shadow_s {
-  -webkit-box-shadow: #777 0px 2px 5px;
-  -moz-box-shadow: #777 0px 2px 5px;
-  box-shadow: #777 0px 2px 5px;
+  -webkit-box-shadow: #777777 0px 2px 5px;
+  -moz-box-shadow: #777777 0px 2px 5px;
+  box-shadow: #777777 0px 2px 5px;
 }
 .linear_grad {
   background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #f0f0f0), color-stop(1, white));
@@ -85,6 +85,64 @@ a.button {
 }
 .clearfix {
   clear: both;
+}
+#dialog {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.5);
+  height: 100%;
+  width: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  box-pack: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  box-align: center;
+}
+#dialog .content {
+  position: relative;
+  height: auto;
+  padding: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  z-index: 9999;
+  background-color: #eee;
+}
+.form li {
+  margin-top: 10px;
+}
+.form li.buttons {
+  text-align: right;
+}
+.form label {
+  display: block;
+  padding: 5px 0px;
+}
+.form label .error {
+  color: red;
+  margin-left: 10px;
+}
+.form label.success {
+  color: green;
+  font-weight: bold;
+  padding: 20px;
+  font-size: 20px;
+}
+.form input {
+  padding: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  width: 200px;
+}
+.form input[type="submit"] {
+  width: auto;
+  border: 1px solid #333;
+  background-color: #eee;
 }
 /************* Scrollbar ***************/.jspVerticalBar {
   right: 2px;

@@ -2,7 +2,6 @@
   height: 67px;
   background: #ccc;
   background: url("../../images/popup/cur_song_bg.png") top left;
-  position: relative;
 }
 #current_song .container {
   position: relative;

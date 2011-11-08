@@ -82,9 +82,6 @@
   cursor: default;
   text-shadow: 0 -1px 0 black;
 }
-#header .volume {
-  position: relative;
-}
 #header .volume .button {
   background-image: url("../../images/popup/volume.png");
 }

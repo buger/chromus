@@ -3,10 +3,11 @@
 	"description": "Last.fm integration",
 
 	"files": [
-		"bg!api.js",
 		"bg!lastfm.js",
+		"bg!lastfm_bg.js",
 
 		"popup!lastfm.js",
+		"popup!lastfm_ui.js",
 
 		"bg_spec!lastfm_spec.js"
 	]

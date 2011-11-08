@@ -1,7 +1,5 @@
 (function() {
-  var fixtures, manager;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  manager = chromus.plugins.music_manager;
+  var fixtures;
   fixtures = {
     playlist: [
       {
@@ -30,27 +28,12 @@
     ]
   };
   describe("Music manager", function() {
+    var manager;
+    manager = chromus.plugins.music_manager;
     beforeEach(function() {
-      return manager.playlist.reset();
-    });
-    it("should load artist top tracks", function() {
-      var first_track_id, play_spy, search_spy, top_spy;
-      top_spy = spyOn(manager.lastfm.artist, 'getTopTracks').andCallFake(__bind(function(artist, callback) {
-        return callback(fixtures.playlist);
-      }, this));
-      search_spy = spyOn(manager, "searchTrack");
-      play_spy = spyOn(manager, 'playTrack').andCallThrough();
-      manager.playTrack({
-        type: "artist",
-        artist: "Chuck Berry"
-      });
-      expect(top_spy).toHaveBeenCalled();
-      expect(manager.playlist.length).toBe(3);
-      expect(play_spy.callCount).toBe(2);
-      expect(search_spy).toHaveBeenCalled();
-      first_track_id = manager.playlist.first().id;
-      expect(first_track_id).toBeDefined();
-      return expect(manager.get('current_track')).toBe(first_track_id);
+      manager.playlist.reset();
+      spyOn(chromus.plugins.lastfm.track, "scrobble");
+      return spyOn(chromus.plugins.lastfm.track, "updateNowPlaying");
     });
     it("should play song after searching", function() {
       var play_spy, play_track_spy, search_spy, vk_spy;

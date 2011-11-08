@@ -387,8 +387,13 @@
       this.track_info = new TrackInfo({
         model: this.model
       });
-      return this.menu = new Menu({
+      this.menu = new Menu({
         model: this.model
+      });
+      return $('#dialog').bind('click', function(evt) {
+        if (evt.target.id === "dialog") {
+          return $('#dialog').hide();
+        }
       });
     };
     App.prototype.start = function() {

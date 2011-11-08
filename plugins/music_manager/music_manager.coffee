@@ -11,8 +11,6 @@ class Playlist extends Backbone.Collection
 
 class MusicManager extends Backbone.Model
 
-    lastfm: chromus.plugins.lastfm
-
     initialize: ->
         _.bindAll @, "onPlaylistReset", "updateState"
 

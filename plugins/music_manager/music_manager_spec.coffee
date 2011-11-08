@@ -1,5 +1,3 @@
-manager = chromus.plugins.music_manager
-
 fixtures =
     playlist: [
                 { 'song': 'Song 1', 'artist': 'Beatles' }
@@ -14,35 +12,14 @@ fixtures =
 
 
 describe "Music manager", ->            
+    manager = chromus.plugins.music_manager
 
     beforeEach ->
         manager.playlist.reset()
 
-    
-    it "should load artist top tracks", ->          
-        # FIX: Wrong fixture used
-        top_spy = spyOn(manager.lastfm.artist, 'getTopTracks')
-            .andCallFake (artist, callback) => callback fixtures.playlist
-
-        search_spy = spyOn(manager, "searchTrack")
-
-        play_spy = spyOn(manager, 'playTrack').andCallThrough()
-
-        manager.playTrack
-            type: "artist"
-            artist: "Chuck Berry"
-
-        expect(top_spy).toHaveBeenCalled()
-
-        expect(manager.playlist.length).toBe(3)
-
-        expect(play_spy.callCount).toBe(2)
-        expect(search_spy).toHaveBeenCalled()
-
-        first_track_id = manager.playlist.first().id
-
-        expect(first_track_id).toBeDefined()
-        expect(manager.get('current_track')).toBe(first_track_id)
+        # Disable some of LFM features
+        spyOn(chromus.plugins.lastfm.track, "scrobble")
+        spyOn(chromus.plugins.lastfm.track, "updateNowPlaying")
             
 
     it "should play song after searching", ->

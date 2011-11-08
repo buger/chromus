@@ -196,6 +196,7 @@ class TrackInfo extends Backbone.View
 
 class Menu extends Backbone.View
     el: $('#wrapper')
+
     template: $('#main_menu_tmpl')
 
     events:
@@ -307,6 +308,10 @@ class App extends Backbone.View
         @controls = new Controls { model:@model }
         @track_info = new TrackInfo { model:@model }
         @menu = new Menu { model:@model }
+
+        $('#dialog').bind 'click', (evt) ->
+            if evt.target.id is "dialog"
+                $('#dialog').hide()
         
     start: ->        
         browser.postMessage method:'getPlaylist'

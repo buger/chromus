@@ -23,7 +23,7 @@
     Chromus.prototype.media_types = {};
     Chromus.prototype.plugins = {};
     Chromus.prototype.plugins_info = {};
-    Chromus.prototype.plugins_list = ['echonest', 'lastfm', 'iframe_player', 'local_files_player', 'vkontakte', 'music_manager', 'ui'];
+    Chromus.prototype.plugins_list = ['iframe_player', 'music_manager', 'echonest', 'lastfm', 'local_files_player', 'vkontakte', 'ui'];
     function Chromus() {
       _.bindAll(this);
       this.pluginsLoadedCallback = function() {};

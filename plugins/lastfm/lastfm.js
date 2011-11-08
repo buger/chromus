@@ -1,10 +1,25 @@
 (function() {
   var LastFM;
+  var __hasProp = Object.prototype.hasOwnProperty;
   LastFM = {
     settings: {
       baseURL: "http://ws.audioscrobbler.com/2.0/",
       format: "json",
-      api_key: "170909e77e67705570080196aca5040b"
+      api_key: "48e602d0f8c4d34f00b1b17d96ab88c1",
+      api_secret: "c129f28ec70abc4311b21fa8473d34e7"
+    },
+    getSignature: function(data) {
+      var key, signature, value;
+      signature = [];
+      for (key in data) {
+        if (!__hasProp.call(data, key)) continue;
+        value = data[key];
+        if (key !== 'format') {
+          signature.push(key + value);
+        }
+      }
+      signature.sort();
+      return MD5(signature.join('') + LastFM.settings.api_secret);
     },
     callMethod: function(method, data, callback) {
       if (data == null) {
@@ -13,6 +28,10 @@
       data.format = this.settings.format;
       data.api_key = this.settings.api_key;
       data.method = method;
+      if (data.sig_call) {
+        delete data.sig_call;
+        data.api_sig = this.getSignature(data);
+      }
       return $.ajax({
         url: "" + this.settings.baseURL,
         data: data,
@@ -24,7 +43,56 @@
         }
       });
     },
+    convertDateToUTC: function(date) {
+      if (date == null) {
+        date = new Date();
+      }
+      return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
+    },
+    fakePostRequest: function(url, data) {
+      var form, iframe, input, key, value;
+      iframe = document.createElement('iframe');
+      iframe.name = iframe.id = +new Date();
+      document.body.appendChild(iframe);
+      form = document.createElement('form');
+      form.action = url;
+      form.method = "post";
+      form.target = iframe.id;
+      for (key in data) {
+        if (!__hasProp.call(data, key)) continue;
+        value = data[key];
+        input = document.createElement('input');
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      }
+      document.body.appendChild(form);
+      form.submit();
+      return setTimeout(function() {
+        document.body.removeChild(iframe);
+        return document.body.removeChild(form);
+      }, 2000);
+    },
     track: {
+      scrobble: function(data, callback) {
+        var signature;
+        data.method = 'track.scrobble';
+        data.timestamp = (+LastFM.convertDateToUTC()) / 1000;
+        data.sk = store.get('lastfm:key');
+        data.api_key = LastFM.settings.api_key;
+        signature = LastFM.getSignature(data);
+        data.api_sig = signature;
+        return LastFM.fakePostRequest("" + LastFM.settings.baseURL, data);
+      },
+      updateNowPlaying: function(data, callback) {
+        var signature;
+        data.method = 'track.updateNowPlaying';
+        data.sk = store.get('lastfm:key');
+        data.api_key = LastFM.settings.api_key;
+        signature = LastFM.getSignature(data);
+        data.api_sig = signature;
+        return LastFM.fakePostRequest("" + LastFM.settings.baseURL, data);
+      },
       search: function(string, callback) {
         return LastFM.callMethod("track.search", {
           track: string
@@ -107,10 +175,12 @@
     }
   };
   this.chromus.registerPlugin("lastfm", LastFM);
-  this.chromus.registerMediaType("artist", function(track, callback) {
-    return LastFM.artist.getTopTracks(track.artist, callback);
-  });
-  this.chromus.registerMediaType("album", function(track, callback) {
-    return LastFM.album.getInfo(track.artist, track.album, callback);
-  });
+  if (browser.page_type === "background") {
+    this.chromus.registerMediaType("artist", function(track, callback) {
+      return LastFM.artist.getTopTracks(track.artist, callback);
+    });
+    this.chromus.registerMediaType("album", function(track, callback) {
+      return LastFM.album.getInfo(track.artist, track.album, callback);
+    });
+  }
 }).call(this);
