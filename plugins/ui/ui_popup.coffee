@@ -194,7 +194,7 @@ class Controls extends Backbone.View
 class TrackInfo extends Backbone.View
     el: $('#current_song')
 
-    template: $('#track_info_tmpl')
+    template: Handlebars.compile($('#track_info_tmpl').html()),
 
     initialize: ->
         _.bindAll @, "updateInfo"
@@ -218,7 +218,7 @@ class TrackInfo extends Backbone.View
         track.album_url = "#{last_fm}/#{track.artist}/#{track.album}"
         track.song_url = "#{last_fm}/#{track.artist}/_/#{track.song}"
         
-        @el.html(@template.tmpl(track))
+        @el.html(@template(track))
             .show()
 
 

@@ -33,28 +33,28 @@
             {{/each}}
         </script>
         
-        <script id="track_info_tmpl" type="text/x-jquery-tmpl">
+        <script id="track_info_tmpl" type="text/template">
             <div class="container">
                 <div class="album_img">
                     <span class="jewelcase"></span>
-                    <img src="${image}" />
+                    <img src="{{image}}" />
                 </div>
                 <div class="love_btn"><a class='button'></a></div>
                 <div class="info">
-                    <a class="song" href="${song_url}" target="_blank">${song}</a>
-                    <a class="artist" href="${artist_url}" target="_blank">${artist}</a>
-                    {{if album}}
+                    <a class="song" href="{{song_url}}" target="_blank">{{song}}</a>
+                    <a class="artist" href="{{artist_url}}" target="_blank">{{artist}}</a>
+                    {{#if album}}
                     <span class="dash">-</span>
-                    <a class="album" href="${album_url}" target="_blank">${album}</a>
+                    <a class="album" href="{{album_url}}" target="_blank">{{album}}</a>
                     {{/if}}
                 </div>
             </div>
             
             <div class="source">
-                {{if typeof(source_title) != "undefined" && source_title !== 'vkontakte.ru'}}
-                <a href="${source_url}" target="_blank">
-                    <img src="${source_icon}" />
-                    <span> ${source_title}</span>
+                {{#if source_title}}
+                <a href="{{source_url}}" target="_blank">
+                    <img src="{{source_icon}}" />
+                    <span>{{source_title}}</span>
                 </a>
                 {{/if}}
             </div>
@@ -172,8 +172,7 @@
             <ul id="main_menu" class="menu_container" style="display:none"></ul>
         </div>
 
-        <script src="lib/jquery.min.js"></script>
-        <script src="lib/jquery.tmpl.min.js"></script>
+        <script src="lib/jquery.min.js"></script>        
         <script src="lib/jquery.mousewheel.js"></script>
         <script src="lib/jquery.jscrollpane.min.js"></script>
         <script src="lib/jquery.disable.text.select.pack.js"></script>

@@ -261,7 +261,7 @@
       TrackInfo.__super__.constructor.apply(this, arguments);
     }
     TrackInfo.prototype.el = $('#current_song');
-    TrackInfo.prototype.template = $('#track_info_tmpl');
+    TrackInfo.prototype.template = Handlebars.compile($('#track_info_tmpl').html());
     TrackInfo.prototype.initialize = function() {
       _.bindAll(this, "updateInfo");
       return this.model.bind('change:current_track', this.updateInfo);
@@ -280,7 +280,7 @@
       track.artist_url = "" + last_fm + "/" + track.artist;
       track.album_url = "" + last_fm + "/" + track.artist + "/" + track.album;
       track.song_url = "" + last_fm + "/" + track.artist + "/_/" + track.song;
-      return this.el.html(this.template.tmpl(track)).show();
+      return this.el.html(this.template(track)).show();
     };
     return TrackInfo;
   })();
