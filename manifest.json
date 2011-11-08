@@ -1,9 +1,9 @@
 {
    "name": "Chromus",
    "version": "3.0.0",   
-   "description": "!! Yes it plays music! Browser as a music player? Why not? Music player for Google Chrome",   
+   "description": "!! Yes it plays music! Browser as a music player? Why not? Music player for Google Chrome",      
 
-   "popup": "popup.html",
+   "popup": "index.html",
    "background_page": "background.html",
 
    "icon-19x19": "assets/icons/sq-19x19.png",
