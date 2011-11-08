@@ -56,10 +56,9 @@
           music_manager.playTrack(msg.track);
         }
         return music_manager.radio = void 0;
-      case "add_to_playlist":
-        music_manager.playlist.create(track);
-        music_manager.updateID3Info(music_manager.playlist.length - 1);
-        return music_manager.radio = void 0;
+      case "addToPlaylist":
+        music_manager.playlist.add(msg.tracks);
+        return console.warn(msg.tracks, music_manager.playlist);
       case "togglePlaying":
         if (music_manager.state.get('name') === "paused" && music_manager.currentTrack()) {
           return music_manager.play();

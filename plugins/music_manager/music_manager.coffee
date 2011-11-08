@@ -1,6 +1,8 @@
 class Track extends Backbone.Model
 
-    initialize: -> @set 'id': chromus.utils.uid()
+    initialize: -> 
+        if not @id
+            @set 'id': chromus.utils.uid()
 
     title: -> "#{@get('artist')} #{@get('song')}"
 
@@ -79,7 +81,9 @@ class MusicManager extends Backbone.Model
     updateState: (state) ->
         @state.set state
 
-        track = @currentTrack()        
+        track = @currentTrack()
+        
+        track?.attributes.duration ?= state.duration
 
         if @state.get('name') is "stopped"
             @playTrack @nextTrack()
@@ -90,23 +94,29 @@ class MusicManager extends Backbone.Model
     searchTrack: (track, callback = ->) ->        
         results = []
 
-        searchCallback = -> 
-            unless _.isEmpty results
-                # TODO: Should chouse best matching song
-                match = results[0]
+        unless track.get('player')
+            searchCallback = -> 
+                unless _.isEmpty results
+                    # TODO: Should chouse best matching song
+                    match = results[0]
 
-                track.set 'file_url': match.file_url
-                track.set 'duration': match.duration
+                    track.set 'file_url': match.file_url
+                    track.set 'duration': match.duration
 
+                    callback track
+
+            for name, obj of chromus.audio_sources            
+                obj.search 
+                    artist: track.get('artist')
+                    song: track.get('song')
+                , (tracks) ->                
+                    results = _.union(results, tracks)
+                    searchCallback()
+        else
+            player = chromus.audio_players[track.get('player')]
+            player.search track, (result) ->
+                track.set 'file_url': result.file_url[0..200]
                 callback track
-
-        for name, obj of chromus.audio_sources            
-            obj.search 
-                artist: track.get('artist')
-                song: track.get('song')
-            , (tracks) ->                
-                results = _.union(results, tracks)
-                searchCallback()
 
 
     playTrack: (track) ->

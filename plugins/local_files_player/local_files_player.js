@@ -17,23 +17,28 @@
       this.iframe_player = chromus.audio_players.iframe_player;
       this.background_playing = browser.isChrome || browser.isFirefox;
       _.bindAll(this);
-      browser.addMessageListener(this.listener);
-      return this.listener();
+      return browser.addMessageListener(this.listener);
     };
     Player.prototype.listener = function(msg) {
-      if (!msg) {
-        return;
-      }
+      var _ref;
       switch (msg.method) {
-        case "localPlayer:addFiles":
-          console.log('adding files to playlist');
-          return chromus.music_manager.playlist.add(msg.files);
+        case 'localPlayer:fileContent':
+          if ((_ref = this.callback) == null) {
+            this.callback = function() {};
+          }
+          console.warn('received file content', msg);
+          return this.callback({
+            file_url: msg.content
+          });
       }
     };
-    Player.prototype.play = function(track) {};
-    Player.prototype.preload = function(track) {};
-    Player.prototype.pause = function() {};
-    Player.prototype.setVolume = function(value) {};
+    Player.prototype.search = function(track, callback) {
+      browser.postMessage({
+        method: "localPlayer:getContent",
+        id: track.id
+      });
+      return this.callback = callback;
+    };
     return Player;
   })();
   this.chromus.registerPlayer("local_files_player", new Player());

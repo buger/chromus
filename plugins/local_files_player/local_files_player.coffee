@@ -6,31 +6,25 @@ class Player extends Backbone.Model
 
         _.bindAll @
         
-        browser.addMessageListener @listener
-        @listener()        
-
+        browser.addMessageListener @listener        
+           
     
     listener: (msg) ->
-        return if !msg
-        
         switch msg.method
-            when "localPlayer:addFiles"
-                console.log('adding files to playlist')
-                chromus.music_manager.playlist.add msg.files
+            when 'localPlayer:fileContent'                
+                @callback ?= ->
 
-        #localPlayer:files_added
-
+                console.warn 'received file content', msg
+                
+                @callback file_url: msg.content
+                
     
-    play: (track) ->
+    search: (track, callback) ->
+        browser.postMessage
+            method: "localPlayer:getContent"
+            id: track.id
 
-
-    preload: (track) ->
-
-
-    pause: ->
-
-
-    setVolume: (value) ->        
+        @callback = callback
 
 
 @chromus.registerPlayer("local_files_player", new Player())

@@ -60,10 +60,10 @@ browser.addMessageListener (msg, sender, sendResponse) ->
             music_manager.radio = undefined
 
 
-        when "add_to_playlist"
-            music_manager.playlist.create(track)
-            music_manager.updateID3Info(music_manager.playlist.length-1)
-            music_manager.radio = undefined
+        when "addToPlaylist"
+            music_manager.playlist.add(msg.tracks)            
+
+            console.warn msg.tracks, music_manager.playlist
 
 
         when "togglePlaying"

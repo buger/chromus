@@ -33,7 +33,7 @@ class Chromus
 		'music_manager'
 		'echonest'
 		'lastfm'		
-		'local_files_player'
+	#	'local_files_player'
 		'vkontakte'
 		'ui'
 	]
@@ -86,7 +86,6 @@ class Chromus
 
 	registerMediaType: (name, context) ->
 		@media_types[name] = context
-
 
 
 @chromus = new Chromus()

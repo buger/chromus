@@ -48,3 +48,15 @@ ul.menu_container {
 .menu_container > li:hover .menu_container {
   display: block;
 }
+#main_menu .open_local_files {
+  position: relative;
+}
+#main_menu .open_local_files input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  filter: alpha(opacity=0);
+  -khtml-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+}

@@ -4,8 +4,6 @@
 	"files": [
 		"bg!iframe_player.js",
 
-		"popup!iframe_player.js",
-
 		"bg_spec!spec.js"
 	]
 }

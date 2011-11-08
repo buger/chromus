@@ -16,30 +16,59 @@
     PopupLocalPlayer.prototype.initialize = function() {
       _.bindAll(this);
       this.files = new Backbone.Collection();
-      return $('#main_menu .open_local_files input').live('change', this.openFiles);
+      $("            <li class='open_local_files'>                <span>Add files to playlist</span>                <input type='file' multiple />            </li>        ").appendTo('#main_menu').find('input').bind('change', this.openFiles);
+      return browser.addMessageListener(this.listener);
     };
     PopupLocalPlayer.prototype.openFiles = function(evt) {
-      var file, opened, _i, _len;
+      var opened;
       opened = _.filter(evt.target.files, function(file) {
         return file.type.match(/^audio/);
       });
-      for (_i = 0, _len = opened.length; _i < _len; _i++) {
-        file = opened[_i];
-        this.files.add({
+      opened = _.map(opened, function(file) {
+        return {
           id: chromus.utils.uid(),
-          name: file.name,
+          artist: "",
+          song: file.name,
           player: "local_files_player",
           data: file
-        });
-      }
+        };
+      });
+      this.files.add(opened);
       if (opened.length) {
         return browser.postMessage({
-          method: 'localPlayer:addFiles',
-          files: this.files.toJSON()
+          method: 'addToPlaylist',
+          tracks: this.files.toJSON()
         });
+      }
+    };
+    PopupLocalPlayer.prototype.readFile = function(id, callback) {
+      var file, reader;
+      if (callback == null) {
+        callback = function() {};
+      }
+      file = this.files.get(id).get('data');
+      reader = new FileReader();
+      reader.onload = function(evt) {
+        console.warn("READ FILES", evt);
+        return callback(evt.target.result);
+      };
+      console.warn("reading files", file);
+      return reader.readAsDataURL(file);
+    };
+    PopupLocalPlayer.prototype.listener = function(msg) {
+      switch (msg.method) {
+        case 'localPlayer:getContent':
+          return this.readFile(msg.id, function(content) {
+            return browser.postMessage({
+              method: 'localPlayer:fileContent',
+              id: msg.id,
+              content: content
+            });
+          });
       }
     };
     return PopupLocalPlayer;
   })();
   new PopupLocalPlayer();
+  $('#main_menu').show();
 }).call(this);
