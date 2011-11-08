@@ -20,10 +20,10 @@
 #header .toggle {
   margin-left: 5px;
 }
-#header .play .button {
+#header .pause .button {
   background-image: url("../../images/popup/play.png");
 }
-#header .pause .button {
+#header .play .button {
   background-image: url("../../images/popup/pause.png");
 }
 #header .next .button {
