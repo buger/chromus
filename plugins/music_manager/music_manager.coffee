@@ -42,8 +42,12 @@ class MusicManager extends Backbone.Model
 
     stop: -> 
         @unset 'current_track'
-        @state.set 'name': 'stopped', silent: true
+        @state.set {'name': 'stopped'}, silent: true
         @player.stop()
+
+
+    setPosition: (value) ->
+        @player.setPosition(value)
         
 
     onPlaylistReset:->
@@ -74,13 +78,12 @@ class MusicManager extends Backbone.Model
     updateState: (state) ->
         @state.set state
 
-        track = @currentTrack()
+        track = @currentTrack()        
 
         if @state.get('name') is "stopped"
-            return @playTrack @nextTrack()
-
-        if track? and Math.round(@state.get('played')) >= Math.round(track.get('duration'))
-            return @updateState name:"stopped"        
+            @playTrack @nextTrack()
+        else if track?.get('duration') and (@state.get('played') - track.get('duration')) >= 0        
+            @updateState name:"stopped"
 
 
     searchTrack: (track, callback = ->) ->        
@@ -146,7 +149,7 @@ class MusicManager extends Backbone.Model
         if @volume is undefined
             @volume = 100        
 
-        @volume    
+        @volume
 
 
     getState: ->

@@ -1,5 +1,5 @@
 (function() {
-  var LoginView, lastfm, template;
+  var LoginView, Menu, lastfm, login_template, menu, menu_template;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -9,7 +9,7 @@
     return child;
   }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   lastfm = chromus.plugins.lastfm;
-  template = '\
+  login_template = '\
     <form class="form">\
         <ul>\
             <li>\
@@ -36,7 +36,7 @@
       "click .close": "close"
     };
     LoginView.prototype.render = function() {
-      this.el.innerHTML = template;
+      this.el.innerHTML = login_template;
       this.delegateEvents();
       $('#dialog .content').html(this.el);
       return $('#dialog').show();
@@ -69,7 +69,8 @@
                     <label class="success">Logged!</label>\
                     <a class="close">close</a>\
                 ';
-          return this.delegateEvents();
+          this.delegateEvents();
+          return menu.render();
         }
       }, this));
       return false;
@@ -79,8 +80,68 @@
     };
     return LoginView;
   })();
-  $('#main_menu .scrobbling').live('click', function() {
-    $('#main_menu').hide();
-    return new LoginView().render();
-  });
+  menu_template = Handlebars.compile('            \
+<span>Last.fm</span>            \
+<ul class="menu_container">\
+    {{#if username}}\
+        {{#if scrobbling}}\
+            <li class="toggle enabled">Scrobbling enabled</li>\
+        {{else}}\
+            <li class="toggle disabled">Scrobbling disabled</li>\
+        {{/if}}\
+        <li class="header">Logged as {{username}}</li>\
+        <li><a href="http://last.fm/user/{{username}}" target="_blank">Profile page</a></li>        \
+        <li class="header">Subscribers radio</li>\
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/personal">Library Radio</li>\
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/mix">Mix Radio</li>\
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/recommended">Recommendation Radio</li>\
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/neighbours">Neighbours Radio</li>\
+        <li class="logout">Logout</li>\
+    {{else}}\
+        <li class="scrobbling not_logged">Want scrobbling?</li>\
+    {{/if}}\
+</ul> \
+');
+  Menu = (function() {
+    __extends(Menu, Backbone.View);
+    function Menu() {
+      Menu.__super__.constructor.apply(this, arguments);
+    }
+    Menu.prototype.tagName = 'li';
+    Menu.prototype.className = 'lastfm';
+    Menu.prototype.events = {
+      "click .not_logged": "login",
+      "click .logout": "logout",
+      "click .toggle": "toggle"
+    };
+    Menu.prototype.initialize = function() {
+      this.container = $('#main_menu');
+      this.container.append(this.el);
+      return this.render();
+    };
+    Menu.prototype.render = function() {
+      var view;
+      view = {
+        username: store.get('lastfm:user'),
+        scrobbling: store.get('lastfm:scrobbling')
+      };
+      this.el.innerHTML = menu_template(view);
+      return this.delegateEvents();
+    };
+    Menu.prototype.login = function() {
+      this.container.hide();
+      return new LoginView().render();
+    };
+    Menu.prototype.logout = function() {
+      store.remove('lastfm:user');
+      store.remove('lastfm:key');
+      return this.render();
+    };
+    Menu.prototype.toggle = function() {
+      store.set('lastfm:scrobbling', !store.get('lastfm:scrobbling'));
+      return this.render();
+    };
+    return Menu;
+  })();
+  menu = new Menu();
 }).call(this);

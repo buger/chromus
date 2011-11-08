@@ -21,7 +21,7 @@ class Player extends Backbone.Model
         if not browser.isFrame and not browser.isSafari            
             @player_frame.src = @player_url + "sm2_iframe"
         else
-            @player_frame.src = "#{@path}/lib/iframe.htm?1" 
+            @player_frame.src = "#{@path}/lib/iframe.htm?2" 
                                                             
         document.body.appendChild @player_frame
             
@@ -82,4 +82,12 @@ class Player extends Backbone.Model
             'volume': value
 
 
-@chromus.registerPlayer("iframe_player", new Player());
+    setPosition: (value) ->
+        console.warn "Settting POSSSITION", value
+
+        @postMessageToPlayer
+            'method': 'setPosition'
+            'position': value
+
+
+@chromus.registerPlayer("iframe_player", new Player())

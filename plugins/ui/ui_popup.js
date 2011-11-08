@@ -76,8 +76,17 @@
         method: 'nextTrack'
       });
     };
+    Player.prototype.setPosition = function(position) {
+      return browser.postMessage({
+        method: 'setPosition',
+        position: position
+      });
+    };
     Player.prototype.listener = function(msg) {
       var _ref;
+      if (msg.method.match("^sm2")) {
+        return;
+      }
       if (!msg.method.match('(playerState|updateState)')) {
         console.log("Popup received message", msg.method, msg);
       } else {
@@ -108,6 +117,8 @@
     Controls.prototype.el = $('#header');
     Controls.prototype.search_template = Handlebars.compile($('#search_result_tmpl').html());
     Controls.prototype.events = {
+      "click .inner": "setPosition",
+      "click .progress": "setPosition",
       "click .toggle": "togglePlaying",
       "click .next": "nextTrack",
       "click .search": "toggleSearch",
@@ -115,21 +126,49 @@
       "click .search_bar .result a": "playSearchedTrack"
     };
     Controls.prototype.initialize = function() {
+      var opts;
       _.bindAll(this, "updateState", "togglePlaying", "search");
-      return this.model.state.bind('change', this.updateState);
+      this.model.state.bind('change', this.updateState);
+      opts = {
+        lines: 8,
+        length: 2,
+        width: 2,
+        radius: 3,
+        color: "#fff"
+      };
+      return this.spinner = new Spinner(opts);
     };
     Controls.prototype.updateState = function(state) {
-      var _ref;
+      var toggle, track, _ref;
+      track = this.model.currentTrack();
       state = state.toJSON();
-      this.$('.toggle').removeClass('play pause').addClass(state.name === "playing" ? 'pause' : 'play');
-      if (state.duration) {
-        this.$('.inner').width(276.0 * state.played / state.duration);
-        this.$('.time').html(prettyTime(state.played));
+      toggle = this.$('.toggle').removeClass('play pause');
+      this.spinner.stop();
+      switch (state.name) {
+        case "playing":
+        case "stopped":
+          toggle.addClass('play');
+          break;
+        case "paused":
+          toggle.addClass('pause');
+          break;
+        case "loading":
+          this.spinner.spin(toggle.find('.button')[0]);
+      }
+      if (track != null ? track.get('duration') : void 0) {
+        this.$('.inner').width(276.0 * state.played / track.get('duration'));
+        this.$('.time').html(prettyTime(track.get('duration') - state.played));
         if ((_ref = state.buffered) == null) {
           state.buffered = 0;
         }
-        return this.$('.progress').width(278.0 * state.buffered / state.duration);
+        return this.$('.progress').width(278.0 * state.buffered / track.get('duration'));
       }
+    };
+    Controls.prototype.setPosition = function(evt) {
+      var position, track;
+      track = this.model.currentTrack();
+      position = (evt.offsetX / 278) * track.get('duration');
+      return this.model.setPosition(position);
     };
     Controls.prototype.togglePlaying = function() {
       if (this.model.state.get('name') === "paused") {
@@ -251,7 +290,6 @@
       Menu.__super__.constructor.apply(this, arguments);
     }
     Menu.prototype.el = $('#wrapper');
-    Menu.prototype.template = $('#main_menu_tmpl');
     Menu.prototype.events = {
       "click #footer .button.menu": "toggleMenu"
     };
@@ -259,9 +297,7 @@
       return _.bindAll(this, "toggleMenu");
     };
     Menu.prototype.toggleMenu = function() {
-      return this.$('#main_menu').html(this.template.tmpl({
-        settings: {}
-      })).toggle();
+      return this.$('#main_menu').toggle();
     };
     return Menu;
   })();

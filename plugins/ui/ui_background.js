@@ -68,9 +68,9 @@
         }
         break;
       case "nextTrack":
-        return music_manager.playNextTrack(true);
+        return music_manager.playTrack(music_manager.nextTrack());
       case "previousTrack":
-        return music_manager.playNextTrack(true, true);
+        return music_manager.playTrack(music_manager.prevTrack());
       case "getPlaylist":
         return browser.postMessage({
           method: "loadPlaylist",
@@ -80,6 +80,8 @@
         });
       case "setVolume":
         return music_manager.setVolume(msg.volume);
+      case "setPosition":
+        return music_manager.setPosition(msg.position);
       case "clearPlaylist":
         music_manager.radio = void 0;
         return music_manager.playlist.reset();

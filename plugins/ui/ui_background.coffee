@@ -74,11 +74,11 @@ browser.addMessageListener (msg, sender, sendResponse) ->
 
 
         when "nextTrack"
-            music_manager.playNextTrack(true)
+            music_manager.playTrack music_manager.nextTrack()
 
 
         when "previousTrack"
-            music_manager.playNextTrack(true, true)
+            music_manager.playTrack music_manager.prevTrack()
 
 
         when "getPlaylist"
@@ -91,6 +91,8 @@ browser.addMessageListener (msg, sender, sendResponse) ->
         when "setVolume"
             music_manager.setVolume(msg.volume)
 
+        when "setPosition"
+            music_manager.setPosition(msg.position)
 
         when "clearPlaylist"
             music_manager.radio = undefined

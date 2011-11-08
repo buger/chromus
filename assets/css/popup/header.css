@@ -17,14 +17,11 @@
   border-right: 1px solid #484848;
   border-left: 1px solid #484848;
 }
-#header .play {
+#header .toggle {
   margin-left: 5px;
 }
 #header .play .button {
   background-image: url("../../images/popup/play.png");
-}
-#header .pause {
-  margin-left: 5px;
 }
 #header .pause .button {
   background-image: url("../../images/popup/pause.png");

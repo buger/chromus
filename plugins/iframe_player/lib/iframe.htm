@@ -149,6 +149,13 @@
 
                         break;
 
+                    case "setPosition":
+                        if (current_sound) {
+                            current_sound.setPosition(msg.position*1000);
+                        }
+
+                        break;
+
                     default:
                         console.log("iFrame:::Unknown message:", evt.data);                        
                 }

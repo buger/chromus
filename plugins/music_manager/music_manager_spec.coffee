@@ -65,7 +65,7 @@ describe "Music manager", ->
 
         states = _.map state_spy.calls, (call) -> call.args[0].name
 
-        expect(states).toEqual ['loading','playing','paused','stopped']
+        expect(states).toEqual ['loading','playing','paused']
 
 
     it "should change state to paused", ->
@@ -130,3 +130,14 @@ describe "Music manager", ->
 
         expect(manager.state.get('name')).toBe "stopped"
 
+    
+    it "should change track position", ->
+        set_position_spy = spyOn(manager.player, "setPosition")
+
+        manager.playlist.reset(fixtures.playlist)        
+        manager.setPosition(30)
+
+        manager.player.state.set 'played': 30
+
+        expect(manager.state.get('played')).toBe 30
+        expect(set_position_spy).toHaveBeenCalled()

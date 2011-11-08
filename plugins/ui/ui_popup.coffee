@@ -39,16 +39,19 @@ class Player extends Backbone.Model
 
 
     pause: ->
-        @state.set 'name':'paused'
-        
+        @state.set 'name':'paused'    
         browser.postMessage { method:'pause' }
 
 
     next: ->        
         browser.postMessage { method:'nextTrack' }
 
+    setPosition: (position) ->
+        browser.postMessage { method:'setPosition', position:position }
 
     listener: (msg) ->
+        return if msg.method.match("^sm2")
+
         if !msg.method.match('(playerState|updateState)')
             console.log "Popup received message", msg.method, msg
         else
@@ -58,7 +61,7 @@ class Player extends Backbone.Model
         
         
         @set 'settings': msg.settings if msg.settings?        
-        @state.set msg.state if msg.state?
+        @state.set msg.state if msg.state?            
         
         @playlist.reset msg.playlist if msg.playlist
                 
@@ -71,6 +74,8 @@ class Controls extends Backbone.View
     search_template: Handlebars.compile($('#search_result_tmpl').html()),
 
     events:
+        "click .inner": "setPosition"
+        "click .progress": "setPosition"
         "click .toggle": "togglePlaying"
         "click .next":   "nextTrack"
         "click .search": "toggleSearch"
@@ -82,23 +87,46 @@ class Controls extends Backbone.View
 
         @model.state.bind 'change', @updateState
 
+        opts = 
+            lines: 8
+            length: 2
+            width: 2
+            radius: 3
+            color: "#fff"
+
+        @spinner = new Spinner(opts)
+
 
     updateState: (state) ->
+        track = @model.currentTrack()
         state = state.toJSON()
 
-        @$('.toggle')
+        toggle = @$('.toggle')
             .removeClass('play pause')
-            .addClass(
-                if state.name is "playing" then 'pause' else 'play'
-            )
+
+        @spinner.stop()
+            
+        switch state.name
+            when "playing","stopped" then toggle.addClass('play')
+            when "paused" then toggle.addClass('pause')
+            when "loading" then @spinner.spin(toggle.find('.button')[0])
+
         
-        if state.duration        
-            @$('.inner').width(276.0*state.played/state.duration)
-            @$('.time').html prettyTime(state.played)
+        if track?.get('duration')
+            @$('.inner').width(276.0*state.played/track.get('duration'))
+            @$('.time').html prettyTime(track.get('duration') - state.played)
 
             state.buffered ?= 0
-            @$('.progress').width(278.0*state.buffered/state.duration)
+            @$('.progress').width(278.0*state.buffered/track.get('duration'))
+    
 
+    setPosition: (evt) ->
+        track = @model.currentTrack()
+
+        position = (evt.offsetX/278) * track.get('duration')
+
+        @model.setPosition position
+                
 
     togglePlaying: ->
         if @model.state.get('name') is "paused"
@@ -197,8 +225,6 @@ class TrackInfo extends Backbone.View
 class Menu extends Backbone.View
     el: $('#wrapper')
 
-    template: $('#main_menu_tmpl')
-
     events:
         "click #footer .button.menu": "toggleMenu"
 
@@ -206,9 +232,7 @@ class Menu extends Backbone.View
         _.bindAll @, "toggleMenu"
 
     toggleMenu: ->
-        @$('#main_menu').html(
-            @template.tmpl settings: {}
-        ).toggle()        
+        @$('#main_menu').toggle()        
                                 
 
 class PlaylistView extends Backbone.View

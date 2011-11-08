@@ -1,6 +1,6 @@
 lastfm = chromus.plugins.lastfm
 
-template = '
+login_template = '
     <form class="form">
         <ul>
             <li>
@@ -26,7 +26,7 @@ class LoginView extends Backbone.View
         "click .close": "close"
     
     render: ->
-        @el.innerHTML = template
+        @el.innerHTML = login_template
         @delegateEvents()
 
         $('#dialog .content').html(@el)
@@ -64,6 +64,8 @@ class LoginView extends Backbone.View
 
                 @delegateEvents()
 
+                menu.render()
+
         false #stop propagation
     
 
@@ -71,7 +73,75 @@ class LoginView extends Backbone.View
         $('#dialog').hide()
 
 
-$('#main_menu .scrobbling').live 'click', ->
-    $('#main_menu').hide()
 
-    new LoginView().render()
+menu_template = Handlebars.compile '            
+<span>Last.fm</span>            
+<ul class="menu_container">
+    {{#if username}}
+        {{#if scrobbling}}
+            <li class="toggle enabled">Scrobbling enabled</li>
+        {{else}}
+            <li class="toggle disabled">Scrobbling disabled</li>
+        {{/if}}
+        <li class="header">Logged as {{username}}</li>
+        <li><a href="http://last.fm/user/{{username}}" target="_blank">Profile page</a></li>        
+        <li class="header">Subscribers radio</li>
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/personal">Library Radio</li>
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/mix">Mix Radio</li>
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/recommended">Recommendation Radio</li>
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/neighbours">Neighbours Radio</li>
+        <li class="logout">Logout</li>
+    {{else}}
+        <li class="scrobbling not_logged">Want scrobbling?</li>
+    {{/if}}
+</ul> 
+'
+
+
+class Menu extends Backbone.View
+
+    tagName: 'li'
+
+    className: 'lastfm'
+
+    events: 
+        "click .not_logged": "login"
+        "click .logout": "logout"
+        "click .toggle": "toggle"
+
+
+    initialize: ->
+        @container = $('#main_menu')
+        @container.append @el
+
+        @render()
+
+
+    render: ->
+        view = 
+            username: store.get('lastfm:user')
+            scrobbling: store.get('lastfm:scrobbling')
+                    
+        @el.innerHTML = menu_template view
+
+        @delegateEvents()
+
+
+    login: ->
+        @container.hide()
+        new LoginView().render()
+
+    
+    logout: ->
+        store.remove 'lastfm:user'
+        store.remove 'lastfm:key'
+
+        @render()
+
+
+    toggle: ->
+        store.set 'lastfm:scrobbling', !store.get('lastfm:scrobbling')
+        @render()
+
+
+menu = new Menu()

@@ -27,7 +27,7 @@
       if (!browser.isFrame && !browser.isSafari) {
         this.player_frame.src = this.player_url + "sm2_iframe";
       } else {
-        this.player_frame.src = "" + this.path + "/lib/iframe.htm?1";
+        this.player_frame.src = "" + this.path + "/lib/iframe.htm?2";
       }
       document.body.appendChild(this.player_frame);
       this.player_ready = false;
@@ -86,6 +86,13 @@
       return this.postMessageToPlayer({
         'method': 'setVolume',
         'volume': value
+      });
+    };
+    Player.prototype.setPosition = function(value) {
+      console.warn("Settting POSSSITION", value);
+      return this.postMessageToPlayer({
+        'method': 'setPosition',
+        'position': value
       });
     };
     return Player;

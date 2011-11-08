@@ -71,7 +71,7 @@
       states = _.map(state_spy.calls, function(call) {
         return call.args[0].name;
       });
-      return expect(states).toEqual(['loading', 'playing', 'paused', 'stopped']);
+      return expect(states).toEqual(['loading', 'playing', 'paused']);
     });
     it("should change state to paused", function() {
       manager.playlist.reset(fixtures.playlist);
@@ -123,7 +123,7 @@
       expect(manager.get('current_track')).toBe(manager.playlist.models[2].id);
       return expect(manager.state.get('name')).toBe("playing");
     });
-    return it("should stop if song ended", function() {
+    it("should stop if song ended", function() {
       var play_track_spy;
       play_track_spy = spyOn(manager, "playTrack");
       manager.playlist.reset(fixtures.playlist);
@@ -141,6 +141,17 @@
       });
       expect(play_track_spy).toHaveBeenCalled();
       return expect(manager.state.get('name')).toBe("stopped");
+    });
+    return it("should change track position", function() {
+      var set_position_spy;
+      set_position_spy = spyOn(manager.player, "setPosition");
+      manager.playlist.reset(fixtures.playlist);
+      manager.setPosition(30);
+      manager.player.state.set({
+        'played': 30
+      });
+      expect(manager.state.get('played')).toBe(30);
+      return expect(set_position_spy).toHaveBeenCalled();
     });
   });
 }).call(this);

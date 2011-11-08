@@ -72,10 +72,14 @@
     MusicManager.prototype.stop = function() {
       this.unset('current_track');
       this.state.set({
-        'name': 'stopped',
+        'name': 'stopped'
+      }, {
         silent: true
       });
       return this.player.stop();
+    };
+    MusicManager.prototype.setPosition = function(value) {
+      return this.player.setPosition(value);
     };
     MusicManager.prototype.onPlaylistReset = function() {
       return this.setEmptyState();
@@ -107,8 +111,7 @@
       track = this.currentTrack();
       if (this.state.get('name') === "stopped") {
         return this.playTrack(this.nextTrack());
-      }
-      if ((track != null) && Math.round(this.state.get('played')) >= Math.round(track.get('duration'))) {
+      } else if ((track != null ? track.get('duration') : void 0) && (this.state.get('played') - track.get('duration')) >= 0) {
         return this.updateState({
           name: "stopped"
         });
