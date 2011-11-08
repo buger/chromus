@@ -72,12 +72,15 @@
 }
 #header .timeline .time {
   position: absolute;
-  top: -2px;
+  top: -1px;
   right: -33px;
   color: white;
-  font-size: 85%;
+  font-size: 11px;
   cursor: default;
   text-shadow: 0 -1px 0 black;
+}
+#header .volume {
+  position: relative;
 }
 #header .volume .button {
   background-image: url("../../images/popup/volume.png");
@@ -94,12 +97,12 @@
   cursor: pointer;
   z-index: 1;
   overflow: hidden;
-  -webkit-border-bottom-right-radius: 5px;
-  -webkit-border-bottom-left-radius: 5px;
-  -moz-border-radius-bottomright: 5px;
-  -moz-border-radius-bottomleft: 5px;
-  border-bottom-right-radius: 5px;
-  border-bottom-left-radius: 5px;
+  -webkit-border-bottom-right-radius: 10px;
+  -webkit-border-bottom-left-radius: 10px;
+  -moz-border-radius-bottomright: 10px;
+  -moz-border-radius-bottomleft: 10px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
 }
 #header .volume .bar_bg {
   background: #333;
@@ -124,6 +127,9 @@
   background: url("../../images/popup/header_bg.png");
   z-index: 2;
   padding: 5px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 #header .search_bar .text {
   width: 100%;
@@ -134,18 +140,23 @@
 }
 #header .search_bar .result {
   position: absolute;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   top: 36px;
-  left: -1px;
-  width: 448px;
+  left: 0px;
+  width: 468px;
   height: auto;
   background: white;
   border: 1px solid #ccc;
   z-index: 3;
+}
+#header .search_bar .result > div {
   padding: 10px;
 }
 #header .search_bar .result h3 {
   font-family: tahoma;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
   clear: both;
   color: #333;
@@ -153,6 +164,9 @@
 #header .search_bar .result ul {
   margin-top: 5px;
   margin-bottom: 10px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
   zoom: 1;
 }
 #header .search_bar .result ul:before, #header .search_bar .result ul:after {
@@ -165,6 +179,8 @@
   clear: both;
 }
 #header .search_bar .result ul li {
+  display: inline-block;
+  width: 49%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -179,9 +195,11 @@
   -webkit-box-align: center;
   -moz-box-align: center;
   box-align: center;
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.4em;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   height: 34px;
   padding: 5px 10px;
   cursor: pointer;

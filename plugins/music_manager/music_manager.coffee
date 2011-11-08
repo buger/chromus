@@ -21,6 +21,7 @@ class MusicManager extends Backbone.Model
         @playlist.reset()
 
         @setPlayer()
+        @setVolume()
 
     
     setPlayer: (player = 'iframe_player') ->
@@ -139,17 +140,12 @@ class MusicManager extends Backbone.Model
                                 
 
     setVolume: (volume) ->
-        if volume?
-            @volume = volume        
+        @volume = volume if volume?
 
-        @player.setVolume @getVolume()
+        @player.setVolume @volume
 
 
-    getVolume: ->
-        if @volume is undefined
-            @volume = 100        
-
-        @volume
+    getVolume: -> @volume ? 100
 
 
     getState: ->

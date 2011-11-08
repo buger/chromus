@@ -42,7 +42,8 @@
       this.state = new Backbone.Model();
       this.playlist.bind('reset', this.onPlaylistReset);
       this.playlist.reset();
-      return this.setPlayer();
+      this.setPlayer();
+      return this.setVolume();
     };
     MusicManager.prototype.setPlayer = function(player) {
       if (player == null) {
@@ -188,13 +189,11 @@
       if (volume != null) {
         this.volume = volume;
       }
-      return this.player.setVolume(this.getVolume());
+      return this.player.setVolume(this.volume);
     };
     MusicManager.prototype.getVolume = function() {
-      if (this.volume === void 0) {
-        this.volume = 100;
-      }
-      return this.volume;
+      var _ref;
+      return (_ref = this.volume) != null ? _ref : 100;
     };
     MusicManager.prototype.getState = function() {
       return this.state.toJSON();

@@ -57,12 +57,13 @@
       this.state.unset('name', {
         silent: true
       });
-      return this.postMessageToPlayer({
+      this.postMessageToPlayer({
         'method': 'play',
         'url': track.file_url,
         'track': track.id,
         'use_flash': track.use_flash
       });
+      return this.setVolume();
     };
     Player.prototype.preload = function(track) {
       return this.postMessageToPlayer({
@@ -83,13 +84,16 @@
       });
     };
     Player.prototype.setVolume = function(value) {
+      if (value == null) {
+        value = this.value;
+      }
+      this.value = value != null ? value : 100;
       return this.postMessageToPlayer({
         'method': 'setVolume',
-        'volume': value
+        'volume': this.value
       });
     };
     Player.prototype.setPosition = function(value) {
-      console.warn("Settting POSSSITION", value);
       return this.postMessageToPlayer({
         'method': 'setPosition',
         'position': value

@@ -76,7 +76,8 @@
           method: "loadPlaylist",
           playlist: music_manager.playlist.toJSON(),
           current_track: music_manager.get('current_track'),
-          state: music_manager.getState()
+          state: music_manager.getState(),
+          volume: music_manager.getVolume()
         });
       case "setVolume":
         return music_manager.setVolume(msg.volume);

@@ -51,13 +51,15 @@ class Player extends Backbone.Model
 
     
     play: (track) ->
-        @state.unset 'name', silent:true
+        @state.unset 'name', silent:true        
 
         @postMessageToPlayer
             'method': 'play',
             'url': track.file_url,
             'track': track.id,
             'use_flash': track.use_flash
+
+        @setVolume()
 
 
     preload: (track) ->
@@ -76,15 +78,15 @@ class Player extends Backbone.Model
         @postMessageToPlayer 'method': 'stop'
         
 
-    setVolume: (value) ->
+    setVolume: (value = @value) ->
+        @value = value ? 100
+
         @postMessageToPlayer
             'method': 'setVolume'
-            'volume': value
+            'volume': @value
 
 
     setPosition: (value) ->
-        console.warn "Settting POSSSITION", value
-
         @postMessageToPlayer
             'method': 'setPosition'
             'position': value

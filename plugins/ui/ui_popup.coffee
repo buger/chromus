@@ -47,7 +47,14 @@ class Player extends Backbone.Model
         browser.postMessage { method:'nextTrack' }
 
     setPosition: (position) ->
+        @state.set 'played': position
+
         browser.postMessage { method:'setPosition', position:position }
+
+    setVolume: (volume) ->
+        @set 'volume': volume
+
+        browser.postMessage { method:'setVolume', volume:volume }
 
     listener: (msg) ->
         return if msg.method.match("^sm2")
@@ -59,8 +66,8 @@ class Player extends Backbone.Model
                 @playlist.get(msg.track.id).set(msg.track)
                 @set 'current_track': msg.track.id
         
-        
-        @set 'settings': msg.settings if msg.settings?        
+        @set 'settings': msg.settings if msg.settings?
+        @set 'volume': msg.volume if msg.volume?
         @state.set msg.state if msg.state?            
         
         @playlist.reset msg.playlist if msg.playlist
@@ -81,11 +88,14 @@ class Controls extends Backbone.View
         "click .search": "toggleSearch"
         "keyup .search_bar .text": "search"
         "click .search_bar .result a": "playSearchedTrack"
+        "click .volume .button": "toggleVolume"
+        "click .volume .bar_bg": "setVolume"
 
     initialize: ->
-        _.bindAll @, "updateState", "togglePlaying", "search"
+        _.bindAll @, "updateState", "togglePlaying", "search", "updateVolume"
 
         @model.state.bind 'change', @updateState
+        @model.bind 'change:volume', @updateVolume
 
         opts = 
             lines: 8
@@ -96,13 +106,14 @@ class Controls extends Backbone.View
 
         @spinner = new Spinner(opts)
 
+        @updateState(@model.state)
+
 
     updateState: (state) ->
         track = @model.currentTrack()
         state = state.toJSON()
 
-        toggle = @$('.toggle')
-            .removeClass('play pause')
+        toggle = @$('.toggle').removeClass('play pause')
 
         @spinner.stop()
             
@@ -110,6 +121,7 @@ class Controls extends Backbone.View
             when "playing","stopped" then toggle.addClass('play')
             when "paused" then toggle.addClass('pause')
             when "loading" then @spinner.spin(toggle.find('.button')[0])
+            else toggle.addClass('play')
 
         
         if track?.get('duration')
@@ -118,6 +130,8 @@ class Controls extends Backbone.View
 
             state.buffered ?= 0
             @$('.progress').width(278.0*state.buffered/track.get('duration'))
+        else
+            @$('.time').html prettyTime(0)
     
 
     setPosition: (evt) ->
@@ -167,15 +181,15 @@ class Controls extends Backbone.View
             render()
 
             chromus.plugins.lastfm.artist.search text, (artists = []) =>
-                view.artists = _.first(artists, 3)
+                view.artists = _.first(artists, 4)
                 render()
             
             chromus.plugins.lastfm.track.search text, (tracks = []) =>
-                view.tracks = _.first(tracks, 3)
+                view.tracks = _.first(tracks, 4)
                 render()                            
 
             chromus.plugins.lastfm.album.search text, (albums = []) =>
-                view.albums = _.first(albums, 3)
+                view.albums = _.first(albums, 4)
                 render()
     , 500
 
@@ -189,6 +203,16 @@ class Controls extends Backbone.View
             playlist: [ track_info ]
 
         @toggleSearch()
+
+    
+    toggleVolume: ->
+        @$('.volume_bar').toggle()
+
+    setVolume: (evt) ->
+        @model.setVolume(100 - evt.layerY)
+
+    updateVolume: ->
+        $('.volume_bar .level').css height: (100-@model.get('volume'))+"%"
                               
 
 class TrackInfo extends Backbone.View

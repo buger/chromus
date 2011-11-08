@@ -62,6 +62,7 @@
         </script>
 
         <script id="search_result_tmpl" type="text/template">
+            <div>
             {{#show_artists}}
             <h3>Artists</h3>
             <ul>
@@ -86,7 +87,7 @@
                     <li>
                         <a class="ex_container" data-artist="{{artist}}" data-song="{{name}}">
                             <span class="image" style='background-image: url({{lfm_img "smallsquare" this}})'></span>
-                            <span>{{artist}} &mdash; {{name}}</span>
+                            <span>{{artist}}<br/><b>{{name}}</b></span>
                         </a>
                     </li>
                 {{/tracks}}
@@ -103,7 +104,7 @@
                     <li>
                         <a class="ex_container" data-artist="{{artist}}" data-album="{{name}}">
                             <span class="image" style='background-image: url({{lfm_img "smallsquare" this}})'></span>
-                            <span>{{artist}} &mdash; {{name}}</span>
+                            <span>{{artist}}<br/><b>{{name}}</b></span>
                         </a>
                     </li>
                 {{/albums}}
@@ -112,6 +113,7 @@
                 {{/albums}}
             </ul>
             {{/show_albums}}
+            </div>
         </script>
 
     </head>
@@ -134,7 +136,7 @@
                         <div class="outer br_8">
                             <div class="inner"></div>
                             <div class="progress"></div>
-                            <div class="time"></div>
+                            <div class="time">0:00</div>
                         </div>
                     </div>
                     <div class="control volume">
@@ -151,7 +153,7 @@
                         <a class="button"></a>
                     </div>
                     <div class="search_bar" style="display: none">
-                        <input type="search" class="text br_8" />
+                        <input type="text" class="text br_8" />
                         <div class="result"></div>
                     </div>                    
                 </div>

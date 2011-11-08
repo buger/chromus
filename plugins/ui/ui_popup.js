@@ -77,9 +77,21 @@
       });
     };
     Player.prototype.setPosition = function(position) {
+      this.state.set({
+        'played': position
+      });
       return browser.postMessage({
         method: 'setPosition',
         position: position
+      });
+    };
+    Player.prototype.setVolume = function(volume) {
+      this.set({
+        'volume': volume
+      });
+      return browser.postMessage({
+        method: 'setVolume',
+        volume: volume
       });
     };
     Player.prototype.listener = function(msg) {
@@ -99,6 +111,9 @@
       }
       this.set({
         'settings': msg.settings != null ? msg.settings : void 0
+      });
+      this.set({
+        'volume': msg.volume != null ? msg.volume : void 0
       });
       if (msg.state != null) {
         this.state.set(msg.state);
@@ -123,12 +138,15 @@
       "click .next": "nextTrack",
       "click .search": "toggleSearch",
       "keyup .search_bar .text": "search",
-      "click .search_bar .result a": "playSearchedTrack"
+      "click .search_bar .result a": "playSearchedTrack",
+      "click .volume .button": "toggleVolume",
+      "click .volume .bar_bg": "setVolume"
     };
     Controls.prototype.initialize = function() {
       var opts;
-      _.bindAll(this, "updateState", "togglePlaying", "search");
+      _.bindAll(this, "updateState", "togglePlaying", "search", "updateVolume");
       this.model.state.bind('change', this.updateState);
+      this.model.bind('change:volume', this.updateVolume);
       opts = {
         lines: 8,
         length: 2,
@@ -136,7 +154,8 @@
         radius: 3,
         color: "#fff"
       };
-      return this.spinner = new Spinner(opts);
+      this.spinner = new Spinner(opts);
+      return this.updateState(this.model.state);
     };
     Controls.prototype.updateState = function(state) {
       var toggle, track, _ref;
@@ -154,6 +173,9 @@
           break;
         case "loading":
           this.spinner.spin(toggle.find('.button')[0]);
+          break;
+        default:
+          toggle.addClass('play');
       }
       if (track != null ? track.get('duration') : void 0) {
         this.$('.inner').width(276.0 * state.played / track.get('duration'));
@@ -162,6 +184,8 @@
           state.buffered = 0;
         }
         return this.$('.progress').width(278.0 * state.buffered / track.get('duration'));
+      } else {
+        return this.$('.time').html(prettyTime(0));
       }
     };
     Controls.prototype.setPosition = function(evt) {
@@ -224,21 +248,21 @@
           if (artists == null) {
             artists = [];
           }
-          view.artists = _.first(artists, 3);
+          view.artists = _.first(artists, 4);
           return render();
         }, this));
         chromus.plugins.lastfm.track.search(text, __bind(function(tracks) {
           if (tracks == null) {
             tracks = [];
           }
-          view.tracks = _.first(tracks, 3);
+          view.tracks = _.first(tracks, 4);
           return render();
         }, this));
         return chromus.plugins.lastfm.album.search(text, __bind(function(albums) {
           if (albums == null) {
             albums = [];
           }
-          view.albums = _.first(albums, 3);
+          view.albums = _.first(albums, 4);
           return render();
         }, this));
       }
@@ -252,6 +276,17 @@
         playlist: [track_info]
       });
       return this.toggleSearch();
+    };
+    Controls.prototype.toggleVolume = function() {
+      return this.$('.volume_bar').toggle();
+    };
+    Controls.prototype.setVolume = function(evt) {
+      return this.model.setVolume(100 - evt.layerY);
+    };
+    Controls.prototype.updateVolume = function() {
+      return $('.volume_bar .level').css({
+        height: (100 - this.model.get('volume')) + "%"
+      });
     };
     return Controls;
   })();
