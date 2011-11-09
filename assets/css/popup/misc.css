@@ -89,6 +89,7 @@ a.button {
 #dialog {
   position: fixed;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
   height: 100%;
   width: 100%;
   display: -webkit-box;

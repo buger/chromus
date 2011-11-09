@@ -1,6 +1,16 @@
 (function() {
-  var LastFM;
+  var LastFM, hashToQueryString;
   var __hasProp = Object.prototype.hasOwnProperty;
+  hashToQueryString = function(hash) {
+    var key, params, value;
+    params = [];
+    for (key in hash) {
+      if (!__hasProp.call(hash, key)) continue;
+      value = hash[key];
+      params.push("" + key + "=" + value);
+    }
+    return params.join('&');
+  };
   LastFM = {
     settings: {
       baseURL: "http://ws.audioscrobbler.com/2.0/",
@@ -30,6 +40,7 @@
       data.method = method;
       if (data.sig_call) {
         delete data.sig_call;
+        data.sk = store.get('lastfm:key');
         data.api_sig = this.getSignature(data);
       }
       return $.ajax({
@@ -172,15 +183,62 @@
         params.push("artist=" + encodeURIComponent(options.artist));
       }
       return "" + LastFM.settings.baseURL + "?api_key=" + LastFM.settings.api_key + "&method=" + method_prefix + ".getImageRedirect&size=" + options.size + "&" + (params.join('&'));
+    },
+    radio: {
+      getPlaylist: function(callback) {
+        return LastFM.callMethod("radio.getPlaylist", {
+          sig_call: true
+        }, function(resp) {
+          var tracks;
+          tracks = resp.playlist.trackList.track;
+          console.warn(resp);
+          tracks = _.map(tracks, function(track) {
+            return {
+              artist: track.creator,
+              song: track.title,
+              file_url: track.location,
+              image: track.image,
+              duration: track.duration / 1000,
+              radio: true,
+              source_title: resp.playlist.title,
+              source_icon: "http://cdn.last.fm/flatness/favicon.2.ico"
+            };
+          });
+          return callback(tracks);
+        });
+      },
+      tune: function(station, callback) {
+        var data, signature;
+        data = {
+          station: station
+        };
+        data.method = 'radio.tune';
+        data.sk = store.get('lastfm:key');
+        data.api_key = LastFM.settings.api_key;
+        signature = LastFM.getSignature(data);
+        data.api_sig = signature;
+        data.format = "json";
+        data._url = "" + LastFM.settings.baseURL;
+        data._method = "POST";
+        return $.ajax({
+          url: "http://chromusapp.appspot.com/proxy?_callback=?",
+          data: data,
+          dataType: "jsonp",
+          cache: true,
+          success: function(resp) {
+            resp = JSON.parse(resp.response);
+            if (!resp.error) {
+              return callback();
+            } else {
+              return browser.postMessage({
+                method: "lastfm:error",
+                error: resp.error.code
+              });
+            }
+          }
+        });
+      }
     }
   };
   this.chromus.registerPlugin("lastfm", LastFM);
-  if (browser.page_type === "background") {
-    this.chromus.registerMediaType("artist", function(track, callback) {
-      return LastFM.artist.getTopTracks(track.artist, callback);
-    });
-    this.chromus.registerMediaType("album", function(track, callback) {
-      return LastFM.album.getInfo(track.artist, track.album, callback);
-    });
-  }
 }).call(this);

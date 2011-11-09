@@ -73,6 +73,36 @@ class LoginView extends Backbone.View
         $('#dialog').hide()
 
 
+error_template = Handlebars.compile '
+    <ul>
+        <li>
+            <span>This channel available only for paid Last.fm subscribers</span>
+        </li>
+        <li class="buttons">
+            <a class="close">Close</a>
+        </li>
+    </ul>
+'
+
+
+class ErrorWindow extends Backbone.View
+
+    events: 
+        "click .close": "close"
+    
+    render: ->
+        @el.innerHTML = error_template()
+        @delegateEvents()
+
+        $('#dialog .content').html(@el)
+        $('#dialog').show()
+
+    close: ->
+        $('#dialog').hide()
+
+error_window = new ErrorWindow()
+
+
 
 menu_template = Handlebars.compile '            
 <span>Last.fm</span>            
@@ -108,6 +138,7 @@ class Menu extends Backbone.View
         "click .not_logged": "login"
         "click .logout": "logout"
         "click .toggle": "toggle"
+        "click .lastfm_radio": "playRadio"
 
 
     initialize: ->
@@ -144,4 +175,23 @@ class Menu extends Backbone.View
         @render()
 
 
+    playRadio: (evt) ->
+        track = 
+            type: "lastfm:radio"
+            artist: "LastFM radio"
+            song: "Loading..."
+            station: $(evt.target).attr('data-radio')
+
+        browser.postMessage 
+            method: "play"
+            track: track
+            playlist: [track]
+            
 menu = new Menu()
+
+browser.addMessageListener (msg) ->
+    switch msg.method
+        when "lastfm:error"
+            error_window.render()
+
+$('#main_menu').show()

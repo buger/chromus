@@ -299,7 +299,8 @@
     TrackInfo.prototype.template = Handlebars.compile($('#track_info_tmpl').html());
     TrackInfo.prototype.initialize = function() {
       _.bindAll(this, "updateInfo");
-      return this.model.bind('change:current_track', this.updateInfo);
+      this.model.bind('change:current_track', this.updateInfo);
+      return this.model.playlist.bind('all', this.updateInfo);
     };
     TrackInfo.prototype.updateInfo = function() {
       var last_fm, track, _ref;
@@ -348,8 +349,8 @@
     };
     PlaylistView.prototype.initialize = function() {
       _.bindAll(this, 'updatePlaylist');
-      this.model.playlist.bind('add', this.updatePlaylist);
-      return this.model.playlist.bind('reset', this.updatePlaylist);
+      this.model.playlist.bind('all', this.updatePlaylist);
+      return this.model.bind("change:current_track", this.updatePlaylist);
     };
     PlaylistView.prototype.togglePlaying = function(evt) {
       var id;
@@ -374,7 +375,6 @@
     };
     PlaylistView.prototype.updatePlaylist = function() {
       var helpers, merge_rows, model, pane, playlist, track, view, _i, _len;
-      console.log('updating playlist');
       merge_rows = 0;
       playlist = this.model.playlist.toJSON();
       for (_i = 0, _len = playlist.length; _i < _len; _i++) {

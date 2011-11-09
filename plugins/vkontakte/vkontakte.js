@@ -49,7 +49,9 @@
                   artist: i.audio.artist,
                   song: i.audio.title,
                   duration: parseInt(i.audio.duration),
-                  file_url: i.audio.url
+                  file_url: i.audio.url,
+                  source_title: "Vkontakte",
+                  source_icon: "http://vkontakte.ru/favicon.ico"
                 };
               });
               return callback(records);

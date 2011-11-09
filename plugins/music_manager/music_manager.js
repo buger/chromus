@@ -137,10 +137,10 @@
           if (!_.isEmpty(results)) {
             match = results[0];
             track.set({
-              'file_url': match.file_url
-            });
-            track.set({
-              'duration': match.duration
+              'file_url': match.file_url,
+              'duration': match.duration,
+              'source_title': match.source_title,
+              'source_icon': match.source_icon
             });
             return callback(track);
           }

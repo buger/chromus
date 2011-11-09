@@ -1,3 +1,12 @@
+hashToQueryString = (hash) ->
+        params = []
+
+        for own key, value of hash            
+            params.push "#{key}=#{value}"
+
+        params.join('&')
+
+
 LastFM = 
     settings: 
         baseURL: "http://ws.audioscrobbler.com/2.0/"
@@ -24,6 +33,8 @@ LastFM =
 
         if data.sig_call
             delete data.sig_call
+
+            data.sk = store.get('lastfm:key')
         
             data.api_sig = @getSignature(data)  
 
@@ -63,7 +74,7 @@ LastFM =
         form.submit()
 
         # Clean up
-        setTimeout ->
+        setTimeout ->            
             document.body.removeChild(iframe)
             document.body.removeChild(form)
         , 2000
@@ -73,7 +84,7 @@ LastFM =
         scrobble: (data, callback) ->
             data.method = 'track.scrobble'
             data.timestamp = (+ LastFM.convertDateToUTC()) / 1000
-            data.sk = store.get('lastfm:key')            
+            data.sk = store.get('lastfm:key')
             data.api_key = LastFM.settings.api_key
 
             signature = LastFM.getSignature(data)
@@ -152,14 +163,60 @@ LastFM =
             params.push "artist=" + encodeURIComponent(options.artist)
          
                 
-        "#{LastFM.settings.baseURL}?api_key=#{LastFM.settings.api_key}&method=#{method_prefix}.getImageRedirect&size=#{options.size}&#{params.join('&')}"     
+        "#{LastFM.settings.baseURL}?api_key=#{LastFM.settings.api_key}&method=#{method_prefix}.getImageRedirect&size=#{options.size}&#{params.join('&')}"
+
+    radio:
+        getPlaylist: (callback) ->
+            LastFM.callMethod "radio.getPlaylist",
+                sig_call: true
+            , (resp) ->
+                tracks = resp.playlist.trackList.track
+
+                console.warn resp
+
+                tracks = _.map tracks, (track) ->
+                    artist: track.creator
+                    song: track.title
+                    file_url: track.location
+                    image: track.image
+                    duration: track.duration/1000
+                    radio: true
+                    source_title: resp.playlist.title
+                    source_icon: "http://cdn.last.fm/flatness/favicon.2.ico"
+
+
+                callback tracks
+                                
+
+        tune: (station, callback) ->            
+            data = station: station            
+            data.method = 'radio.tune'
+            data.sk = store.get('lastfm:key')            
+            data.api_key = LastFM.settings.api_key
+
+
+            signature = LastFM.getSignature(data)
+            data.api_sig = signature
+            data.format = "json"
+
+            data._url = "#{LastFM.settings.baseURL}"
+            data._method = "POST"
+
+            $.ajax
+                url: "http://chromusapp.appspot.com/proxy?_callback=?"
+                data: data
+                dataType:"jsonp"
+                cache: true
+                success: (resp) ->
+                    resp = JSON.parse(resp.response)
+                    
+                    unless resp.error                    
+                        callback()                            
+                    else
+                        browser.postMessage
+                            method: "lastfm:error"
+                            error: resp.error.code
+                    
 
 
 @chromus.registerPlugin "lastfm", LastFM
-
-if browser.page_type is "background"
-    @chromus.registerMediaType "artist", (track, callback) ->
-        LastFM.artist.getTopTracks track.artist, callback
-
-    @chromus.registerMediaType "album", (track, callback) ->
-        LastFM.album.getInfo track.artist, track.album, callback

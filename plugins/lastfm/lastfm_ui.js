@@ -1,5 +1,5 @@
 (function() {
-  var LoginView, Menu, lastfm, login_template, menu, menu_template;
+  var ErrorWindow, LoginView, Menu, error_template, error_window, lastfm, login_template, menu, menu_template;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -80,6 +80,36 @@
     };
     return LoginView;
   })();
+  error_template = Handlebars.compile('\
+    <ul>\
+        <li>\
+            <span>This channel available only for paid Last.fm subscribers</span>\
+        </li>\
+        <li class="buttons">\
+            <a class="close">Close</a>\
+        </li>\
+    </ul>\
+');
+  ErrorWindow = (function() {
+    __extends(ErrorWindow, Backbone.View);
+    function ErrorWindow() {
+      ErrorWindow.__super__.constructor.apply(this, arguments);
+    }
+    ErrorWindow.prototype.events = {
+      "click .close": "close"
+    };
+    ErrorWindow.prototype.render = function() {
+      this.el.innerHTML = error_template();
+      this.delegateEvents();
+      $('#dialog .content').html(this.el);
+      return $('#dialog').show();
+    };
+    ErrorWindow.prototype.close = function() {
+      return $('#dialog').hide();
+    };
+    return ErrorWindow;
+  })();
+  error_window = new ErrorWindow();
   menu_template = Handlebars.compile('            \
 <span>Last.fm</span>            \
 <ul class="menu_container">\
@@ -112,7 +142,8 @@
     Menu.prototype.events = {
       "click .not_logged": "login",
       "click .logout": "logout",
-      "click .toggle": "toggle"
+      "click .toggle": "toggle",
+      "click .lastfm_radio": "playRadio"
     };
     Menu.prototype.initialize = function() {
       this.container = $('#main_menu');
@@ -141,7 +172,28 @@
       store.set('lastfm:scrobbling', !store.get('lastfm:scrobbling'));
       return this.render();
     };
+    Menu.prototype.playRadio = function(evt) {
+      var track;
+      track = {
+        type: "lastfm:radio",
+        artist: "LastFM radio",
+        song: "Loading...",
+        station: $(evt.target).attr('data-radio')
+      };
+      return browser.postMessage({
+        method: "play",
+        track: track,
+        playlist: [track]
+      });
+    };
     return Menu;
   })();
   menu = new Menu();
+  browser.addMessageListener(function(msg) {
+    switch (msg.method) {
+      case "lastfm:error":
+        return error_window.render();
+    }
+  });
+  $('#main_menu').show();
 }).call(this);

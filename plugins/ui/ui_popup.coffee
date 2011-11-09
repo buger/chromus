@@ -224,6 +224,7 @@ class TrackInfo extends Backbone.View
         _.bindAll @, "updateInfo"
 
         @model.bind 'change:current_track', @updateInfo
+        @model.playlist.bind 'all', @updateInfo
         
                 
     updateInfo: ->
@@ -240,7 +241,7 @@ class TrackInfo extends Backbone.View
         last_fm = "http://last.fm/music"
         track.artist_url = "#{last_fm}/#{track.artist}"
         track.album_url = "#{last_fm}/#{track.artist}/#{track.album}"
-        track.song_url = "#{last_fm}/#{track.artist}/_/#{track.song}"
+        track.song_url = "#{last_fm}/#{track.artist}/_/#{track.song}"        
         
         @el.html(@template(track))
             .show()
@@ -271,8 +272,9 @@ class PlaylistView extends Backbone.View
     initialize: ->
         _.bindAll @, 'updatePlaylist'
 
-        @model.playlist.bind 'add', @updatePlaylist
-        @model.playlist.bind 'reset', @updatePlaylist
+        @model.playlist.bind 'all', @updatePlaylist
+        @model.bind "change:current_track", @updatePlaylist
+                
     
     togglePlaying: (evt) ->
         id = + $.attr evt.currentTarget, 'data-id'
@@ -292,8 +294,6 @@ class PlaylistView extends Backbone.View
 
 
     updatePlaylist: ->
-        console.log('updating playlist')
-
         merge_rows = 0
                 
         playlist = @model.playlist.toJSON()
