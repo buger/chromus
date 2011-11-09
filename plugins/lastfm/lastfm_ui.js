@@ -121,6 +121,7 @@
         {{/if}}\
         <li class="header">Logged as {{username}}</li>\
         <li><a href="http://last.fm/user/{{username}}" target="_blank">Profile page</a></li>        \
+        <li class="loved_radio">Loved Tracks Radio</li>\
         <li class="header">Subscribers radio</li>\
         <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/personal">Library Radio</li>\
         <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/mix">Mix Radio</li>\
@@ -143,7 +144,8 @@
       "click .not_logged": "login",
       "click .logout": "logout",
       "click .toggle": "toggle",
-      "click .lastfm_radio": "playRadio"
+      "click .lastfm_radio": "playRadio",
+      "click .loved_radio": "playLovedRadio"
     };
     Menu.prototype.initialize = function() {
       this.container = $('#main_menu');
@@ -179,6 +181,19 @@
         artist: "LastFM radio",
         song: "Loading...",
         station: $(evt.target).attr('data-radio')
+      };
+      return browser.postMessage({
+        method: "play",
+        track: track,
+        playlist: [track]
+      });
+    };
+    Menu.prototype.playLovedRadio = function(evt) {
+      var track;
+      track = {
+        type: "lastfm:loved",
+        artist: "LastFM Loved radio (free)",
+        song: "Loading..."
       };
       return browser.postMessage({
         method: "play",

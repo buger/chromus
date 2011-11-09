@@ -166,7 +166,7 @@ LastFM =
         "#{LastFM.settings.baseURL}?api_key=#{LastFM.settings.api_key}&method=#{method_prefix}.getImageRedirect&size=#{options.size}&#{params.join('&')}"
 
     radio:
-        getPlaylist: (callback) ->
+        getPlaylist: (callback) ->            
             LastFM.callMethod "radio.getPlaylist",
                 sig_call: true
             , (resp) ->
@@ -185,10 +185,14 @@ LastFM =
                     source_icon: "http://cdn.last.fm/flatness/favicon.2.ico"
 
 
-                callback tracks
+                callback tracks    
                                 
 
-        tune: (station, callback) ->            
+        tune: (station, callback) ->
+            if station.match(/loved$/)
+                LastFM._station = 'loved'
+                return callback()
+                        
             data = station: station            
             data.method = 'radio.tune'
             data.sk = store.get('lastfm:key')            
@@ -215,8 +219,6 @@ LastFM =
                     else
                         browser.postMessage
                             method: "lastfm:error"
-                            error: resp.error.code
-                    
-
+                            error: resp.error.code                    
 
 @chromus.registerPlugin "lastfm", LastFM

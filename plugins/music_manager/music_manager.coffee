@@ -103,8 +103,11 @@ class MusicManager extends Backbone.Model
                     track.set
                         'file_url': match.file_url
                         'duration': match.duration
-                        'source_title': match.source_title
-                        'source_icon': match.source_icon
+
+                    if not track.get('source_title')
+                        track.set
+                            'source_title': match.source_title
+                            'source_icon': match.source_icon
 
                     callback track
 

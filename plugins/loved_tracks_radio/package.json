@@ -1,0 +1,8 @@
+{
+	"name": "Last.fm loved tracks",
+	"description": "Special for Chromus users",
+
+	"files": [
+		"bg!loved_tracks_radio.js"
+	]
+}

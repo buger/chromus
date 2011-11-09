@@ -115,6 +115,7 @@ menu_template = Handlebars.compile '
         {{/if}}
         <li class="header">Logged as {{username}}</li>
         <li><a href="http://last.fm/user/{{username}}" target="_blank">Profile page</a></li>        
+        <li class="loved_radio">Loved Tracks Radio</li>
         <li class="header">Subscribers radio</li>
         <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/personal">Library Radio</li>
         <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/mix">Mix Radio</li>
@@ -139,6 +140,7 @@ class Menu extends Backbone.View
         "click .logout": "logout"
         "click .toggle": "toggle"
         "click .lastfm_radio": "playRadio"
+        "click .loved_radio": "playLovedRadio"
 
 
     initialize: ->
@@ -185,7 +187,20 @@ class Menu extends Backbone.View
         browser.postMessage 
             method: "play"
             track: track
-            playlist: [track]
+            playlist: [track]            
+
+
+    playLovedRadio: (evt) ->
+        track = 
+            type: "lastfm:loved"
+            artist: "LastFM Loved radio (free)"
+            song: "Loading..."
+
+        browser.postMessage 
+            method: "play"
+            track: track
+            playlist: [track]                   
+
             
 menu = new Menu()
 

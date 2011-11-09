@@ -209,6 +209,10 @@
       },
       tune: function(station, callback) {
         var data, signature;
+        if (station.match(/loved$/)) {
+          LastFM._station = 'loved';
+          return callback();
+        }
         data = {
           station: station
         };
