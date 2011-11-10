@@ -12,11 +12,8 @@
     return "<span class='spinner'></span>";
   });
   Handlebars.registerHelper('lfm_img', function(size, context) {
-    var image;
-    return image = chromus.plugins.lastfm.image({
-      artist: context.artist || context.name,
-      size: size
-    });
+    var _ref, _ref2;
+    return (_ref = context.image) != null ? (_ref2 = _ref[1]) != null ? _ref2["#text"] : void 0 : void 0;
   });
   Track = (function() {
     __extends(Track, Backbone.Model);

@@ -2,11 +2,8 @@ Handlebars.registerHelper 'spinner', (context) ->
     "<span class='spinner'></span>"
 
 
-Handlebars.registerHelper 'lfm_img', (size, context) ->    
-    image = chromus.plugins.lastfm.image
-        artist: context.artist || context.name,
-        size: size
-
+Handlebars.registerHelper 'lfm_img', (size, context) ->
+    context.image?[1]?["#text"]
 
 class Track extends Backbone.Model    
 
@@ -171,7 +168,7 @@ class Controls extends Backbone.View
             view =
                 'show_tracks': (fn) -> if not @tracks or @tracks?.length then fn(this)
                 'show_albums': (fn) -> if not @albums or @albums?.length then fn(this)
-                'show_artists': (fn) -> if not @artists or @artists?.length then fn(this)
+                'show_artists': (fn) -> if not @artists or @artists?.length then fn(this)            
 
             render = =>
                 @$('.search_bar .result').html(@search_template(view))
