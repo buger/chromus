@@ -1,5 +1,5 @@
 (function() {
-  var App, Controls, Menu, Player, Playlist, PlaylistView, Track, TrackInfo;
+  var App, Controls, Footer, Player, Playlist, PlaylistView, Track, TrackInfo;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -118,6 +118,9 @@
       if (msg.state != null) {
         this.state.set(msg.state);
       }
+      if (msg.volume != null) {
+        console.warn(msg);
+      }
       if (msg.playlist) {
         return this.playlist.reset(msg.playlist);
       }
@@ -138,15 +141,12 @@
       "click .next": "nextTrack",
       "click .search": "toggleSearch",
       "keyup .search_bar .text": "search",
-      "click .search_bar .result a": "playSearchedTrack",
-      "click .volume .button": "toggleVolume",
-      "click .volume .bar_bg": "setVolume"
+      "click .search_bar .result a": "playSearchedTrack"
     };
     Controls.prototype.initialize = function() {
       var opts;
-      _.bindAll(this, "updateState", "togglePlaying", "search", "updateVolume");
+      _.bindAll(this, "updateState", "togglePlaying", "search");
       this.model.state.bind('change', this.updateState);
-      this.model.bind('change:volume', this.updateVolume);
       opts = {
         lines: 8,
         length: 2,
@@ -277,17 +277,6 @@
       });
       return this.toggleSearch();
     };
-    Controls.prototype.toggleVolume = function() {
-      return this.$('.volume_bar').toggle();
-    };
-    Controls.prototype.setVolume = function(evt) {
-      return this.model.setVolume(100 - evt.layerY);
-    };
-    Controls.prototype.updateVolume = function() {
-      return $('.volume_bar .level').css({
-        height: (100 - this.model.get('volume')) + "%"
-      });
-    };
     return Controls;
   })();
   TrackInfo = (function() {
@@ -320,22 +309,40 @@
     };
     return TrackInfo;
   })();
-  Menu = (function() {
-    __extends(Menu, Backbone.View);
-    function Menu() {
-      Menu.__super__.constructor.apply(this, arguments);
+  Footer = (function() {
+    __extends(Footer, Backbone.View);
+    function Footer() {
+      Footer.__super__.constructor.apply(this, arguments);
     }
-    Menu.prototype.el = $('#wrapper');
-    Menu.prototype.events = {
-      "click #footer .button.menu": "toggleMenu"
+    Footer.prototype.el = $('#footer');
+    Footer.prototype.events = {
+      "click .menu": "toggleMenu",
+      "click .volume": "toggleVolume",
+      "click .volume_bar .bar_bg": "setVolume"
     };
-    Menu.prototype.initialize = function() {
-      return _.bindAll(this, "toggleMenu");
+    Footer.prototype.initialize = function() {
+      _.bindAll(this);
+      this.model.bind('change:volume', this.updateVolume);
+      return this.updateVolume();
     };
-    Menu.prototype.toggleMenu = function() {
-      return this.$('#main_menu').toggle();
+    Footer.prototype.toggleMenu = function() {
+      return $('#main_menu').toggle();
     };
-    return Menu;
+    Footer.prototype.toggleVolume = function() {
+      return this.model.setVolume(0);
+    };
+    Footer.prototype.setVolume = function(evt) {
+      var total_width, volume;
+      total_width = this.$('.volume_bar .bar_bg').width();
+      volume = evt.layerX / total_width * 100;
+      return this.model.setVolume(volume);
+    };
+    Footer.prototype.updateVolume = function() {
+      return this.$('.volume_bar .bar').css({
+        width: this.model.get('volume') + "%"
+      });
+    };
+    return Footer;
   })();
   PlaylistView = (function() {
     __extends(PlaylistView, Backbone.View);
@@ -452,7 +459,7 @@
       this.track_info = new TrackInfo({
         model: this.model
       });
-      this.menu = new Menu({
+      this.footer = new Footer({
         model: this.model
       });
       return $('#dialog').bind('click', function(evt) {

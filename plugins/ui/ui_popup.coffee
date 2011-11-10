@@ -68,7 +68,9 @@ class Player extends Backbone.Model
         
         @set 'settings': msg.settings if msg.settings?
         @set 'volume': msg.volume if msg.volume?
-        @state.set msg.state if msg.state?            
+        @state.set msg.state if msg.state?                    
+
+        console.warn msg if msg.volume?
         
         @playlist.reset msg.playlist if msg.playlist
                 
@@ -88,14 +90,12 @@ class Controls extends Backbone.View
         "click .search": "toggleSearch"
         "keyup .search_bar .text": "search"
         "click .search_bar .result a": "playSearchedTrack"
-        "click .volume .button": "toggleVolume"
-        "click .volume .bar_bg": "setVolume"
+                
 
     initialize: ->
-        _.bindAll @, "updateState", "togglePlaying", "search", "updateVolume"
+        _.bindAll @, "updateState", "togglePlaying", "search"
 
         @model.state.bind 'change', @updateState
-        @model.bind 'change:volume', @updateVolume
 
         opts = 
             lines: 8
@@ -202,17 +202,7 @@ class Controls extends Backbone.View
             track:    track_info
             playlist: [ track_info ]
 
-        @toggleSearch()
-
-    
-    toggleVolume: ->
-        @$('.volume_bar').toggle()
-
-    setVolume: (evt) ->
-        @model.setVolume(100 - evt.layerY)
-
-    updateVolume: ->
-        $('.volume_bar .level').css height: (100-@model.get('volume'))+"%"
+        @toggleSearch()    
                               
 
 class TrackInfo extends Backbone.View
@@ -247,17 +237,36 @@ class TrackInfo extends Backbone.View
             .show()
 
 
-class Menu extends Backbone.View
-    el: $('#wrapper')
+class Footer extends Backbone.View
+    el: $('#footer')
 
     events:
-        "click #footer .button.menu": "toggleMenu"
+        "click .menu": "toggleMenu"
+        "click .volume": "toggleVolume"
+        "click .volume_bar .bar_bg": "setVolume"
 
     initialize: ->
-        _.bindAll @, "toggleMenu"
+        _.bindAll @
+
+        @model.bind 'change:volume', @updateVolume
+        @updateVolume()
 
     toggleMenu: ->
-        @$('#main_menu').toggle()        
+        $('#main_menu').toggle()
+
+    
+    toggleVolume: ->
+        @model.setVolume(0)        
+
+    setVolume: (evt) ->
+        total_width = @$('.volume_bar .bar_bg').width()
+        volume = evt.layerX/total_width * 100
+        
+        @model.setVolume(volume)
+                
+
+    updateVolume: ->
+        @$('.volume_bar .bar').css width: @model.get('volume')+"%"
                                 
 
 class PlaylistView extends Backbone.View
@@ -349,7 +358,7 @@ class App extends Backbone.View
         @playlist = new PlaylistView { model:@model }
         @controls = new Controls { model:@model }
         @track_info = new TrackInfo { model:@model }
-        @menu = new Menu { model:@model }
+        @footer = new Footer { model:@model }
 
         $('#dialog').bind 'click', (evt) ->
             if evt.target.id is "dialog"

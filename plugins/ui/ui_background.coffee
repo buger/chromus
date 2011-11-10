@@ -82,6 +82,8 @@ browser.addMessageListener (msg, sender, sendResponse) ->
 
 
         when "getPlaylist"
+            console.warn "getting playlist"
+
             browser.postMessage
                 method: "loadPlaylist"
                 playlist: music_manager.playlist.toJSON()

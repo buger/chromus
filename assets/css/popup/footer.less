@@ -34,7 +34,45 @@
     .right {
         .box-flex(0);
 
+        .box();
+        .box-align(center);
+
+        .volume {
+            display: block;
+            background-image: url("@{asset_path}/volume.png");
+            width: 10px;
+            height: 12px;          
+            margin-top: -3px;
+        }
+    
+        .volume_bar {            
+            width: 89px;
+            cursor: pointer;            
+            overflow: hidden;
+            margin-right: 14px;
+            margin-left: 5px;
+            margin-top: -1px;
+
+            .bar_bg {
+                background: #0f0f0f;
+                padding: 0;
+                vertical-align: bottom;
+                overflow: hidden;
+
+                .border-radius(5px);
+
+                border: 1px solid #0f0f0f;
+            }
+
+            .bar {
+                background: #dfdfdf;
+                height: 6px;
+                .border-radius(4px);
+            }
+        }            
+
         .menu {
+            display: block;
             height: 25px;
             width: 38px;
             margin-right: 10px;

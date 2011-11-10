@@ -71,6 +71,7 @@
       case "previousTrack":
         return music_manager.playTrack(music_manager.prevTrack());
       case "getPlaylist":
+        console.warn("getting playlist");
         return browser.postMessage({
           method: "loadPlaylist",
           playlist: music_manager.playlist.toJSON(),
