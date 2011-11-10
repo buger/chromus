@@ -79,6 +79,9 @@
     Chromus.prototype.registerMediaType = function(name, context) {
       return this.media_types[name] = context;
     };
+    Chromus.prototype.addMenu = function(el) {
+      return $('#main_menu').prepend(el);
+    };
     return Chromus;
   })();
   this.chromus = new Chromus();

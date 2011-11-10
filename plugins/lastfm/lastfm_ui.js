@@ -149,7 +149,6 @@
     };
     Menu.prototype.initialize = function() {
       this.container = $('#main_menu');
-      this.container.append(this.el);
       return this.render();
     };
     Menu.prototype.render = function() {
@@ -204,11 +203,11 @@
     return Menu;
   })();
   menu = new Menu();
+  chromus.addMenu(menu.el);
   browser.addMessageListener(function(msg) {
     switch (msg.method) {
       case "lastfm:error":
         return error_window.render();
     }
   });
-  $('#main_menu').show();
 }).call(this);

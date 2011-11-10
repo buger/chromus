@@ -144,9 +144,7 @@ class Menu extends Backbone.View
 
 
     initialize: ->
-        @container = $('#main_menu')
-        @container.append @el
-
+        @container = $('#main_menu')        
         @render()
 
 
@@ -203,10 +201,11 @@ class Menu extends Backbone.View
 
             
 menu = new Menu()
+chromus.addMenu(menu.el)
 
 browser.addMessageListener (msg) ->
     switch msg.method
         when "lastfm:error"
             error_window.render()
 
-$('#main_menu').show()
+#$('#main_menu').show()

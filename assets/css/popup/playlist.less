@@ -1,22 +1,29 @@
 @asset_path: "../../images/popup";
+@import "mixins.less";
 
 /*********** Playlist *************/
 #playlist {
-    padding-top: 5px;
-    margin-bottom: 25px;
     overflow: auto;    
 
-
     .artist_playlist {
-        margin-bottom: 5px;
-
         .artist .image { display: none; }
 
-        &.large {
-            .artist { visibility: hidden; }            
+        &.large {                        
+
+            .artist { 
+                visibility: hidden; 
+                display: block;
+                height: auto;
+
+                span {
+                    display: inline-block;
+                }
+            }  
 
             .track_container:first-child .artist { 
                 visibility: visible;
+
+                padding: 16px;
 
                 .image {
                     display: block;
@@ -24,42 +31,63 @@
             }
         }
 
+        .track_container {
+            .box();
+            .box-pack(end);
+            .box-align(start);
+            height: 34px;
+            cursor: pointer;
+
+            &:nth-child(even) {
+                .song {
+                    background-color: #f2f2f2;
+                }
+            }
+        }
+
         .artist {
-            position: absolute;
-            left: 0px;
+            width: 40%;
+            height: 34px;
+
+            left: 0px;            
 
             text-align: right;
-            width: 187px;
-            padding: 5px 0px;            
+
+            padding: 0px 8px;
+            padding-right: 16px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            .box();
+            .box-align(center);
+            .box-sizing(border-box);
+            .box-pack(end);
 
             .image img {
-                width: 38px;
-                height: 38px;
+                width: 50px;
+                height: 50px;
             }
 
             span {
-                display: inline-block;
+                display: block;
                 font-size: 13px;
-                height: 140px;
+                line-height: 150%;
 
                 font-family: Verdana, arial;
-                
-                width: 157px;
-
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
             }
         }
 
         .song {
-            width: 300px;
-            margin-left: 192px;
+            width: 60%; 
+            .box-sizing(border-box);                      
+
+            border-left: 1px solid #e3e3e3;
+            border-bottom: 1px solid #e3e3e3;                        
 
             .title {
                 display: inline-block;
 
-                width: 210px;
                 text-align: left;
                 font-weight: bold;
                 font-family: Arial;
@@ -67,13 +95,13 @@
                     
                 text-shadow: 0 1px 0 #fff;
                 
-                padding: 6px 6px;   
+                padding: 12px;   
 
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
 
-                cursor: pointer;
+                cursor: pointer;          
             }
 
             .controls {
@@ -81,7 +109,7 @@
             }
 
             &:hover, &.playing {
-                background: red;
+                background: #666 !important;
 
                 .title {
                     color: #fff;

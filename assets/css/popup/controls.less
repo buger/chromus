@@ -1,23 +1,23 @@
+@import "mixins.less";
+
 @asset_path: "../../images/popup";
 
 #current_song {
     position: relative;
     
-    height: 67px;
-    background: #ccc;
+    height: 64px;
     background: url("@{asset_path}/cur_song_bg.png") top left;
+    border-bottom: 1px solid #b8b8b8;
 
     .container {
-        position: relative;
-        padding: 10px;
+        position: relative;        
 
-        div {
-            float: left;
-        }
+        .box();
+        .box-align(center);
     }
 
     .love_btn {
-        padding: 15px 10px;
+        padding: 15px 15px;
 
         .button { background-image: url("@{asset_path}/love_btn.png"); }
     }
@@ -27,14 +27,16 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        max-width: 300px;
+        max-width: 350px;
+        line-height: 14px;
         
         a {
             color: #000;
             text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+            font-size: 13px;
             cursor: pointer;
             text-decoration: none;
-            font-family: Verdana, arial;
+            font-family: arial;
 
             &:hover { text-decoration: underline; }
         }
@@ -43,62 +45,26 @@
             display: block;
             font-weight: bold;
             line-height: 153.9%;
-            font-size: 100%;
+            font-size: 15px;
             font-family: arial;
         }
 
-        .artist { font-size: 93%; }
-        .album { font-size: 85%; }
+        .artist { font-size: 13px; }
+        .album { font-size: 12px; }
         .dash { padding: 0px 3px; }
     }
 
     .album_img {
-        position: relative;
-        margin-left: 5px;
-        top: -2px;
+        position: relative;        
         
         img {
-            height: 50px;
-            width: 50px;
+            height: 64px;
+            width: 64px;
+            border-left: 1px solid #949494;
+            border-right: 1px solid #949494;
         }
-        
-        .jewelcase {
-            position: absolute;
-            top: -1px;
-            left: -5px;
-            background: url("@{asset_path}/jewelcase.png") no-repeat;
-            background-size: 96%;
-            width: 60px;
-            height: 54px;
-        }
-    }
+    }      
     
-    .playing {
-        position: absolute;
-        top: 5px;
-        right: 5px;
-        width: 12px;
-        height: 12px;
-        background: url("@{asset_path}/playing.gif") top left no-repeat;
-        cursor: help;
-    }
-
-    .loader { display: none; }
-
-    &.loading {
-        .container { display: none !important; }
-    
-        .loader {
-            display: block;
-            position: absolute;
-            top: 0px;
-            left: 0px;
-            width: 468px;
-            height: 65px;
-            background: url("@{asset_path}/loader.gif") center no-repeat;
-        }
-    }
-
     .source {
         position: absolute;
         right: 7px;
@@ -110,6 +76,11 @@
         a {
             color: #666;
             text-decoration: none;
+            
+            span { 
+                display: inline-block;
+                margin-top: -1px;
+            }                        
         }
 
         img { 

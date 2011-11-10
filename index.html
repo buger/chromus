@@ -40,7 +40,6 @@
         <script id="track_info_tmpl" type="text/template">
             <div class="container">
                 <div class="album_img">
-                    <span class="jewelcase"></span>
                     <img src="{{image}}" />
                 </div>
                 <div class="love_btn"><a class='button'></a></div>
@@ -56,7 +55,7 @@
             
             <div class="source">
                 {{#if source_title}}
-                <a href="{{source_url}}" target="_blank">
+                <a>
                     <img src="{{source_icon}}" />
                     <span>{{source_title}}</span>
                 </a>
@@ -129,46 +128,37 @@
             </div>
 
             <div id="header">
-                <div class="container">
-                    <div class="control toggle play">
-                        <a class="button"></a>
-                    </div>
-                    <div class="control next">
-                        <a class="button"></a>
-                    </div>
-                    <div class="control timeline">
-                        <div class="outer br_8">
-                            <div class="inner"></div>
-                            <div class="progress"></div>
-                            <div class="time">0:00</div>
-                        </div>
-                    </div>
-                    <div class="control volume">
-                        <a class="button"></a>
-                        <div class="volume_bar" style="display: none">
-                            <div class="bar_bg br_8">
-                                <div class="level"></div>
-                                <div class="bar br_8"></div>
-                            </div>
-                            <div class="handler"></div>
-                        </div>                        
-                    </div>
-                    <div class="control search">
-                        <a class="button"></a>
-                    </div>
-                    <div class="search_bar" style="display: none">
-                        <input type="text" class="text br_8" />
-                        <div class="result"></div>
-                    </div>                    
+                <a class="button toggle play"></a>
+                <a class="button next"></a>
+                
+                <div class="timeline outer br_8">
+                    <div class="inner"></div>
+                    <div class="progress"></div>                
                 </div>
+                <div class="time">0:00</div>
+                <!-- <div class="control volume">
+                    <a class="button"></a>
+                    <div class="volume_bar" style="display: none">
+                        <div class="bar_bg br_8">
+                            <div class="level"></div>
+                            <div class="bar br_8"></div>
+                        </div>
+                        <div class="handler"></div>
+                    </div>                        
+                </div> -->            
+                <a class="search"></a>
+                <div class="search_bar" style="display: none">
+                    <input type="text" class="text br_8" />
+                    <div class="result"></div>
+                </div>                    
             </div>
             <div id="current_song">
             </div>
             <div id="playlist" style="visibility: hidden"></div>
             <div id="footer">
                 <div class="left">
-                    <a class="button shuffle"></a>
                     <a class="button repeat"></a>
+                    <a class="button shuffle"></a>
                 </div>
                 <div class="right">
                     <a class="button menu"></a>

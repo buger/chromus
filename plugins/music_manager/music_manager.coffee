@@ -167,5 +167,4 @@ class MusicManager extends Backbone.Model
     getState: ->
         @state.toJSON()
 
-
 chromus.registerPlugin("music_manager", new MusicManager())

@@ -120,13 +120,13 @@ class Controls extends Backbone.View
         switch state.name
             when "playing","stopped" then toggle.addClass('play')
             when "paused" then toggle.addClass('pause')
-            when "loading" then @spinner.spin(toggle.find('.button')[0])
+            when "loading" then @spinner.spin(toggle[0])
             else toggle.addClass('play')
 
         
         if track?.get('duration')
             @$('.inner').width(276.0*state.played/track.get('duration'))
-            @$('.time').html prettyTime(track.get('duration') - state.played)
+            @$('.time').html "-"+prettyTime(track.get('duration') - state.played)
 
             state.buffered ?= 0
             @$('.progress').width(278.0*state.buffered/track.get('duration'))

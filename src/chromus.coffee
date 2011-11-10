@@ -89,6 +89,11 @@ class Chromus
 		@media_types[name] = context
 
 
+	# UI features
+	addMenu: (el) ->
+		$('#main_menu').prepend(el)
+
+
 @chromus = new Chromus()
 
 

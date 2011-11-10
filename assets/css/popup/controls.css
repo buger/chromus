@@ -1,18 +1,20 @@
 #current_song {
   position: relative;
-  height: 67px;
-  background: #ccc;
+  height: 64px;
   background: url("../../images/popup/cur_song_bg.png") top left;
+  border-bottom: 1px solid #b8b8b8;
 }
 #current_song .container {
   position: relative;
-  padding: 10px;
-}
-#current_song .container div {
-  float: left;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  box-align: center;
 }
 #current_song .love_btn {
-  padding: 15px 10px;
+  padding: 15px 15px;
 }
 #current_song .love_btn .button {
   background-image: url("../../images/popup/love_btn.png");
@@ -22,14 +24,16 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  max-width: 300px;
+  max-width: 350px;
+  line-height: 14px;
 }
 #current_song .info a {
   color: #000;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
+  font-size: 13px;
   cursor: pointer;
   text-decoration: none;
-  font-family: Verdana, arial;
+  font-family: arial;
 }
 #current_song .info a:hover {
   text-decoration: underline;
@@ -38,59 +42,26 @@
   display: block;
   font-weight: bold;
   line-height: 153.9%;
-  font-size: 100%;
+  font-size: 15px;
   font-family: arial;
 }
 #current_song .info .artist {
-  font-size: 93%;
+  font-size: 13px;
 }
 #current_song .info .album {
-  font-size: 85%;
+  font-size: 12px;
 }
 #current_song .info .dash {
   padding: 0px 3px;
 }
 #current_song .album_img {
   position: relative;
-  margin-left: 5px;
-  top: -2px;
 }
 #current_song .album_img img {
-  height: 50px;
-  width: 50px;
-}
-#current_song .album_img .jewelcase {
-  position: absolute;
-  top: -1px;
-  left: -5px;
-  background: url("../../images/popup/jewelcase.png") no-repeat;
-  background-size: 96%;
-  width: 60px;
-  height: 54px;
-}
-#current_song .playing {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 12px;
-  height: 12px;
-  background: url("../../images/popup/playing.gif") top left no-repeat;
-  cursor: help;
-}
-#current_song .loader {
-  display: none;
-}
-#current_song.loading .container {
-  display: none !important;
-}
-#current_song.loading .loader {
-  display: block;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 468px;
-  height: 65px;
-  background: url("../../images/popup/loader.gif") center no-repeat;
+  height: 64px;
+  width: 64px;
+  border-left: 1px solid #949494;
+  border-right: 1px solid #949494;
 }
 #current_song .source {
   position: absolute;
@@ -103,6 +74,10 @@
 #current_song .source a {
   color: #666;
   text-decoration: none;
+}
+#current_song .source a span {
+  display: inline-block;
+  margin-top: -1px;
 }
 #current_song .source img {
   vertical-align: top;

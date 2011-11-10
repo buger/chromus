@@ -172,14 +172,14 @@
           toggle.addClass('pause');
           break;
         case "loading":
-          this.spinner.spin(toggle.find('.button')[0]);
+          this.spinner.spin(toggle[0]);
           break;
         default:
           toggle.addClass('play');
       }
       if (track != null ? track.get('duration') : void 0) {
         this.$('.inner').width(276.0 * state.played / track.get('duration'));
-        this.$('.time').html(prettyTime(track.get('duration') - state.played));
+        this.$('.time').html("-" + prettyTime(track.get('duration') - state.played));
         if ((_ref = state.buffered) == null) {
           state.buffered = 0;
         }

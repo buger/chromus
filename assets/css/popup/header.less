@@ -5,48 +5,46 @@
 #header {
     height: 36px;
     background: #444;
-    border-top: 1px solid black;
-    border-right: 1px solid black;
-    border-left: 1px solid black;
+    
+    .box();
+    .box-sizing(border-box);
+    .box-align(center);
 
-    .container .control {
-        float: left;
-        height: 24px;
-        padding: 5px 5px;
-    }
-  
-    .container {
-        height: 34px;
-        background: url("@{asset_path}/header_bg.png");
-        border-top: 1px solid #484848;
-        border-right: 1px solid #484848;
-        border-left: 1px solid #484848;
-    }
+    background: url("@{asset_path}/header_bg.png");
+    border-top: 1px solid #484848;
+    border-right: 1px solid #484848;
+    border-left: 1px solid #484848;
 
     .toggle {
         margin-left: 5px;
+        .box-flex(0);
     }
 
-    .pause .button {
-            background-image: url("@{asset_path}/play.png");        
+    .button {
+        display: block;
+        padding: 0px 5px;
+        background-position: center;
+        background-repeat: no-repeat;
+        margin-top: -3px;
     }
 
-    .play .button {
+    .button.pause {
+        background-image: url("@{asset_path}/play.png");
+    }
+
+    .button.play {
             background-image: url("@{asset_path}/pause.png");        
     }
 
-    .next .button {
+    .button.next {
         background-image: url("@{asset_path}/next.png");
+        .box-flex(0);
     }
 
-    .control.timeline {
-        padding-top: 11px;
-        margin-right: 40px;
-    }
-
-    .timeline {
-        .outer {
-            width: 282px;
+    .timeline {        
+        &.outer {
+            .box-flex(1);
+            margin-left: 5px;
             height: 9px;
             background: url("@{asset_path}/timeline_bg.png") center left repeat-x;
             border-bottom: 1px solid #353535;
@@ -84,16 +82,20 @@
             -webkit-border-radius: 7px;
             -moz-border-radius: 7px;
         }    
+    }
 
-        .time {
-            position: absolute;
-            top: -1px;
-            right: -33px;
-            color: white;
-            font-size: 11px;
-            cursor: default;
-            text-shadow: 0 -1px 0 #000000;
-        }
+
+    .time {
+        display: block;
+
+        .box-flex(0);
+        padding: 0px 15px;
+        text-align: right;
+        color: white;
+        font-size: 12px;
+        cursor: default;
+        text-shadow: 0 -1px 0 #000000;        
+        margin-top: -2px;
     }
 
     .volume {
@@ -136,17 +138,36 @@
         }
     }
 
-    .search .button {
-        background-image: url("@{asset_path}/search.png");
+    .search {
+        display: block;
+        cursor: pointer;
+
+        .box-flex(0);
+        margin-top: -1px;
+        width: 48px;
+        height: 35px;
+        .box-sizing(border-box);
+        background-image: url("@{asset_path}/search_bg.png");
+        background-position: top left;
+        background-repeat: repeat-x;
+
+        .opacity(90);
+
+        &:hover {
+            .opacity(100);
+        }
     }
 
+        
+
     .search_bar {
+        .transition();
+
         position: absolute;
         left: 0px;
         top: 1px;
-        width: 419px;
+        width: 400px;
         height: 24px;
-        background: url("@{asset_path}/header_bg.png");
         z-index: 2;
         padding: 5px;
         .box-sizing(border-box);    
@@ -164,12 +185,14 @@
 
             .box-sizing(border-box);
 
-            top: 36px;
+            .transition();
+
+            top: 35px;
             left: 0px;
             width: 468px;
             height: auto;
             background: white;
-            border: 1px solid #ccc;
+            border-bottom: 1px solid #ccc;
             z-index: 3;
 
             > div {
