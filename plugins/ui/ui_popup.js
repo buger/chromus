@@ -350,7 +350,10 @@
     PlaylistView.prototype.initialize = function() {
       _.bindAll(this, 'updatePlaylist');
       this.model.playlist.bind('all', this.updatePlaylist);
-      return this.model.bind("change:current_track", this.updatePlaylist);
+      this.model.bind("change:current_track", this.updatePlaylist);
+      return this.scroll = new iScroll('playlist', {
+        bounce: false
+      });
     };
     PlaylistView.prototype.togglePlaying = function(evt) {
       var id;
@@ -374,7 +377,7 @@
       return count;
     };
     PlaylistView.prototype.updatePlaylist = function() {
-      var helpers, merge_rows, model, pane, playlist, track, view, _i, _len;
+      var helpers, merge_rows, model, playlist, track, view, _i, _len;
       merge_rows = 0;
       playlist = this.model.playlist.toJSON();
       for (_i = 0, _len = playlist.length; _i < _len; _i++) {
@@ -388,7 +391,6 @@
           track.artist_playlist_count = this.artistPlaylistCount(track.artist, _i);
         }
       }
-      pane = this.el.data('jsp');
       view = {
         playlist: playlist
       };
@@ -423,22 +425,13 @@
         }
       };
       helpers = _.defaults(helpers, Handlebars.helpers);
-      if (pane) {
-        pane.getContentPane().html(this.template(view, {
-          helpers: helpers
-        }));
-        pane.reinitialise();
-      } else {
-        this.el.html(this.template(view, {
-          helpers: helpers
-        }));
-        this.el.jScrollPane({
-          maintainPosition: true
-        });
-      }
-      return $('#playlist').css({
+      this.el.find('.container').html(this.template(view, {
+        helpers: helpers
+      }));
+      this.el.css({
         visibility: 'visible'
       });
+      return this.scroll.refresh();
     };
     return PlaylistView;
   })();

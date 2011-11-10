@@ -274,6 +274,8 @@ class PlaylistView extends Backbone.View
 
         @model.playlist.bind 'all', @updatePlaylist
         @model.bind "change:current_track", @updatePlaylist
+
+        @scroll = new iScroll('playlist', { bounce: false })
                 
     
     togglePlaying: (evt) ->
@@ -305,9 +307,7 @@ class PlaylistView extends Backbone.View
             track.next = playlist[_i+1]
 
             if not track.previous or track.previous.artist isnt track.artist
-                track.artist_playlist_count = @artistPlaylistCount(track.artist, _i)
-        
-        pane = @el.data('jsp')
+                track.artist_playlist_count = @artistPlaylistCount(track.artist, _i)    
 
         view = 
             playlist: playlist        
@@ -333,19 +333,11 @@ class PlaylistView extends Backbone.View
 
 
         helpers = _.defaults helpers, Handlebars.helpers        
+    
+        @el.find('.container').html @template view, helpers: helpers        
+        @el.css visibility:'visible'
 
-        if pane
-            pane.getContentPane()
-                .html @template view, helpers: helpers
-            
-            pane.reinitialise()
-        else
-            @el.html @template view, helpers: helpers
-                            
-            @el.jScrollPane
-                maintainPosition: true        
-
-        $('#playlist').css visibility:'visible'
+        @scroll.refresh()
 
 
 class App extends Backbone.View
