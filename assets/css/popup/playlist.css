@@ -33,7 +33,7 @@
   height: 34px;
   cursor: pointer;
 }
-#playlist .artist_playlist .track_container:nth-child(even) .song {
+#playlist .artist_playlist .track_container.odd .song {
   background-color: #f2f2f2;
 }
 #playlist .artist_playlist .artist {

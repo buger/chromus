@@ -431,6 +431,7 @@
       this.el.css({
         visibility: 'visible'
       });
+      this.el.find('.track_container:odd').addClass('odd');
       return this.scroll.refresh();
     };
     return PlaylistView;

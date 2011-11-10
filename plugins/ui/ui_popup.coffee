@@ -337,6 +337,8 @@ class PlaylistView extends Backbone.View
         @el.find('.container').html @template view, helpers: helpers        
         @el.css visibility:'visible'
 
+        @el.find('.track_container:odd').addClass('odd')
+
         @scroll.refresh()
 
 
