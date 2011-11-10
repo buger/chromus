@@ -12,7 +12,9 @@ class LastfmLovedRadio
     getNext: (callback) ->
         if @pages.length
             @pages = _.shuffle @pages
-            @page = pages[0]
+            @page = @pages[0]
+
+        console.warn "LOVED", @page, @pages
               
         chromus.plugins.lastfm.callMethod "user.getlovedtracks", 
             user: store.get('lastfm:user')
@@ -26,7 +28,7 @@ class LastfmLovedRadio
 
                     return @getNext(callback)                
 
-                if @pages.length
+                unless @pages.length
                     @pages = response.lovedtracks["@attr"].totalPages
                     @pages = _.range 1, @pages
                 

@@ -14,8 +14,9 @@
     LastfmLovedRadio.prototype.getNext = function(callback) {
       if (this.pages.length) {
         this.pages = _.shuffle(this.pages);
-        this.page = pages[0];
+        this.page = this.pages[0];
       }
+      console.warn("LOVED", this.page, this.pages);
       return chromus.plugins.lastfm.callMethod("user.getlovedtracks", {
         user: store.get('lastfm:user'),
         page: this.page
@@ -27,7 +28,7 @@
           this.pages = _.without(this.pages, this.page);
           return this.getNext(callback);
         }
-        if (this.pages.length) {
+        if (!this.pages.length) {
           this.pages = response.lovedtracks["@attr"].totalPages;
           this.pages = _.range(1, this.pages);
         }
