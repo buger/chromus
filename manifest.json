@@ -1,22 +1,12 @@
 {
-  "name": "Chromus",
-   "version": "3",
-   "description": "Next get music player",
+   "name": "Chromus",
+   "version": "3.0.0",   
+   "description": "!! Yes it plays music! Browser as a music player? Why not? Music player for Google Chrome",      
 
-   "icons": {
-      "128": "assets/icons/chromus_big.jpg"      
-   },
-   
-   "browser_action": {
-     "default_icon": "assets/icons/19x19-3.png", 
-     "default_title": "Chromus",      
-     "popup": "index.html"        
-   },
+   "popup": "index.html",
+   "background_page": "background.html",
 
-   "background_page": "background.html",   
-   
-   "options_page": "options.html",
-
-   "permissions": ["notifications", "tabs", "http://*/", "https://*/"]
-
+   "icon-19x19": "assets/icons/sq-19x19.png",
+   "icon-29x29": "assets/icons/sq-29x29.png",
+   "icon-42x42": "assets/icons/sq-42x42.png"
 }
