@@ -40,7 +40,9 @@
       data.method = method;
       if (data.sig_call) {
         delete data.sig_call;
-        data.sk = store.get('lastfm:key');
+        if (!method.match(/^auth/)) {
+          data.sk = store.get('lastfm:key');
+        }
         data.api_sig = this.getSignature(data);
       }
       return $.ajax({

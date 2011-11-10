@@ -34,7 +34,8 @@ LastFM =
         if data.sig_call
             delete data.sig_call
 
-            data.sk = store.get('lastfm:key')
+            unless method.match /^auth/
+                data.sk = store.get('lastfm:key')
         
             data.api_sig = @getSignature(data)  
 
