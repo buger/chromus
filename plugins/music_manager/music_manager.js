@@ -132,7 +132,7 @@
       }
       results = [];
       if (!track.get('player')) {
-        searchCallback = function() {
+        searchCallback = __bind(function() {
           var match;
           if (!_.isEmpty(results)) {
             match = results[0];
@@ -147,8 +147,10 @@
               });
             }
             return callback(track);
+          } else {
+            return this.playTrack(this.nextTrack());
           }
-        };
+        }, this);
         _ref = chromus.audio_sources;
         _results = [];
         for (name in _ref) {

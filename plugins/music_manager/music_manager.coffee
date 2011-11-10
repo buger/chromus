@@ -95,7 +95,7 @@ class MusicManager extends Backbone.Model
         results = []
 
         unless track.get('player')
-            searchCallback = -> 
+            searchCallback = => 
                 unless _.isEmpty results
                     # TODO: Should chouse best matching song
                     match = results[0]
@@ -110,6 +110,8 @@ class MusicManager extends Backbone.Model
                             'source_icon': match.source_icon
 
                     callback track
+                else 
+                    @playTrack @nextTrack()
 
             for name, obj of chromus.audio_sources            
                 obj.search 
