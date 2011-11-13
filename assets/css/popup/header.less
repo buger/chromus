@@ -232,3 +232,26 @@
         }
     }
 }
+
+#minimize { display: none; }
+
+.pokki #minimize {
+    display: block;
+    position: absolute;
+
+    top:0px;
+    right: 0px;    
+    width: 19px;
+    height: 11px;
+
+    z-index: 999;
+    cursor: pointer;
+
+    background-image: url("@{asset_path}/minimize.png");
+
+    .opacity(70);
+
+    &:hover {
+        .opacity(100);
+    }
+}

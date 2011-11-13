@@ -389,6 +389,9 @@ class App extends Backbone.View
             if evt.target.id is "dialog"
                 $('#dialog').hide()
         
+        $('#minimize').bind 'click', ->
+            pokki.closePopup()
+        
     start: ->        
         browser.postMessage method:'getPlaylist'
         browser.postMessage method:'getSettings'

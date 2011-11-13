@@ -495,10 +495,13 @@
       this.footer = new Footer({
         model: this.model
       });
-      return $('#dialog').bind('click', function(evt) {
+      $('#dialog').bind('click', function(evt) {
         if (evt.target.id === "dialog") {
           return $('#dialog').hide();
         }
+      });
+      return $('#minimize').bind('click', function() {
+        return pokki.closePopup();
       });
     };
     App.prototype.start = function() {
