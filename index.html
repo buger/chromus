@@ -15,7 +15,7 @@
                 {{#is_previous}}
                 <div class="artist_playlist {{#more_then_two}}large{{/more_then_two}}">
                 {{/is_previous}}
-                    <div class="track_container">
+                    <div class="track_container" data-id="{{id}}">
                         <div class="artist">
                             <div class="image">
                                 <img src='{{lfm_img this}}' />
@@ -120,7 +120,7 @@
         </script>
 
     </head>
-    <body class="yui3-cssreset">
+    <body>
         <div id="wrapper">
             <div id="dialog" style="display:none">
                 <div class="content">                    
@@ -151,8 +151,8 @@
             </div>
             <div id="footer">
                 <div class="left">
-                    <a class="button repeat"></a>
-                    <a class="button shuffle"></a>
+                    <a class="button repeat" title="Repeat playlist"></a>
+                    <a class="button shuffle" title="Shuffle playlist"></a>
                 </div>
                 <div class="right">
                     <a class="volume"></a>
@@ -178,6 +178,9 @@
 
         <script src="lib/spin.min.js"></script>
         <script src="lib/store.js"></script>
+        <!--
+        <script src="lib/twipsy.js"></script>
+        -->
 
         <script src="lib/md5.js"></script>
         

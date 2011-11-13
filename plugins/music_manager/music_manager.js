@@ -42,6 +42,7 @@
       _.bindAll(this, "onPlaylistReset", "updateState");
       this.playlist = new Playlist();
       this.state = new Backbone.Model();
+      this.settings = new Backbone.Model();
       this.playlist.bind('reset', this.onPlaylistReset);
       this.playlist.reset();
       this.setPlayer();
@@ -79,21 +80,37 @@
       }, {
         silent: true
       });
-      return this.player.stop();
+      if (this.player) {
+        this.player.stop();
+      }
+      return this.setEmptyState();
     };
     MusicManager.prototype.setPosition = function(value) {
       return this.player.setPosition(value);
     };
     MusicManager.prototype.onPlaylistReset = function() {
-      return this.setEmptyState();
+      return this.stop();
     };
     MusicManager.prototype.currentTrack = function() {
       return this.playlist.get(this.get('current_track'));
     };
     MusicManager.prototype.nextTrack = function() {
-      var index;
-      index = this.playlist.indexOf(this.currentTrack());
-      return this.playlist.models[index + 1];
+      var index, next_track;
+      if (!this.get('current_track')) {
+        return;
+      }
+      if (this.settings.get('shuffle')) {
+        return this.playlist.models[Math.floor(Math.random() * this.playlist.length - 1)];
+      } else {
+        index = this.playlist.indexOf(this.currentTrack());
+        next_track = this.playlist.models[index + 1];
+        if (this.settings.get('repeat') && !next_track) {
+          console.warn(this.playlist.first());
+          return this.playlist.first();
+        } else {
+          return next_track;
+        }
+      }
     };
     MusicManager.prototype.prevTrack = function() {
       var index;

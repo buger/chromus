@@ -1,6 +1,6 @@
 (function() {
   /*
-  	Track scrobbling 
+      Track scrobbling 
   */
   var last_scrobbled, lastfm, manager;
   lastfm = chromus.plugins.lastfm;
@@ -15,7 +15,6 @@
     if (state.get('name') === "playing" && track.id !== last_scrobbled) {
       percent_played = (state.get('played') / track.get('duration')) * 100;
       if (percent_played > 30 && track.get('duration') > 30) {
-        console.warn("scrobbling", track.id, last_scrobbled);
         last_scrobbled = track.id;
         lastfm.track.scrobble({
           artist: track.get('artist'),
@@ -36,11 +35,24 @@
     }
   });
   chromus.plugins.music_manager.bind('change:current_track', function() {
-    var _ref;
-    if (!manager.nextTrack() && ((_ref = manager.currentTrack()) != null ? _ref.get('radio') : void 0)) {
-      return lastfm.radio.getPlaylist(function(tracks) {
-        return manager.playlist.add(tracks);
-      });
+    var index, previous_tracks, track, _i, _len, _ref;
+    if ((_ref = manager.currentTrack()) != null ? _ref.get('radio') : void 0) {
+      index = manager.playlist.indexOf(manager.currentTrack());
+      previous_tracks = _.first(manager.playlist.models, index);
+      for (_i = 0, _len = previous_tracks.length; _i < _len; _i++) {
+        track = previous_tracks[_i];
+        if (track.get('radio')) {
+          track.unset('file_url');
+          track.unset('radio');
+          track.unset('source_title');
+          track.unset('source_icon');
+        }
+      }
+      if (!manager.nextTrack()) {
+        return lastfm.radio.getPlaylist(function(tracks) {
+          return manager.playlist.add(tracks);
+        });
+      }
     }
   });
   chromus.registerMediaType("artist", function(track, callback) {
@@ -50,6 +62,10 @@
     return lastfm.album.getInfo(track.artist, track.album, callback);
   });
   chromus.registerMediaType("lastfm:radio", function(track, callback) {
+    manager.settings.set({
+      'repeat': false,
+      'shuffle': false
+    });
     return lastfm.radio.tune(track.station, function() {
       return lastfm.radio.getPlaylist(callback);
     });

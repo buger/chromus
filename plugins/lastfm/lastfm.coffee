@@ -180,7 +180,7 @@ LastFM =
                     artist: track.creator
                     song: track.title
                     file_url: track.location
-                    images: track.image
+                    images: [track.image]
                     duration: track.duration/1000
                     radio: true
                     source_title: resp.playlist.title

@@ -19,15 +19,28 @@
     
         .button {
             padding-right: 10px;
-            height: 14px;            
+            height: 14px;
+            background-position: center;
+
+            .opacity(80);
         }
         
         .shuffle {
             background-image: url("@{asset_path}/shuffle.png");
+
+            &.active, &:hover {
+                background-image: url("@{asset_path}/shuffle_hover.png");
+                .opacity(100);
+            }
         }
         
         .repeat {
             background-image: url("@{asset_path}/repeat.png");
+
+            &.active, &:hover {
+                background-image: url("@{asset_path}/repeat_hover.png");
+                .opacity(100);
+            }
         }
     }
 

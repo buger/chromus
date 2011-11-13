@@ -119,8 +119,7 @@ menu_template = Handlebars.compile '
         <li class="header">Subscribers radio</li>
         <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/personal">Library Radio</li>
         <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/mix">Mix Radio</li>
-        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/recommended">Recommendation Radio</li>
-        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/neighbours">Neighbours Radio</li>
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/recommended">Recommendation Radio</li>        
         <li class="logout">Logout</li>
     {{else}}
         <li class="scrobbling not_logged">Want scrobbling?</li>

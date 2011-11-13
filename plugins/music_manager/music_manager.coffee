@@ -17,7 +17,8 @@ class MusicManager extends Backbone.Model
         _.bindAll @, "onPlaylistReset", "updateState"
 
         @playlist = new Playlist()
-        @state = new Backbone.Model()        
+        @state = new Backbone.Model()
+        @settings = new Backbone.Model()
 
         @playlist.bind 'reset', @onPlaylistReset
         @playlist.reset()
@@ -46,15 +47,15 @@ class MusicManager extends Backbone.Model
     stop: -> 
         @unset 'current_track'
         @state.set {'name': 'stopped'}, silent: true
-        @player.stop()
+        @player.stop() if @player
+        @setEmptyState()
 
 
     setPosition: (value) ->
         @player.setPosition(value)
-        
+    
 
-    onPlaylistReset:->
-        @setEmptyState()
+    onPlaylistReset:-> @stop()
 
 
     currentTrack: ->
@@ -62,8 +63,19 @@ class MusicManager extends Backbone.Model
 
 
     nextTrack: ->
-        index = @playlist.indexOf @currentTrack()
-        @playlist.models[index + 1]
+        return if not @get 'current_track'
+        
+        if @settings.get('shuffle')
+            @playlist.models[Math.floor(Math.random()*@playlist.length-1)]
+        else
+            index = @playlist.indexOf @currentTrack()
+            next_track = @playlist.models[index + 1] 
+            
+            if @settings.get('repeat') and !next_track
+                console.warn @playlist.first()
+                return @playlist.first()
+            else
+                return next_track
 
 
     prevTrack: ->        
@@ -154,7 +166,7 @@ class MusicManager extends Backbone.Model
         else
             chromus.media_types[track.get('type')] track.toJSON(), (tracks) =>
                 @playlist.reset tracks
-                @playTrack @playlist.first().id                
+                @playTrack @playlist.first().id
                                 
 
     setVolume: (volume) ->

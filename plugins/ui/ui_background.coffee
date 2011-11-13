@@ -30,6 +30,12 @@ for event in ['reset','add','create']
             state: music_manager.getState()
 
 
+music_manager.settings.bind 'change', (settings) ->
+    browser.postMessage
+        method: "updateSettings"
+        settings: settings.toJSON()
+
+
 browser.addMessageListener (msg, sender, sendResponse) ->
     if !msg.method.match('(playerState|updateState)')
         console.log(msg.method, msg, sender)
@@ -79,13 +85,14 @@ browser.addMessageListener (msg, sender, sendResponse) ->
             music_manager.playTrack music_manager.prevTrack()
 
 
-        when "getPlaylist"
+        when "ui:init"
             browser.postMessage
                 method: "loadPlaylist"
                 playlist: music_manager.playlist.toJSON()
                 current_track: music_manager.get('current_track')
                 state: music_manager.getState()
                 volume: music_manager.getVolume()
+                settings: music_manager.settings.toJSON()                
 
         when "setVolume"
             music_manager.setVolume(msg.volume)
@@ -93,8 +100,10 @@ browser.addMessageListener (msg, sender, sendResponse) ->
         when "setPosition"
             music_manager.setPosition(msg.position)
 
+        when "setSettings"
+            music_manager.settings.set msg.data
+
         when "clearPlaylist"
-            music_manager.radio = undefined
             music_manager.playlist.reset()
 
     

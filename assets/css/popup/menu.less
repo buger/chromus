@@ -44,10 +44,13 @@ ul.menu_container {
   bottom: 0px;
   right: 100%;
   width: 100%;
-  display: none;
+  visibility: hidden;
+  .opacity(0);
+  .transition(all 0.5s ease-in-out);
 }
 .menu_container > li:hover .menu_container {
-  display: block;
+  visibility: visible;
+  .opacity(100);
 }
 
 #main_menu .open_local_files {

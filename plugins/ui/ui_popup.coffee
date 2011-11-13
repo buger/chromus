@@ -10,7 +10,10 @@ Handlebars.registerHelper 'lfm_img', (context) ->
     image = context.images[0]
     
     if typeof(context.images[0]) isnt "string"
-        context.images[1]["#text"]
+        try
+            context.images[1]["#text"]
+        catch
+            console.warn context.images
     else
         context.images[0]
 
@@ -28,6 +31,10 @@ class Player extends Backbone.Model
         @playlist = new Playlist()
 
         @state = new Backbone.Model()
+
+        @settings = new Backbone.Model
+            repeat: false
+            shuffle: false
 
         browser.addMessageListener @listener
 
@@ -63,6 +70,11 @@ class Player extends Backbone.Model
 
         browser.postMessage { method:'setVolume', volume:volume }
 
+    setSettings: (data) ->
+        @settings.set data
+
+        browser.postMessage { method: 'setSettings', data: data }
+
     listener: (msg) ->
         return if msg.method.match("^sm2")
 
@@ -73,7 +85,8 @@ class Player extends Backbone.Model
                 @playlist.get(msg.track.id).set(msg.track)
                 @set 'current_track': msg.track.id
         
-        @set 'settings': msg.settings if msg.settings?
+        @settings.set msg.settings if msg.settings?
+
         @set 'volume': msg.volume if msg.volume?
         @state.set msg.state if msg.state?                    
         
@@ -270,12 +283,16 @@ class Footer extends Backbone.View
         "click .menu": "toggleMenu"
         "click .volume": "toggleVolume"
         "click .volume_bar .bar_bg": "setVolume"
+        "click .shuffle": "toggleShuffle"
+        "click .repeat": "toggleRepeat"
 
     initialize: ->
         _.bindAll @
 
         @model.bind 'change:volume', @updateVolume
+        @model.settings.bind 'change', @updateSettings
         @updateVolume()
+
 
     toggleMenu: ->
         $('#main_menu').toggle()
@@ -293,7 +310,19 @@ class Footer extends Backbone.View
 
     updateVolume: ->
         @$('.volume_bar .bar').css width: @model.get('volume')+"%"
-                                
+
+
+    toggleShuffle: ->
+        @model.setSettings 'shuffle':!@$('.shuffle').hasClass('active')
+    
+    toggleRepeat: ->
+        @model.setSettings 'repeat':!@$('.repeat').hasClass('active')
+
+    updateSettings: ->
+        @$('.shuffle').toggleClass('active', @model.settings.get('shuffle'))
+        @$('.repeat').toggleClass('active', @model.settings.get('repeat'))
+    
+                                    
 
 class PlaylistView extends Backbone.View
 
@@ -375,6 +404,9 @@ class PlaylistView extends Backbone.View
 
         @scroll.refresh()
 
+        if @scroll.vScrollbar and playlist.length and model.get('current_track')
+            @scroll.scrollToElement @el.find(".track_container[data-id=#{model.get('current_track')}]")[0]
+
 
 class App extends Backbone.View
     initialize: ->        
@@ -388,13 +420,14 @@ class App extends Backbone.View
         $('#dialog').bind 'click', (evt) ->
             if evt.target.id is "dialog"
                 $('#dialog').hide()
-        
-        $('#minimize').bind 'click', ->
+
+        if browser.isPokki
+            $('#minimize').bind 'click', ->
             pokki.closePopup()
-        
+
+                
     start: ->        
-        browser.postMessage method:'getPlaylist'
-        browser.postMessage method:'getSettings'
+        browser.postMessage method:'ui:init'
 
 @app = new App()
 

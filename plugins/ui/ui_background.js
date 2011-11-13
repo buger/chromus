@@ -32,6 +32,12 @@
       });
     });
   }
+  music_manager.settings.bind('change', function(settings) {
+    return browser.postMessage({
+      method: "updateSettings",
+      settings: settings.toJSON()
+    });
+  });
   browser.addMessageListener(function(msg, sender, sendResponse) {
     if (!msg.method.match('(playerState|updateState)')) {
       console.log(msg.method, msg, sender);
@@ -73,20 +79,22 @@
         return music_manager.playTrack(music_manager.nextTrack());
       case "previousTrack":
         return music_manager.playTrack(music_manager.prevTrack());
-      case "getPlaylist":
+      case "ui:init":
         return browser.postMessage({
           method: "loadPlaylist",
           playlist: music_manager.playlist.toJSON(),
           current_track: music_manager.get('current_track'),
           state: music_manager.getState(),
-          volume: music_manager.getVolume()
+          volume: music_manager.getVolume(),
+          settings: music_manager.settings.toJSON()
         });
       case "setVolume":
         return music_manager.setVolume(msg.volume);
       case "setPosition":
         return music_manager.setPosition(msg.position);
+      case "setSettings":
+        return music_manager.settings.set(msg.data);
       case "clearPlaylist":
-        music_manager.radio = void 0;
         return music_manager.playlist.reset();
     }
   });

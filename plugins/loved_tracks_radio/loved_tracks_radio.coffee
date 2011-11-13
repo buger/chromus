@@ -61,4 +61,8 @@ manager.bind 'change:current_track', ->
 chromus.registerMediaType "lastfm:loved", (track, callback) ->
     radio.reset()
 
+    manager.settings.set 
+        'repeat': false
+        'shuffle': false
+
     radio.getNext callback

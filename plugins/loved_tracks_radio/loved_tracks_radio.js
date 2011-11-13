@@ -60,6 +60,10 @@
   });
   chromus.registerMediaType("lastfm:loved", function(track, callback) {
     radio.reset();
+    manager.settings.set({
+      'repeat': false,
+      'shuffle': false
+    });
     return radio.getNext(callback);
   });
 }).call(this);

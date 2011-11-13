@@ -50,6 +50,10 @@
       _.bindAll(this, "listener");
       this.playlist = new Playlist();
       this.state = new Backbone.Model();
+      this.settings = new Backbone.Model({
+        repeat: false,
+        shuffle: false
+      });
       return browser.addMessageListener(this.listener);
     };
     Player.prototype.currentTrack = function() {
@@ -102,6 +106,13 @@
         volume: volume
       });
     };
+    Player.prototype.setSettings = function(data) {
+      this.settings.set(data);
+      return browser.postMessage({
+        method: 'setSettings',
+        data: data
+      });
+    };
     Player.prototype.listener = function(msg) {
       var _ref;
       if (msg.method.match("^sm2")) {
@@ -117,9 +128,9 @@
           });
         }
       }
-      this.set({
-        'settings': msg.settings != null ? msg.settings : void 0
-      });
+      if (msg.settings != null) {
+        this.settings.set(msg.settings);
+      }
       this.set({
         'volume': msg.volume != null ? msg.volume : void 0
       });
@@ -347,11 +358,14 @@
     Footer.prototype.events = {
       "click .menu": "toggleMenu",
       "click .volume": "toggleVolume",
-      "click .volume_bar .bar_bg": "setVolume"
+      "click .volume_bar .bar_bg": "setVolume",
+      "click .shuffle": "toggleShuffle",
+      "click .repeat": "toggleRepeat"
     };
     Footer.prototype.initialize = function() {
       _.bindAll(this);
       this.model.bind('change:volume', this.updateVolume);
+      this.model.settings.bind('change', this.updateSettings);
       return this.updateVolume();
     };
     Footer.prototype.toggleMenu = function() {
@@ -370,6 +384,20 @@
       return this.$('.volume_bar .bar').css({
         width: this.model.get('volume') + "%"
       });
+    };
+    Footer.prototype.toggleShuffle = function() {
+      return this.model.setSettings({
+        'shuffle': !this.$('.shuffle').hasClass('active')
+      });
+    };
+    Footer.prototype.toggleRepeat = function() {
+      return this.model.setSettings({
+        'repeat': !this.$('.repeat').hasClass('active')
+      });
+    };
+    Footer.prototype.updateSettings = function() {
+      this.$('.shuffle').toggleClass('active', this.model.settings.get('shuffle'));
+      return this.$('.repeat').toggleClass('active', this.model.settings.get('repeat'));
     };
     return Footer;
   })();
@@ -472,7 +500,10 @@
         visibility: 'visible'
       });
       this.el.find('.track_container:odd').addClass('odd');
-      return this.scroll.refresh();
+      this.scroll.refresh();
+      if (this.scroll.vScrollbar && playlist.length && model.get('current_track')) {
+        return this.scroll.scrollToElement(this.el.find(".track_container[data-id=" + (model.get('current_track')) + "]")[0]);
+      }
     };
     return PlaylistView;
   })();
@@ -500,16 +531,14 @@
           return $('#dialog').hide();
         }
       });
-      return $('#minimize').bind('click', function() {
+      if (browser.isPokki) {
+        $('#minimize').bind('click', function() {});
         return pokki.closePopup();
-      });
+      }
     };
     App.prototype.start = function() {
-      browser.postMessage({
-        method: 'getPlaylist'
-      });
       return browser.postMessage({
-        method: 'getSettings'
+        method: 'ui:init'
       });
     };
     return App;
