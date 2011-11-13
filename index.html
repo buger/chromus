@@ -18,7 +18,7 @@
                     <div class="track_container">
                         <div class="artist">
                             <div class="image">
-                                <img src='{{artist_image}}' />
+                                <img src='{{lfm_img this}}' />
                             </div>
                                 
                             <span title="{{artist}}">{{artist}}</span>
@@ -39,9 +39,9 @@
         
         <script id="track_info_tmpl" type="text/template">
             <div class="container">
-                <div class="album_img">
-                    <img src="{{image}}" />
-                </div>
+                <a class="album_img">
+                    <img src="{{lfm_img this}}" />
+                </a>
                 <div class="love_btn"><a class='button'></a></div>
                 <div class="info">
                     <a class="song" href="{{song_url}}" target="_blank">{{song}}</a>
@@ -72,7 +72,7 @@
                 {{#artists}}
                     <li>
                         <a class="ex_container" data-artist="{{name}}">
-                            <span class="image" style='background-image: url({{lfm_img "smallsquare" this}})'></span>
+                            <span class="image" style='background-image: url({{lfm_img this}})'></span>
                             <span>{{name}}</span>
                         </a>
                     </li>
@@ -89,7 +89,7 @@
                 {{#tracks}}
                     <li>
                         <a class="ex_container" data-artist="{{artist}}" data-song="{{name}}">
-                            <span class="image" style='background-image: url({{lfm_img "smallsquare" this}})'></span>
+                            <span class="image" style='background-image: url({{lfm_img this}})'></span>
                             <span>{{artist}}<br/><b>{{name}}</b></span>
                         </a>
                     </li>
@@ -106,7 +106,7 @@
                 {{#albums}}
                     <li>
                         <a class="ex_container" data-artist="{{artist}}" data-album="{{name}}">
-                            <span class="image" style='background-image: url({{lfm_img "smallsquare" this}})'></span>
+                            <span class="image" style='background-image: url({{lfm_img this}})'></span>
                             <span>{{artist}}<br/><b>{{name}}</b></span>
                         </a>
                     </li>

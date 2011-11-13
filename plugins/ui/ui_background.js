@@ -57,8 +57,7 @@
         }
         return music_manager.radio = void 0;
       case "addToPlaylist":
-        music_manager.playlist.add(msg.tracks);
-        return console.warn(msg.tracks, music_manager.playlist);
+        return music_manager.playlist.add(msg.tracks);
       case "togglePlaying":
         if (music_manager.state.get('name') === "paused" && music_manager.currentTrack()) {
           return music_manager.play();
@@ -71,7 +70,6 @@
       case "previousTrack":
         return music_manager.playTrack(music_manager.prevTrack());
       case "getPlaylist":
-        console.warn("getting playlist");
         return browser.postMessage({
           method: "loadPlaylist",
           playlist: music_manager.playlist.toJSON(),
@@ -96,6 +94,15 @@
     });
     chrome.tabs.onSelectionChanged.addListener(function(tab_id, select_info) {
       return console.log("Tab selected", tab_id, select_info);
+    });
+  }
+  if (browser.isPokki) {
+    chromus.plugins.music_manager.state.bind('change', function(state) {
+      if (state.get('name') === 'playing') {
+        return pokki.setIdleDetect('background', false);
+      } else {
+        return pokki.setIdleDetect('background', true);
+      }
     });
   }
 }).call(this);

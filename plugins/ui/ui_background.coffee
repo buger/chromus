@@ -61,10 +61,7 @@ browser.addMessageListener (msg, sender, sendResponse) ->
 
 
         when "addToPlaylist"
-            music_manager.playlist.add(msg.tracks)            
-
-            console.warn msg.tracks, music_manager.playlist
-
+            music_manager.playlist.add(msg.tracks)
 
         when "togglePlaying"
             if music_manager.state.get('name') is "paused" and music_manager.currentTrack()
@@ -82,8 +79,6 @@ browser.addMessageListener (msg, sender, sendResponse) ->
 
 
         when "getPlaylist"
-            console.warn "getting playlist"
-
             browser.postMessage
                 method: "loadPlaylist"
                 playlist: music_manager.playlist.toJSON()
@@ -110,3 +105,12 @@ if browser.isChrome
 
     chrome.tabs.onSelectionChanged.addListener (tab_id, select_info) ->
         console.log("Tab selected", tab_id, select_info)
+
+
+# Disable pokki idle detection
+if browser.isPokki    
+    chromus.plugins.music_manager.state.bind 'change', (state) ->
+        if state.get('name') is 'playing'
+            pokki.setIdleDetect('background', false)
+        else
+            pokki.setIdleDetect('background', true)

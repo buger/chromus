@@ -2,8 +2,18 @@ Handlebars.registerHelper 'spinner', (context) ->
     "<span class='spinner'></span>"
 
 
-Handlebars.registerHelper 'lfm_img', (size, context) ->
-    context.image?[1]?["#text"]
+# TODO: Refactor
+Handlebars.registerHelper 'lfm_img', (context) ->
+    context.images ?= context.image
+    return "about:blank" unless context.images
+
+    image = context.images[0]
+    
+    if typeof(context.images[0]) isnt "string"
+        context.images[1]["#text"]
+    else
+        context.images[0]
+
 
 class Track extends Backbone.Model    
 
@@ -66,8 +76,6 @@ class Player extends Backbone.Model
         @set 'settings': msg.settings if msg.settings?
         @set 'volume': msg.volume if msg.volume?
         @state.set msg.state if msg.state?                    
-
-        console.warn msg if msg.volume?
         
         @playlist.reset msg.playlist if msg.playlist
                 
@@ -205,6 +213,9 @@ class Controls extends Backbone.View
 class TrackInfo extends Backbone.View
     el: $('#current_song')
 
+    events: 
+        "click .album_img": "albumCover"
+
     template: Handlebars.compile($('#track_info_tmpl').html()),
 
     initialize: ->
@@ -221,9 +232,7 @@ class TrackInfo extends Backbone.View
         if not track
             return @el.empty()                      
 
-        track.image = chromus.plugins.lastfm.image
-            artist: track.artist
-            song: track.song
+        track.images ?= [chromus.plugins.lastfm.image artist: track.artist]
 
         last_fm = "http://last.fm/music"
         track.artist_url = "#{last_fm}/#{track.artist}"
@@ -232,6 +241,26 @@ class TrackInfo extends Backbone.View
         
         @el.html(@template(track))
             .show()
+
+    
+    albumCover: ->
+        return false
+
+        track = @model.currentTrack()        
+
+        if track.get('images').length
+            img = new Image()
+
+            src = _.last track.get('images')
+            src = src['#text'] if typeof(src) isnt "string"                
+
+            img.src = src
+
+            img.onclick = ->
+                $('#dialog').hide()
+
+            $('#dialog .content').html img
+            $('#dialog').show()
 
 
 class Footer extends Backbone.View
@@ -307,8 +336,7 @@ class PlaylistView extends Backbone.View
         playlist = @model.playlist.toJSON()
         
         for track in playlist
-            track.artist_image = chromus.plugins.lastfm.image 
-                artist: track.artist
+            track.images ?= [chromus.plugins.lastfm.image artist: track.artist]
             track.previous = playlist[_i-1]
             track.next = playlist[_i+1]
 
@@ -369,3 +397,7 @@ class App extends Backbone.View
 
 
 $ -> browser.onReady -> app.start()
+
+if browser.isPokki
+    pokki.addEventListener 'pokki_link', (url) ->
+        pokki.openURLInDefaultBrowser(url)

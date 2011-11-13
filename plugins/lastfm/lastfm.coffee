@@ -126,6 +126,7 @@ LastFM =
                     artist: track.artist.name
                     song: track.name
                     duration: parseInt(track.duration)
+                    images: track.image
 
                 callback tracks
         
@@ -134,6 +135,7 @@ LastFM =
             LastFM.callMethod "album.search",
                 "album": album
             , (resp) -> callback resp.results.albummatches?.album
+
 
         getInfo: (artist, album, callback) ->
             LastFM.callMethod "album.getInfo",
@@ -146,6 +148,7 @@ LastFM =
                     artist: track.artist.name
                     song: track.name
                     duration: parseInt(track.duration)
+                    images: track.images
 
                 callback tracks
 
@@ -173,13 +176,11 @@ LastFM =
             , (resp) ->
                 tracks = resp.playlist.trackList.track
 
-                console.warn resp
-
                 tracks = _.map tracks, (track) ->
                     artist: track.creator
                     song: track.title
                     file_url: track.location
-                    image: track.image
+                    images: track.image
                     duration: track.duration/1000
                     radio: true
                     source_title: resp.playlist.title

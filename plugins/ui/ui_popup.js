@@ -11,9 +11,20 @@
   Handlebars.registerHelper('spinner', function(context) {
     return "<span class='spinner'></span>";
   });
-  Handlebars.registerHelper('lfm_img', function(size, context) {
-    var _ref, _ref2;
-    return (_ref = context.image) != null ? (_ref2 = _ref[1]) != null ? _ref2["#text"] : void 0 : void 0;
+  Handlebars.registerHelper('lfm_img', function(context) {
+    var image, _ref;
+    if ((_ref = context.images) == null) {
+      context.images = context.image;
+    }
+    if (!context.images) {
+      return "about:blank";
+    }
+    image = context.images[0];
+    if (typeof context.images[0] !== "string") {
+      return context.images[1]["#text"];
+    } else {
+      return context.images[0];
+    }
   });
   Track = (function() {
     __extends(Track, Backbone.Model);
@@ -114,9 +125,6 @@
       });
       if (msg.state != null) {
         this.state.set(msg.state);
-      }
-      if (msg.volume != null) {
-        console.warn(msg);
       }
       if (msg.playlist) {
         return this.playlist.reset(msg.playlist);
@@ -282,6 +290,9 @@
       TrackInfo.__super__.constructor.apply(this, arguments);
     }
     TrackInfo.prototype.el = $('#current_song');
+    TrackInfo.prototype.events = {
+      "click .album_img": "albumCover"
+    };
     TrackInfo.prototype.template = Handlebars.compile($('#track_info_tmpl').html());
     TrackInfo.prototype.initialize = function() {
       _.bindAll(this, "updateInfo");
@@ -289,20 +300,41 @@
       return this.model.playlist.bind('all', this.updateInfo);
     };
     TrackInfo.prototype.updateInfo = function() {
-      var last_fm, track, _ref;
+      var last_fm, track, _ref, _ref2;
       track = (_ref = this.model.currentTrack()) != null ? _ref.toJSON() : void 0;
       if (!track) {
         return this.el.empty();
       }
-      track.image = chromus.plugins.lastfm.image({
-        artist: track.artist,
-        song: track.song
-      });
+      if ((_ref2 = track.images) == null) {
+        track.images = [
+          chromus.plugins.lastfm.image({
+            artist: track.artist
+          })
+        ];
+      }
       last_fm = "http://last.fm/music";
       track.artist_url = "" + last_fm + "/" + track.artist;
       track.album_url = "" + last_fm + "/" + track.artist + "/" + track.album;
       track.song_url = "" + last_fm + "/" + track.artist + "/_/" + track.song;
       return this.el.html(this.template(track)).show();
+    };
+    TrackInfo.prototype.albumCover = function() {
+      var img, src, track;
+      return false;
+      track = this.model.currentTrack();
+      if (track.get('images').length) {
+        img = new Image();
+        src = _.last(track.get('images'));
+        if (typeof src !== "string") {
+          src = src['#text'];
+        }
+        img.src = src;
+        img.onclick = function() {
+          return $('#dialog').hide();
+        };
+        $('#dialog .content').html(img);
+        return $('#dialog').show();
+      }
     };
     return TrackInfo;
   })();
@@ -381,14 +413,18 @@
       return count;
     };
     PlaylistView.prototype.updatePlaylist = function() {
-      var helpers, merge_rows, model, playlist, track, view, _i, _len;
+      var helpers, merge_rows, model, playlist, track, view, _i, _len, _ref;
       merge_rows = 0;
       playlist = this.model.playlist.toJSON();
       for (_i = 0, _len = playlist.length; _i < _len; _i++) {
         track = playlist[_i];
-        track.artist_image = chromus.plugins.lastfm.image({
-          artist: track.artist
-        });
+        if ((_ref = track.images) == null) {
+          track.images = [
+            chromus.plugins.lastfm.image({
+              artist: track.artist
+            })
+          ];
+        }
         track.previous = playlist[_i - 1];
         track.next = playlist[_i + 1];
         if (!track.previous || track.previous.artist !== track.artist) {
@@ -481,4 +517,9 @@
       return app.start();
     });
   });
+  if (browser.isPokki) {
+    pokki.addEventListener('pokki_link', function(url) {
+      return pokki.openURLInDefaultBrowser(url);
+    });
+  }
 }).call(this);

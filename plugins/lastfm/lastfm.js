@@ -134,7 +134,8 @@
             return {
               artist: track.artist.name,
               song: track.name,
-              duration: parseInt(track.duration)
+              duration: parseInt(track.duration),
+              images: track.image
             };
           });
           return callback(tracks);
@@ -161,7 +162,8 @@
             return {
               artist: track.artist.name,
               song: track.name,
-              duration: parseInt(track.duration)
+              duration: parseInt(track.duration),
+              images: track.images
             };
           });
           return callback(tracks);
@@ -193,13 +195,12 @@
         }, function(resp) {
           var tracks;
           tracks = resp.playlist.trackList.track;
-          console.warn(resp);
           tracks = _.map(tracks, function(track) {
             return {
               artist: track.creator,
               song: track.title,
               file_url: track.location,
-              image: track.image,
+              images: track.image,
               duration: track.duration / 1000,
               radio: true,
               source_title: resp.playlist.title,
