@@ -21,7 +21,11 @@
     }
     image = context.images[0];
     if (typeof context.images[0] !== "string") {
-      return context.images[1]["#text"];
+      try {
+        return context.images[1]["#text"];
+      } catch (error) {
+        return console.warn(context.images);
+      }
     } else {
       return context.images[0];
     }
@@ -366,7 +370,14 @@
       _.bindAll(this);
       this.model.bind('change:volume', this.updateVolume);
       this.model.settings.bind('change', this.updateSettings);
-      return this.updateVolume();
+      this.updateVolume();
+      return $(document).bind('click', function(evt) {
+        if ($('#main_menu').is(':visible') && !$(evt.target).hasClass('menu')) {
+          if (!$(evt.target).closest('#main_menu').length) {
+            return $('#main_menu').hide();
+          }
+        }
+      });
     };
     Footer.prototype.toggleMenu = function() {
       return $('#main_menu').toggle();
@@ -532,8 +543,9 @@
         }
       });
       if (browser.isPokki) {
-        $('#minimize').bind('click', function() {});
-        return pokki.closePopup();
+        return $('#minimize').bind('click', function() {
+          return pokki.closePopup();
+        });
       }
     };
     App.prototype.start = function() {

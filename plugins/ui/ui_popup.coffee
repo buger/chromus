@@ -12,7 +12,7 @@ Handlebars.registerHelper 'lfm_img', (context) ->
     if typeof(context.images[0]) isnt "string"
         try
             context.images[1]["#text"]
-        catch
+        catch error
             console.warn context.images
     else
         context.images[0]
@@ -293,6 +293,12 @@ class Footer extends Backbone.View
         @model.settings.bind 'change', @updateSettings
         @updateVolume()
 
+        $(document).bind 'click', (evt) ->
+            if $('#main_menu').is(':visible') and !$(evt.target).hasClass('menu')
+
+                unless $(evt.target).closest('#main_menu').length
+                    $('#main_menu').hide()
+
 
     toggleMenu: ->
         $('#main_menu').toggle()
@@ -423,7 +429,7 @@ class App extends Backbone.View
 
         if browser.isPokki
             $('#minimize').bind 'click', ->
-            pokki.closePopup()
+                pokki.closePopup()
 
                 
     start: ->        

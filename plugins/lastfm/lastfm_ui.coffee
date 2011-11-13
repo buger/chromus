@@ -4,6 +4,11 @@ login_template = '
     <form class="form">
         <ul>
             <li>
+                <center>
+                <img src="http://cdn.last.fm/flatness/badges/lastfm_red.gif"/>
+                </center>
+            </li>
+            <li>
                 <label>Username <span class="error" style="display:none">Wrong credentials</span></label>
                 <input name="username" autofocus/>
             </li>
@@ -12,8 +17,8 @@ login_template = '
                 <input type="password" name="password" />
             </li>
             <li class="buttons">
+                <input type="submit" value="Login" class="btn" />
                 <a class="close">close</a>
-                <input type="submit" value="Login" />
             </li>
         </ul>
     </form>'
@@ -57,9 +62,17 @@ class LoginView extends Backbone.View
                 store.set 'lastfm:key', resp.session.key
                 store.set 'lastfm:scrobbling', true
                 
-                @el.innerHTML = '               
-                    <label class="success">Logged!</label>
-                    <a class="close">close</a>
+                @el.innerHTML = '
+                    <form class="form">
+                    <ul>             
+                        <li style="text-align: center">   
+                            <label class="success" style="color: green; font-weight: bold;">Successfully Logged</label>
+                        </li>                        
+                        <li class="buttons">
+                            <a class="close" style="margin-left: 0px">close</a>
+                        </li>
+                    </ul>
+                    </form>
                 '                
 
                 @delegateEvents()
@@ -109,17 +122,18 @@ menu_template = Handlebars.compile '
 <ul class="menu_container">
     {{#if username}}
         {{#if scrobbling}}
-            <li class="toggle enabled">Scrobbling enabled</li>
+            <li class="toggle enabled" style="color: #5FFA69">Scrobbling enabled</li>
         {{else}}
-            <li class="toggle disabled">Scrobbling disabled</li>
-        {{/if}}
-        <li class="header">Logged as {{username}}</li>
-        <li><a href="http://last.fm/user/{{username}}" target="_blank">Profile page</a></li>        
+            <li class="toggle disabled" style="color: #FF6666">Scrobbling disabled</li>
+        {{/if}}        
+        <li class="header">Free radio</li>
         <li class="loved_radio">Loved Tracks Radio</li>
         <li class="header">Subscribers radio</li>
         <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/personal">Library Radio</li>
         <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/mix">Mix Radio</li>
-        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/recommended">Recommendation Radio</li>        
+        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/recommended">Recommendation Radio</li>
+        <li class="header"></li>
+        <li><a href="http://last.fm/user/{{username}}" target="_blank">{{username}}</a></li>        
         <li class="logout">Logout</li>
     {{else}}
         <li class="scrobbling not_logged">Want scrobbling?</li>

@@ -97,9 +97,16 @@ a.button {
     position: relative;
     height: auto;
     padding: 10px;
-    .border-radius(10px);
+    .border-radius(3px);
     z-index:9999;
-    background-color: #eee;
+    background-color: #fff;
+    .box-shadow(1px 1px 3px rgba(0,0,0,.5));
+  }
+
+  .close {
+    margin-left: 10px;
+    color: lighten(#FF0000, 20%);
+    cursor: pointer;
   }
 }
 
@@ -108,13 +115,14 @@ a.button {
     margin-top: 10px;
 
     &.buttons {
-      text-align: right;
+      text-align: left;
     }    
   }
 
   label {
     display: block;
     padding: 5px 0px;        
+    font-weight: bold;
 
     .error {
       color: red;
@@ -136,11 +144,16 @@ a.button {
 
     &[type="submit"] {
       width: auto;
-      border: 1px solid #333;
-      background-color: #eee;
     }
   }
 }
+
+/*********** Browser specifiec stuff **************/
+
+.frame #wrapper {
+  min-height: 0;
+}
+
 
 /************* Scrollbar ***************/
 .jspVerticalBar {
@@ -224,6 +237,69 @@ a.button {
 }
 
 
-.frame #wrapper {
-  min-height: 0;
+@basefont: 13;
+
+.btn {
+  // Button Base
+  cursor: pointer;
+  display: inline-block;
+  #gradient > .vertical-three-colors(#ffffff, #ffffff, 25%, darken(#ffffff, 10%)); // Don't use .gradientbar() here since it does a three-color gradient
+  padding: 5px 14px 6px;
+  text-shadow: 0 1px 1px rgba(255,255,255,.75);
+  color: #333;
+  font-size: @basefont;
+  line-height: normal;
+  border: 1px solid #ccc;
+  border-bottom-color: #bbb;
+  .border-radius(4px);
+  @shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
+  .box-shadow(@shadow);
+
+  &:hover {
+    background-position: 0 -15px;
+    color: #333;
+    text-decoration: none;
+  }
+
+  // Focus state for keyboard and accessibility
+  &:focus {
+    outline: 1px dotted #666;
+  }
+   // Transitions
+  .transition(.1s linear all);
+
+  // Active and Disabled states
+  &.active,
+  &:active {
+    @shadow: inset 0 2px 4px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.05);
+    .box-shadow(@shadow);
+  }
+  &.disabled {
+    cursor: default;
+    background-image: none;
+    .reset-filter();
+    .opacity(65);
+    .box-shadow(none);
+  }
+  &[disabled] {
+    // disabled pseudo can't be included with .disabled
+    // def because IE8 and below will drop it ;_;
+    cursor: default;
+    background-image: none;
+    .reset-filter();
+    .opacity(65);
+    .box-shadow(none);
+  }
+
+  // Button Sizes
+  &.large {
+    font-size: @basefont + 2px;
+    line-height: normal;
+    padding: 9px 14px 9px;
+    .border-radius(6px);
+  }
+  &.small {
+    padding: 7px 9px 7px;
+    font-size: @basefont - 2px;
+  }
 }
