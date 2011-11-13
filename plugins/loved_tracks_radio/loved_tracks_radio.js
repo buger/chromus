@@ -32,7 +32,7 @@
           this.pages = response.lovedtracks["@attr"].totalPages;
           this.pages = _.range(1, this.pages);
         }
-        tracks = _.first(tracks, 5);
+        tracks = _.first(tracks, 3);
         this.played_tracks = _.union(this.played_tracks, tracks);
         tracks = _.map(tracks, function(track) {
           return {

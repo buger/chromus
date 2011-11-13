@@ -32,7 +32,7 @@ class LastfmLovedRadio
                     @pages = response.lovedtracks["@attr"].totalPages
                     @pages = _.range 1, @pages
                 
-                tracks = _.first(tracks, 5)
+                tracks = _.first(tracks, 3)
                 @played_tracks = _.union @played_tracks, tracks
                 
                 tracks = _.map tracks, (track) ->
