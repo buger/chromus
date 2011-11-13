@@ -55,6 +55,7 @@
   padding: 0px 3px;
 }
 #current_song .album_img {
+  display: block;
   position: relative;
 }
 #current_song .album_img img {
