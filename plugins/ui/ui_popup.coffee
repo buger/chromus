@@ -397,7 +397,3 @@ class App extends Backbone.View
 
 
 $ -> browser.onReady -> app.start()
-
-if browser.isPokki
-    pokki.addEventListener 'pokki_link', (url) ->
-        pokki.openURLInDefaultBrowser(url)

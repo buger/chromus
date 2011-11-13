@@ -21,12 +21,13 @@ music_manager.state.bind 'change', (state) ->
         track: track
 
 
-music_manager.playlist.bind 'all', ->
-    browser.postMessage
-        method: "loadPlaylist"
-        playlist: music_manager.playlist.toJSON()
-        current_track: music_manager.get('current_track')
-        state: music_manager.getState()
+for event in ['reset','add','create']
+    music_manager.playlist.bind event, ->
+        browser.postMessage
+            method: "loadPlaylist"
+            playlist: music_manager.playlist.toJSON()
+            current_track: music_manager.get('current_track')
+            state: music_manager.getState()
 
 
 browser.addMessageListener (msg, sender, sendResponse) ->

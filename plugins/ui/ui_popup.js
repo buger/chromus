@@ -517,9 +517,4 @@
       return app.start();
     });
   });
-  if (browser.isPokki) {
-    pokki.addEventListener('pokki_link', function(url) {
-      return pokki.openURLInDefaultBrowser(url);
-    });
-  }
 }).call(this);

@@ -1,5 +1,5 @@
 (function() {
-  var music_manager;
+  var event, music_manager, _i, _len, _ref;
   browser.toolbarItem.setBackgroundColor([51, 153, 204, 255]);
   music_manager = chromus.plugins.music_manager;
   music_manager.state.bind('change', function(state) {
@@ -20,14 +20,18 @@
       track: track
     });
   });
-  music_manager.playlist.bind('all', function() {
-    return browser.postMessage({
-      method: "loadPlaylist",
-      playlist: music_manager.playlist.toJSON(),
-      current_track: music_manager.get('current_track'),
-      state: music_manager.getState()
+  _ref = ['reset', 'add', 'create'];
+  for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+    event = _ref[_i];
+    music_manager.playlist.bind(event, function() {
+      return browser.postMessage({
+        method: "loadPlaylist",
+        playlist: music_manager.playlist.toJSON(),
+        current_track: music_manager.get('current_track'),
+        state: music_manager.getState()
+      });
     });
-  });
+  }
   browser.addMessageListener(function(msg, sender, sendResponse) {
     if (!msg.method.match('(playerState|updateState)')) {
       console.log(msg.method, msg, sender);
