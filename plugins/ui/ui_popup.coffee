@@ -295,7 +295,7 @@ class PlaylistView extends Backbone.View
     artistPlaylistCount: (artist, start_from) ->        
         count = 0
 
-        for track in @model.playlist.models[start_from..]
+        for track in @model.playlist.models[start_from..start_from+3]
             count++ if track.get('artist') is artist
 
         count

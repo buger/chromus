@@ -371,7 +371,7 @@
     PlaylistView.prototype.artistPlaylistCount = function(artist, start_from) {
       var count, track, _i, _len, _ref;
       count = 0;
-      _ref = this.model.playlist.models.slice(start_from);
+      _ref = this.model.playlist.models.slice(start_from, (start_from + 3 + 1) || 9e9);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         track = _ref[_i];
         if (track.get('artist') === artist) {
