@@ -71,7 +71,7 @@
       states = _.map(state_spy.calls, function(call) {
         return call.args[0].name;
       });
-      return expect(states).toEqual(['loading', 'playing', 'paused']);
+      return expect(states).toEqual(['loading', 'playing', 'paused', 'stopped']);
     });
     it("should change state to paused", function() {
       manager.playlist.reset(fixtures.playlist);

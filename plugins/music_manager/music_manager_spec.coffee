@@ -65,7 +65,7 @@ describe "Music manager", ->
 
         states = _.map state_spy.calls, (call) -> call.args[0].name
 
-        expect(states).toEqual ['loading','playing','paused']
+        expect(states).toEqual ['loading','playing','paused','stopped']
 
 
     it "should change state to paused", ->

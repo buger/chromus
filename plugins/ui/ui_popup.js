@@ -229,6 +229,8 @@
       bar = this.$('.search_bar').toggle();
       if (bar.is(':visible')) {
         return bar.find('input').focus();
+      } else {
+        return $('#first_run .search-tip').hide();
       }
     };
     Controls.prototype.search = _.debounce(function(evt) {
@@ -240,6 +242,7 @@
       if (!text.trim()) {
         return this.$('.search_bar .result').html('');
       } else {
+        $('#first_run .search-tip').hide();
         view = {
           'show_tracks': function(fn) {
             var _ref2;
@@ -380,6 +383,7 @@
       });
     };
     Footer.prototype.toggleMenu = function() {
+      $('#first_run .settings-tip').hide();
       return $('#main_menu').toggle();
     };
     Footer.prototype.toggleVolume = function() {
@@ -543,9 +547,15 @@
         }
       });
       if (browser.isPokki) {
-        return $('#minimize').bind('click', function() {
+        $('#minimize').bind('click', function() {
           return pokki.closePopup();
         });
+      }
+      console.warn(store.get('first_run'));
+      if (!store.get('first_run')) {
+        $('#first_run').show();
+        this.controls.toggleSearch();
+        return store.set('first_run', true);
       }
     };
     App.prototype.start = function() {

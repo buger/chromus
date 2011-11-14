@@ -1,6 +1,6 @@
 {
    	"name": "Chromus",
-   	"version": "3.0.0",   
+   	"version": "3.0.1",   
    	"description": "Awesome music player for Pokki",      
 
    	"popup": "index.html",

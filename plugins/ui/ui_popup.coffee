@@ -174,18 +174,23 @@ class Controls extends Backbone.View
     toggleSearch: ->        
         bar = @$('.search_bar').toggle()
 
-        bar.find('input').focus() if bar.is ':visible'
+        if bar.is ':visible'
+            bar.find('input').focus()
+        else
+            $('#first_run .search-tip').hide()
     
     # Rate limiting search function, by adding slight delay
     # http://documentcloud.github.com/underscore/#debounce
     search: _.debounce (evt) ->
-        return if evt.keyCode in [40,45,37,39,38]        
+        return if evt.keyCode in [40,45,37,39,38]
 
         text = evt.currentTarget.value
         
         if not text.trim()
             @$('.search_bar .result').html('')
         else
+            $('#first_run .search-tip').hide()
+
             view =
                 'show_tracks': (fn) -> if not @tracks or @tracks?.length then fn(this)
                 'show_albums': (fn) -> if not @albums or @albums?.length then fn(this)
@@ -208,7 +213,7 @@ class Controls extends Backbone.View
 
             chromus.plugins.lastfm.album.search text, (albums = []) =>
                 view.albums = _.first(albums, 4)
-                render()
+                render()                        
     , 500
 
     
@@ -301,6 +306,7 @@ class Footer extends Backbone.View
 
 
     toggleMenu: ->
+        $('#first_run .settings-tip').hide()
         $('#main_menu').toggle()
 
     
@@ -430,6 +436,15 @@ class App extends Backbone.View
         if browser.isPokki
             $('#minimize').bind 'click', ->
                 pokki.closePopup()
+
+        console.warn store.get('first_run')
+
+        if not store.get('first_run')
+            $('#first_run').show()
+            @controls.toggleSearch()
+
+            store.set('first_run', true)
+
 
                 
     start: ->        
