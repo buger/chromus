@@ -11,8 +11,8 @@ LastFM =
     settings: 
         baseURL: "http://ws.audioscrobbler.com/2.0/"
         format: "json"
-        api_key: pokki.getScrambled('lastfm_api_key')
-        api_secret: pokki.getScrambled('lastfm_api_secret')
+        api_key: pokki?.getScrambled('lastfm_api_key')
+        api_secret: pokki?.getScrambled('lastfm_api_secret')
 
     
     getSignature: (data) ->

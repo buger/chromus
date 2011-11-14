@@ -15,8 +15,8 @@
     settings: {
       baseURL: "http://ws.audioscrobbler.com/2.0/",
       format: "json",
-      api_key: pokki.getScrambled('lastfm_api_key'),
-      api_secret: pokki.getScrambled('lastfm_api_secret')
+      api_key: typeof pokki !== "undefined" && pokki !== null ? pokki.getScrambled('lastfm_api_key') : void 0,
+      api_secret: typeof pokki !== "undefined" && pokki !== null ? pokki.getScrambled('lastfm_api_secret') : void 0
     },
     getSignature: function(data) {
       var key, signature, value;

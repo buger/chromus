@@ -141,7 +141,7 @@ menu_template = Handlebars.compile '
         <li><a href="http://last.fm/user/{{username}}" target="_blank">{{username}}</a></li>        
         <li class="logout">Logout</li>
     {{else}}
-        <li class="scrobbling not_logged">Want scrobbling?</li>
+        <li class="not_logged">Login to Last.fm</li>
     {{/if}}
 </ul> 
 '
