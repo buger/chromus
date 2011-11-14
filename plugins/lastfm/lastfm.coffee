@@ -11,8 +11,8 @@ LastFM =
     settings: 
         baseURL: "http://ws.audioscrobbler.com/2.0/"
         format: "json"
-        api_key: "48e602d0f8c4d34f00b1b17d96ab88c1"
-        api_secret: "c129f28ec70abc4311b21fa8473d34e7"
+        api_key: pokki.getScrambled('lastfm_api_key')
+        api_secret: pokki.getScrambled('lastfm_api_secret')
 
     
     getSignature: (data) ->
@@ -26,6 +26,13 @@ LastFM =
         MD5(signature.join('') + LastFM.settings.api_secret)
 
 
+    getSession: ->
+        if browser.isPokki
+            pokki.descramble store.get('lastfm:key')
+        else
+            store.get('lastfm:key')
+
+
     callMethod: (method, data = {}, callback) ->
         data.format = @settings.format
         data.api_key = @settings.api_key
@@ -35,7 +42,7 @@ LastFM =
             delete data.sig_call
 
             unless method.match /^auth/
-                data.sk = store.get('lastfm:key')
+                data.sk = LastFM.getSession()
         
             data.api_sig = @getSignature(data)  
 
@@ -85,7 +92,7 @@ LastFM =
         scrobble: (data, callback) ->
             data.method = 'track.scrobble'
             data.timestamp = (+ LastFM.convertDateToUTC()) / 1000
-            data.sk = store.get('lastfm:key')
+            data.sk = LastFM.getSession()
             data.api_key = LastFM.settings.api_key
 
             signature = LastFM.getSignature(data)
@@ -96,7 +103,7 @@ LastFM =
         
         updateNowPlaying: (data, callback) ->
             data.method = 'track.updateNowPlaying'
-            data.sk = store.get('lastfm:key')            
+            data.sk = LastFM.getSession()
             data.api_key = LastFM.settings.api_key
 
             signature = LastFM.getSignature(data)
@@ -197,7 +204,7 @@ LastFM =
                         
             data = station: station            
             data.method = 'radio.tune'
-            data.sk = store.get('lastfm:key')            
+            data.sk = LastFM.getSession()
             data.api_key = LastFM.settings.api_key
 
 

@@ -15,8 +15,8 @@
     settings: {
       baseURL: "http://ws.audioscrobbler.com/2.0/",
       format: "json",
-      api_key: "48e602d0f8c4d34f00b1b17d96ab88c1",
-      api_secret: "c129f28ec70abc4311b21fa8473d34e7"
+      api_key: pokki.getScrambled('lastfm_api_key'),
+      api_secret: pokki.getScrambled('lastfm_api_secret')
     },
     getSignature: function(data) {
       var key, signature, value;
@@ -31,6 +31,13 @@
       signature.sort();
       return MD5(signature.join('') + LastFM.settings.api_secret);
     },
+    getSession: function() {
+      if (browser.isPokki) {
+        return pokki.descramble(store.get('lastfm:key'));
+      } else {
+        return store.get('lastfm:key');
+      }
+    },
     callMethod: function(method, data, callback) {
       if (data == null) {
         data = {};
@@ -41,7 +48,7 @@
       if (data.sig_call) {
         delete data.sig_call;
         if (!method.match(/^auth/)) {
-          data.sk = store.get('lastfm:key');
+          data.sk = LastFM.getSession();
         }
         data.api_sig = this.getSignature(data);
       }
@@ -91,7 +98,7 @@
         var signature;
         data.method = 'track.scrobble';
         data.timestamp = (+LastFM.convertDateToUTC()) / 1000;
-        data.sk = store.get('lastfm:key');
+        data.sk = LastFM.getSession();
         data.api_key = LastFM.settings.api_key;
         signature = LastFM.getSignature(data);
         data.api_sig = signature;
@@ -100,7 +107,7 @@
       updateNowPlaying: function(data, callback) {
         var signature;
         data.method = 'track.updateNowPlaying';
-        data.sk = store.get('lastfm:key');
+        data.sk = LastFM.getSession();
         data.api_key = LastFM.settings.api_key;
         signature = LastFM.getSignature(data);
         data.api_sig = signature;
@@ -220,7 +227,7 @@
           station: station
         };
         data.method = 'radio.tune';
-        data.sk = store.get('lastfm:key');
+        data.sk = LastFM.getSession();
         data.api_key = LastFM.settings.api_key;
         signature = LastFM.getSignature(data);
         data.api_sig = signature;

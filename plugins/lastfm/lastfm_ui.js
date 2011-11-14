@@ -68,7 +68,11 @@
           return this.spinner.stop();
         } else if (resp.session) {
           store.set('lastfm:user', resp.session.name);
-          store.set('lastfm:key', resp.session.key);
+          if (browser.isPokki) {
+            store.set('lastfm:key', pokki.scramble(resp.session.key));
+          } else {
+            store.set('lastfm:key', resp.session.key);
+          }
           store.set('lastfm:scrobbling', true);
           this.el.innerHTML = '\
                     <form class="form">\
