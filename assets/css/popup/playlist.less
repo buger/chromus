@@ -11,9 +11,8 @@
 
         &.large {                        
 
-            .artist { 
-                visibility: hidden; 
-                display: block;
+            .artist > div {                 
+                visibility: hidden;
                 height: auto;
 
                 span {
@@ -21,22 +20,24 @@
                 }
             }  
 
-            .track_container:first-child .artist { 
-                visibility: visible;
+            .track_container:first-child .artist {                 
+                > div { 
+                    visibility: visible;
+                    
+                    display: inline-block;
 
-                padding: 16px;
+                    padding: 16px;
 
-                .image {
-                    display: block;
+                    .image {
+                        display: block;
+                    }
                 }
             }
         }
 
-        .track_container {
-            .box();
-            .box-pack(end);
-            .box-align(start);
+        .track_container {            
             height: 34px;
+            width: 100%;
             cursor: pointer;
 
             &.odd {
@@ -46,7 +47,8 @@
             }
         }
 
-        .artist {
+        .artist {            
+            float: left;
             width: 40%;
             height: 34px;
 
@@ -56,14 +58,18 @@
 
             padding: 0px 8px;
             padding-right: 16px;
-            overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
 
-            .box();
-            .box-align(center);
             .box-sizing(border-box);
-            .box-pack(end);
+
+            > div {                
+                height: 34px;
+                .box();
+                .box-align(center);
+                .box-sizing(border-box);
+                .box-pack(end);
+            }
 
             .image img {
                 width: 50px;
@@ -80,7 +86,9 @@
         }
 
         .song {
-            width: 60%; 
+            float: left;
+            width: 60%;
+
             .box-sizing(border-box);                      
 
             border-left: 1px solid #e3e3e3;

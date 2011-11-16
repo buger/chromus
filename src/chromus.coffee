@@ -61,18 +61,16 @@ class Chromus
 			complete: @pluginsLoadedCallback
 		
 
-	loadPlugins: ->
-		callback = _.after @plugins_list.length, @injectPluginFiles
-
+	loadPlugins: ->		
+		callback = _.after @plugins_list.length, @injectPluginFiles				
 		for plugin in @plugins_list						
 			do (plugin) =>
-				plugin_path = browser.extension.getURL "/plugins/#{plugin}"			
-				package_path = "#{plugin_path}/package.json"
-
+				plugin_path = browser.extension.getURL "/plugins/#{plugin}"
+				package_path = "#{plugin_path}/package.json"								
 				$.getJSON package_path, (package) =>					
 					@plugins_info[plugin] = package
 					@plugins_info[plugin].path = plugin_path
-
+					
 					callback()																		
 
 	registerPlugin: (name, context) ->

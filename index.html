@@ -8,7 +8,7 @@
           <meta name="MobileOptimized" content="320"/> 
           <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 
-        <link rel="stylesheet" href="assets/css/popup.css" type="text/css">
+        <link rel="stylesheet" href="assets/css/popup.css" type="text/css">        
 
         <script id="playlist_tmpl" type="text/template">
             {{#each playlist}}
@@ -17,11 +17,13 @@
                 {{/is_previous}}
                     <div class="track_container" data-id="{{id}}">
                         <div class="artist">
-                            <div class="image">
-                                <img src='{{lfm_img this}}' />
+                            <div>
+                                <div class="image">
+                                    <img src='{{lfm_img this}}' />
+                                </div>
+                                    
+                                <span title="{{artist}}">{{artist}}</span>
                             </div>
-                                
-                            <span title="{{artist}}">{{artist}}</span>
                         </div>
                         <div class="song {{#is_current}}playing{{/is_current}}" data-id='{{id}}'>                        
                             <span class="title">{{{title}}}</span>
@@ -183,6 +185,8 @@
 
             <ul id="main_menu" class="menu_container" style="display:none"></ul>
         </div>
+
+        <script src="lib/flexie.js"></script>
 
         <script src="lib/jquery.min.js"></script>
 

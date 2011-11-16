@@ -5,47 +5,45 @@
 #playlist .artist_playlist .artist .image {
   display: none;
 }
-#playlist .artist_playlist.large .artist {
+#playlist .artist_playlist.large .artist > div {
   visibility: hidden;
-  display: block;
   height: auto;
 }
-#playlist .artist_playlist.large .artist span {
+#playlist .artist_playlist.large .artist > div span {
   display: inline-block;
 }
-#playlist .artist_playlist.large .track_container:first-child .artist {
+#playlist .artist_playlist.large .track_container:first-child .artist > div {
   visibility: visible;
+  display: inline-block;
   padding: 16px;
 }
-#playlist .artist_playlist.large .track_container:first-child .artist .image {
+#playlist .artist_playlist.large .track_container:first-child .artist > div .image {
   display: block;
 }
 #playlist .artist_playlist .track_container {
-  display: -webkit-box;
-  display: -moz-box;
-  display: box;
-  -webkit-box-pack: end;
-  -moz-box-pack: end;
-  box-pack: end;
-  -webkit-box-align: start;
-  -moz-box-align: start;
-  box-align: start;
   height: 34px;
+  width: 100%;
   cursor: pointer;
 }
 #playlist .artist_playlist .track_container.odd .song {
   background-color: #f2f2f2;
 }
 #playlist .artist_playlist .artist {
+  float: left;
   width: 40%;
   height: 34px;
   left: 0px;
   text-align: right;
   padding: 0px 8px;
   padding-right: 16px;
-  overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+#playlist .artist_playlist .artist > div {
+  height: 34px;
   display: -webkit-box;
   display: -moz-box;
   display: box;
@@ -70,6 +68,7 @@
   font-family: Verdana, arial;
 }
 #playlist .artist_playlist .song {
+  float: left;
   width: 60%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
