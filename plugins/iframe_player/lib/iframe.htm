@@ -8,7 +8,7 @@
             // enable HTML5 audio support, if you're feeling adventurous. iPad/iPhone will always get this.
             soundManager.useHTML5Audio = true;
             soundManager.html5Test = /^(probably|maybe)$/i;
-            soundManager.preferFlash = true;
+            soundManager.preferFlash = false;
 
             soundManager.onready(function() {
                 postMessageJSON({'method':'ready'});

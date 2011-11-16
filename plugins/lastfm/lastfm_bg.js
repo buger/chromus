@@ -3,6 +3,7 @@
       Track scrobbling 
   */
   var last_scrobbled, lastfm, manager;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   lastfm = chromus.plugins.lastfm;
   manager = chromus.plugins.music_manager;
   last_scrobbled = void 0;
@@ -46,6 +47,7 @@
           track.unset('radio');
           track.unset('source_title');
           track.unset('source_icon');
+          track.unset('type');
         }
       }
       if (!manager.nextTrack()) {
@@ -70,4 +72,20 @@
       return lastfm.radio.getPlaylist(callback);
     });
   });
+  chromus.registerMediaType("lastfm:stream_track", __bind(function(track, callback) {
+    var xhr;
+    return xhr = $.ajax({
+      url: "http://chromusapp.appspot.com/proxy?_callback=?",
+      dataType: "jsonp",
+      data: {
+        '_url': track.file_url
+      },
+      cache: true,
+      success: function(resp) {
+        return callback({
+          file_url: resp.headers.location
+        }, false);
+      }
+    });
+  }, this));
 }).call(this);

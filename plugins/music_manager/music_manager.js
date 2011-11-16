@@ -204,6 +204,9 @@
       if (track !== this.currentTrack()) {
         this.stop();
       }
+      this.state.set({
+        'name': 'loading'
+      });
       if (track.get('type') == null) {
         this.set({
           'current_track': track.id
@@ -211,17 +214,23 @@
         if (track.get('file_url')) {
           return this.play(track);
         } else {
-          this.state.set({
-            'name': 'loading'
-          });
           return this.searchTrack(track, __bind(function() {
             return this.playTrack(track);
           }, this));
         }
       } else {
-        return chromus.media_types[track.get('type')](track.toJSON(), __bind(function(tracks) {
-          this.playlist.reset(tracks);
-          return this.playTrack(this.playlist.first().id);
+        return chromus.media_types[track.get('type')](track.toJSON(), __bind(function(resp, reset) {
+          if (reset == null) {
+            reset = true;
+          }
+          if (reset) {
+            this.playlist.reset(resp);
+            return this.playTrack(this.playlist.first().id);
+          } else {
+            track.set(resp);
+            track.unset('type');
+            return this.playTrack(track);
+          }
         }, this));
       }
     };

@@ -8,10 +8,5 @@
 
    	"icon-19x19": "assets/icons/19x19.png",
    	"icon-29x29": "assets/icons/29x29.png",
-   	"icon-42x42": "assets/icons/42x42.png",
-
-	"scrambled_data": [
-		{"key": "lastfm_api_key", "value": "48e602d0f8c4d34f00b1b17d96ab88c1"},
-   		{"key": "lastfm_api_secret", "value": "c129f28ec70abc4311b21fa8473d34e7"}
-   	]
+   	"icon-42x42": "assets/icons/42x42.png"
 }

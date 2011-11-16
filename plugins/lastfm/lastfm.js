@@ -15,8 +15,8 @@
     settings: {
       baseURL: "http://ws.audioscrobbler.com/2.0/",
       format: "json",
-      api_key: typeof pokki !== "undefined" && pokki !== null ? pokki.getScrambled('lastfm_api_key') : void 0,
-      api_secret: typeof pokki !== "undefined" && pokki !== null ? pokki.getScrambled('lastfm_api_secret') : void 0
+      api_key: "48e602d0f8c4d34f00b1b17d96ab88c1",
+      api_secret: "c129f28ec70abc4311b21fa8473d34e7"
     },
     getSignature: function(data) {
       var key, signature, value;
@@ -210,6 +210,7 @@
               images: [track.image],
               duration: track.duration / 1000,
               radio: true,
+              type: 'lastfm:stream_track',
               source_title: resp.playlist.title,
               source_icon: "http://cdn.last.fm/flatness/favicon.2.ico"
             };

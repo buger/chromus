@@ -50,6 +50,7 @@ chromus.plugins.music_manager.bind 'change:current_track', ->
                 track.unset 'radio'
                 track.unset 'source_title'
                 track.unset 'source_icon'
+                track.unset 'type'
         
         # If last track, load more
         if not manager.nextTrack()
@@ -71,3 +72,15 @@ chromus.registerMediaType "lastfm:radio", (track, callback) ->
 
     lastfm.radio.tune track.station, ->
         lastfm.radio.getPlaylist callback
+
+chromus.registerMediaType "lastfm:stream_track", (track, callback) =>
+    xhr = $.ajax
+            url: "http://chromusapp.appspot.com/proxy?_callback=?"
+            dataType: "jsonp",
+            data:
+                '_url': track.file_url
+            cache: true,
+            success: (resp) ->
+                callback 
+                    file_url: resp.headers.location
+                , false 

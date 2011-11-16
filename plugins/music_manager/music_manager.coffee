@@ -152,21 +152,26 @@ class MusicManager extends Backbone.Model
         if track isnt @currentTrack()
             @stop()
                     
+        @state.set 'name':'loading'
 
         unless track.get('type')?
             @set 'current_track': track.id
 
             if track.get('file_url')
                 @play track
-            else
-                @state.set 'name':'loading'
-
+            else                
                 @searchTrack track, =>
                     @playTrack track
         else
-            chromus.media_types[track.get('type')] track.toJSON(), (tracks) =>
-                @playlist.reset tracks
-                @playTrack @playlist.first().id
+            chromus.media_types[track.get('type')] track.toJSON(), (resp, reset = true) =>
+                if reset
+                    @playlist.reset resp
+                    @playTrack @playlist.first().id
+                else
+                    track.set resp
+                    track.unset 'type'
+
+                    @playTrack track
                                 
 
     setVolume: (volume) ->
