@@ -81,7 +81,7 @@ class Player extends Backbone.Model
         if !msg.method.match('(playerState|updateState)')
             console.log "Popup received message", msg.method, msg
         else
-            if msg.state.name in ["playing", "loading"]                
+            if msg.track and msg.state.name in ["playing", "loading"]
                 @playlist.get(msg.track.id).set(msg.track)
                 @set 'current_track': msg.track.id
         

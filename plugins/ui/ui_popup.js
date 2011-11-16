@@ -125,7 +125,7 @@
       if (!msg.method.match('(playerState|updateState)')) {
         console.log("Popup received message", msg.method, msg);
       } else {
-        if ((_ref = msg.state.name) === "playing" || _ref === "loading") {
+        if (msg.track && ((_ref = msg.state.name) === "playing" || _ref === "loading")) {
           this.playlist.get(msg.track.id).set(msg.track);
           this.set({
             'current_track': msg.track.id
