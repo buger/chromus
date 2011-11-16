@@ -3,12 +3,18 @@
 @import "mixins.less";
 
 #header {
+    position: absolute;
     height: 36px;
+    width: 100%;
     background: #444;
     
-    .box();
     .box-sizing(border-box);
-    .box-align(center);
+    
+    > div {
+        width: 100%;
+        .box();
+        .box-align(center);
+    }
 
     background: url("@{asset_path}/header_bg.png");
     border-top: 1px solid #484848;

@@ -1,5 +1,7 @@
 #current_song {
-  position: relative;
+  position: absolute;
+  top: 36px;
+  width: 100%;
   height: 64px;
   background: url("../../images/popup/cur_song_bg.png") top left;
   border-bottom: 1px solid #b8b8b8;

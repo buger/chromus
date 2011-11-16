@@ -1,19 +1,24 @@
 #header {
+  position: absolute;
   height: 36px;
+  width: 100%;
   background: #444;
-  display: -webkit-box;
-  display: -moz-box;
-  display: box;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  -webkit-box-align: center;
-  -moz-box-align: center;
-  box-align: center;
   background: url("../../images/popup/header_bg.png");
   border-top: 1px solid #484848;
   border-right: 1px solid #484848;
   border-left: 1px solid #484848;
+}
+#header > div {
+  width: 100%;
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  box-align: center;
 }
 #header .toggle {
   margin-left: 5px;

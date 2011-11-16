@@ -3,14 +3,21 @@
 @import "mixins.less";
 
 #footer {
+    position: absolute;
+    bottom: 0px;
+
     background: url("@{asset_path}/footer_bg.png") top left;
     width: 100%;
     height: 27px;
     padding: 2px 0px;
 
-    .box();
     .box-sizing(border-box);
-    .box-align(center);
+
+    > div {
+        width: 100%;
+        .box();    
+        .box-align(center);
+    }
   
     .left {
         .box-flex(1);

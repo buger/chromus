@@ -1,5 +1,8 @@
 /*********** Playlist *************/#playlist {
-  position: relative;
+  position: absolute;
+  top: 100px;
+  bottom: 27px;
+  width: 100%;
   overflow: auto;
 }
 #playlist .artist_playlist .artist .image {

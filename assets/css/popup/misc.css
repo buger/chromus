@@ -65,28 +65,12 @@ a.button {
   overflow: hidden;
   font-size: 93%;
   line-height: 77%;
-  display: -webkit-box;
-  display: -moz-box;
-  display: box;
-  -webkit-box-orient: vertical;
-  -moz-box-orient: vertical;
-  box-orient: vertical;
-}
-#header, #current_song, #footer {
-  -webkit-box-flex: 0;
-  -moz-box-flex: 0;
-  box-flex: 0;
-}
-#playlist {
-  -webkit-box-flex: 1;
-  -moz-box-flex: 1;
-  box-flex: 1;
 }
 .clearfix {
   clear: both;
 }
 #dialog {
-  position: fixed;
+  position: relative;
   background: rgba(0, 0, 0, 0.5);
   z-index: 999;
   height: 100%;
