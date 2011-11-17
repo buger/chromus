@@ -107,11 +107,12 @@ class Controls extends Backbone.View
         "click .next":   "nextTrack"
         "click .search": "toggleSearch"
         "keyup .search_bar .text": "search"
-        "click .search_bar .result a": "playSearchedTrack"
+        "click .search_bar .result span.add_to_playlist": "addToPlaylist"
+        "click .search_bar .result a.ex_container": "playSearchedTrack"
                 
 
     initialize: ->
-        _.bindAll @, "updateState", "togglePlaying", "search"
+        _.bindAll @
 
         @model.state.bind 'change', @updateState
 
@@ -226,6 +227,22 @@ class Controls extends Backbone.View
             playlist: [ track_info ]
 
         @toggleSearch()    
+
+
+    addToPlaylist: (evt) ->
+        console.warn('asdasd')
+
+        track_info = getTrackInfo(evt.currentTarget.parentNode)
+
+        console.warn track_info
+
+        browser.postMessage
+            method:   'addToPlaylist'
+            tracks:    [track_info]
+
+        @toggleSearch()
+
+        evt.stopPropagation()
                               
 
 class TrackInfo extends Backbone.View

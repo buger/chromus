@@ -161,11 +161,12 @@
       "click .next": "nextTrack",
       "click .search": "toggleSearch",
       "keyup .search_bar .text": "search",
-      "click .search_bar .result a": "playSearchedTrack"
+      "click .search_bar .result span.add_to_playlist": "addToPlaylist",
+      "click .search_bar .result a.ex_container": "playSearchedTrack"
     };
     Controls.prototype.initialize = function() {
       var opts;
-      _.bindAll(this, "updateState", "togglePlaying", "search");
+      _.bindAll(this);
       this.model.state.bind('change', this.updateState);
       opts = {
         lines: 8,
@@ -299,6 +300,18 @@
         playlist: [track_info]
       });
       return this.toggleSearch();
+    };
+    Controls.prototype.addToPlaylist = function(evt) {
+      var track_info;
+      console.warn('asdasd');
+      track_info = getTrackInfo(evt.currentTarget.parentNode);
+      console.warn(track_info);
+      browser.postMessage({
+        method: 'addToPlaylist',
+        tracks: [track_info]
+      });
+      this.toggleSearch();
+      return evt.stopPropagation();
     };
     return Controls;
   })();

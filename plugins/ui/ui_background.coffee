@@ -68,7 +68,14 @@ browser.addMessageListener (msg, sender, sendResponse) ->
 
 
         when "addToPlaylist"
-            music_manager.playlist.add(msg.tracks)
+            for track in msg.tracks
+                if track.type
+                    chromus.media_types[track.type] track, (resp) =>
+                        music_manager.playlist.remove(track)
+                        music_manager.playlist.add(resp)
+                else
+                    music_manager.playlist.add(track)
+
 
         when "togglePlaying"
             if music_manager.state.get('name') is "paused" and music_manager.currentTrack()

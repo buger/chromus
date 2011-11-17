@@ -1,5 +1,6 @@
 (function() {
   var event, music_manager, _i, _len, _ref;
+  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   browser.toolbarItem.setBackgroundColor([51, 153, 204, 255]);
   music_manager = chromus.plugins.music_manager;
   music_manager.state.bind('change', function(state) {
@@ -39,6 +40,7 @@
     });
   });
   browser.addMessageListener(function(msg, sender, sendResponse) {
+    var track, _j, _len2, _ref2, _results;
     if (!msg.method.match('(playerState|updateState)')) {
       console.log(msg.method, msg, sender);
     }
@@ -67,7 +69,17 @@
         }
         return music_manager.radio = void 0;
       case "addToPlaylist":
-        return music_manager.playlist.add(msg.tracks);
+        _ref2 = msg.tracks;
+        _results = [];
+        for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
+          track = _ref2[_j];
+          _results.push(track.type ? chromus.media_types[track.type](track, __bind(function(resp) {
+            music_manager.playlist.remove(track);
+            return music_manager.playlist.add(resp);
+          }, this)) : music_manager.playlist.add(track));
+        }
+        return _results;
+        break;
       case "togglePlaying":
         if (music_manager.state.get('name') === "paused" && music_manager.currentTrack()) {
           return music_manager.play();
