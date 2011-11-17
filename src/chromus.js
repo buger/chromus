@@ -35,11 +35,12 @@
       this.loadPlugins();
     }
     Chromus.prototype.injectPluginFiles = function() {
-      var files, meta, plugin, _ref;
+      var files, meta, plugin, _i, _len, _ref;
       files = [];
-      _ref = this.plugins_info;
-      for (plugin in _ref) {
-        meta = _ref[plugin];
+      _ref = this.plugins_list;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        plugin = _ref[_i];
+        meta = this.plugins_info[plugin];
         files.push(_.map(meta['files'], function(file) {
           var match;
           match = file.match(/(.*!)?(.*)/);

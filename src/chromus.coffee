@@ -55,7 +55,9 @@ class Chromus
 	injectPluginFiles: ->		
 		files = []
 
-		for plugin, meta of @plugins_info
+		for plugin in @plugins_list
+			meta = @plugins_info[plugin]
+
 			files.push _.map meta['files'], (file) ->
 				match = file.match(/(.*!)?(.*)/)				
 				"#{match[1]}#{meta.path}/#{match[2]}?#{+new Date()}"	
