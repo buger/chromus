@@ -1,5 +1,5 @@
 (function() {
-  var App, Controls, Footer, Player, Playlist, PlaylistView, Track, TrackInfo;
+  var App, Controls, Footer, Player, Playlist, PlaylistView, Track, TrackInfo, clear_playlist;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
     for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
     function ctor() { this.constructor = child; }
@@ -573,4 +573,11 @@
       return app.start();
     });
   });
+  clear_playlist = $('<li>Clear playlist</li>').bind('click', function() {
+    $('#main_menu').hide();
+    return browser.postMessage({
+      method: "clearPlaylist"
+    });
+  });
+  chromus.addMenu(clear_playlist);
 }).call(this);

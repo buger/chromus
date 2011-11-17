@@ -455,3 +455,12 @@ class App extends Backbone.View
 
 
 $ -> browser.onReady -> app.start()
+
+
+clear_playlist = $('<li>Clear playlist</li>').bind 'click', ->
+    $('#main_menu').hide()
+    
+    browser.postMessage
+        method: "clearPlaylist"
+
+chromus.addMenu(clear_playlist);
