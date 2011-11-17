@@ -27,6 +27,7 @@
   height: 34px;
   width: 100%;
   cursor: pointer;
+  background-color: #fff;
 }
 #playlist .artist_playlist .track_container.odd .song {
   background-color: #f2f2f2;
