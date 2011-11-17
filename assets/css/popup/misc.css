@@ -77,7 +77,7 @@ a.button {
   bottom: 27px;
   background: white;
   padding: 10px;
-  z-index: 9999;
+  z-index: 101;
   border-left: 1px solid #eee;
   border-right: 1px solid #eee;
   -webkit-box-sizing: border-box;

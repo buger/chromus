@@ -163,7 +163,7 @@ class SettingsView extends Backbone.View
 
     close: ->
         $('#panel').removeClass('show')
-        
+
 
 class Menu extends Backbone.View
 
@@ -184,12 +184,11 @@ class Menu extends Backbone.View
 
     openPanel: ->
         new SettingsView().render()
+        $('#main_menu').hide()
                  
                     
 menu = new Menu()
 chromus.addMenu(menu.el)
-
-menu.openPanel()
 
 
 browser.addMessageListener (msg) ->

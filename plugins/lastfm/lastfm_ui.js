@@ -190,13 +190,13 @@
       return this.delegateEvents();
     };
     Menu.prototype.openPanel = function() {
-      return new SettingsView().render();
+      new SettingsView().render();
+      return $('#main_menu').hide();
     };
     return Menu;
   })();
   menu = new Menu();
   chromus.addMenu(menu.el);
-  menu.openPanel();
   browser.addMessageListener(function(msg) {
     switch (msg.method) {
       case "lastfm:error":

@@ -3,6 +3,7 @@
   width: 50%;
   bottom: 27px;
   right: 0px;
+  z-index: 105;
   font-size: 116%;
 }
 #main_menu a {
