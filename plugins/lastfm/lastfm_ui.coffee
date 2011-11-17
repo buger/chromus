@@ -76,7 +76,7 @@ class SettingsView extends Backbone.View
             logged: !!lastfm.getSession()
             scrobbling: !!store.get('lastfm:scrobbling')
             user: store.get('lastfm:user')
-            subscriber: !!store.get('lastfm:subscriber')
+            subscriber: !!parseInt(store.get('lastfm:subscriber'))
 
         @el.innerHTML = template(view)
 
@@ -147,7 +147,7 @@ class SettingsView extends Backbone.View
                 @spinner.stop()
             else if resp.session            
                 store.set 'lastfm:user', resp.session.name
-                store.set 'lastfm:subscriber', resp.session.subscriber
+                store.set 'lastfm:subscriber', parseInt(resp.session.subscriber)
 
                 console.warn resp.session.subscriber
 

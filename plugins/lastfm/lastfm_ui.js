@@ -86,7 +86,7 @@
         logged: !!lastfm.getSession(),
         scrobbling: !!store.get('lastfm:scrobbling'),
         user: store.get('lastfm:user'),
-        subscriber: !!store.get('lastfm:subscriber')
+        subscriber: !!parseInt(store.get('lastfm:subscriber'))
       };
       this.el.innerHTML = template(view);
       $('#panel .container').html(this.el);
@@ -153,7 +153,7 @@
           return this.spinner.stop();
         } else if (resp.session) {
           store.set('lastfm:user', resp.session.name);
-          store.set('lastfm:subscriber', resp.session.subscriber);
+          store.set('lastfm:subscriber', parseInt(resp.session.subscriber));
           console.warn(resp.session.subscriber);
           if (browser.isPokki) {
             store.set('lastfm:key', pokki.scramble(resp.session.key));
