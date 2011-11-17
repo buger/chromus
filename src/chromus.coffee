@@ -36,12 +36,13 @@ class Chromus
 	plugins_list: [
 		'iframe_player'
 		'music_manager'
+		'ui'
 		'echonest'
 		'lastfm'
 		'loved_tracks_radio'	
 	#	'local_files_player'
-		'vkontakte'
-		'ui'
+		'vkontakte'		
+		'about'
 	]
 
 	constructor: ->		
@@ -51,16 +52,14 @@ class Chromus
 		@loadPlugins()
 	
 
-	injectPluginFiles: ->
-		console.log 'injecting files'
-
+	injectPluginFiles: ->		
 		files = []
 
 		for plugin, meta of @plugins_info
 			files.push _.map meta['files'], (file) ->
 				match = file.match(/(.*!)?(.*)/)				
-				"#{match[1]}#{meta.path}/#{match[2]}?#{+new Date()}"
-		
+				"#{match[1]}#{meta.path}/#{match[2]}?#{+new Date()}"	
+
 		yepnope
 			load: _.flatten files
 			complete: @pluginsLoadedCallback
@@ -94,7 +93,7 @@ class Chromus
 
 	# UI features
 	addMenu: (el) ->
-		$('#main_menu').prepend(el)
+		$('#main_menu').append(el)
 
 
 @chromus = new Chromus()

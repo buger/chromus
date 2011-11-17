@@ -28,7 +28,7 @@
     Chromus.prototype.media_types = {};
     Chromus.prototype.plugins = {};
     Chromus.prototype.plugins_info = {};
-    Chromus.prototype.plugins_list = ['iframe_player', 'music_manager', 'echonest', 'lastfm', 'loved_tracks_radio', 'vkontakte', 'ui'];
+    Chromus.prototype.plugins_list = ['iframe_player', 'music_manager', 'ui', 'echonest', 'lastfm', 'loved_tracks_radio', 'vkontakte', 'about'];
     function Chromus() {
       _.bindAll(this);
       this.pluginsLoadedCallback = function() {};
@@ -36,7 +36,6 @@
     }
     Chromus.prototype.injectPluginFiles = function() {
       var files, meta, plugin, _ref;
-      console.log('injecting files');
       files = [];
       _ref = this.plugins_info;
       for (plugin in _ref) {
@@ -85,7 +84,7 @@
       return this.media_types[name] = context;
     };
     Chromus.prototype.addMenu = function(el) {
-      return $('#main_menu').prepend(el);
+      return $('#main_menu').append(el);
     };
     return Chromus;
   })();
