@@ -40,7 +40,7 @@ class LastfmLovedRadio
                     artist: track.artist.name
                     
                     source_title: "Last.fm Loved Tracks Radio (Free)"
-                    source_icon: browser.extension.getURL('/assets/icons/19x19-2.png')
+                    source_icon: browser.extension.getURL('/assets/icons/19x19.png')
 
                     loved_radio: true
 

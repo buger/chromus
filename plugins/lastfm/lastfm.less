@@ -1,0 +1,169 @@
+@import "../../assets/css/popup/mixins.less";
+
+@red: #FF0000;
+@green: #008000;
+
+.menu_container {
+	.lastfm {
+		background: url(images/lastfm_small.ico) 10px 7px no-repeat;
+
+		padding-left: 40px;
+	}
+}
+
+#panel {
+	.lastfm {
+		padding-top: 0px;
+
+		background: url(images/lastfm_red.gif) top right no-repeat;		
+		background-size: 25%;
+
+		ul {
+			margin-top: 20px;
+		}
+
+		li.clearfix {
+			.clearfix();
+			margin:0;
+			padding:0;
+		}
+
+		li.header {
+			font-size: 16px;
+			font-weight: bold;
+			color: #222;
+			margin-top: 30px;
+
+			.notice {
+				font-size: 13px;
+				color: lighten(blue, 20%);
+				margin-left: 10px;
+			}
+		}
+
+		label {
+			display: inline-block;
+			font-size: 15px;
+			line-height: 150%;
+
+			margin-right: 10px;
+		}
+
+		.username {
+			float: left; 
+			width: 50%;
+		}
+
+		.logout {
+			margin-top: 20px;
+			font-size: 14px;
+			color: red;
+			font-weight: bold;
+		}
+
+		.login {
+			width: 50%;
+			margin: 0 auto;
+
+			.error {
+				font-size: 12px;
+			}
+
+			label {
+				display: block;
+			}
+
+			input[type=submit] {
+				padding: 5px 15px;
+				font-size: 14px;
+			}
+		}
+
+		.stations {
+			ul { margin:0;padding:0; }
+			li { 		
+				position: relative;		
+				float: left;
+				width: 50%;
+				padding: 10px;				
+				.box-sizing(border-box);
+				font-size: 14px;
+				font-weight: bold;
+				cursor: pointer;
+				.opacity(80);
+				
+				background: url(images/radio.png) 0px 4px no-repeat;
+				padding-left: 28px;
+
+				&:hover {
+					.opacity(100);
+					text-decoration: underline;	
+				}
+
+				&.free:after {					
+					content: "free";
+					.border-radius(3px);
+					color: white;
+					background-color: green;
+					padding: 3px;
+					font-weight: normal;
+					font-size: 12px;
+					position: absolute;
+					left: 125px;
+					top: -4px;
+				}				
+			}
+
+			&.subscribe {
+				li.pay { 
+					.opacity(40);
+
+					&:hover {
+						text-decoration: none;
+						cursor: default;
+					}		
+				}
+			}
+		}
+
+		.toggle {
+			.box();
+			.box-align(center);
+
+			float:left; 
+			width: 50%; 
+
+			.toggler {
+				cursor: pointer;
+				width: 60px;
+				height: 26px;
+				border: 1px solid #555555;
+
+				.border-radius(4px);
+				
+				#gradient > .vertical(desaturate(lighten(@green, 30%), 50%), desaturate(lighten(@green, 20%),50%));
+
+				> div {
+					height: 24px;
+					border: 1px solid #e5e5e5;
+
+					margin-left: 0;
+					width: 30px;
+					.border-radius(3px);
+
+					#gradient > .vertical(#FFFFFF, #A1A1A1);
+
+					.transition();
+				}
+
+				&.off {
+					#gradient > .vertical(desaturate(lighten(@red, 20%), 20%), lighten(@red, 10%));
+
+					> div {
+						margin-left: 28px;
+					}
+				}
+			}
+		}
+	}
+}

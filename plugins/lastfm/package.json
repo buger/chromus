@@ -8,6 +8,7 @@
 
 		"popup!lastfm.js",
 		"popup!lastfm_ui.js",
+		"css!lastfm.css",
 
 		"bg_spec!lastfm_spec.js"
 	]

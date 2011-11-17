@@ -17,6 +17,11 @@
     resource.bypass = !(window.jasmine && browser.page_type === "popup");
     return resource;
   });
+  yepnope.addPrefix('css', function(resource) {
+    resource.bypass = browser.page_type !== "popup";
+    resource.forceCSS = true;
+    return resource;
+  });
   Chromus = (function() {
     Chromus.prototype.audio_players = {};
     Chromus.prototype.audio_sources = {};

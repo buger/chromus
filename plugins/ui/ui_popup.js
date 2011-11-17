@@ -551,12 +551,14 @@
           return pokki.closePopup();
         });
       }
-      console.warn(store.get('first_run'));
       if (!store.get('first_run')) {
         $('#first_run').show();
         this.controls.toggleSearch();
-        return store.set('first_run', true);
+        store.set('first_run', true);
       }
+      return $('#panel .back').live('click', function() {
+        return $('#panel').removeClass('show');
+      });
     };
     App.prototype.start = function() {
       return browser.postMessage({

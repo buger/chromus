@@ -74,13 +74,13 @@ chromus.registerMediaType "lastfm:radio", (track, callback) ->
         lastfm.radio.getPlaylist callback
 
 chromus.registerMediaType "lastfm:stream_track", (track, callback) =>
-    xhr = $.ajax
-            url: "http://chromusapp.appspot.com/proxy?_callback=?"
-            dataType: "jsonp",
-            data:
-                '_url': track.file_url
-            cache: true,
-            success: (resp) ->
-                callback 
-                    file_url: resp.headers.location
-                , false 
+    $.ajax
+        url: "http://chromusapp.appspot.com/proxy?_callback=?"
+        dataType: "jsonp",
+        data:
+            '_url': track.file_url
+        cache: true,
+        success: (resp) ->
+            callback 
+                file_url: resp.headers.location
+            , false 

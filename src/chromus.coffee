@@ -14,6 +14,11 @@ yepnope.addPrefix 'popup_spec', (resource) ->
 	resource.bypass = !(window.jasmine && browser.page_type is "popup")
 	resource
 
+yepnope.addPrefix 'css', (resource) ->
+	resource.bypass = browser.page_type isnt "popup"
+	resource.forceCSS = true
+	resource
+
 
 
 class Chromus

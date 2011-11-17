@@ -143,53 +143,43 @@
       }
     };
     MusicManager.prototype.searchTrack = function(track, callback) {
-      var name, obj, player, results, searchCallback, _ref, _results;
+      var name, obj, results, searchCallback, _ref, _results;
       if (callback == null) {
         callback = function() {};
       }
       results = [];
-      if (!track.get('player')) {
-        searchCallback = __bind(function() {
-          var match;
-          if (!_.isEmpty(results)) {
-            match = results[0];
-            track.set({
-              'file_url': match.file_url,
-              'duration': match.duration
-            });
-            if (!track.get('source_title')) {
-              track.set({
-                'source_title': match.source_title,
-                'source_icon': match.source_icon
-              });
-            }
-            return callback(track);
-          } else {
-            return this.playTrack(this.nextTrack());
-          }
-        }, this);
-        _ref = chromus.audio_sources;
-        _results = [];
-        for (name in _ref) {
-          obj = _ref[name];
-          _results.push(obj.search({
-            artist: track.get('artist'),
-            song: track.get('song')
-          }, function(tracks) {
-            results = _.union(results, tracks);
-            return searchCallback();
-          }));
-        }
-        return _results;
-      } else {
-        player = chromus.audio_players[track.get('player')];
-        return player.search(track, function(result) {
+      searchCallback = __bind(function() {
+        var match;
+        if (!_.isEmpty(results)) {
+          match = results[0];
           track.set({
-            'file_url': result.file_url.slice(0, 201)
+            'file_url': match.file_url,
+            'duration': match.duration
           });
+          if (!track.get('source_title')) {
+            track.set({
+              'source_title': match.source_title,
+              'source_icon': match.source_icon
+            });
+          }
           return callback(track);
-        });
+        } else {
+          return this.playTrack(this.nextTrack());
+        }
+      }, this);
+      _ref = chromus.audio_sources;
+      _results = [];
+      for (name in _ref) {
+        obj = _ref[name];
+        _results.push(obj.search({
+          artist: track.get('artist'),
+          song: track.get('song')
+        }, function(tracks) {
+          results = _.union(results, tracks);
+          return searchCallback();
+        }));
       }
+      return _results;
     };
     MusicManager.prototype.playTrack = function(track) {
       if (_.isNumber(track)) {

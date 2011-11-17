@@ -54,6 +54,10 @@ LastFM =
             success: (resp) ->
                 console.log "Lastfm response:", resp
                 callback resp
+            error: (resp) ->
+                callback
+                    error: "asd"
+
 
 
     convertDateToUTC: (date = new Date()) ->

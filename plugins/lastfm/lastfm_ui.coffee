@@ -1,13 +1,47 @@
 lastfm = chromus.plugins.lastfm
 
-login_template = '
-    <form class="form">
-        <ul>
-            <li>
-                <center>
-                <img src="http://cdn.last.fm/flatness/badges/lastfm_red.gif"/>
-                </center>
-            </li>
+template = Handlebars.compile '    
+    <div class="header">
+        <a class="btn back">Back to playlist</a>
+    </div>
+    {{#if logged}}
+        <form class="form">
+            <ul>          
+                <li class="username">
+                    <label>Logged as <a href="http://last.fm/user/{{user}}" target="_blank">{{user}}</a></label>
+                </li>
+                <li class="toggle">
+                    <label>Scrobbling</label>
+                    <div class="toggler {{#unless scrobbling}}off{{/unless}}">
+                        <div></div>
+                    </div>                    
+                </li>
+                <li class="clearfix"></li>
+                
+                <li class="header">
+                    <span>Your Stations</span>
+                    {{#unless subscriber}}<span class="notice">Some radiostations available for subscribers only</span>{{/unless}}
+                </li>
+
+                <li class="stations {{#unless subscriber}}subscribe{{/unless}}">
+                    <ul>                    
+                        <li class="loved_radio free">Loved Tracks</li>
+
+                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/personal">Library Radio</li>
+                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/mix">Mix Radio</li>
+                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/recommended">Recommended Radio</li>
+                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/friends">Friends Radio</li>
+                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/neighbours">Neighbourhood Radio</li>
+                    </ul>
+                </li>
+                <li class="clearfix"></li>
+                            
+                <li class="logout btn danger">Logout</li>
+            </ul>
+        </form>    
+    {{else}}
+    <form class="form login" onsubmit="return false">
+        <ul>            
             <li>
                 <label>Username <span class="error" style="display:none">Wrong credentials</span></label>
                 <input name="username" autofocus/>
@@ -18,181 +52,50 @@ login_template = '
             </li>
             <li class="buttons">
                 <input type="submit" value="Login" class="btn" />
-                <a class="close">close</a>
             </li>
         </ul>
-    </form>'
-
-
-class LoginView extends Backbone.View
-
-    events: 
-        "submit form": "login"
-        "click .close": "close"
-    
-    render: ->
-        @el.innerHTML = login_template
-        @delegateEvents()
-
-        $('#dialog .content').html(@el)
-        $('#dialog').show()
-
-    login: (evt) ->
-        form = evt.target
-        
-        [username, password] = [form.username.value, form.password.value]
-        
-        @$('*').css 'visibility':'hidden'
-
-        @spinner = new Spinner().spin(@el)
-
-        auth_token = MD5(username + MD5(password))
-
-        lastfm.callMethod 'auth.getMobileSession', 
-            sig_call: true,
-            username: username,
-            authToken: auth_token
-        , (resp) =>
-            if resp.error
-                @$('*').css 'visibility':'visible'
-                @$('.error').show()
-                @spinner.stop()
-            else if resp.session            
-                store.set 'lastfm:user', resp.session.name
-
-                if browser.isPokki
-                    store.set 'lastfm:key', pokki.scramble(resp.session.key)
-                else
-                    store.set 'lastfm:key', resp.session.key
-
-                store.set 'lastfm:scrobbling', true
-                
-                @el.innerHTML = '
-                    <form class="form">
-                    <ul>             
-                        <li style="text-align: center">   
-                            <label class="success" style="color: green; font-weight: bold;">Successfully Logged</label>
-                        </li>                        
-                        <li class="buttons">
-                            <a class="close" style="margin-left: 0px">close</a>
-                        </li>
-                    </ul>
-                    </form>
-                '                
-
-                @delegateEvents()
-
-                menu.render()
-
-        false #stop propagation
-    
-
-    close: ->
-        $('#dialog').hide()
-
-
-error_template = Handlebars.compile '
-    <ul>
-        <li>
-            <span>This channel available only for paid Last.fm subscribers</span>
-        </li>
-        <li class="buttons">
-            <a class="close">Close</a>
-        </li>
-    </ul>
-'
-
-
-class ErrorWindow extends Backbone.View
-
-    events: 
-        "click .close": "close"
-    
-    render: ->
-        @el.innerHTML = error_template()
-        @delegateEvents()
-
-        $('#dialog .content').html(@el)
-        $('#dialog').show()
-
-    close: ->
-        $('#dialog').hide()
-
-error_window = new ErrorWindow()
-
-
-
-menu_template = Handlebars.compile '            
-<span>Last.fm</span>            
-<ul class="menu_container">
-    {{#if username}}
-        {{#if scrobbling}}
-            <li class="toggle enabled" style="color: #5FFA69">Scrobbling enabled</li>
-        {{else}}
-            <li class="toggle disabled" style="color: #FF6666">Scrobbling disabled</li>
-        {{/if}}        
-        <li class="header">Free radio</li>
-        <li class="loved_radio">Loved Tracks Radio</li>
-        <li class="header">Subscribers radio</li>
-        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/personal">Library Radio</li>
-        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/mix">Mix Radio</li>
-        <li class="lastfm_radio" data-radio="lastfm://user/{{username}}/recommended">Recommendation Radio</li>
-        <li class="header"></li>
-        <li><a href="http://last.fm/user/{{username}}" target="_blank">{{username}}</a></li>        
-        <li class="logout">Logout</li>
-    {{else}}
-        <li class="not_logged">Login to Last.fm</li>
+    </form>
     {{/if}}
-</ul> 
-'
+    '
 
 
-class Menu extends Backbone.View
+class SettingsView extends Backbone.View
 
-    tagName: 'li'
-
-    className: 'lastfm'
+    className: "lastfm"
 
     events: 
-        "click .not_logged": "login"
+        "submit form.login": "login"
+        "click .back": "close"
         "click .logout": "logout"
-        "click .toggle": "toggle"
+        "click .toggler": "toggleScrobbling"
         "click .lastfm_radio": "playRadio"
         "click .loved_radio": "playLovedRadio"
-
-
-    initialize: ->
-        @container = $('#main_menu')        
-        @render()
-
-
+    
     render: ->
         view = 
-            username: store.get('lastfm:user')
-            scrobbling: store.get('lastfm:scrobbling')
-                    
-        @el.innerHTML = menu_template view
+            logged: !!lastfm.getSession()
+            scrobbling: !!store.get('lastfm:scrobbling')
+            user: store.get('lastfm:user')
+            subscriber: !!store.get('lastfm:subscriber')
+
+        @el.innerHTML = template(view)
+
+        $('#panel .container').html(@el)
+        $('#panel').addClass('show')
 
         @delegateEvents()
 
-
-    login: ->
-        @container.hide()
-        new LoginView().render()
-
-    
     logout: ->
         store.remove 'lastfm:user'
         store.remove 'lastfm:key'
 
         @render()
 
-
-    toggle: ->
+    toggleScrobbling: ->
         store.set 'lastfm:scrobbling', !store.get('lastfm:scrobbling')
-        @render()
+        @$('.toggler').toggleClass('off', !store.get('lastfm:scrobbling'))
 
-
+    
     playRadio: (evt) ->
         track = 
             type: "lastfm:radio"
@@ -203,7 +106,9 @@ class Menu extends Backbone.View
         browser.postMessage 
             method: "play"
             track: track
-            playlist: [track]            
+            playlist: [track]
+
+        $('#panel').removeClass('show')
 
 
     playLovedRadio: (evt) ->
@@ -215,11 +120,77 @@ class Menu extends Backbone.View
         browser.postMessage 
             method: "play"
             track: track
-            playlist: [track]                   
+            playlist: [track]
 
-            
+        $('#panel').removeClass('show')
+                                
+
+    login: (evt) ->
+        form = evt.target
+        
+        [username, password] = [form.username.value, form.password.value]
+                
+        @$('.login *').css 'visibility':'hidden'
+        @spinner = new Spinner().spin(@el)        
+
+        auth_token = MD5(username + MD5(password))
+
+        lastfm.callMethod 'auth.getMobileSession', 
+            sig_call: true,
+            username: username,
+            authToken: auth_token
+        , (resp) =>
+            @$('.login *').css 'visibility':'visible'
+
+            if resp.error                
+                @$('.error').show()
+                @spinner.stop()
+            else if resp.session            
+                store.set 'lastfm:user', resp.session.name
+                store.set 'lastfm:subscriber', resp.session.subscriber
+
+                console.warn resp.session.subscriber
+
+                if browser.isPokki
+                    store.set 'lastfm:key', pokki.scramble(resp.session.key)
+                else
+                    store.set 'lastfm:key', resp.session.key
+
+                store.set 'lastfm:scrobbling', true                                
+                @render()
+        
+        evt.stopPropagation()
+
+    close: ->
+        $('#panel').removeClass('show')
+        
+
+class Menu extends Backbone.View
+
+    tagName: 'li'
+
+    className: 'lastfm'
+
+    events: 
+        "click": "openPanel"
+
+    initialize: ->
+        @container = $('#main_menu')        
+        @render()
+
+    render: ->                    
+        @el.innerHTML = "Last.FM"        
+        @delegateEvents()    
+
+    openPanel: ->
+        new SettingsView().render()
+                 
+                    
 menu = new Menu()
 chromus.addMenu(menu.el)
+
+menu.openPanel()
+
 
 browser.addMessageListener (msg) ->
     switch msg.method

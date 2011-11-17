@@ -435,15 +435,16 @@ class App extends Backbone.View
 
         if browser.isPokki
             $('#minimize').bind 'click', ->
-                pokki.closePopup()
-
-        console.warn store.get('first_run')
+                pokki.closePopup()        
 
         if not store.get('first_run')
             $('#first_run').show()
             @controls.toggleSearch()
 
             store.set('first_run', true)
+
+
+        $('#panel .back').live 'click', -> $('#panel').removeClass('show')
 
 
                 

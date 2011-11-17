@@ -60,6 +60,11 @@
         success: function(resp) {
           console.log("Lastfm response:", resp);
           return callback(resp);
+        },
+        error: function(resp) {
+          return callback({
+            error: "asd"
+          });
         }
       });
     },

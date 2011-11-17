@@ -73,6 +73,36 @@ a.button {
 
 .clearfix { clear: both; }
 
+#panel {
+  position: absolute;
+  width: 100%;
+  left: -1000px;
+  top: 101px;
+  bottom: 27px;
+  background: white;
+  padding: 10px;
+  z-index: 9999;
+  border-left: 1px solid #eee;
+  border-right: 1px solid #eee;
+
+  .box-sizing(border-box);
+
+  .transition(all .5s ease-in-out);
+
+  &.show {
+    left: 0px;
+  }
+
+  .container {
+    h3.title {
+      display: inline-block;
+      margin-left: 10px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+  }
+}
+
 
 #dialog {
   position: relative;
@@ -129,6 +159,7 @@ a.button {
       font-size: 20px;
     }
   }
+  
   input {
     padding: 5px;
     .border-radius(5px);
@@ -222,7 +253,7 @@ a.button {
 }
 
 
-@basefont: 13;
+@basefont: 18px;
 
 .btn {
   // Button Base

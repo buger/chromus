@@ -73,8 +73,7 @@
     });
   });
   chromus.registerMediaType("lastfm:stream_track", __bind(function(track, callback) {
-    var xhr;
-    return xhr = $.ajax({
+    return $.ajax({
       url: "http://chromusapp.appspot.com/proxy?_callback=?",
       dataType: "jsonp",
       data: {

@@ -106,38 +106,32 @@ class MusicManager extends Backbone.Model
     searchTrack: (track, callback = ->) ->        
         results = []
 
-        unless track.get('player')
-            searchCallback = => 
-                unless _.isEmpty results
-                    # TODO: Should chouse best matching song
-                    match = results[0]
+        searchCallback = => 
+            unless _.isEmpty results
+                # TODO: Should chouse best matching song
+                match = results[0]
 
+                track.set
+                    'file_url': match.file_url
+                    'duration': match.duration
+
+                if not track.get('source_title')
                     track.set
-                        'file_url': match.file_url
-                        'duration': match.duration
+                        'source_title': match.source_title
+                        'source_icon': match.source_icon
 
-                    if not track.get('source_title')
-                        track.set
-                            'source_title': match.source_title
-                            'source_icon': match.source_icon
-
-                    callback track
-                else 
-                    @playTrack @nextTrack()
-
-            for name, obj of chromus.audio_sources            
-                obj.search 
-                    artist: track.get('artist')
-                    song: track.get('song')
-                , (tracks) ->                
-                    results = _.union(results, tracks)
-                    searchCallback()
-        else
-            player = chromus.audio_players[track.get('player')]
-            player.search track, (result) ->
-                track.set 'file_url': result.file_url[0..200]
                 callback track
+            else 
+                @playTrack @nextTrack()
 
+        for name, obj of chromus.audio_sources            
+            obj.search 
+                artist: track.get('artist')
+                song: track.get('song')
+            , (tracks) ->                
+                results = _.union(results, tracks)
+                searchCallback()
+        
 
     playTrack: (track) ->
         if _.isNumber(track)

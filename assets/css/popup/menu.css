@@ -21,7 +21,7 @@ ul.menu_container {
   position: relative;
 }
 .menu_container > li:hover {
-  background: #000;
+  background-color: #000;
 }
 .menu_container > li.header {
   font-weight: bold;
