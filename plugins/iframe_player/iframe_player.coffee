@@ -21,7 +21,7 @@ class Player extends Backbone.Model
         if not browser.isFrame and not browser.isSafari            
             @player_frame.src = @player_url + "sm2_iframe"
         else
-            @player_frame.src = "#{@path}/lib/iframe.htm?6" 
+            @player_frame.src = "#{@path}/lib/iframe.htm?9" 
                                                             
         document.body.appendChild @player_frame
             

@@ -28,10 +28,7 @@
                 sound.onposition(1, function() {
                     postMessageJSON({method:'startPlaying', id: this.sID});
                 });
-
-                sound.onplay = function() { 
-                }
-
+             
                 sound.onfinish = function() { 
                     postMessageJSON({ method:'finished' });
                     delete currentSound; 

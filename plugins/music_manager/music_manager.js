@@ -136,7 +136,7 @@
       }
       if (this.state.get('name') === "stopped") {
         return this.playTrack(this.nextTrack());
-      } else if ((track != null ? track.get('duration') : void 0) && (this.state.get('played') - track.get('duration')) >= 0) {
+      } else if ((track != null ? track.get('duration') : void 0) && ((this.state.get('played') - track.get('duration')) | 0) >= 0) {
         return this.updateState({
           name: "stopped"
         });
