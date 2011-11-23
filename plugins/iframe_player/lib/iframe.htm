@@ -104,6 +104,7 @@
                                                 
                         sound.play({
                             onfinish: function(){
+                                console.log('finished');
                                 postMessageJSON({ method:'finished' });
                                 delete currentSound; 
                             }
