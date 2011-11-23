@@ -66,7 +66,14 @@
         </script>
 
         <script id="search_result_tmpl" type="text/template">
-            <div>
+            <header>
+                <a class="back"></a>
+                {{#if search_term}}
+                <h3>Search &laquo;{{search_term}}&raquo;</h3>
+                {{/if}}
+            </header>
+
+            <div class="search_results">
             {{#show_artists}}
             <h3>Artists</h3>
             <ul>
@@ -164,10 +171,9 @@
                         <div class="progress"></div>                
                     </div>
                     <div class="time">0:00</div>                
-                    <a class="search"></a>
-                    <div class="search_bar" style="display: none">
-                        <input type="text" class="text br_8" />
-                        <div class="result"></div>
+                    <a class="search"><span class="img"></span></a>
+                    <div class="search_bar">
+                        <input type="text" class="text" />                    
                     </div>
                 </div>
             </div>

@@ -1,3 +1,4 @@
+@asset_path: "../../images/popup";
 @import "mixins.less";
 
 * {
@@ -81,29 +82,55 @@ a.button {
 #panel {
   position: absolute;
   width: 100%;
-  left: -1000px;
-  top: 101px;
+  left: 100%;
+  top: 36px;
   bottom: 27px;
-  background: white;
-  padding: 10px;
+  background: white;  
   z-index: 101;
-  border-left: 1px solid #eee;
-  border-right: 1px solid #eee;
 
   .box-sizing(border-box);
 
-  .transition(all .5s ease-in-out);
+  .transition(all .2s ease-in-out);
 
   &.show {
     left: 0px;
   }
+  
+  header {
+    .box();
+    .box-align(center);
 
-  .container {
-    h3.title {
-      display: inline-block;
-      margin-left: 10px;
-      font-size: 20px;
+    .box-shadow(inset 0px 0px 5px 0px rgba(0, 0, 0, 0.2));
+
+    #gradient > .vertical(#eee, #ddd);
+    padding: 10px;
+
+    + * { padding: 20px; }
+
+    h3 {
+      display: block;
+      margin-left: 15px;
+      font-size: 22px;
       font-weight: bold;
+      color: #444;
+    }  
+
+    a.back {    
+      cursor: pointer;
+      display: block;
+      width: 72px;
+      height: 31px;
+      background: url("@{asset_path}/back.png");
+
+      .opacity(95);
+      
+      &:hover {
+        .opacity(100);
+      }      
+
+      &:active {
+        background-position: center right;
+      }
     }
   }
 }

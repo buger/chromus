@@ -10,11 +10,13 @@
   }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   lastfm = chromus.plugins.lastfm;
   template = Handlebars.compile('    \
-    <div class="header">\
-        <a class="btn back">Back to playlist</a>\
-    </div>\
+    <header>\
+        <a class="back"></a>\
+        <h3>Last.FM</h3>\
+    </header>\
     {{#if logged}}\
         <form class="form">\
+            <div class="logo"></div>\
             <ul>          \
                 <li class="username">\
                     <label>Logged as <a href="http://last.fm/user/{{user}}" target="_blank">{{user}}</a></label>\

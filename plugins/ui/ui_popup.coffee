@@ -106,9 +106,7 @@ class Controls extends Backbone.View
         "click .toggle": "togglePlaying"
         "click .next":   "nextTrack"
         "click .search": "toggleSearch"
-        "keyup .search_bar .text": "search"
-        "click .search_bar .result span.add_to_playlist": "addToPlaylist"
-        "click .search_bar .result a.ex_container": "playSearchedTrack"
+        "keyup .search_bar .text": "search"        
                 
 
     initialize: ->
@@ -126,6 +124,14 @@ class Controls extends Backbone.View
         @spinner = new Spinner(opts)
 
         @updateState(@model.state)
+
+        $('#panel .search_results span.add_to_playlist').live 'click', (evt) =>
+            $('#panel .back').triggerHandler('click')
+            @addToPlaylist(evt)
+
+        $('#panel .search_results a.ex_container').live 'click', (evt) =>
+            $('#panel .back').triggerHandler('click')
+            @playSearchedTrack(evt)
 
 
     updateState: (state) ->
@@ -172,13 +178,21 @@ class Controls extends Backbone.View
         @model.next()
 
     
-    toggleSearch: ->        
-        bar = @$('.search_bar').toggle()
+    toggleSearch: ->
+        @el.toggleClass('search_mode')
 
-        if bar.is ':visible'
-            bar.find('input').focus()
+        if @el.hasClass('search_mode')
+            @$('.search_bar').addClass('show')
+
+            setTimeout =>
+                @$('.search_bar').find('input').focus()
+            , 500
+
+            $('#panel .container').html @search_template @search_view ? {}
+            $('#panel').addClass('show')
         else
-            $('#first_run .search-tip').hide()
+            @$('.search_bar').removeClass('show')
+            $('#panel').removeClass('show')
     
     # Rate limiting search function, by adding slight delay
     # http://documentcloud.github.com/underscore/#debounce
@@ -192,28 +206,30 @@ class Controls extends Backbone.View
         else
             $('#first_run .search-tip').hide()
 
-            view =
+            @search_view =
+                'search_term': text
+
                 'show_tracks': (fn) -> if not @tracks or @tracks?.length then fn(this)
                 'show_albums': (fn) -> if not @albums or @albums?.length then fn(this)
                 'show_artists': (fn) -> if not @artists or @artists?.length then fn(this)            
 
             render = =>
-                @$('.search_bar .result').html(@search_template(view))
-                    .end()
+                $('#panel .container').html @search_template @search_view ? {}
+                $('#panel').addClass('show')
                     .find('.loader').spin('small');
 
             render()
 
             chromus.plugins.lastfm.artist.search text, (artists = []) =>
-                view.artists = _.first(artists, 4)
+                @search_view.artists = _.first(artists, 4)
                 render()
             
             chromus.plugins.lastfm.track.search text, (tracks = []) =>
-                view.tracks = _.first(tracks, 4)
+                @search_view.tracks = _.first(tracks, 4)
                 render()                            
 
             chromus.plugins.lastfm.album.search text, (albums = []) =>
-                view.albums = _.first(albums, 4)
+                @search_view.albums = _.first(albums, 4)
                 render()                        
     , 500
 
@@ -461,7 +477,10 @@ class App extends Backbone.View
             store.set('first_run', true)
 
 
-        $('#panel .back').live 'click', -> $('#panel').removeClass('show')
+        $('#panel .back').live 'click', -> 
+            $('#panel').removeClass('show')
+            $('#header').removeClass('search_mode')
+                .find('.search_bar').removeClass('show')
 
 
                 

@@ -160,9 +160,7 @@
       "click .toggle": "togglePlaying",
       "click .next": "nextTrack",
       "click .search": "toggleSearch",
-      "keyup .search_bar .text": "search",
-      "click .search_bar .result span.add_to_playlist": "addToPlaylist",
-      "click .search_bar .result a.ex_container": "playSearchedTrack"
+      "keyup .search_bar .text": "search"
     };
     Controls.prototype.initialize = function() {
       var opts;
@@ -176,7 +174,15 @@
         color: "#fff"
       };
       this.spinner = new Spinner(opts);
-      return this.updateState(this.model.state);
+      this.updateState(this.model.state);
+      $('#panel .search_results span.add_to_playlist').live('click', __bind(function(evt) {
+        $('#panel .back').triggerHandler('click');
+        return this.addToPlaylist(evt);
+      }, this));
+      return $('#panel .search_results a.ex_container').live('click', __bind(function(evt) {
+        $('#panel .back').triggerHandler('click');
+        return this.playSearchedTrack(evt);
+      }, this));
     };
     Controls.prototype.updateState = function(state) {
       var toggle, track, _ref;
@@ -226,16 +232,22 @@
       return this.model.next();
     };
     Controls.prototype.toggleSearch = function() {
-      var bar;
-      bar = this.$('.search_bar').toggle();
-      if (bar.is(':visible')) {
-        return bar.find('input').focus();
+      var _ref;
+      this.el.toggleClass('search_mode');
+      if (this.el.hasClass('search_mode')) {
+        this.$('.search_bar').addClass('show');
+        setTimeout(__bind(function() {
+          return this.$('.search_bar').find('input').focus();
+        }, this), 500);
+        $('#panel .container').html(this.search_template((_ref = this.search_view) != null ? _ref : {}));
+        return $('#panel').addClass('show');
       } else {
-        return $('#first_run .search-tip').hide();
+        this.$('.search_bar').removeClass('show');
+        return $('#panel').removeClass('show');
       }
     };
     Controls.prototype.search = _.debounce(function(evt) {
-      var render, text, view, _ref;
+      var render, text, _ref;
       if ((_ref = evt.keyCode) === 40 || _ref === 45 || _ref === 37 || _ref === 39 || _ref === 38) {
         return;
       }
@@ -244,7 +256,8 @@
         return this.$('.search_bar .result').html('');
       } else {
         $('#first_run .search-tip').hide();
-        view = {
+        this.search_view = {
+          'search_term': text,
           'show_tracks': function(fn) {
             var _ref2;
             if (!this.tracks || ((_ref2 = this.tracks) != null ? _ref2.length : void 0)) {
@@ -265,28 +278,30 @@
           }
         };
         render = __bind(function() {
-          return this.$('.search_bar .result').html(this.search_template(view)).end().find('.loader').spin('small');
+          var _ref2;
+          $('#panel .container').html(this.search_template((_ref2 = this.search_view) != null ? _ref2 : {}));
+          return $('#panel').addClass('show').find('.loader').spin('small');
         }, this);
         render();
         chromus.plugins.lastfm.artist.search(text, __bind(function(artists) {
           if (artists == null) {
             artists = [];
           }
-          view.artists = _.first(artists, 4);
+          this.search_view.artists = _.first(artists, 4);
           return render();
         }, this));
         chromus.plugins.lastfm.track.search(text, __bind(function(tracks) {
           if (tracks == null) {
             tracks = [];
           }
-          view.tracks = _.first(tracks, 4);
+          this.search_view.tracks = _.first(tracks, 4);
           return render();
         }, this));
         return chromus.plugins.lastfm.album.search(text, __bind(function(albums) {
           if (albums == null) {
             albums = [];
           }
-          view.albums = _.first(albums, 4);
+          this.search_view.albums = _.first(albums, 4);
           return render();
         }, this));
       }
@@ -570,7 +585,8 @@
         store.set('first_run', true);
       }
       return $('#panel .back').live('click', function() {
-        return $('#panel').removeClass('show');
+        $('#panel').removeClass('show');
+        return $('#header').removeClass('search_mode').find('.search_bar').removeClass('show');
       });
     };
     App.prototype.start = function() {

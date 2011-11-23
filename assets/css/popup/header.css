@@ -114,79 +114,97 @@
   -webkit-box-flex: 0;
   -moz-box-flex: 0;
   box-flex: 0;
-  margin-top: -3px;
+  margin-top: -1px;
+  margin-right: -1px;
   width: 48px;
   height: 35px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  background-image: url("../../images/popup/search_bg.png");
-  background-position: top left;
-  background-repeat: repeat-x;
-  filter: alpha(opacity=90);
-  -khtml-opacity: 0.9;
-  -moz-opacity: 0.9;
-  opacity: 0.9;
+  border-left: 1px solid #444;
+  background-color: black;
+  background-repeat: no-repeat;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#777777), color-stop(50%, #333333), to(black));
+  background-image: -webkit-linear-gradient(#777777, #333333 50%, black);
+  background-image: -moz-linear-gradient(top, #777777, #333333 50%, black);
+  background-image: -ms-linear-gradient(#777777, #333333 50%, black);
+  background-image: -o-linear-gradient(#777777, #333333 50%, black);
+  background-image: linear-gradient(#777777, #333333 50%, black);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#777777', endColorstr='black', GradientType=0);
+  z-index: 9999;
+  position: relative;
 }
 #header .search:hover {
-  filter: alpha(opacity=100);
-  -khtml-opacity: 1;
-  -moz-opacity: 1;
-  opacity: 1;
+  background-color: black;
+  background-repeat: no-repeat;
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#848484), color-stop(50%, #404040), to(black));
+  background-image: -webkit-linear-gradient(#848484, #404040 50%, black);
+  background-image: -moz-linear-gradient(top, #848484, #404040 50%, black);
+  background-image: -ms-linear-gradient(#848484, #404040 50%, black);
+  background-image: -o-linear-gradient(#848484, #404040 50%, black);
+  background-image: linear-gradient(#848484, #404040 50%, black);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#848484', endColorstr='black', GradientType=0);
+}
+#header .search .img {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  background: url("../../images/popup/search.png") center no-repeat;
+  background-position: 16px 10px;
 }
 #header .search_bar {
-  -webkit-transition: 0.1s linear all;
-  -moz-transition: 0.1s linear all;
-  -ms-transition: 0.1s linear all;
-  -o-transition: 0.1s linear all;
-  transition: 0.1s linear all;
+  -webkit-transition: all 0.2s ease-in-out;
+  -moz-transition: all 0.2s ease-in-out;
+  -ms-transition: all 0.2s ease-in-out;
+  -o-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
   position: absolute;
-  left: 0px;
+  left: 100%;
   top: 1px;
-  width: 400px;
+  width: 405px;
   height: 24px;
   z-index: 101;
-  padding: 5px;
+  padding: 2px 5px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+}
+#header .search_bar.show {
+  left: 0px;
 }
 #header .search_bar .text {
   width: 100%;
   border: 1px solid #ccc;
-  font-size: 100%;
-  padding: 3px 6px;
-  color: #333;
+  font-size: 16px;
+  padding: 2px 5px;
+  color: #555;
+  font-weight: bold;
+  height: 100%;
+  background-color: #efefef;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
 }
-#header .search_bar .result {
-  position: absolute;
+#header.search_mode .search .img {
+  background-size: 14px;
+  background-image: url("../../images/popup/close.png");
+}
+#panel .search_results {
+  margin-top: 10px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  -webkit-transition: 0.1s linear all;
-  -moz-transition: 0.1s linear all;
-  -ms-transition: 0.1s linear all;
-  -o-transition: 0.1s linear all;
-  transition: 0.1s linear all;
-  top: 35px;
-  left: 0px;
-  width: 468px;
-  height: auto;
-  background: white;
-  border-bottom: 1px solid #ccc;
-  z-index: 3;
-}
-#header .search_bar .result > div {
   padding: 10px;
+  background: white;
 }
-#header .search_bar .result h3 {
+#panel .search_results h3 {
   font-family: tahoma;
   font-size: 14px;
   font-weight: bold;
   clear: both;
   color: #333;
 }
-#header .search_bar .result ul {
+#panel .search_results ul {
   margin-top: 5px;
   margin-bottom: 10px;
   -webkit-box-sizing: border-box;
@@ -194,26 +212,26 @@
   box-sizing: border-box;
   zoom: 1;
 }
-#header .search_bar .result ul:before, #header .search_bar .result ul:after {
+#panel .search_results ul:before, #panel .search_results ul:after {
   display: table;
   content: "";
   zoom: 1;
   *display: inline;
 }
-#header .search_bar .result ul:after {
+#panel .search_results ul:after {
   clear: both;
 }
-#header .search_bar .result ul li {
+#panel .search_results ul li {
   display: inline-block;
   width: 49%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-#header .search_bar .result ul li.loader {
+#panel .search_results ul li.loader {
   padding: 15px;
 }
-#header .search_bar .result ul li a.ex_container {
+#panel .search_results ul li a.ex_container {
   display: -webkit-box;
   display: -moz-box;
   display: box;
@@ -236,13 +254,13 @@
   opacity: 0.9;
   color: #333;
 }
-#header .search_bar .result ul li a.ex_container span {
+#panel .search_results ul li a.ex_container span {
   display: block;
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
   box-flex: 1;
 }
-#header .search_bar .result ul li a.ex_container .image {
+#panel .search_results ul li a.ex_container .image {
   height: 34px;
   width: 34px;
   -webkit-box-flex: 0;
@@ -256,33 +274,33 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-#header .search_bar .result ul li a.ex_container .add_to_playlist {
+#panel .search_results ul li a.ex_container .add_to_playlist {
   display: none;
   position: absolute;
   width: 18px;
   height: 18px;
-  right: 5px;
-  top: 12px;
+  left: 18px;
+  top: 14px;
   filter: alpha(opacity=70);
   -khtml-opacity: 0.7;
   -moz-opacity: 0.7;
   opacity: 0.7;
   background: url("../../images/popup/add.png") center no-repeat;
 }
-#header .search_bar .result ul li a.ex_container .add_to_playlist:hover {
+#panel .search_results ul li a.ex_container .add_to_playlist:hover {
   filter: alpha(opacity=100);
   -khtml-opacity: 1;
   -moz-opacity: 1;
   opacity: 1;
 }
-#header .search_bar .result ul li a.ex_container:hover {
+#panel .search_results ul li a.ex_container:hover {
   background-color: #eee;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
   border: 1px solid #ccc;
 }
-#header .search_bar .result ul li a.ex_container:hover .add_to_playlist {
+#panel .search_results ul li a.ex_container:hover .add_to_playlist {
   display: block;
 }
 #minimize {

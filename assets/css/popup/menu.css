@@ -10,19 +10,24 @@
   color: white;
 }
 .menu_container {
-  background: #333;
+  background: #eee;
 }
 ul.menu_container {
   list-style: none;
+  -webkit-box-shadow: -1px -1px 5px 0px rgba(0, 0, 0, 0.5);
+  -moz-box-shadow: -1px -1px 5px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: -1px -1px 5px 0px rgba(0, 0, 0, 0.5);
 }
 .menu_container > li {
-  padding: 10px;
-  color: white;
+  padding: 15px 15px;
+  color: #222;
   cursor: pointer;
   position: relative;
+  border-top: 1px solid #aaa;
 }
 .menu_container > li:hover {
-  background-color: #000;
+  background-color: #333;
+  color: #eee;
 }
 .menu_container > li.header {
   font-weight: bold;
