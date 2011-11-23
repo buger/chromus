@@ -149,12 +149,12 @@ class Controls extends Backbone.View
             else toggle.addClass('play')
 
         
-        if track?.get('duration')
-            @$('.inner').width(276.0*state.played/track.get('duration'))
+        if track?.get('duration')        
+            @$('.inner').width(state.played/track.get('duration')*100 + '%')
             @$('.time').html "-"+prettyTime(track.get('duration') - state.played)
 
             state.buffered ?= 0
-            @$('.progress').width(278.0*state.buffered/track.get('duration'))
+            @$('.progress').width(state.buffered/track.get('duration')*100 + '%')
         else
             @$('.time').html prettyTime(0)
     

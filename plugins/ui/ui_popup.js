@@ -205,12 +205,12 @@
           toggle.addClass('play');
       }
       if (track != null ? track.get('duration') : void 0) {
-        this.$('.inner').width(276.0 * state.played / track.get('duration'));
+        this.$('.inner').width(state.played / track.get('duration') * 100 + '%');
         this.$('.time').html("-" + prettyTime(track.get('duration') - state.played));
         if ((_ref = state.buffered) == null) {
           state.buffered = 0;
         }
-        return this.$('.progress').width(278.0 * state.buffered / track.get('duration'));
+        return this.$('.progress').width(state.buffered / track.get('duration') * 100 + '%');
       } else {
         return this.$('.time').html(prettyTime(0));
       }
