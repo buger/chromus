@@ -99,7 +99,7 @@ class MusicManager extends Backbone.Model
 
         if @state.get('name') is "stopped"
             @playTrack @nextTrack()
-        else if track?.get('duration') and ((@state.get('played') - track.get('duration'))|0) >= 0        
+        else if false and track?.get('duration') and ((@state.get('played') - track.get('duration'))|0) >= 0        
             @updateState name:"stopped"
 
 

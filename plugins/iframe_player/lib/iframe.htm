@@ -1,6 +1,6 @@
 <html><head>
 <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">        
-        <script src="soundmanager2.js?1"></script>
+        <script src="soundmanager2-min.js?1"></script>
         <script>
             soundManager.url = 'swf/';
             soundManager.flashVersion = 9; // optional: shiny features (default = 8)
@@ -29,11 +29,6 @@
                     postMessageJSON({method:'startPlaying', id: this.sID});
                 });
              
-                sound.onfinish = function() { 
-                    postMessageJSON({ method:'finished' });
-                    delete currentSound; 
-                }
-
                 sound.finished = false;
                     
                 sounds.push(sound);
@@ -107,7 +102,12 @@
 
                         current_sound = sound;
                                                 
-                        sound.play();
+                        sound.play({
+                            onfinish: function(){
+                                postMessageJSON({ method:'finished' });
+                                delete currentSound; 
+                            }
+                        });
 
                         break;
 
