@@ -52,17 +52,17 @@
   color: red;
   font-weight: bold;
 }
-#panel .lastfm form .login {
+#panel .lastfm form.login {
   width: 50%;
   margin: 0 auto;
 }
-#panel .lastfm form .login .error {
+#panel .lastfm form.login .error {
   font-size: 12px;
 }
-#panel .lastfm form .login label {
+#panel .lastfm form.login label {
   display: block;
 }
-#panel .lastfm form .login input[type=submit] {
+#panel .lastfm form.login input[type=submit] {
   padding: 5px 15px;
   font-size: 14px;
 }

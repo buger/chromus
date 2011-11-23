@@ -131,16 +131,16 @@ a.button {
   width: 72px;
   height: 31px;
   background: url("../../images/popup/back.png");
-  filter: alpha(opacity=95);
-  -khtml-opacity: 0.95;
-  -moz-opacity: 0.95;
-  opacity: 0.95;
-}
-#panel header a.back:hover {
   filter: alpha(opacity=100);
   -khtml-opacity: 1;
   -moz-opacity: 1;
   opacity: 1;
+}
+#panel header a.back:hover {
+  filter: alpha(opacity=95);
+  -khtml-opacity: 0.95;
+  -moz-opacity: 0.95;
+  opacity: 0.95;
 }
 #panel header a.back:active {
   background-position: center right;

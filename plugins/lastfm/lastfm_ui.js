@@ -52,6 +52,7 @@
         </form>    \
     {{else}}\
     <form class="form login" onsubmit="return false">\
+        <div class="logo"></div>\
         <ul>            \
             <li>\
                 <label>Username <span class="error" style="display:none">Wrong credentials</span></label>\
