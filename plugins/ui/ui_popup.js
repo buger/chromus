@@ -233,6 +233,7 @@
     };
     Controls.prototype.toggleSearch = function() {
       var _ref;
+      $('#first_run .search-tip').hide();
       this.el.toggleClass('search_mode');
       if (this.el.hasClass('search_mode')) {
         this.$('.search_bar').addClass('show');

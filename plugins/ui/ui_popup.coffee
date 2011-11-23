@@ -179,6 +179,8 @@ class Controls extends Backbone.View
 
     
     toggleSearch: ->
+        $('#first_run .search-tip').hide()
+        
         @el.toggleClass('search_mode')
 
         if @el.hasClass('search_mode')
