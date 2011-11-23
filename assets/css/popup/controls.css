@@ -16,7 +16,8 @@
   box-align: center;
 }
 #current_song .love_btn {
-  padding: 15px 15px;
+  padding: 15px 5px;
+  visibility: hidden;
 }
 #current_song .love_btn .button {
   background-image: url("../../images/popup/love_btn.png");
