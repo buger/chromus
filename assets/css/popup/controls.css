@@ -16,24 +16,24 @@
   box-align: center;
 }
 #current_song .love_btn {
-  padding: 15px 5px;
+  padding: 15px 0px;
   visibility: hidden;
 }
 #current_song .love_btn .button {
   background-image: url("../../images/popup/love_btn.png");
 }
 #current_song .info {
-  padding: 7px 0px;
+  padding-top: 4px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   max-width: 350px;
-  line-height: 14px;
+  line-height: 20px;
 }
 #current_song .info a {
   color: #000;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.6);
-  font-size: 13px;
+  font-size: 14px;
   cursor: pointer;
   text-decoration: none;
   font-family: arial;
@@ -44,8 +44,7 @@
 #current_song .info .song {
   display: block;
   font-weight: bold;
-  line-height: 153.9%;
-  font-size: 15px;
+  font-size: 16px;
   font-family: arial;
 }
 #current_song .info .artist {

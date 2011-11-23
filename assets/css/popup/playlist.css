@@ -74,6 +74,7 @@
 #playlist .artist_playlist .song {
   float: left;
   width: 60%;
+  background: white;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -102,4 +103,7 @@
 #playlist .artist_playlist .song:hover .title, #playlist .artist_playlist .song.playing .title {
   color: #fff;
   text-shadow: 0 1px 0 rgba(0, 29, 84, 0.3);
+}
+#playlist .artist_playlist .song.playing {
+  background: #444 !important;
 }
