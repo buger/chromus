@@ -581,7 +581,9 @@
       }
       if (!store.get('first_run')) {
         $('#first_run').show();
-        this.controls.toggleSearch();
+        $('#first_run > div').bind('click', function(evt) {
+          return $(evt.currentTarget).remove();
+        });
         store.set('first_run', true);
       }
       return $('#panel .back').live('click', function() {

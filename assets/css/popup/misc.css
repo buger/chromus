@@ -218,7 +218,7 @@ a.button {
   -webkit-border-radius: 10px;
   -moz-border-radius: 10px;
   border-radius: 10px;
-  border: 2px solid #666;
+  border: 1px solid #666;
   color: #222;
   width: auto;
   margin: 10px 100px;
@@ -246,6 +246,11 @@ a.button {
   border-left: 10px solid transparent;
   border-right: 10px solid transparent;
   border-bottom: 10px solid #666666;
+  left: 95%;
+}
+#first_run .search-tip p {
+  margin-right: 0;
+  margin-left: 200px;
 }
 #first_run .settings-tip {
   cursor: default;

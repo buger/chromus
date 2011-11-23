@@ -214,7 +214,7 @@ a.button {
         margin-top: 10px;
         background: white;
         .border-radius(10px);
-        border: 2px solid #666;
+        border: 1px solid #666;
         color: #222;
         width: auto;
         margin: 10px 100px;
@@ -232,13 +232,19 @@ a.button {
         position: absolute;
         top: 40px;
         z-index: 9999;
-        left: 0px;    
+        left: 0px;
         width: 100%;
                     
         .arrow {
             position: absolute;            
             #popoverArrow .below(10px);
+            left: 95%;
         }        
+
+        p {
+          margin-right: 0;
+          margin-left: 200px;
+        }
     }
 
     .settings-tip {

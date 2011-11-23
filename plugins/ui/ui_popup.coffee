@@ -472,7 +472,9 @@ class App extends Backbone.View
 
         if not store.get('first_run')
             $('#first_run').show()
-            @controls.toggleSearch()
+
+            $('#first_run > div').bind 'click', (evt) ->
+                $(evt.currentTarget).remove()
 
             store.set('first_run', true)
 
