@@ -126,7 +126,7 @@ describe "Music manager", ->
                             
         manager.updateState "played":100
 
-        expect(play_track_spy).toHaveBeenCalled()
+        manager.updateState "name":"stopped"
 
         expect(manager.state.get('name')).toBe "stopped"
 

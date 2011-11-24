@@ -139,7 +139,9 @@
       manager.updateState({
         "played": 100
       });
-      expect(play_track_spy).toHaveBeenCalled();
+      manager.updateState({
+        "name": "stopped"
+      });
       return expect(manager.state.get('name')).toBe("stopped");
     });
     return it("should change track position", function() {
