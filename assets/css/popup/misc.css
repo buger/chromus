@@ -370,3 +370,45 @@ a.button {
   padding: 7px 9px 7px;
   font-size: 16px;
 }
+.test_mode #background_page {
+  position: absolute;
+  top: 2%;
+  bottom: 0px;
+  left: 0px;
+  width: 49%;
+  height: 100%;
+  background: white;
+  z-index: 99999;
+  -webkit-transition: 0.1s linear all;
+  -moz-transition: 0.1s linear all;
+  -ms-transition: 0.1s linear all;
+  -o-transition: 0.1s linear all;
+  transition: 0.1s linear all;
+  border: 0px;
+}
+.test_mode #background_page:hover {
+  width: 90%;
+}
+.test_mode .jasmine_reporter {
+  position: absolute;
+  background: white;
+  top: 2%;
+  bottom: 0px;
+  right: 0px;
+  width: 49%;
+  padding: 10px;
+  height: 100%;
+  font-size: 15px;
+  -webkit-transition: 0.1s linear all;
+  -moz-transition: 0.1s linear all;
+  -ms-transition: 0.1s linear all;
+  -o-transition: 0.1s linear all;
+  transition: 0.1s linear all;
+}
+.test_mode .jasmine_reporter:hover {
+  width: 90%;
+  z-index: 999999;
+}
+.test_mode #wrapper:hover ~ #background_page, .test_mode #wrapper:hover ~ .jasmine_reporter {
+  top: 99%;
+}

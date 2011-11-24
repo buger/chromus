@@ -1,27 +1,7 @@
 (function() {
-  var Chromus;
+  var Chromus, global;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  yepnope.addPrefix('bg', function(resource) {
-    resource.bypass = browser.page_type !== "background";
-    return resource;
-  });
-  yepnope.addPrefix('popup', function(resource) {
-    resource.bypass = browser.page_type !== "popup";
-    return resource;
-  });
-  yepnope.addPrefix('bg_spec', function(resource) {
-    resource.bypass = !(window.jasmine && browser.page_type === "background");
-    return resource;
-  });
-  yepnope.addPrefix('popup_spec', function(resource) {
-    resource.bypass = !(window.jasmine && browser.page_type === "popup");
-    return resource;
-  });
-  yepnope.addPrefix('css', function(resource) {
-    resource.bypass = browser.page_type !== "popup";
-    resource.forceCSS = true;
-    return resource;
-  });
+  global = this;
   Chromus = (function() {
     Chromus.prototype.audio_players = {};
     Chromus.prototype.audio_sources = {};
@@ -31,7 +11,6 @@
     Chromus.prototype.plugins_list = ['iframe_player', 'music_manager', 'ui', 'echonest', 'lastfm', 'loved_tracks_radio', 'vkontakte', 'about'];
     function Chromus() {
       _.bindAll(this);
-      this.pluginsLoadedCallback = function() {};
       this.loadPlugins();
     }
     Chromus.prototype.injectPluginFiles = function() {
@@ -71,6 +50,12 @@
         }, this)(plugin));
       }
       return _results;
+    };
+    Chromus.prototype.pluginsLoadedCallback = function() {
+      if (global.isTestMode()) {
+        jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+        return jasmine.getEnv().execute();
+      }
     };
     Chromus.prototype.registerPlugin = function(name, context) {
       return this.plugins[name] = context;

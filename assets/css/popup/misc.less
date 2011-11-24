@@ -357,3 +357,47 @@ a.button {
     font-size: @basefont - 2px;
   }
 }
+
+.test_mode {
+  #background_page {
+    position: absolute;
+    top: 2%;
+    bottom: 0px;
+    left: 0px;
+    width: 49%;
+    height: 100%;
+    background: white;
+    z-index: 99999;
+    .transition();
+
+    &:hover {
+      width: 90%;
+    }
+
+    border: 0px;
+  }
+
+  .jasmine_reporter {
+    position: absolute;
+    background: white;
+    top: 2%;
+    bottom: 0px;
+    right: 0px;
+    width: 49%;
+    padding: 10px;
+    height: 100%;
+    font-size: 15px;
+    .transition();
+
+    &:hover {
+      width: 90%;
+      z-index: 999999;
+    }
+  }
+
+  #wrapper:hover {
+    ~ #background_page, ~ .jasmine_reporter {
+      top: 99%;
+    }
+  }
+}

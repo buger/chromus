@@ -1,25 +1,4 @@
-yepnope.addPrefix 'bg', (resource) ->
-	resource.bypass = browser.page_type isnt "background"
-	resource
-
-yepnope.addPrefix 'popup', (resource) ->
-	resource.bypass = browser.page_type isnt "popup"
-	resource
-
-yepnope.addPrefix 'bg_spec', (resource) ->
-	resource.bypass = !(window.jasmine && browser.page_type is "background")
-	resource
-
-yepnope.addPrefix 'popup_spec', (resource) ->
-	resource.bypass = !(window.jasmine && browser.page_type is "popup")
-	resource
-
-yepnope.addPrefix 'css', (resource) ->
-	resource.bypass = browser.page_type isnt "popup"
-	resource.forceCSS = true
-	resource
-
-
+global = @
 
 class Chromus
 	
@@ -48,7 +27,6 @@ class Chromus
 	constructor: ->		
 		_.bindAll @
 
-		@pluginsLoadedCallback = ->
 		@loadPlugins()
 	
 
@@ -77,7 +55,13 @@ class Chromus
 					@plugins_info[plugin] = package
 					@plugins_info[plugin].path = plugin_path
 					
-					callback()																		
+					callback()
+					
+
+	pluginsLoadedCallback: ->
+		if global.isTestMode()
+			jasmine.getEnv().addReporter(new jasmine.TrivialReporter())
+			jasmine.getEnv().execute()
 
 	registerPlugin: (name, context) ->
 		@plugins[name] = context
@@ -91,7 +75,6 @@ class Chromus
 
 	registerMediaType: (name, context) ->
 		@media_types[name] = context
-
 
 	# UI features
 	addMenu: (el) ->
