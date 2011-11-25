@@ -1,6 +1,8 @@
 global = @
 
-class Chromus
+class Chromus	
+
+	baseURL: "http://chromusapp.appspot.com"
 	
 	audio_players: {}
 
@@ -20,7 +22,8 @@ class Chromus
 		'lastfm'
 		'loved_tracks_radio'	
 	#	'local_files_player'
-		'vkontakte'		
+		'vkontakte'
+		'4shared'	
 		'about'
 	]
 

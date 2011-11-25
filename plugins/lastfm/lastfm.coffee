@@ -221,7 +221,7 @@ LastFM =
             data._method = "POST"
 
             $.ajax
-                url: "http://chromusapp.appspot.com/proxy?_callback=?"
+                url: "#{chromus.baseURL}/proxy?_callback=?"
                 data: data
                 dataType:"jsonp"
                 cache: true

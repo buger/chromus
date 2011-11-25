@@ -1,0 +1,8 @@
+{
+	"name": "4Shared.com",
+	"description": "4Shared.com search engine",
+
+	"files": [
+		"bg!4shared.js"
+	]
+}

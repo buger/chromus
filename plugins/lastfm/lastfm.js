@@ -241,7 +241,7 @@
         data._url = "" + LastFM.settings.baseURL;
         data._method = "POST";
         return $.ajax({
-          url: "http://chromusapp.appspot.com/proxy?_callback=?",
+          url: "" + chromus.baseURL + "/proxy?_callback=?",
           data: data,
           dataType: "jsonp",
           cache: true,

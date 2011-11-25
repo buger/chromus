@@ -3,12 +3,13 @@
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   global = this;
   Chromus = (function() {
+    Chromus.prototype.baseURL = "http://chromusapp.appspot.com";
     Chromus.prototype.audio_players = {};
     Chromus.prototype.audio_sources = {};
     Chromus.prototype.media_types = {};
     Chromus.prototype.plugins = {};
     Chromus.prototype.plugins_info = {};
-    Chromus.prototype.plugins_list = ['iframe_player', 'music_manager', 'ui', 'echonest', 'lastfm', 'loved_tracks_radio', 'vkontakte', 'about'];
+    Chromus.prototype.plugins_list = ['iframe_player', 'music_manager', 'ui', 'echonest', 'lastfm', 'loved_tracks_radio', 'vkontakte', '4shared', 'about'];
     function Chromus() {
       _.bindAll(this);
       this.loadPlugins();

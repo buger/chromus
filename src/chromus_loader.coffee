@@ -50,7 +50,7 @@ files = [
     "test_mode!lib/jasmine/jasmine.js"
     "test_mode!lib/jasmine/jasmine-html.js"
 
-    "src/chromus.js"
+    "src/chromus.js?" + (+new Date())
     "src/utils.js"
 ]
 
