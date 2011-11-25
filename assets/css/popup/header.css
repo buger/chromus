@@ -312,7 +312,7 @@
   right: 0px;
   width: 19px;
   height: 11px;
-  z-index: 999;
+  z-index: 99999999;
   cursor: pointer;
   background-image: url("../../images/popup/minimize.png");
   filter: alpha(opacity=70);
