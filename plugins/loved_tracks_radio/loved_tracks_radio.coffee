@@ -14,8 +14,7 @@ class LastfmLovedRadio
             @pages = _.shuffle @pages
             @page = @pages[0]
 
-        console.warn "LOVED", @page, @pages
-              
+
         chromus.plugins.lastfm.callMethod "user.getlovedtracks", 
             user: store.get('lastfm:user')
             page: @page
@@ -43,19 +42,43 @@ class LastfmLovedRadio
                     source_icon: browser.extension.getURL('/assets/icons/19x19.png')
 
                     loved_radio: true
+                    
+                tracks.push
+                    song: "Load next tracks"
+                    artist: ""
+                    type: "lastfm:loved_loader"
+                    action: true
+
 
                 callback(tracks)
+
 
 radio = new LastfmLovedRadio()
 
 manager = chromus.plugins.music_manager
-# Load next tracks if in radio mode
-manager.bind 'change:current_track', ->   
-    if not manager.nextTrack() and manager.currentTrack()?.get('loved_radio')
 
-        radio.getNext (tracks) ->
-            manager.playlist.add tracks
-             
+
+addNextTracks = ->
+    radio.getNext (tracks) ->
+        loaders = manager.playlist.filter (i) -> 
+            i.get('type') is 'lastfm:loved_loader'
+
+        manager.playlist.remove loaders        
+        manager.playlist.add tracks
+
+
+manager.bind 'change:current_track', ->
+    track = manager.currentTrack()
+
+    if track?.get('loved_radio') and manager.nextTrack()?.get('type') is "lastfm:loved_loader"
+
+        addNextTracks()
+                               
+
+chromus.registerMediaType "lastfm:loved_loader", (track) -> 
+    track.set 'song': "Loading..."
+    addNextTracks()
+
                     
 
 chromus.registerMediaType "lastfm:loved", (track, callback) ->

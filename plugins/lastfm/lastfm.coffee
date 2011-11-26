@@ -193,16 +193,21 @@ LastFM =
                     file_url: track.location
                     images: [track.image]
                     duration: track.duration/1000
-                    radio: true
+                    lastfm_radio: true
                     type: 'lastfm:stream_track'
                     source_title: resp.playlist.title
                     source_icon: "http://cdn.last.fm/flatness/favicon.2.ico"
-
+                                                
+                tracks.push
+                    song: "Load next tracks"
+                    artist: ""
+                    type: "lastfm:radio_loader"
+                    action: true
 
                 callback tracks    
                                 
 
-        tune: (station, callback) ->
+        tune: (station, callback) ->            
             if station.match(/loved$/)
                 LastFM._station = 'loved'
                 return callback()

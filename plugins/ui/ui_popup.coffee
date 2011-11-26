@@ -12,8 +12,7 @@ Handlebars.registerHelper 'lfm_img', (context) ->
     if typeof(context.images[0]) isnt "string"
         try
             context.images[1]["#text"]
-        catch error
-            console.warn context.images
+        catch error            
     else
         context.images[0]
 
@@ -248,11 +247,7 @@ class Controls extends Backbone.View
 
 
     addToPlaylist: (evt) ->
-        console.warn('asdasd')
-
         track_info = getTrackInfo(evt.currentTarget.parentNode)
-
-        console.warn track_info
 
         browser.postMessage
             method:   'addToPlaylist'

@@ -24,7 +24,7 @@
       try {
         return context.images[1]["#text"];
       } catch (error) {
-        return console.warn(context.images);
+
       }
     } else {
       return context.images[0];
@@ -319,9 +319,7 @@
     };
     Controls.prototype.addToPlaylist = function(evt) {
       var track_info;
-      console.warn('asdasd');
       track_info = getTrackInfo(evt.currentTarget.parentNode);
-      console.warn(track_info);
       browser.postMessage({
         method: 'addToPlaylist',
         tracks: [track_info]

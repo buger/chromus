@@ -24,7 +24,6 @@ chromus.plugins.music_manager.state.bind 'change', (state) ->
                 artist: track.get('artist')
                 track: track.get('song')
                 duration: track.get('duration')
-                radio: true
                                 
     else if state.get('name') is 'stopped'              
         last_scrobbled = undefined
@@ -36,14 +35,23 @@ chromus.plugins.music_manager.state.bind 'change', (state) ->
             duration: track.get('duration')
 
 
+addNextTracks = ->
+    lastfm.radio.getPlaylist (tracks) ->                
+        loaders = manager.playlist.filter (i) -> 
+            i.get('type') is 'lastfm:radio_loader'
+
+        manager.playlist.remove loaders        
+        manager.playlist.add tracks
+
+
 # Load next tracks if in radio mode
 chromus.plugins.music_manager.bind 'change:current_track', ->       
-    if manager.currentTrack()?.get('radio')
+    if manager.currentTrack()?.get('lastfm_radio')
 
         index = manager.playlist.indexOf manager.currentTrack()
         previous_tracks = _.first manager.playlist.models, index
 
-        # LastFm did't support playing previous tracks
+        # LastFM did't support playing previous tracks
         for track in previous_tracks
             if track.get('radio')                
                 track.unset 'file_url'
@@ -53,24 +61,27 @@ chromus.plugins.music_manager.bind 'change:current_track', ->
                 track.unset 'type'
         
         # If last track, load more
-        if not manager.nextTrack()
-            lastfm.radio.getPlaylist (tracks) ->
-                manager.playlist.add tracks
-    
+        if manager.nextTrack()?.get('type') is "lastfm:radio_loader"
+            addNextTracks()
+            
+
+chromus.registerMediaType "lastfm:radio_loader", (track) -> 
+    track.set 'song': "Loading..."
+    addNextTracks()
 
 
 chromus.registerMediaType "artist", (track, callback) ->
-    lastfm.artist.getTopTracks track.artist, callback
+    lastfm.artist.getTopTracks track.get('artist'), callback
 
 chromus.registerMediaType "album", (track, callback) ->
-    lastfm.album.getInfo track.artist, track.album, callback
+    lastfm.album.getInfo track.get('artist'), track.get('album'), callback
 
 chromus.registerMediaType "lastfm:radio", (track, callback) ->
     manager.settings.set 
         'repeat': false
         'shuffle': false
 
-    lastfm.radio.tune track.station, ->
+    lastfm.radio.tune track.get('station'), ->
         lastfm.radio.getPlaylist callback
 
 chromus.registerMediaType "lastfm:stream_track", (track, callback) =>
@@ -78,7 +89,7 @@ chromus.registerMediaType "lastfm:stream_track", (track, callback) =>
         url: "http://chromusapp.appspot.com/proxy?_callback=?"
         dataType: "jsonp",
         data:
-            '_url': track.file_url
+            '_url': track.get('file_url')
         cache: true,
         success: (resp) ->
             callback 

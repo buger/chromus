@@ -126,20 +126,12 @@
       });
     };
     MusicManager.prototype.updateState = function(state) {
-      var track, _base, _ref;
-      this.state.set(state);
+      var track;
+      this.state.set(state.toJSON());
       track = this.currentTrack();
-      if (track != null) {
-        if ((_ref = (_base = track.attributes).duration) == null) {
-          _base.duration = state.duration;
-        }
-      }
-      if (this.state.get('name') === "stopped") {
+      if (state.get('name') === "stopped") {
+        console.warn('updateState', state.toJSON(), this.state.toJSON());
         return this.playTrack(this.nextTrack());
-      } else if (false && (track != null ? track.get('duration') : void 0) && ((this.state.get('played') - track.get('duration')) | 0) >= 0) {
-        return this.updateState({
-          name: "stopped"
-        });
       }
     };
     MusicManager.prototype.searchTrack = function(track, callback) {
@@ -191,12 +183,14 @@
       if (!_.isFunction(track.get)) {
         track = new Track(track);
       }
-      if (track !== this.currentTrack()) {
-        this.stop();
+      if (!track.get('action')) {
+        this.state.set({
+          'name': 'loading'
+        });
+        if (track !== this.currentTrack()) {
+          this.stop();
+        }
       }
-      this.state.set({
-        'name': 'loading'
-      });
       if (track.get('type') == null) {
         this.set({
           'current_track': track.id
@@ -209,7 +203,7 @@
           }, this));
         }
       } else {
-        return chromus.media_types[track.get('type')](track.toJSON(), __bind(function(resp, reset) {
+        return chromus.media_types[track.get('type')](track, __bind(function(resp, reset) {
           if (reset == null) {
             reset = true;
           }

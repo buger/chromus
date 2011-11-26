@@ -90,17 +90,15 @@ class MusicManager extends Backbone.Model
             buffered: 0
             name: "stopped"
 
-    updateState: (state) ->
-        @state.set state
+    updateState: (state) ->        
+        @state.set state.toJSON()
 
-        track = @currentTrack()
-        
-        track?.attributes.duration ?= state.duration     
+        track = @currentTrack()            
 
-        if @state.get('name') is "stopped"
+        if state.get('name') is "stopped"
+            console.warn 'updateState', state.toJSON(), @state.toJSON()
+
             @playTrack @nextTrack()
-        else if false and track?.get('duration') and ((@state.get('played') - track.get('duration'))|0) >= 0        
-            @updateState name:"stopped"
 
 
     searchTrack: (track, callback = ->) ->        
@@ -142,11 +140,11 @@ class MusicManager extends Backbone.Model
         if not _.isFunction track.get
             track = new Track(track)
 
+        if not track.get('action')
+            @state.set 'name':'loading'
 
-        if track isnt @currentTrack()
-            @stop()
-                    
-        @state.set 'name':'loading'
+            if track isnt @currentTrack()
+                @stop()
 
         unless track.get('type')?
             @set 'current_track': track.id
@@ -157,7 +155,7 @@ class MusicManager extends Backbone.Model
                 @searchTrack track, =>
                     @playTrack track
         else
-            chromus.media_types[track.get('type')] track.toJSON(), (resp, reset = true) =>
+            chromus.media_types[track.get('type')] track, (resp, reset = true) =>
                 if reset
                     @playlist.reset resp
                     @playTrack @playlist.first().id

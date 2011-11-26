@@ -2,7 +2,7 @@
   /*
       Track scrobbling 
   */
-  var last_scrobbled, lastfm, manager;
+  var addNextTracks, last_scrobbled, lastfm, manager;
   var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
   lastfm = chromus.plugins.lastfm;
   manager = chromus.plugins.music_manager;
@@ -20,8 +20,7 @@
         lastfm.track.scrobble({
           artist: track.get('artist'),
           track: track.get('song'),
-          duration: track.get('duration'),
-          radio: true
+          duration: track.get('duration')
         });
       }
     } else if (state.get('name') === 'stopped') {
@@ -35,9 +34,19 @@
       });
     }
   });
+  addNextTracks = function() {
+    return lastfm.radio.getPlaylist(function(tracks) {
+      var loaders;
+      loaders = manager.playlist.filter(function(i) {
+        return i.get('type') === 'lastfm:radio_loader';
+      });
+      manager.playlist.remove(loaders);
+      return manager.playlist.add(tracks);
+    });
+  };
   chromus.plugins.music_manager.bind('change:current_track', function() {
-    var index, previous_tracks, track, _i, _len, _ref;
-    if ((_ref = manager.currentTrack()) != null ? _ref.get('radio') : void 0) {
+    var index, previous_tracks, track, _i, _len, _ref, _ref2;
+    if ((_ref = manager.currentTrack()) != null ? _ref.get('lastfm_radio') : void 0) {
       index = manager.playlist.indexOf(manager.currentTrack());
       previous_tracks = _.first(manager.playlist.models, index);
       for (_i = 0, _len = previous_tracks.length; _i < _len; _i++) {
@@ -50,25 +59,29 @@
           track.unset('type');
         }
       }
-      if (!manager.nextTrack()) {
-        return lastfm.radio.getPlaylist(function(tracks) {
-          return manager.playlist.add(tracks);
-        });
+      if (((_ref2 = manager.nextTrack()) != null ? _ref2.get('type') : void 0) === "lastfm:radio_loader") {
+        return addNextTracks();
       }
     }
   });
+  chromus.registerMediaType("lastfm:radio_loader", function(track) {
+    track.set({
+      'song': "Loading..."
+    });
+    return addNextTracks();
+  });
   chromus.registerMediaType("artist", function(track, callback) {
-    return lastfm.artist.getTopTracks(track.artist, callback);
+    return lastfm.artist.getTopTracks(track.get('artist'), callback);
   });
   chromus.registerMediaType("album", function(track, callback) {
-    return lastfm.album.getInfo(track.artist, track.album, callback);
+    return lastfm.album.getInfo(track.get('artist'), track.get('album'), callback);
   });
   chromus.registerMediaType("lastfm:radio", function(track, callback) {
     manager.settings.set({
       'repeat': false,
       'shuffle': false
     });
-    return lastfm.radio.tune(track.station, function() {
+    return lastfm.radio.tune(track.get('station'), function() {
       return lastfm.radio.getPlaylist(callback);
     });
   });
@@ -77,7 +90,7 @@
       url: "http://chromusapp.appspot.com/proxy?_callback=?",
       dataType: "jsonp",
       data: {
-        '_url': track.file_url
+        '_url': track.get('file_url')
       },
       cache: true,
       success: function(resp) {
