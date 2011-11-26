@@ -7,7 +7,7 @@ class Source
     processResults: (response) ->
         results = $(response).find('table.listView tr')        
 
-        results = _.map results, (tr) ->    
+        results = _.map results, (tr) ->
             tr = $(tr)
 
             result =
@@ -17,6 +17,8 @@ class Source
                     ?.match(/(http[^']*)/)?[1]
 
         results = _.reject results, (i) -> !i.title or !i.file_url
+        
+        callb        
 
 
     search: (args, callback = ->) ->
@@ -52,4 +54,5 @@ class Source
                 success: (result) => callback @processResults()
                         
 
-@chromus.register_plugin("for_shared", new Source())
+@chromus.registerAudioSource("for_shared", new Source())
+@chromus.registerPlugin("for_shared", new Source())

@@ -15,9 +15,10 @@
           file_url: (_ref = tr.find('.playThumb img')) != null ? (_ref2 = _ref.attr('onclick')) != null ? (_ref3 = _ref2.match(/(http[^']*)/)) != null ? _ref3[1] : void 0 : void 0 : void 0
         };
       });
-      return results = _.reject(results, function(i) {
+      results = _.reject(results, function(i) {
         return !i.title || !i.file_url;
       });
+      return callb;
     };
     Source.prototype.search = function(args, callback) {
       var data, query, url;
@@ -55,5 +56,6 @@
     };
     return Source;
   })();
-  this.chromus.register_plugin("for_shared", new Source());
+  this.chromus.registerAudioSource("for_shared", new Source());
+  this.chromus.registerPlugin("for_shared", new Source());
 }).call(this);

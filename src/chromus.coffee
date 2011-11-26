@@ -23,7 +23,8 @@ class Chromus
 		'loved_tracks_radio'	
 	#	'local_files_player'
 		'vkontakte'
-		'4shared'	
+		#'4shared'	
+		#'bandcamp'
 		'about'
 	]
 

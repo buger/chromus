@@ -1,0 +1,8 @@
+{
+	"name": "Bandcamp.com",
+	"description": "Bandcamp.com search engine",
+
+	"files": [
+		"bg!bandcamp.js"
+	]
+}
