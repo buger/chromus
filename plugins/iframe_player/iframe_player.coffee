@@ -43,7 +43,8 @@ class Player extends Backbone.Model
                 @player_ready = true
 
             when 'sm2:finished'
-                @state.set name:"stopped"                
+                @state.set name:"stopped"
+                @state.unset 'name', silent:true  
 
 
     postMessageToPlayer: (data) ->

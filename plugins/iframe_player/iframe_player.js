@@ -45,8 +45,11 @@
         case 'sm2:ready':
           return this.player_ready = true;
         case 'sm2:finished':
-          return this.state.set({
+          this.state.set({
             name: "stopped"
+          });
+          return this.state.unset('name', {
+            silent: true
           });
       }
     };

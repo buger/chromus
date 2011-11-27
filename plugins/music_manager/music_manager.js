@@ -130,7 +130,7 @@
       this.state.set(state.toJSON());
       track = this.currentTrack();
       if (state.get('name') === "stopped") {
-        console.warn('updateState', state.toJSON(), this.state.toJSON());
+        console.warn('updateState', state.toJSON(), this.state.toJSON(), this.nextTrack().toJSON());
         return this.playTrack(this.nextTrack());
       }
     };

@@ -96,7 +96,7 @@ class MusicManager extends Backbone.Model
         track = @currentTrack()            
 
         if state.get('name') is "stopped"
-            console.warn 'updateState', state.toJSON(), @state.toJSON()
+            console.warn 'updateState', state.toJSON(), @state.toJSON(), @nextTrack().toJSON()
 
             @playTrack @nextTrack()
 
