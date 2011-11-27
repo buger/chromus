@@ -19,17 +19,24 @@ class LastfmLovedRadio
             user: store.get('lastfm:user')
             page: @page
         , (response) =>            
+                # If this is first call
+                unless @pages.length
+                    @pages = response.lovedtracks["@attr"].totalPages
+                    @pages = _.range 1, @pages
+                                
+                    # If user have to loved tracks, return empty array
+                    if response.lovedtracks.track.length
+                        return @getNext(callback) 
+                    else
+                        return callback []
+
                 tracks = _.difference response.lovedtracks.track, @played_tracks
                 tracks = _.shuffle tracks
                 
                 if not tracks.length
                     @pages = _.without(@pages, @page)
 
-                    return @getNext(callback)                
-
-                unless @pages.length
-                    @pages = response.lovedtracks["@attr"].totalPages
-                    @pages = _.range 1, @pages
+                    return @getNext(callback)                                
                 
                 tracks = _.first(tracks, 3)
                 @played_tracks = _.union @played_tracks, tracks

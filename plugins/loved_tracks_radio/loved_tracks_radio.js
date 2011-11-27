@@ -21,15 +21,20 @@
         page: this.page
       }, __bind(function(response) {
         var tracks;
+        if (!this.pages.length) {
+          this.pages = response.lovedtracks["@attr"].totalPages;
+          this.pages = _.range(1, this.pages);
+          if (response.lovedtracks.track.length) {
+            return this.getNext(callback);
+          } else {
+            return callback([]);
+          }
+        }
         tracks = _.difference(response.lovedtracks.track, this.played_tracks);
         tracks = _.shuffle(tracks);
         if (!tracks.length) {
           this.pages = _.without(this.pages, this.page);
           return this.getNext(callback);
-        }
-        if (!this.pages.length) {
-          this.pages = response.lovedtracks["@attr"].totalPages;
-          this.pages = _.range(1, this.pages);
         }
         tracks = _.first(tracks, 3);
         this.played_tracks = _.union(this.played_tracks, tracks);
