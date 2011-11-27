@@ -35,11 +35,17 @@
     }
   });
   addNextTracks = function() {
-    return lastfm.radio.getPlaylist(function(tracks) {
-      var loaders;
-      loaders = manager.playlist.filter(function(i) {
-        return i.get('type') === 'lastfm:radio_loader';
+    var loader, loaders, _i, _len;
+    loaders = manager.playlist.filter(function(i) {
+      return i.get('type') === 'lastfm:radio_loader';
+    });
+    for (_i = 0, _len = loaders.length; _i < _len; _i++) {
+      loader = loaders[_i];
+      loader.set({
+        'song': "Loading..."
       });
+    }
+    return lastfm.radio.getPlaylist(function(tracks) {
       manager.playlist.remove(loaders);
       return manager.playlist.add(tracks);
     });
@@ -65,9 +71,6 @@
     }
   });
   chromus.registerMediaType("lastfm:radio_loader", function(track) {
-    track.set({
-      'song': "Loading..."
-    });
     return addNextTracks();
   });
   chromus.registerMediaType("artist", function(track, callback) {

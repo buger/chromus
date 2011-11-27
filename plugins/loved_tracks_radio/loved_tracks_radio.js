@@ -56,11 +56,17 @@
   radio = new LastfmLovedRadio();
   manager = chromus.plugins.music_manager;
   addNextTracks = function() {
-    return radio.getNext(function(tracks) {
-      var loaders;
-      loaders = manager.playlist.filter(function(i) {
-        return i.get('type') === 'lastfm:loved_loader';
+    var loader, loaders, _i, _len;
+    loaders = manager.playlist.filter(function(i) {
+      return i.get('type') === 'lastfm:loved_loader';
+    });
+    for (_i = 0, _len = loaders.length; _i < _len; _i++) {
+      loader = loaders[_i];
+      loader.set({
+        'song': 'Loading...'
       });
+    }
+    return radio.getNext(function(tracks) {
       manager.playlist.remove(loaders);
       return manager.playlist.add(tracks);
     });
@@ -73,10 +79,6 @@
     }
   });
   chromus.registerMediaType("lastfm:loved_loader", function(track) {
-    track.set({
-      'song': "Loading..."
-    });
-    console.warn("ZZZZZ");
     return addNextTracks();
   });
   chromus.registerMediaType("lastfm:loved", function(track, callback) {

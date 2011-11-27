@@ -184,17 +184,20 @@
         track = new Track(track);
       }
       if (!track.get('action')) {
+        if (track !== this.currentTrack()) {
+          console.warn('stopping');
+          this.stop();
+        }
+        if (track.get('type') == null) {
+          this.set({
+            'current_track': track.id
+          });
+        }
         this.state.set({
           'name': 'loading'
         });
-        if (track !== this.currentTrack()) {
-          this.stop();
-        }
       }
       if (track.get('type') == null) {
-        this.set({
-          'current_track': track.id
-        });
         if (track.get('file_url')) {
           return this.play(track);
         } else {

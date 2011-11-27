@@ -42,13 +42,17 @@ class Player extends Backbone.Model
         @playlist.get @get 'current_track'        
 
 
-    play: (track = @get('current_track')) ->
-        @set 'current_track':track
-        @playlist.trigger 'reset'
+    play: (track_id = @get('current_track')) ->        
+        track = @playlist.get(track_id)
 
-        @state.set 'name':'playing'
+        unless track.get('action')
+            @set 'current_track':track_id
+            @state.set 'name':'playing'
+        else
+            track.set 'song': "Loading..."
+            
 
-        browser.postMessage { method:'play', track: parseInt(track) }
+        browser.postMessage { method:'play', track: parseInt(track_id) }
 
 
     pause: ->
@@ -81,13 +85,13 @@ class Player extends Backbone.Model
             console.log "Popup received message", msg.method, msg
         else
             if msg.track and msg.state.name in ["playing", "loading"]
-                @playlist.get(msg.track.id).set(msg.track)
+                @playlist.get(msg.track.id).set(msg.track)                
                 @set 'current_track': msg.track.id
         
         @settings.set msg.settings if msg.settings?
 
         @set 'volume': msg.volume if msg.volume?
-        @state.set msg.state if msg.state?                    
+        @state.set msg.state if msg.state?               
         
         @playlist.reset msg.playlist if msg.playlist
                 
@@ -270,7 +274,7 @@ class TrackInfo extends Backbone.View
         _.bindAll @, "updateInfo"
 
         @model.bind 'change:current_track', @updateInfo
-        @model.playlist.bind 'all', @updateInfo
+        @model.playlist.bind 'all', _.debounce @updateInfo, 500
         
                 
     updateInfo: ->
@@ -376,10 +380,14 @@ class PlaylistView extends Backbone.View
         "click #playlist .song": "togglePlaying"
 
     initialize: ->
-        _.bindAll @, 'updatePlaylist'
+        _.bindAll @, 'updatePlaylist', 'updateCurrent'
 
-        @model.playlist.bind 'all', @updatePlaylist
-        @model.bind "change:current_track", @updatePlaylist
+        render_limiter = _.debounce @updatePlaylist, 200
+
+        for evt in ['change:song','change:artist','add','remove','reset']
+            @model.playlist.bind evt, render_limiter
+        
+        @model.bind "change:current_track", @updateCurrent
 
         @scroll = new iScroll('playlist', { bounce: false })
                 
@@ -401,7 +409,22 @@ class PlaylistView extends Backbone.View
         count
 
 
+    updateCurrent: ->
+        @$('.song.playing').removeClass 'playing'
+
+        current = @model.get('current_track')
+
+        if current
+            console.warn "current_track", current
+            @$(".track_container.#{current} .song").addClass 'playing'
+            
+            if @scroll.vScrollbar 
+                @scroll.scrollToElement @el.find(".track_container.#{current}")[0]  
+
+
     updatePlaylist: ->
+        console.warn "updating playlist"
+
         merge_rows = 0
                 
         playlist = @model.playlist.toJSON()
@@ -444,10 +467,7 @@ class PlaylistView extends Backbone.View
 
         @el.find('.track_container:odd').addClass('odd')
 
-        @scroll.refresh()
-
-        if @scroll.vScrollbar and playlist.length and model.get('current_track')
-            @scroll.scrollToElement @el.find(".track_container[data-id=#{model.get('current_track')}]")[0]
+        @scroll.refresh()  
 
 
 class App extends Backbone.View

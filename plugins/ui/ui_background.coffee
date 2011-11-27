@@ -21,7 +21,7 @@ music_manager.state.bind 'change', (state) ->
         track: track
 
 
-for event in ['reset','add','create']
+for event in ['reset','add','create', 'change:song']
     music_manager.playlist.bind event, ->
         browser.postMessage
             method: "loadPlaylist"

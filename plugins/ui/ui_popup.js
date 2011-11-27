@@ -63,20 +63,27 @@
     Player.prototype.currentTrack = function() {
       return this.playlist.get(this.get('current_track'));
     };
-    Player.prototype.play = function(track) {
-      if (track == null) {
-        track = this.get('current_track');
+    Player.prototype.play = function(track_id) {
+      var track;
+      if (track_id == null) {
+        track_id = this.get('current_track');
       }
-      this.set({
-        'current_track': track
-      });
-      this.playlist.trigger('reset');
-      this.state.set({
-        'name': 'playing'
-      });
+      track = this.playlist.get(track_id);
+      if (!track.get('action')) {
+        this.set({
+          'current_track': track_id
+        });
+        this.state.set({
+          'name': 'playing'
+        });
+      } else {
+        track.set({
+          'song': "Loading..."
+        });
+      }
       return browser.postMessage({
         method: 'play',
-        track: parseInt(track)
+        track: parseInt(track_id)
       });
     };
     Player.prototype.pause = function() {
@@ -342,7 +349,7 @@
     TrackInfo.prototype.initialize = function() {
       _.bindAll(this, "updateInfo");
       this.model.bind('change:current_track', this.updateInfo);
-      return this.model.playlist.bind('all', this.updateInfo);
+      return this.model.playlist.bind('all', _.debounce(this.updateInfo, 500));
     };
     TrackInfo.prototype.updateInfo = function() {
       var last_fm, track, _ref, _ref2;
@@ -454,9 +461,15 @@
       "click #playlist .song": "togglePlaying"
     };
     PlaylistView.prototype.initialize = function() {
-      _.bindAll(this, 'updatePlaylist');
-      this.model.playlist.bind('all', this.updatePlaylist);
-      this.model.bind("change:current_track", this.updatePlaylist);
+      var evt, render_limiter, _i, _len, _ref;
+      _.bindAll(this, 'updatePlaylist', 'updateCurrent');
+      render_limiter = _.debounce(this.updatePlaylist, 200);
+      _ref = ['change:song', 'change:artist', 'add', 'remove', 'reset'];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        evt = _ref[_i];
+        this.model.playlist.bind(evt, render_limiter);
+      }
+      this.model.bind("change:current_track", this.updateCurrent);
       return this.scroll = new iScroll('playlist', {
         bounce: false
       });
@@ -482,8 +495,21 @@
       }
       return count;
     };
+    PlaylistView.prototype.updateCurrent = function() {
+      var current;
+      this.$('.song.playing').removeClass('playing');
+      current = this.model.get('current_track');
+      if (current) {
+        console.warn("current_track", current);
+        this.$(".track_container." + current + " .song").addClass('playing');
+        if (this.scroll.vScrollbar) {
+          return this.scroll.scrollToElement(this.el.find(".track_container." + current)[0]);
+        }
+      }
+    };
     PlaylistView.prototype.updatePlaylist = function() {
       var helpers, merge_rows, model, playlist, track, view, _i, _len, _ref;
+      console.warn("updating playlist");
       merge_rows = 0;
       playlist = this.model.playlist.toJSON();
       for (_i = 0, _len = playlist.length; _i < _len; _i++) {
@@ -542,10 +568,7 @@
         visibility: 'visible'
       });
       this.el.find('.track_container:odd').addClass('odd');
-      this.scroll.refresh();
-      if (this.scroll.vScrollbar && playlist.length && model.get('current_track')) {
-        return this.scroll.scrollToElement(this.el.find(".track_container[data-id=" + (model.get('current_track')) + "]")[0]);
-      }
+      return this.scroll.refresh();
     };
     return PlaylistView;
   })();

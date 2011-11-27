@@ -36,10 +36,13 @@ chromus.plugins.music_manager.state.bind 'change', (state) ->
 
 
 addNextTracks = ->
-    lastfm.radio.getPlaylist (tracks) ->                
-        loaders = manager.playlist.filter (i) -> 
+    loaders = manager.playlist.filter (i) -> 
             i.get('type') is 'lastfm:radio_loader'
+    
+    for loader in loaders        
+        loader.set 'song': "Loading..."
 
+    lastfm.radio.getPlaylist (tracks) ->
         manager.playlist.remove loaders        
         manager.playlist.add tracks
 
@@ -65,8 +68,7 @@ chromus.plugins.music_manager.bind 'change:current_track', ->
             addNextTracks()
             
 
-chromus.registerMediaType "lastfm:radio_loader", (track) -> 
-    track.set 'song': "Loading..."
+chromus.registerMediaType "lastfm:radio_loader", (track) ->     
     addNextTracks()
 
 

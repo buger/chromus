@@ -141,14 +141,16 @@ class MusicManager extends Backbone.Model
             track = new Track(track)
 
         if not track.get('action')
-            @state.set 'name':'loading'
-
             if track isnt @currentTrack()
+                console.warn 'stopping'
                 @stop()
+                
+            unless track.get('type')?
+                @set 'current_track': track.id
+
+            @state.set 'name':'loading'                        
 
         unless track.get('type')?
-            @set 'current_track': track.id
-
             if track.get('file_url')
                 @play track
             else                
