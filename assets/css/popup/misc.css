@@ -73,7 +73,7 @@ a.button {
 .clearfix {
   clear: both;
 }
-#panel {
+.panel {
   position: absolute;
   width: 100%;
   left: 100%;
@@ -90,10 +90,10 @@ a.button {
   -o-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-#panel.show {
+.panel.show {
   left: 0px;
 }
-#panel header {
+.panel header {
   width: 100%;
   display: -webkit-box;
   display: -moz-box;
@@ -116,17 +116,17 @@ a.button {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeeee', endColorstr='#dddddd', GradientType=0);
   padding: 10px;
 }
-#panel header + * {
+.panel header + * {
   padding: 20px;
 }
-#panel header h3 {
+.panel header h3 {
   display: block;
   margin-left: 15px;
   font-size: 22px;
   font-weight: bold;
   color: #444;
 }
-#panel header a.back {
+.panel header a.back {
   cursor: pointer;
   display: block;
   width: 72px;
@@ -137,13 +137,13 @@ a.button {
   -moz-opacity: 1;
   opacity: 1;
 }
-#panel header a.back:hover {
+.panel header a.back:hover {
   filter: alpha(opacity=95);
   -khtml-opacity: 0.95;
   -moz-opacity: 0.95;
   opacity: 0.95;
 }
-#panel header a.back:active {
+.panel header a.back:active {
   background-position: center right;
 }
 #dialog {

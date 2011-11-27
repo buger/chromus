@@ -182,12 +182,10 @@
       };
       this.spinner = new Spinner(opts);
       this.updateState(this.model.state);
-      $('#panel .search_results span.add_to_playlist').live('click', __bind(function(evt) {
-        $('#panel .back').triggerHandler('click');
+      $('.panel.search span.add_to_playlist').live('click', __bind(function(evt) {
         return this.addToPlaylist(evt);
       }, this));
-      return $('#panel .search_results a.ex_container').live('click', __bind(function(evt) {
-        $('#panel .back').triggerHandler('click');
+      return $('.panel.search a.ex_container').live('click', __bind(function(evt) {
         return this.playSearchedTrack(evt);
       }, this));
     };
@@ -247,11 +245,14 @@
         setTimeout(__bind(function() {
           return this.$('.search_bar').find('input').focus();
         }, this), 500);
-        $('#panel .container').html(this.search_template((_ref = this.search_view) != null ? _ref : {}));
-        return $('#panel').addClass('show');
+        this.search_panel = $('<div class="panel search"></div>').html(this.search_template((_ref = this.search_view) != null ? _ref : {})).appendTo($('#wrapper'));
+        return _.delay(__bind(function() {
+          return this.search_panel.addClass('show');
+        }, this));
       } else {
         this.$('.search_bar').removeClass('show');
-        return $('#panel').removeClass('show');
+        console.warn("hiding panel");
+        return this.search_panel.find('.back').trigger('click');
       }
     };
     Controls.prototype.search = _.debounce(function(evt) {
@@ -287,8 +288,7 @@
         };
         render = __bind(function() {
           var _ref2;
-          $('#panel .container').html(this.search_template((_ref2 = this.search_view) != null ? _ref2 : {}));
-          return $('#panel').addClass('show').find('.loader').spin('small');
+          return this.search_panel.html(this.search_template((_ref2 = this.search_view) != null ? _ref2 : {})).find('.loader').spin('small');
         }, this);
         render();
         chromus.plugins.lastfm.artist.search(text, __bind(function(artists) {
@@ -608,8 +608,15 @@
         });
         store.set('first_run', true);
       }
-      return $('#panel .back').live('click', function() {
-        $('#panel').removeClass('show');
+      return $('.panel .back').live('click', function(evt) {
+        var panel;
+        panel = $(evt.currentTarget).closest('.panel');
+        panel.removeClass('show');
+        setTimeout(function() {
+          if (!panel.hasClass('show')) {
+            return panel.remove();
+          }
+        }, 1000);
         return $('#header').removeClass('search_mode').find('.search_bar').removeClass('show');
       });
     };

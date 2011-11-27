@@ -83,8 +83,11 @@ class SettingsView extends Backbone.View
 
         @el.innerHTML = template(view)
 
-        $('#panel .container').html(@el)
-        $('#panel').addClass('show')
+        @panel = $('<div class="panel">')
+            .html(@el)
+            .appendTo $("#wrapper")
+                    
+        _.delay => @panel.addClass('show')
 
         @delegateEvents()
 
@@ -111,7 +114,7 @@ class SettingsView extends Backbone.View
             track: track
             playlist: [track]
 
-        $('#panel').removeClass('show')
+        @panel.removeClass('show')
 
 
     playLovedRadio: (evt) ->
@@ -125,7 +128,7 @@ class SettingsView extends Backbone.View
             track: track
             playlist: [track]
 
-        $('#panel').removeClass('show')
+        @panel.removeClass('show')
                                 
 
     login: (evt) ->
@@ -165,7 +168,7 @@ class SettingsView extends Backbone.View
         evt.stopPropagation()
 
     close: ->
-        $('#panel').removeClass('show')
+        @panel.removeClass('show')
 
 
 class Menu extends Backbone.View

@@ -128,12 +128,10 @@ class Controls extends Backbone.View
 
         @updateState(@model.state)
 
-        $('#panel .search_results span.add_to_playlist').live 'click', (evt) =>
-            $('#panel .back').triggerHandler('click')
+        $('.panel.search span.add_to_playlist').live 'click', (evt) =>
             @addToPlaylist(evt)
 
-        $('#panel .search_results a.ex_container').live 'click', (evt) =>
-            $('#panel .back').triggerHandler('click')
+        $('.panel.search a.ex_container').live 'click', (evt) =>            
             @playSearchedTrack(evt)
 
 
@@ -193,11 +191,16 @@ class Controls extends Backbone.View
                 @$('.search_bar').find('input').focus()
             , 500
 
-            $('#panel .container').html @search_template @search_view ? {}
-            $('#panel').addClass('show')
+            @search_panel = $('<div class="panel search"></div>')
+                .html(@search_template @search_view ? {})
+                .appendTo($('#wrapper'))
+                
+            _.delay => @search_panel.addClass('show')
         else
             @$('.search_bar').removeClass('show')
-            $('#panel').removeClass('show')
+
+            console.warn "hiding panel"
+            @search_panel.find('.back').trigger('click')
     
     # Rate limiting search function, by adding slight delay
     # http://documentcloud.github.com/underscore/#debounce
@@ -218,10 +221,10 @@ class Controls extends Backbone.View
                 'show_albums': (fn) -> if not @albums or @albums?.length then fn(this)
                 'show_artists': (fn) -> if not @artists or @artists?.length then fn(this)            
 
-            render = =>
-                $('#panel .container').html @search_template @search_view ? {}
-                $('#panel').addClass('show')
-                    .find('.loader').spin('small');
+            render = =>                                   
+                @search_panel.html(@search_template @search_view ? {})
+                .find('.loader')
+                    .spin('small')
 
             render()
 
@@ -496,8 +499,15 @@ class App extends Backbone.View
             store.set('first_run', true)
 
 
-        $('#panel .back').live 'click', -> 
-            $('#panel').removeClass('show')
+        $('.panel .back').live 'click', (evt) -> 
+            panel = $(evt.currentTarget).closest('.panel')
+
+            panel.removeClass('show')
+
+            setTimeout -> 
+                panel.remove() unless panel.hasClass('show')
+            , 1000
+
             $('#header').removeClass('search_mode')
                 .find('.search_bar').removeClass('show')
 

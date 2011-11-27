@@ -73,10 +73,10 @@
         _results = [];
         for (_j = 0, _len2 = _ref2.length; _j < _len2; _j++) {
           track = _ref2[_j];
-          _results.push(track.type ? chromus.media_types[track.type](track, __bind(function(resp) {
+          _results.push(track.type ? (track = new Backbone.Model(track), chromus.media_types[track.get('type')](track, __bind(function(resp) {
             music_manager.playlist.remove(track);
             return music_manager.playlist.add(resp);
-          }, this)) : music_manager.playlist.add(track));
+          }, this))) : music_manager.playlist.add(track));
         }
         return _results;
         break;

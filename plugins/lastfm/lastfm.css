@@ -2,7 +2,7 @@
   background: url(images/lastfm_small.ico) 10px 12px no-repeat;
   padding-left: 35px;
 }
-#panel .lastfm form .logo {
+.panel .lastfm form .logo {
   top: 7px;
   right: 7px;
   position: absolute;
@@ -11,66 +11,66 @@
   background: url(images/lastfm_grey.gif) top center no-repeat;
   background-size: 100%;
 }
-#panel .lastfm form li.clearfix {
+.panel .lastfm form li.clearfix {
   zoom: 1;
   margin: 0;
   padding: 0;
 }
-#panel .lastfm form li.clearfix:before, #panel .lastfm form li.clearfix:after {
+.panel .lastfm form li.clearfix:before, .panel .lastfm form li.clearfix:after {
   display: table;
   content: "";
   zoom: 1;
   *display: inline;
 }
-#panel .lastfm form li.clearfix:after {
+.panel .lastfm form li.clearfix:after {
   clear: both;
 }
-#panel .lastfm form li.header {
+.panel .lastfm form li.header {
   font-size: 16px;
   font-weight: bold;
   color: #222;
   margin-top: 30px;
 }
-#panel .lastfm form li.header .notice {
+.panel .lastfm form li.header .notice {
   font-size: 13px;
   color: #6666ff;
   margin-left: 10px;
 }
-#panel .lastfm form label {
+.panel .lastfm form label {
   display: inline-block;
   font-size: 15px;
   line-height: 150%;
   margin-right: 10px;
 }
-#panel .lastfm form .username {
+.panel .lastfm form .username {
   float: left;
   width: 50%;
 }
-#panel .lastfm form .logout {
+.panel .lastfm form .logout {
   margin-top: 20px;
   font-size: 14px;
   color: red;
   font-weight: bold;
 }
-#panel .lastfm form.login {
+.panel .lastfm form.login {
   width: 50%;
   margin: 0 auto;
 }
-#panel .lastfm form.login .error {
+.panel .lastfm form.login .error {
   font-size: 12px;
 }
-#panel .lastfm form.login label {
+.panel .lastfm form.login label {
   display: block;
 }
-#panel .lastfm form.login input[type=submit] {
+.panel .lastfm form.login input[type=submit] {
   padding: 5px 15px;
   font-size: 14px;
 }
-#panel .lastfm form .stations ul {
+.panel .lastfm form .stations ul {
   margin: 0;
   padding: 0;
 }
-#panel .lastfm form .stations li {
+.panel .lastfm form .stations li {
   position: relative;
   float: left;
   width: 50%;
@@ -88,14 +88,14 @@
   background: url(images/radio.png) 0px 4px no-repeat;
   padding-left: 28px;
 }
-#panel .lastfm form .stations li:hover {
+.panel .lastfm form .stations li:hover {
   filter: alpha(opacity=100);
   -khtml-opacity: 1;
   -moz-opacity: 1;
   opacity: 1;
   text-decoration: underline;
 }
-#panel .lastfm form .stations li.free:after {
+.panel .lastfm form .stations li.free:after {
   content: "free";
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
@@ -109,17 +109,17 @@
   left: 125px;
   top: -4px;
 }
-#panel .lastfm form .stations.subscribe li.pay {
+.panel .lastfm form .stations.subscribe li.pay {
   filter: alpha(opacity=40);
   -khtml-opacity: 0.4;
   -moz-opacity: 0.4;
   opacity: 0.4;
 }
-#panel .lastfm form .stations.subscribe li.pay:hover {
+.panel .lastfm form .stations.subscribe li.pay:hover {
   text-decoration: none;
   cursor: default;
 }
-#panel .lastfm form .toggle {
+.panel .lastfm form .toggle {
   display: -webkit-box;
   display: -moz-box;
   display: box;
@@ -129,7 +129,7 @@
   float: left;
   width: 50%;
 }
-#panel .lastfm form .toggle .toggler {
+.panel .lastfm form .toggle .toggler {
   cursor: pointer;
   width: 60px;
   height: 26px;
@@ -148,7 +148,7 @@
   background-image: linear-gradient(top, #53c653, #39ad3a);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#53c653', endColorstr='#39ad3a', GradientType=0);
 }
-#panel .lastfm form .toggle .toggler > div {
+.panel .lastfm form .toggle .toggler > div {
   height: 24px;
   border: 1px solid #e5e5e5;
   margin-left: 0;
@@ -172,7 +172,7 @@
   -o-transition: 0.1s linear all;
   transition: 0.1s linear all;
 }
-#panel .lastfm form .toggle .toggler.off {
+.panel .lastfm form .toggle .toggler.off {
   background-color: #ff3333;
   background-repeat: repeat-x;
   background-image: -khtml-gradient(linear, left top, left bottom, from(#f07575), to(#ff3333));
@@ -184,6 +184,6 @@
   background-image: linear-gradient(top, #f07575, #ff3333);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f07575', endColorstr='#ff3333', GradientType=0);
 }
-#panel .lastfm form .toggle .toggler.off > div {
+.panel .lastfm form .toggle .toggler.off > div {
   margin-left: 28px;
 }

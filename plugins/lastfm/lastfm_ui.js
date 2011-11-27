@@ -92,8 +92,10 @@
         subscriber: !!parseInt(store.get('lastfm:subscriber'))
       };
       this.el.innerHTML = template(view);
-      $('#panel .container').html(this.el);
-      $('#panel').addClass('show');
+      this.panel = $('<div class="panel">').html(this.el).appendTo($("#wrapper"));
+      _.delay(__bind(function() {
+        return this.panel.addClass('show');
+      }, this));
       return this.delegateEvents();
     };
     SettingsView.prototype.logout = function() {
@@ -118,7 +120,7 @@
         track: track,
         playlist: [track]
       });
-      return $('#panel').removeClass('show');
+      return this.panel.removeClass('show');
     };
     SettingsView.prototype.playLovedRadio = function(evt) {
       var track;
@@ -132,7 +134,7 @@
         track: track,
         playlist: [track]
       });
-      return $('#panel').removeClass('show');
+      return this.panel.removeClass('show');
     };
     SettingsView.prototype.login = function(evt) {
       var auth_token, form, password, username, _ref;
@@ -170,7 +172,7 @@
       return evt.stopPropagation();
     };
     SettingsView.prototype.close = function() {
-      return $('#panel').removeClass('show');
+      return this.panel.removeClass('show');
     };
     return SettingsView;
   })();

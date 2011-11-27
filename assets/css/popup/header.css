@@ -188,7 +188,7 @@
   background-size: 14px;
   background-image: url("../../images/popup/close.png");
 }
-#panel .search_results {
+.panel.search .search_results {
   margin-top: 10px;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
@@ -196,14 +196,14 @@
   padding: 10px;
   background: white;
 }
-#panel .search_results h3 {
+.panel.search .search_results h3 {
   font-family: tahoma;
   font-size: 14px;
   font-weight: bold;
   clear: both;
   color: #333;
 }
-#panel .search_results ul {
+.panel.search .search_results ul {
   margin-top: 5px;
   margin-bottom: 10px;
   -webkit-box-sizing: border-box;
@@ -211,26 +211,26 @@
   box-sizing: border-box;
   zoom: 1;
 }
-#panel .search_results ul:before, #panel .search_results ul:after {
+.panel.search .search_results ul:before, .panel.search .search_results ul:after {
   display: table;
   content: "";
   zoom: 1;
   *display: inline;
 }
-#panel .search_results ul:after {
+.panel.search .search_results ul:after {
   clear: both;
 }
-#panel .search_results ul li {
+.panel.search .search_results ul li {
   display: inline-block;
   width: 49%;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-#panel .search_results ul li.loader {
+.panel.search .search_results ul li.loader {
   padding: 15px;
 }
-#panel .search_results ul li a.ex_container {
+.panel.search .search_results ul li a.ex_container {
   display: -webkit-box;
   display: -moz-box;
   display: box;
@@ -253,13 +253,13 @@
   opacity: 0.9;
   color: #333;
 }
-#panel .search_results ul li a.ex_container span {
+.panel.search .search_results ul li a.ex_container span {
   display: block;
   -webkit-box-flex: 1;
   -moz-box-flex: 1;
   box-flex: 1;
 }
-#panel .search_results ul li a.ex_container .image {
+.panel.search .search_results ul li a.ex_container .image {
   height: 34px;
   width: 34px;
   -webkit-box-flex: 0;
@@ -273,7 +273,7 @@
   -moz-border-radius: 2px;
   border-radius: 2px;
 }
-#panel .search_results ul li a.ex_container .add_to_playlist {
+.panel.search .search_results ul li a.ex_container .add_to_playlist {
   display: none;
   position: absolute;
   width: 18px;
@@ -286,20 +286,20 @@
   opacity: 0.7;
   background: url("../../images/popup/add.png") center no-repeat;
 }
-#panel .search_results ul li a.ex_container .add_to_playlist:hover {
+.panel.search .search_results ul li a.ex_container .add_to_playlist:hover {
   filter: alpha(opacity=100);
   -khtml-opacity: 1;
   -moz-opacity: 1;
   opacity: 1;
 }
-#panel .search_results ul li a.ex_container:hover {
+.panel.search .search_results ul li a.ex_container:hover {
   background-color: #eee;
   -webkit-border-radius: 2px;
   -moz-border-radius: 2px;
   border-radius: 2px;
   border: 1px solid #ccc;
 }
-#panel .search_results ul li a.ex_container:hover .add_to_playlist {
+.panel.search .search_results ul li a.ex_container:hover .add_to_playlist {
   display: block;
 }
 #minimize {

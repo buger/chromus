@@ -70,7 +70,9 @@ browser.addMessageListener (msg, sender, sendResponse) ->
         when "addToPlaylist"
             for track in msg.tracks
                 if track.type
-                    chromus.media_types[track.type] track, (resp) =>
+                    track = new Backbone.Model(track)
+
+                    chromus.media_types[track.get('type')] track, (resp) =>
                         music_manager.playlist.remove(track)
                         music_manager.playlist.add(resp)
                 else
