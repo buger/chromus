@@ -1,6 +1,5 @@
 # Events API for working with `MusicManager`
 # ------------------------------------------
-
 music_manager = chromus.plugins.music_manager
 
 browser.addMessageListener (msg, sender, sendResponse) ->

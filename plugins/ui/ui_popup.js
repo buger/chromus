@@ -248,7 +248,6 @@
         }, this));
       } else {
         this.$('.search_bar').removeClass('show');
-        console.warn("hiding panel");
         return this.search_panel.find('.back').trigger('click');
       }
     };
@@ -497,7 +496,6 @@
       this.$('.song.playing').removeClass('playing');
       current = this.model.get('current_track');
       if (current) {
-        console.warn("current_track", current);
         this.$(".track_container." + current + " .song").addClass('playing');
         if (this.scroll.vScrollbar) {
           return this.scroll.scrollToElement(this.el.find(".track_container." + current)[0]);
@@ -506,7 +504,6 @@
     };
     PlaylistView.prototype.updatePlaylist = function() {
       var helpers, merge_rows, model, playlist, track, view, _i, _len, _ref;
-      console.warn("updating playlist");
       merge_rows = 0;
       playlist = this.model.playlist.toJSON();
       for (_i = 0, _len = playlist.length; _i < _len; _i++) {

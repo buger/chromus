@@ -220,12 +220,12 @@ class MusicManager extends Backbone.Model
     
     # Update overall volume. Shoud be between 0 and 100.
     setVolume: (volume) ->
-        @volume = volume or 0
+        @volume = volume if volume?
         @player.setVolume @volume
 
 
     # Helper for getting volume
-    getVolume: -> @volume? ? 100
+    getVolume: -> @volume ? 100
 
 music_manager = new MusicManager()
 

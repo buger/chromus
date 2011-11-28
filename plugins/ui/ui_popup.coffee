@@ -195,7 +195,6 @@ class Controls extends Backbone.View
         else
             @$('.search_bar').removeClass('show')
 
-            console.warn "hiding panel"
             @search_panel.find('.back').trigger('click')
     
     # Rate limiting search function, by adding slight delay
@@ -414,7 +413,6 @@ class PlaylistView extends Backbone.View
         current = @model.get('current_track')
 
         if current
-            console.warn "current_track", current
             @$(".track_container.#{current} .song").addClass 'playing'
             
             if @scroll.vScrollbar 
@@ -422,8 +420,6 @@ class PlaylistView extends Backbone.View
 
 
     updatePlaylist: ->
-        console.warn "updating playlist"
-
         merge_rows = 0
                 
         playlist = @model.playlist.toJSON()

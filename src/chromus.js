@@ -42,7 +42,7 @@
         _results.push(__bind(function(plugin) {
           var package_path, plugin_path;
           plugin_path = browser.extension.getURL("/plugins/" + plugin);
-          package_path = "" + plugin_path + "/package.json";
+          package_path = "" + plugin_path + "/package.json?" + (+new Date());
           return $.getJSON(package_path, __bind(function(package) {
             this.plugins_info[plugin] = package;
             this.plugins_info[plugin].path = plugin_path;

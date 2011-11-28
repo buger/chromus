@@ -54,7 +54,7 @@ class Chromus
 		for plugin in @plugins_list						
 			do (plugin) =>
 				plugin_path = browser.extension.getURL "/plugins/#{plugin}"
-				package_path = "#{plugin_path}/package.json"								
+				package_path = "#{plugin_path}/package.json?#{+new Date()}"				
 				$.getJSON package_path, (package) =>					
 					@plugins_info[plugin] = package
 					@plugins_info[plugin].path = plugin_path

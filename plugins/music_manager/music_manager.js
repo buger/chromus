@@ -217,12 +217,14 @@
       return this.player.setPosition(value);
     };
     MusicManager.prototype.setVolume = function(volume) {
-      this.volume = volume || 0;
+      if (volume != null) {
+        this.volume = volume;
+      }
       return this.player.setVolume(this.volume);
     };
     MusicManager.prototype.getVolume = function() {
       var _ref;
-      return (_ref = this.volume != null) != null ? _ref : 100;
+      return (_ref = this.volume) != null ? _ref : 100;
     };
     return MusicManager;
   })();
