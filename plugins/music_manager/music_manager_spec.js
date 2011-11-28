@@ -123,27 +123,6 @@
       expect(manager.get('current_track')).toBe(manager.playlist.models[2].id);
       return expect(manager.state.get('name')).toBe("playing");
     });
-    it("should stop if song ended", function() {
-      var play_track_spy;
-      play_track_spy = spyOn(manager, "playTrack");
-      manager.playlist.reset(fixtures.playlist);
-      manager.set({
-        'current_track': manager.playlist.first().id
-      });
-      manager.state.set({
-        'name': 'playing'
-      });
-      manager.currentTrack().set({
-        'duration': 100
-      });
-      manager.updateState({
-        "played": 100
-      });
-      manager.updateState({
-        "name": "stopped"
-      });
-      return expect(manager.state.get('name')).toBe("stopped");
-    });
     return it("should change track position", function() {
       var set_position_spy;
       set_position_spy = spyOn(manager.player, "setPosition");

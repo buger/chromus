@@ -115,21 +115,6 @@ describe "Music manager", ->
 
         expect(manager.state.get('name')).toBe "playing"
 
-
-    it "should stop if song ended", ->
-        play_track_spy = spyOn(manager, "playTrack")
-
-        manager.playlist.reset(fixtures.playlist)
-        manager.set 'current_track': manager.playlist.first().id
-        manager.state.set 'name':'playing'
-        manager.currentTrack().set 'duration':100
-                            
-        manager.updateState "played":100
-
-        manager.updateState "name":"stopped"
-
-        expect(manager.state.get('name')).toBe "stopped"
-
     
     it "should change track position", ->
         set_position_spy = spyOn(manager.player, "setPosition")
