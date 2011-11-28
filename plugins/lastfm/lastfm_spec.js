@@ -91,8 +91,8 @@
         return callback(fixtures.playlist);
       }, this));
       search_spy = spyOn(manager, "searchTrack");
-      play_spy = spyOn(manager, 'playTrack').andCallThrough();
-      manager.playTrack({
+      play_spy = spyOn(manager, 'play').andCallThrough();
+      manager.play({
         type: "artist",
         artist: "Chuck Berry"
       });

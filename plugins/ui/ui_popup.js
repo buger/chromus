@@ -8,9 +8,6 @@
     child.__super__ = parent.prototype;
     return child;
   }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
-  Handlebars.registerHelper('spinner', function(context) {
-    return "<span class='spinner'></span>";
-  });
   Handlebars.registerHelper('lfm_img', function(context) {
     var image, _ref;
     if ((_ref = context.images) == null) {

@@ -38,13 +38,13 @@
     it("should play song after searching", function() {
       var play_spy, play_track_spy, search_spy, vk_spy;
       search_spy = spyOn(manager, "searchTrack").andCallThrough();
-      play_track_spy = spyOn(manager, "playTrack").andCallThrough();
-      play_spy = spyOn(manager, "play");
+      play_track_spy = spyOn(manager, "play").andCallThrough();
+      play_spy = spyOn(manager.player, "play");
       vk_spy = spyOn(chromus.audio_sources.vkontakte, "search").andCallFake(function(track, callback) {
         return callback(fixtures.searchResults);
       });
       manager.playlist.reset(fixtures.playlist);
-      manager.playTrack(manager.playlist.first());
+      manager.play(manager.playlist.first());
       expect(search_spy).toHaveBeenCalled();
       expect(vk_spy).toHaveBeenCalled();
       expect(manager.currentTrack().get('file_url')).toBe(fixtures.searchResults[0].file_url);
@@ -64,7 +64,7 @@
         return state_spy(state.toJSON());
       };
       manager.state.bind('change', callback);
-      manager.playTrack(manager.playlist.first());
+      manager.play(manager.playlist.first());
       manager.pause();
       manager.stop();
       manager.state.unbind('change', callback);
@@ -100,7 +100,7 @@
         'name': 'playing'
       });
       update_state_spy = spyOn(manager, "updateState").andCallThrough();
-      play_track_spy = spyOn(manager, "playTrack").andCallThrough();
+      play_track_spy = spyOn(manager, "play").andCallThrough();
       search_spy = spyOn(manager, "searchTrack").andCallThrough();
       vk_spy = spyOn(chromus.audio_sources.vkontakte, "search").andCallFake(function(track, callback) {
         return callback(fixtures.searchResults);

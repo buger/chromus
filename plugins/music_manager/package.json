@@ -3,6 +3,7 @@
 
 	"files": [
 		"bg!music_manager.js",
+		"bg!music_manager_api.js",
 
 		"bg_spec!music_manager_spec.js"
 	]

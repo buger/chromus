@@ -1,7 +1,3 @@
-Handlebars.registerHelper 'spinner', (context) ->
-    "<span class='spinner'></span>"
-
-
 # TODO: Refactor
 Handlebars.registerHelper 'lfm_img', (context) ->
     context.images ?= context.image

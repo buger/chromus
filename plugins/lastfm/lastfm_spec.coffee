@@ -49,9 +49,9 @@ describe "LastFM plugin", ->
 
         search_spy = spyOn(manager, "searchTrack")
 
-        play_spy = spyOn(manager, 'playTrack').andCallThrough()
+        play_spy = spyOn(manager, 'play').andCallThrough()
 
-        manager.playTrack
+        manager.play
             type: "artist"
             artist: "Chuck Berry"
 

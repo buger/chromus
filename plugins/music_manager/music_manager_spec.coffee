@@ -24,14 +24,14 @@ describe "Music manager", ->
 
     it "should play song after searching", ->
         search_spy = spyOn(manager, "searchTrack").andCallThrough()
-        play_track_spy = spyOn(manager, "playTrack").andCallThrough()
-        play_spy = spyOn(manager, "play")
+        play_track_spy = spyOn(manager, "play").andCallThrough()
+        play_spy = spyOn(manager.player, "play")
 
         vk_spy = spyOn(chromus.audio_sources.vkontakte, "search")
             .andCallFake (track, callback) -> callback fixtures.searchResults
 
         manager.playlist.reset(fixtures.playlist)            
-        manager.playTrack manager.playlist.first()
+        manager.play manager.playlist.first()
 
         expect(search_spy).toHaveBeenCalled()
         expect(vk_spy).toHaveBeenCalled()                            
@@ -57,7 +57,7 @@ describe "Music manager", ->
         
         manager.state.bind 'change', callback
 
-        manager.playTrack manager.playlist.first()
+        manager.play manager.playlist.first()
         manager.pause()        
         manager.stop()
 
@@ -92,7 +92,7 @@ describe "Music manager", ->
         manager.state.set 'name':'playing'
         
         update_state_spy = spyOn(manager, "updateState").andCallThrough()
-        play_track_spy = spyOn(manager, "playTrack").andCallThrough()
+        play_track_spy = spyOn(manager, "play").andCallThrough()
         search_spy = spyOn(manager, "searchTrack").andCallThrough()
 
         vk_spy = spyOn(chromus.audio_sources.vkontakte, "search")
