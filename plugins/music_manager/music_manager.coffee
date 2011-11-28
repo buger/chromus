@@ -139,8 +139,11 @@ class MusicManager extends Backbone.Model
     # Play track
     #    
     # If you want to play track that already in `playlist`, 
-    # you should find it in `playlist` collection, and pass that object
+    # you should pass Track object, or track_id
     play: (track) ->
+        unless _.isObject track
+            track = @playlist.get track
+
         unless _.isFunction track.get
             track = new Track(track)
         
@@ -148,14 +151,14 @@ class MusicManager extends Backbone.Model
         # and should not affect playing
         # Example: Last.FM radio -> 'Load next tracks'
         unless track.get('action')
-            if track isnt @currentTrack() then @stop                
+            if track isnt @currentTrack() then @stop()
             
             # If media `type` is set, `current_track` should be changed 
             # after processing by `handleMediaType` function
             unless track.get('type')?
                 @set 'current_track': track.id
             
-            @state.set 'name':'loading'   
+            @state.set 'name':'loading'
 
         unless track.get 'type'
             # If track already have file_url, we can start playling immideatly

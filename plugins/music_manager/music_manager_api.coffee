@@ -15,7 +15,7 @@ browser.addMessageListener (msg, sender, sendResponse) ->
                 music_manager.playlist.reset msg.track
                 music_manager.play music_manager.playlist.first()
             else
-                music_manager.play msg.track        
+                music_manager.play msg.track
 
 
         when "addToPlaylist"

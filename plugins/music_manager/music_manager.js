@@ -138,12 +138,15 @@
       return _results;
     };
     MusicManager.prototype.play = function(track) {
+      if (!_.isObject(track)) {
+        track = this.playlist.get(track);
+      }
       if (!_.isFunction(track.get)) {
         track = new Track(track);
       }
       if (!track.get('action')) {
         if (track !== this.currentTrack()) {
-          this.stop;
+          this.stop();
         }
         if (track.get('type') == null) {
           this.set({
