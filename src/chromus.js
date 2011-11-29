@@ -24,7 +24,7 @@
         files.push(_.map(meta['files'], function(file) {
           var match;
           match = file.match(/(.*!)?(.*)/);
-          return "" + match[1] + meta.path + "/" + match[2] + "?" + (+new Date());
+          return "" + (match[1] || '') + meta.path + "/" + match[2] + "?" + (+new Date());
         }));
       }
       return yepnope({
@@ -72,6 +72,24 @@
     };
     Chromus.prototype.addMenu = function(el) {
       return $('#main_menu').append(el);
+    };
+    Chromus.prototype.openPanel = function(content) {
+      var panel;
+      panel = $('<div class="panel">').html(content).appendTo($("#wrapper")).delegate('.back', 'click', function() {
+        panel.removeClass('show');
+        return _.delay(function() {
+          return panel.remove();
+        }, 300);
+      });
+      _.defer(function() {
+        return panel.addClass('show');
+      });
+      return panel;
+    };
+    Chromus.prototype.closePanel = function() {
+      var latest_panel;
+      latest_panel = _.last($('.panel'));
+      return $(latest_panel).find('.back').trigger('click');
     };
     return Chromus;
   })();

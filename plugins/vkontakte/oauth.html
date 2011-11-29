@@ -1,0 +1,31 @@
+<html>
+	<head>
+		<script src="../../lib/store.js"></script>
+	</head>
+
+	<body>
+		<script type="text/javascript">			
+			if (document.location.hash.match(/access_token/)) {
+            	var hash = document.location.hash.substr(1).split('&');
+            	var auth = {}
+
+	            for (var param, i=0, l=hash.length; i<l; i++) {
+	                param = hash[i].split('=');
+
+	                auth[param[0]] = param[1];
+	            }
+	            
+	            if (window.pokki)
+	            	auth['session_id'] = pokki.scramble(auth['session_id'])
+	            
+	            window.opener.setVKSession(auth);	           
+	        } else if (document.location.hash.match(/error/)) {
+	        	window.parent.setVKSession({ error: true });   
+	        }
+
+	        setTimeout(function(){
+	      		window.close();
+	      	});
+		</script>
+	</body>
+</html>

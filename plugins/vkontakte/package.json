@@ -3,7 +3,9 @@
 	"description": "Vkontakte integration",
 
 	"files": [
-		"bg!vkontakte.js",
+		"vkontakte.js",
+
+		"popup!vkontakte_ui.js",
 
 		"bg_spec!vkontakte_spec.js"
 	]

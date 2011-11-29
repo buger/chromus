@@ -187,15 +187,12 @@ class Controls extends Backbone.View
                 @$('.search_bar').find('input').focus()
             , 500
 
-            @search_panel = $('<div class="panel search"></div>')
-                .html(@search_template @search_view ? {})
-                .appendTo($('#wrapper'))
-                
-            _.delay => @search_panel.addClass('show')
+            @search_panel = chromus.openPanel(@search_template @search_view ? {})
+                .addClass('search')
         else
             @$('.search_bar').removeClass('show')
 
-            @search_panel.find('.back').trigger('click')
+            chromus.closePanel()
     
     # Rate limiting search function, by adding slight delay
     # http://documentcloud.github.com/underscore/#debounce
@@ -492,14 +489,6 @@ class App extends Backbone.View
 
 
         $('.panel .back').live 'click', (evt) -> 
-            panel = $(evt.currentTarget).closest('.panel')
-
-            panel.removeClass('show')
-
-            setTimeout -> 
-                panel.remove() unless panel.hasClass('show')
-            , 1000
-
             $('#header').removeClass('search_mode')
                 .find('.search_bar').removeClass('show')
 
