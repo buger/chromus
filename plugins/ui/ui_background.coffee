@@ -4,15 +4,18 @@ music_manager = chromus.plugins.music_manager
 music_manager.state.bind 'change', (state) ->
     track = music_manager.currentTrack()
 
-    if track
-        browser.toolbarItem.setTitle track.title()
-
     time_left = state.get('duration') - state.get('played')
 
-    if state.get('name') is "stopped" or time_left <= 0
+    if state.get('name') is "stopped" or time_left <= 0        
         browser.toolbarItem.setText("")
     else
         browser.toolbarItem.setText prettyTime(time_left)    
+
+
+    if track
+        title = "(-#{prettyTime(time_left).trim()})  #{track.title()}"
+        browser.toolbarItem.setTitle title
+
 
     browser.broadcastMessage
         method: "updateState"
@@ -37,6 +40,7 @@ music_manager.settings.bind 'change', (settings) ->
 
 # Listen for messages
 browser.addMessageListener (msg, sender, sendResponse) ->
+
     switch msg.method
         when "ui:init"
             browser.postMessage

@@ -7,7 +7,7 @@ class Track extends Backbone.Model
         @set 'id': chromus.utils.uid() if not @id      
         
     title: ->
-        "#{@get('artist')} &mdash; #{@get('song')}"
+        "#{@get('song')} — #{@get('artist')}"
 
 
 # Playlist

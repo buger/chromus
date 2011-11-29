@@ -19,7 +19,7 @@
       });
     };
     Track.prototype.title = function() {
-      return "" + (this.get('artist')) + " &mdash; " + (this.get('song'));
+      return "" + (this.get('song')) + " — " + (this.get('artist'));
     };
     return Track;
   })();

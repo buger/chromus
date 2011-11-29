@@ -2,16 +2,17 @@
   var event, music_manager, _i, _len, _ref;
   music_manager = chromus.plugins.music_manager;
   music_manager.state.bind('change', function(state) {
-    var time_left, track;
+    var time_left, title, track;
     track = music_manager.currentTrack();
-    if (track) {
-      browser.toolbarItem.setTitle(track.title());
-    }
     time_left = state.get('duration') - state.get('played');
     if (state.get('name') === "stopped" || time_left <= 0) {
       browser.toolbarItem.setText("");
     } else {
       browser.toolbarItem.setText(prettyTime(time_left));
+    }
+    if (track) {
+      title = "(-" + (prettyTime(time_left).trim()) + ")  " + (track.title());
+      browser.toolbarItem.setTitle(title);
     }
     return browser.broadcastMessage({
       method: "updateState",
