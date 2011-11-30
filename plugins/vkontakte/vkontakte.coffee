@@ -1,9 +1,7 @@
 global = @
 
 VK =
-    APP_ID: if global.debug then "2649785" else "2698877"
-    BaseURL: "http://api.vk.com/api.php"
-    SignURL: "http://chromusapp.appspot.com/sign_data"
+    APP_ID: if global.debug then "2649785" else "2698877"    
     SCOPE: "audio,offline"
 
     
@@ -26,6 +24,9 @@ VK =
 
 
     searchWithoutLogin: (args, callback) ->
+        BaseURL =  "http://api.vk.com/api.php"
+        SignURL = "http://chromusapp.appspot.com/sign_data"
+
         query = "#{args.artist} #{args.song}"
 
         callback_name = "vkclb#{chromus.utils.uid()}"
@@ -49,33 +50,74 @@ VK =
                     'count': 10
                     'q': query
 
-                @searchAPI data, callback_name ,callback
-    
+                $.ajax
+                    url: "#{VK.BaseURL}"
+                    data: data,
+                    dataType: "jsonp"
+                    cache: true
+                    jsonpCallback: callback_name
 
-    searchAPI: (data, jsonpCallback, callback) ->        
+                    success: (result) ->
+                        return callback [] unless result.response
+
+                        records = _.map _.rest(result.response), (i) -> 
+                            {
+                                artist: i.audio.artist
+                                song: i.audio.title
+                                duration: parseInt(i.audio.duration)
+                                file_url: i.audio.url
+                                source_title: "Vkontakte"
+                                source_icon: "http://vkontakte.ru/favicon.ico"
+                            }
+                                        
+                        callback(records)
+
+    
+    searchAPI: (args, callback) ->
+        console.warn 'searching as logged user'
+
+        query = "#{args.artist} #{args.song}"
+
+        data =
+            q: query
+            format: 'json'
+            sort: 2
+            count: 10
+
+        if browser.isPokki
+            data.access_token = pokki.descrumble store.get('vk:token')
+        else
+            data.access_token = store.get('vk:token')
+
         $.ajax
-            url: "#{VK.BaseURL}"
+            url: "https://api.vkontakte.ru/method/audio.search"
             data: data,
             dataType: "jsonp"
             cache: true
-            jsonpCallback: jsonpCallback
 
             success: (result) ->
                 return callback [] unless result.response
 
                 records = _.map _.rest(result.response), (i) -> 
                     {
-                        artist: i.audio.artist
-                        song: i.audio.title
-                        duration: parseInt(i.audio.duration)
-                        file_url: i.audio.url
+                        artist: i.artist
+                        song: i.title
+                        duration: parseInt(i.duration)
+                        file_url: i.url
                         source_title: "Vkontakte"
                         source_icon: "http://vkontakte.ru/favicon.ico"
                     }
                                 
-                callback(records)    
+                callback(records)        
+                            
+    
+    search: (args, callback) ->
+        if store.get('vk:user_id')
+            VK.searchAPI(args, callback)
+        else
+            VK.searchWithoutLogin(args, callback)
 
-    search: (args, callback) -> VK.searchWithoutLogin(args, callback)
+    
 
 @chromus.registerPlugin("vkontakte", VK)
 @chromus.registerAudioSource("vkontakte", VK)
