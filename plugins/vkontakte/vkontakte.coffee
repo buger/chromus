@@ -1,24 +1,45 @@
-VK =
-    settings:
-        baseURL: "http://api.vk.com/api.php"
-        signURL: "http://chromusapp.appspot.com/sign_data"
+global = @
 
-    search: (args, callback = ->) ->
+VK =
+    APP_ID: if global.debug then "2649785" else "2698877"    
+    SCOPE: "audio,offline"
+
+    
+    authURL: ->
+        redirect_uri = [
+            document.location.toString()            
+            "/../"
+            chromus.plugins_info.vkontakte.path
+            "/oauth.html"
+        ].join('')
+
+        link = [  
+            "http://api.vkontakte.ru/oauth/authorize?"
+            "client_id=" + VK.APP_ID
+            "scope=" + VK.SCOPE
+            "redirect_uri=" + redirect_uri
+            "display=popup"
+            "response_type=token"
+        ].join('&')        
+
+
+    searchWithoutLogin: (args, callback) ->
+        BaseURL =  "http://api.vk.com/api.php"
+        SignURL = "http://chromusapp.appspot.com/sign_data"
+
         query = "#{args.artist} #{args.song}"
 
-        callback_name = args.callback || "vkclb#{chromus.utils.uid()}"
+        callback_name = "vkclb#{chromus.utils.uid()}"
 
         $.ajax
-            url: "#{VK.settings.signURL}"
+            url: "#{VK.SignURL}"
             data: 
                 track: query
             dataType: "jsonp"
-            cache: true
-            jsonpCallback: callback_name
+            cache: true 
+            jsonpCallback: callback_name           
 
-            success: (resp) ->
-                console.log "search callback", resp
-
+            success: (resp) =>
                 data =
                     'api_id': resp.api_key
                     'method': 'audio.search'
@@ -29,9 +50,8 @@ VK =
                     'count': 10
                     'q': query
 
-
-                $.ajax 
-                    url: "#{VK.settings.baseURL}"
+                $.ajax
+                    url: "#{VK.BaseURL}"
                     data: data,
                     dataType: "jsonp"
                     cache: true
@@ -50,7 +70,54 @@ VK =
                                 source_icon: "http://vkontakte.ru/favicon.ico"
                             }
                                         
-                        callback(records)                                    
+                        callback(records)
 
+    
+    searchAPI: (args, callback) ->
+        console.warn 'searching as logged user'
 
+        query = "#{args.artist} #{args.song}"
+
+        data =
+            q: query
+            format: 'json'
+            sort: 2
+            count: 10
+
+        if browser.isPokki
+            data.access_token = pokki.descrumble store.get('vk:token')
+        else
+            data.access_token = store.get('vk:token')
+
+        $.ajax
+            url: "https://api.vkontakte.ru/method/audio.search"
+            data: data,
+            dataType: "jsonp"
+            cache: true
+
+            success: (result) ->
+                return callback [] unless result.response
+
+                records = _.map _.rest(result.response), (i) -> 
+                    {
+                        artist: i.artist
+                        song: i.title
+                        duration: parseInt(i.duration)
+                        file_url: i.url
+                        source_title: "Vkontakte"
+                        source_icon: "http://vkontakte.ru/favicon.ico"
+                    }
+                                
+                callback(records)        
+                            
+    
+    search: (args, callback) ->
+        if store.get('vk:user_id')
+            VK.searchAPI(args, callback)
+        else
+            VK.searchWithoutLogin(args, callback)
+
+    
+
+@chromus.registerPlugin("vkontakte", VK)
 @chromus.registerAudioSource("vkontakte", VK)

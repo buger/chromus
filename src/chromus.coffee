@@ -1,95 +1,124 @@
 global = @
 
-class Chromus	
+class Chromus   
 
-	baseURL: "http://chromusapp.appspot.com"
-	
-	audio_players: {}
+    baseURL: "http://chromusapp.appspot.com"
+    
+    audio_players: {}
 
-	audio_sources: {}
+    audio_sources: {}
 
-	media_types: {}
+    media_types: {}
 
-	plugins: {}
+    plugins: {}
 
-	plugins_info: {}
+    plugins_info: {}
 
-	plugins_list: [
-		'iframe_player'
-		'music_manager'
-		'ui'
-		'echonest'
-		'lastfm'
-		'loved_tracks_radio'	
-	#	'local_files_player'
-		'vkontakte'
-		#'4shared'	
-		#'bandcamp'
-		'about'
-	]
+    plugins_list: [
+        'iframe_player'
+        'music_manager'
+        'ui'
+        'echonest'
+        'lastfm'
+        'loved_tracks_radio'    
+    #   'local_files_player'
+        'vkontakte'
+        #'4shared'  
+        #'bandcamp'
+        'about'
+    ]
 
-	constructor: ->		
-		_.bindAll @
+    constructor: ->     
+        _.bindAll @
 
-		@loadPlugins()
-	
+        @loadPlugins()
+    
 
-	injectPluginFiles: ->		
-		files = []
+    injectPluginFiles: ->       
+        files = []
 
-		for plugin in @plugins_list
-			meta = @plugins_info[plugin]
+        for plugin in @plugins_list
+            meta = @plugins_info[plugin]
 
-			files.push _.map meta['files'], (file) ->
-				match = file.match(/(.*!)?(.*)/)				
-				"#{match[1]}#{meta.path}/#{match[2]}?#{+new Date()}"	
+            files.push _.map meta['files'], (file) ->
+                match = file.match(/(.*!)?(.*)/)
 
-		yepnope
-			load: _.flatten files
-			complete: @pluginsLoadedCallback
-		
+                "#{match[1]||''}#{meta.path}/#{match[2]}?#{+new Date()}"    
 
-	loadPlugins: ->		
-		callback = _.after @plugins_list.length, @injectPluginFiles				
-		for plugin in @plugins_list						
-			do (plugin) =>
-				plugin_path = browser.extension.getURL "/plugins/#{plugin}"
-				package_path = "#{plugin_path}/package.json?#{+new Date()}"				
-				$.getJSON package_path, (package) =>					
-					@plugins_info[plugin] = package
-					@plugins_info[plugin].path = plugin_path
-					
-					callback()
-					
+        yepnope
+            load: _.flatten files
+            complete: @pluginsLoadedCallback
+        
 
-	pluginsLoadedCallback: ->
-		if global.isTestMode()
-			jasmine.getEnv().addReporter(new jasmine.TrivialReporter())
-			jasmine.getEnv().execute()
+    loadPlugins: ->     
+        callback = _.after @plugins_list.length, @injectPluginFiles             
+        for plugin in @plugins_list                     
+            do (plugin) =>                            
+                plugin_path = browser.extension.getURL "/plugins/#{plugin}"
+                package_path = "#{plugin_path}/package.json?#{+new Date()}"             
+                $.getJSON package_path, (package) =>                    
+                    @plugins_info[plugin] = package
+                    @plugins_info[plugin].path = plugin_path
+                    
+                    callback()
+                    
 
-	registerPlugin: (name, context) ->
-		@plugins[name] = context
+    pluginsLoadedCallback: ->
+        if global.isTestMode()
+            jasmine.getEnv().addReporter(new jasmine.TrivialReporter())
+            jasmine.getEnv().execute()
+
+    registerPlugin: (name, context) ->
+        @plugins[name] = context
 
 
-	registerPlayer: (name, context) ->
-		@audio_players[name] = context
+    registerPlayer: (name, context) ->
+        @audio_players[name] = context
 
-	registerAudioSource: (name, context) ->
-		@audio_sources[name] = context
+    registerAudioSource: (name, context) ->
+        @audio_sources[name] = context
 
-	registerMediaType: (name, context) ->
-		@media_types[name] = context
+    registerMediaType: (name, context) ->
+        @media_types[name] = context
 
-	# UI features
-	addMenu: (el) ->
-		$('#main_menu').append(el)
+    # UI features
+    addMenu: (el) ->
+        $('#main_menu').append(el)
+
+    # Creates standard panel    
+    openPanel: (content) ->         
+        panel = $('<div class="panel">')
+            .html(content)
+            .appendTo($("#wrapper"))
+            .delegate '.back', 'click', ->                
+                panel.removeClass('show')
+
+                _.delay ->
+                    panel.remove()
+                , 300       
+        
+        # Without defer jquery adds class immidiatly, without animation
+        _.defer -> panel.addClass('show')
+
+        panel
+                
+    
+    # Close latest created panel, by triggering close event
+    closePanel: ->
+        latest_panel = _.last($('.panel'))
+
+        $(latest_panel).find('.back')
+            .trigger('click')
+        
+
+    
 
 
 @chromus = new Chromus()
 
 
 @chromus.utils = {
-	uid:->
-    	@uid_start ?= +new Date()
-    	@uid_start++
+    uid:->
+        @uid_start ?= +new Date()
+        @uid_start++
 }

@@ -68,11 +68,14 @@ class SettingsView extends Backbone.View
 
     events: 
         "submit form.login": "login"
-        "click .back": "close"
         "click .logout": "logout"
         "click .toggler": "toggleScrobbling"
         "click .lastfm_radio": "playRadio"
         "click .loved_radio": "playLovedRadio"
+
+    initialize: ->
+        chromus.openPanel @el
+        @render()
     
     render: ->
         view = 
@@ -82,13 +85,7 @@ class SettingsView extends Backbone.View
             subscriber: !!parseInt(store.get('lastfm:subscriber'))
 
         @el.innerHTML = template(view)
-
-        @panel = $('<div class="panel">')
-            .html(@el)
-            .appendTo $("#wrapper")
-                    
-        _.delay => @panel.addClass('show')
-
+        
         @delegateEvents()
 
     logout: ->
@@ -114,7 +111,7 @@ class SettingsView extends Backbone.View
             track: track
             playlist: [track]
 
-        @panel.removeClass('show')
+        chromus.closePanel()
 
 
     playLovedRadio: (evt) ->
@@ -128,7 +125,7 @@ class SettingsView extends Backbone.View
             track: track
             playlist: [track]
 
-        @panel.removeClass('show')
+        chromus.closePanel()
                                 
 
     login: (evt) ->
@@ -155,8 +152,6 @@ class SettingsView extends Backbone.View
                 store.set 'lastfm:user', resp.session.name
                 store.set 'lastfm:subscriber', parseInt(resp.session.subscriber)
 
-                console.warn resp.session.subscriber
-
                 if browser.isPokki
                     store.set 'lastfm:key', pokki.scramble(resp.session.key)
                 else
@@ -166,9 +161,6 @@ class SettingsView extends Backbone.View
                 @render()
         
         evt.stopPropagation()
-
-    close: ->
-        @panel.removeClass('show')
 
 
 class Menu extends Backbone.View
@@ -189,7 +181,7 @@ class Menu extends Backbone.View
         @delegateEvents()    
 
     openPanel: ->
-        new SettingsView().render()
+        new SettingsView()
         $('#main_menu').hide()
                  
                     

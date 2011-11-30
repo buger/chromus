@@ -77,11 +77,14 @@
     SettingsView.prototype.className = "lastfm";
     SettingsView.prototype.events = {
       "submit form.login": "login",
-      "click .back": "close",
       "click .logout": "logout",
       "click .toggler": "toggleScrobbling",
       "click .lastfm_radio": "playRadio",
       "click .loved_radio": "playLovedRadio"
+    };
+    SettingsView.prototype.initialize = function() {
+      chromus.openPanel(this.el);
+      return this.render();
     };
     SettingsView.prototype.render = function() {
       var view;
@@ -92,10 +95,6 @@
         subscriber: !!parseInt(store.get('lastfm:subscriber'))
       };
       this.el.innerHTML = template(view);
-      this.panel = $('<div class="panel">').html(this.el).appendTo($("#wrapper"));
-      _.delay(__bind(function() {
-        return this.panel.addClass('show');
-      }, this));
       return this.delegateEvents();
     };
     SettingsView.prototype.logout = function() {
@@ -120,7 +119,7 @@
         track: track,
         playlist: [track]
       });
-      return this.panel.removeClass('show');
+      return chromus.closePanel();
     };
     SettingsView.prototype.playLovedRadio = function(evt) {
       var track;
@@ -134,7 +133,7 @@
         track: track,
         playlist: [track]
       });
-      return this.panel.removeClass('show');
+      return chromus.closePanel();
     };
     SettingsView.prototype.login = function(evt) {
       var auth_token, form, password, username, _ref;
@@ -159,7 +158,6 @@
         } else if (resp.session) {
           store.set('lastfm:user', resp.session.name);
           store.set('lastfm:subscriber', parseInt(resp.session.subscriber));
-          console.warn(resp.session.subscriber);
           if (browser.isPokki) {
             store.set('lastfm:key', pokki.scramble(resp.session.key));
           } else {
@@ -170,9 +168,6 @@
         }
       }, this));
       return evt.stopPropagation();
-    };
-    SettingsView.prototype.close = function() {
-      return this.panel.removeClass('show');
     };
     return SettingsView;
   })();
@@ -195,7 +190,7 @@
       return this.delegateEvents();
     };
     Menu.prototype.openPanel = function() {
-      new SettingsView().render();
+      new SettingsView();
       return $('#main_menu').hide();
     };
     return Menu;

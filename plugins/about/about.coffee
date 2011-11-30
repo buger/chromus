@@ -15,11 +15,7 @@ about = $('<li>About</li>')
     .bind 'click', ->
         $('#main_menu').hide()
 
-        panel = $('<div class="panel">')
-                    .html(template())
-                    .appendTo $("#wrapper")
-        
-        _.delay -> panel.addClass('show')    
+        chromus.openPanel template()
 
 
 chromus.addMenu about

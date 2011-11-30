@@ -12,12 +12,8 @@
     </div>\
 ');
   about = $('<li>About</li>').bind('click', function() {
-    var panel;
     $('#main_menu').hide();
-    panel = $('<div class="panel">').html(template()).appendTo($("#wrapper"));
-    return _.delay(function() {
-      return panel.addClass('show');
-    });
+    return chromus.openPanel(template());
   });
   chromus.addMenu(about);
 }).call(this);
