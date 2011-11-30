@@ -32,7 +32,7 @@ VK =
         callback_name = "vkclb#{chromus.utils.uid()}"
 
         $.ajax
-            url: "#{VK.SignURL}"
+            url: "#{SignURL}"
             data: 
                 track: query
             dataType: "jsonp"
@@ -51,7 +51,7 @@ VK =
                     'q': query
 
                 $.ajax
-                    url: "#{VK.BaseURL}"
+                    url: "#{BaseURL}"
                     data: data,
                     dataType: "jsonp"
                     cache: true

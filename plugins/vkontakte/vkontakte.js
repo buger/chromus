@@ -17,7 +17,7 @@
       query = "" + args.artist + " " + args.song;
       callback_name = "vkclb" + (chromus.utils.uid());
       return $.ajax({
-        url: "" + VK.SignURL,
+        url: "" + SignURL,
         data: {
           track: query
         },
@@ -37,7 +37,7 @@
             'q': query
           };
           return $.ajax({
-            url: "" + VK.BaseURL,
+            url: "" + BaseURL,
             data: data,
             dataType: "jsonp",
             cache: true,
