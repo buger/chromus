@@ -242,13 +242,10 @@
         setTimeout(__bind(function() {
           return this.$('.search_bar').find('input').focus();
         }, this), 500);
-        this.search_panel = $('<div class="panel search"></div>').html(this.search_template((_ref = this.search_view) != null ? _ref : {})).appendTo($('#wrapper'));
-        return _.delay(__bind(function() {
-          return this.search_panel.addClass('show');
-        }, this));
+        return this.search_panel = chromus.openPanel(this.search_template((_ref = this.search_view) != null ? _ref : {})).addClass('search');
       } else {
         this.$('.search_bar').removeClass('show');
-        return this.search_panel.find('.back').trigger('click');
+        return chromus.closePanel();
       }
     };
     Controls.prototype.search = _.debounce(function(evt) {
@@ -603,14 +600,6 @@
         store.set('first_run', true);
       }
       return $('.panel .back').live('click', function(evt) {
-        var panel;
-        panel = $(evt.currentTarget).closest('.panel');
-        panel.removeClass('show');
-        setTimeout(function() {
-          if (!panel.hasClass('show')) {
-            return panel.remove();
-          }
-        }, 1000);
         return $('#header').removeClass('search_mode').find('.search_bar').removeClass('show');
       });
     };
