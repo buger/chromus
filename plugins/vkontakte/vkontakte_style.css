@@ -1,0 +1,13 @@
+.menu_container .vkontakte {
+  background: url(images/favicon.ico) 10px 12px no-repeat;
+  padding-left: 35px;
+}
+.panel .vkontakte form .logo {
+  top: 7px;
+  right: 7px;
+  position: absolute;
+  width: 160px;
+  height: 38px;
+  background: url(images/vk_big.png) top center no-repeat;
+  background-size: 100%;
+}

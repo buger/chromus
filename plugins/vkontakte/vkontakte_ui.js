@@ -13,23 +13,25 @@
         <a class="back"></a>\
         <h3>Vkontakte</h3>\
     </header>\
-	{{#if logged}}        \
-		<form class="form">\
-        	<ul>\
-        		<li>\
-        			<a class="btn logout" style="color: red">Logout</a>\
-        		</li>\
-        	</ul>\
-       	</form>	\
+    <form class="form">\
+    	<div class="logo"></div>\
+	{{#if logged}}        		\
+    	<ul>\
+    		<li>\
+    			<b>Logged!</b>\
+    		</li>\
+    		<li>\
+    			<a class="btn logout" style="color: red">Logout</a>\
+    		</li>\
+    	</ul>       	\
     {{else}}    \
-    	<form class="form">\
-        	<ul>\
-        		<li>\
-        			<a class="btn login">Login to Vkontakte</a>\
-        		</li>\
-        	</ul>\
-       	</form>	\
+    	<ul>\
+    		<li style="text-align: center">\
+    			<a class="btn login">Login to Vkontakte</a>\
+    		</li>\
+    	</ul>\
     {{/if}}\
+    </form>\
 ');
   vk = chromus.plugins.vkontakte;
   UI = (function() {
@@ -74,7 +76,7 @@
     return UI;
   })();
   ui = new UI();
-  menu = $('<li>Vkontakte</li>').bind('click', function() {
+  menu = $('<li class="vkontakte">Vkontakte</li>').bind('click', function() {
     $('#main_menu').hide();
     return ui.open();
   });
