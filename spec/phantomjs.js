@@ -1,11 +1,11 @@
 (function() {
   var file_name, fs, page, waitFor;
+
   fs = require('fs');
+
   waitFor = function(testFx, onReady, timeOutMillis) {
     var condition, f, interval, start;
-    if (timeOutMillis == null) {
-      timeOutMillis = 5000;
-    }
+    if (timeOutMillis == null) timeOutMillis = 5000;
     start = new Date().getTime();
     condition = false;
     f = function() {
@@ -28,15 +28,20 @@
     };
     return interval = setInterval(f, 100);
   };
+
   if (phantom.args.length !== 1) {
     console.log('Usage: run-jasmine.coffee URL');
     phantom.exit();
   }
+
   page = new WebPage();
+
   page.onConsoleMessage = function(msg) {
     return console.log(msg);
   };
+
   file_name = fs.absolute(phantom.args[0]) + "?test_mode";
+
   page.open(file_name, function(status) {
     if (status !== 'success') {
       console.log('Unable to access network');
@@ -44,9 +49,7 @@
     } else {
       return waitFor(function() {
         return page.evaluate(function() {
-          if (document.body.querySelector('.finished-at')) {
-            return true;
-          }
+          if (document.body.querySelector('.finished-at')) return true;
           return false;
         });
       }, function() {
@@ -65,4 +68,5 @@
       });
     }
   });
+
 }).call(this);

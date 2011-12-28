@@ -1,6 +1,8 @@
 (function() {
   var event, music_manager, _i, _len, _ref;
+
   music_manager = chromus.plugins.music_manager;
+
   music_manager.state.bind('change', function(state) {
     var time_left, title, track;
     track = music_manager.currentTrack();
@@ -20,6 +22,7 @@
       track: track
     });
   });
+
   _ref = ['reset', 'add', 'create', 'change:song'];
   for (_i = 0, _len = _ref.length; _i < _len; _i++) {
     event = _ref[_i];
@@ -32,12 +35,14 @@
       });
     });
   }
+
   music_manager.settings.bind('change', function(settings) {
     return browser.postMessage({
       method: "updateSettings",
       settings: settings.toJSON()
     });
   });
+
   browser.addMessageListener(function(msg, sender, sendResponse) {
     switch (msg.method) {
       case "ui:init":
@@ -51,4 +56,5 @@
         });
     }
   });
+
 }).call(this);

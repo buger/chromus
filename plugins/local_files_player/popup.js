@@ -1,24 +1,22 @@
 (function() {
   var PopupLocalPlayer;
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  };
+  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
   PopupLocalPlayer = (function() {
+
     __extends(PopupLocalPlayer, Backbone.Model);
+
     function PopupLocalPlayer() {
       PopupLocalPlayer.__super__.constructor.apply(this, arguments);
     }
+
     PopupLocalPlayer.prototype.initialize = function() {
       _.bindAll(this);
       this.files = new Backbone.Collection();
       $("            <li class='open_local_files'>                <span>Add files to playlist</span>                <input type='file' multiple />            </li>        ").appendTo('#main_menu').find('input').bind('change', this.openFiles);
       return browser.addMessageListener(this.listener);
     };
+
     PopupLocalPlayer.prototype.openFiles = function(evt) {
       var opened;
       opened = _.filter(evt.target.files, function(file) {
@@ -41,11 +39,10 @@
         });
       }
     };
+
     PopupLocalPlayer.prototype.readFile = function(id, callback) {
       var file, reader;
-      if (callback == null) {
-        callback = function() {};
-      }
+      if (callback == null) callback = function() {};
       file = this.files.get(id).get('data');
       reader = new FileReader();
       reader.onload = function(evt) {
@@ -55,6 +52,7 @@
       console.warn("reading files", file);
       return reader.readAsDataURL(file);
     };
+
     PopupLocalPlayer.prototype.listener = function(msg) {
       switch (msg.method) {
         case 'localPlayer:getContent':
@@ -67,8 +65,13 @@
           });
       }
     };
+
     return PopupLocalPlayer;
+
   })();
+
   new PopupLocalPlayer();
+
   $('#main_menu').show();
+
 }).call(this);

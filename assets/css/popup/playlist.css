@@ -1,4 +1,5 @@
-/*********** Playlist *************/#playlist {
+/*********** Playlist *************/
+#playlist {
   position: absolute;
   top: 101px;
   bottom: 27px;

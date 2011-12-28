@@ -36,8 +36,8 @@ img {
   box-shadow: #777777 0px 2px 5px;
 }
 .linear_grad {
-  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #f0f0f0), color-stop(1, white));
-  background: -moz-linear-gradient(center bottom, #f0f0f0, white);
+  background: -webkit-gradient(linear, left bottom, left top, color-stop(0, #f0f0f0), color-stop(1, #ffffff));
+  background: -moz-linear-gradient(center bottom, #f0f0f0, #ffffff);
 }
 .clear {
   clear: both;
@@ -53,13 +53,16 @@ a.button {
   height: 20px;
   text-indent: -9999px;
   /* don't show link text */
+
   overflow: hidden;
   /* don't draw inner link text */
+
   vertical-align: middle;
   cursor: pointer;
   background-repeat: no-repeat;
 }
-/*********** Interface **********/#wrapper {
+/*********** Interface **********/
+#wrapper {
   height: 100%;
   min-height: 550px;
   width: 468px;
@@ -92,6 +95,9 @@ a.button {
 }
 .panel.show {
   left: 0px;
+}
+.panel  > * {
+  width: 100%;
 }
 .panel header {
   width: 100%;
@@ -212,7 +218,8 @@ a.button {
 .form input[type="submit"] {
   width: auto;
 }
-/*********** First run *************/#first_run p {
+/*********** First run *************/
+#first_run p {
   text-align: center;
   margin-top: 10px;
   background: white;
@@ -274,10 +281,12 @@ a.button {
 #first_run .settings-tip p {
   margin-right: 0;
 }
-/*********** Browser specifiec stuff **************/.frame #wrapper {
+/*********** Browser specifiec stuff **************/
+.frame #wrapper {
   min-height: 0;
 }
-/************* Scrollbar ***************/.jspVerticalBar {
+/************* Scrollbar ***************/
+.jspVerticalBar {
   right: 2px;
 }
 .fade {
@@ -296,13 +305,13 @@ a.button {
   display: inline-block;
   background-color: #e6e6e6;
   background-repeat: no-repeat;
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(white), color-stop(25%, white), to(#e6e6e6));
-  background-image: -webkit-linear-gradient(white, white 25%, #e6e6e6);
-  background-image: -moz-linear-gradient(top, white, white 25%, #e6e6e6);
-  background-image: -ms-linear-gradient(white, white 25%, #e6e6e6);
-  background-image: -o-linear-gradient(white, white 25%, #e6e6e6);
-  background-image: linear-gradient(white, white 25%, #e6e6e6);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='white', endColorstr='#e6e6e6', GradientType=0);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), color-stop(25%, #ffffff), to(#e6e6e6));
+  background-image: -webkit-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+  background-image: -moz-linear-gradient(top, #ffffff, #ffffff 25%, #e6e6e6);
+  background-image: -ms-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+  background-image: -o-linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+  background-image: linear-gradient(#ffffff, #ffffff 25%, #e6e6e6);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#e6e6e6', GradientType=0);
   padding: 5px 14px 6px;
   text-shadow: 0 1px 1px rgba(255, 255, 255, 0.75);
   color: #333;

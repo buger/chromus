@@ -1,5 +1,6 @@
 (function() {
   var about, template;
+
   template = Handlebars.compile('    \
     <header>\
         <a class="back"></a>\
@@ -11,9 +12,12 @@
         <a href="https://github.com/chromus/chromus" style="display:block;margin-top:15px; font-size: 14px;" target="_blank">github</a>\
     </div>\
 ');
+
   about = $('<li>About</li>').bind('click', function() {
     $('#main_menu').hide();
     return chromus.openPanel(template());
   });
+
   chromus.addMenu(about);
+
 }).call(this);

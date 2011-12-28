@@ -1,0 +1,12 @@
+{
+   	"name": "Chromus",
+   	"version": "3.0.2",   
+   	"description": "Awesome music player for Pokki",      
+
+   	"popup": "index.html",
+   	"background_page": "background.html",
+
+   	"icon-19x19": "assets/icons/19x19.png",
+   	"icon-29x29": "assets/icons/29x29.png",
+   	"icon-42x42": "assets/icons/42x42.png"
+}

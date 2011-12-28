@@ -1,7 +1,8 @@
 (function() {
   var VK, global;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   global = this;
+
   VK = {
     APP_ID: global.debug ? "2649785" : "2698877",
     SCOPE: "audio,offline",
@@ -12,6 +13,7 @@
     },
     searchWithoutLogin: function(args, callback) {
       var BaseURL, SignURL, callback_name, query;
+      var _this = this;
       BaseURL = "http://api.vk.com/api.php";
       SignURL = "http://chromusapp.appspot.com/sign_data";
       query = "" + args.artist + " " + args.song;
@@ -24,7 +26,7 @@
         dataType: "jsonp",
         cache: true,
         jsonpCallback: callback_name,
-        success: __bind(function(resp) {
+        success: function(resp) {
           var data;
           data = {
             'api_id': resp.api_key,
@@ -44,9 +46,7 @@
             jsonpCallback: callback_name,
             success: function(result) {
               var records;
-              if (!result.response) {
-                return callback([]);
-              }
+              if (!result.response) return callback([]);
               records = _.map(_.rest(result.response), function(i) {
                 return {
                   artist: i.audio.artist,
@@ -60,7 +60,7 @@
               return callback(records);
             }
           });
-        }, this)
+        }
       });
     },
     searchAPI: function(args, callback) {
@@ -85,9 +85,7 @@
         cache: true,
         success: function(result) {
           var records;
-          if (!result.response) {
-            return callback([]);
-          }
+          if (!result.response) return callback([]);
           records = _.map(_.rest(result.response), function(i) {
             return {
               artist: i.artist,
@@ -110,6 +108,9 @@
       }
     }
   };
+
   this.chromus.registerPlugin("vkontakte", VK);
+
   this.chromus.registerAudioSource("vkontakte", VK);
+
 }).call(this);

@@ -1,5 +1,4 @@
-(function() {
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   describe("LastFM plugin", function() {
     var fixtures, lastfm, manager;
     fixtures = {
@@ -86,10 +85,11 @@
     });
     it("should load artist top tracks", function() {
       var first_track_id, play_spy, search_spy, top_spy;
+      var _this = this;
       manager.playlist.reset();
-      top_spy = spyOn(lastfm.artist, 'getTopTracks').andCallFake(__bind(function(artist, callback) {
+      top_spy = spyOn(lastfm.artist, 'getTopTracks').andCallFake(function(artist, callback) {
         return callback(fixtures.playlist);
-      }, this));
+      });
       search_spy = spyOn(manager, "searchTrack");
       play_spy = spyOn(manager, 'play').andCallThrough();
       manager.play({
@@ -167,4 +167,3 @@
       return expect(scrobble_spy.callCount).toBe(1);
     });
   });
-}).call(this);

@@ -1,6 +1,7 @@
 (function() {
   var LastFM, hashToQueryString;
   var __hasProp = Object.prototype.hasOwnProperty;
+
   hashToQueryString = function(hash) {
     var key, params, value;
     params = [];
@@ -11,6 +12,7 @@
     }
     return params.join('&');
   };
+
   LastFM = {
     settings: {
       baseURL: "http://ws.audioscrobbler.com/2.0/",
@@ -24,9 +26,7 @@
       for (key in data) {
         if (!__hasProp.call(data, key)) continue;
         value = data[key];
-        if (key !== 'format') {
-          signature.push(key + value);
-        }
+        if (key !== 'format') signature.push(key + value);
       }
       signature.sort();
       return MD5(signature.join('') + LastFM.settings.api_secret);
@@ -39,17 +39,13 @@
       }
     },
     callMethod: function(method, data, callback) {
-      if (data == null) {
-        data = {};
-      }
+      if (data == null) data = {};
       data.format = this.settings.format;
       data.api_key = this.settings.api_key;
       data.method = method;
       if (data.sig_call) {
         delete data.sig_call;
-        if (!method.match(/^auth/)) {
-          data.sk = LastFM.getSession();
-        }
+        if (!method.match(/^auth/)) data.sk = LastFM.getSession();
         data.api_sig = this.getSignature(data);
       }
       return $.ajax({
@@ -69,9 +65,7 @@
       });
     },
     convertDateToUTC: function(date) {
-      if (date == null) {
-        date = new Date();
-      }
+      if (date == null) date = new Date();
       return new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds());
     },
     fakePostRequest: function(url, data) {
@@ -184,12 +178,8 @@
     },
     image: function(options) {
       var method_prefix, params, _ref;
-      if (!options.artist) {
-        return;
-      }
-      if ((_ref = options.size) == null) {
-        options.size = "mediumsquare";
-      }
+      if (!options.artist) return;
+      if ((_ref = options.size) == null) options.size = "mediumsquare";
       params = [];
       if (options.album) {
         method_prefix = "album";
@@ -266,5 +256,7 @@
       }
     }
   };
+
   this.chromus.registerPlugin("lastfm", LastFM);
+
 }).call(this);

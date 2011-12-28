@@ -1,5 +1,6 @@
 (function() {
   var BandCamp;
+
   BandCamp = {
     bandURL: "http://api.bandcamp.com/api/band/3",
     albumURL: "http://api.bandcamp.com/api/album/2",
@@ -89,14 +90,19 @@
             _results = [];
             for (_i = 0, _len = discogs.length; _i < _len; _i++) {
               obj = discogs[_i];
-              _results.push(obj.track_id ? (tracks.push(obj), process_tracks()) : BandCamp.album.info(obj.album_id, function(album) {
-                album.tracks = _.map(album.tracks, function(t) {
-                  t.artist = obj.artist;
-                  return t;
-                });
-                tracks.push(album.tracks);
-                return process_tracks();
-              }));
+              if (obj.track_id) {
+                tracks.push(obj);
+                _results.push(process_tracks());
+              } else {
+                _results.push(BandCamp.album.info(obj.album_id, function(album) {
+                  album.tracks = _.map(album.tracks, function(t) {
+                    t.artist = obj.artist;
+                    return t;
+                  });
+                  tracks.push(album.tracks);
+                  return process_tracks();
+                }));
+              }
             }
             return _results;
           });
@@ -104,6 +110,9 @@
       });
     }
   };
+
   this.chromus.registerPlugin("bandcamp", BandCamp);
+
   this.chromus.registerAudioSource("bandcamp", BandCamp);
+
 }).call(this);

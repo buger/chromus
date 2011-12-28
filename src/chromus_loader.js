@@ -1,38 +1,49 @@
 (function() {
   var files, global, _ref;
+
   global = this;
+
   if (((_ref = this.parent) != null ? typeof _ref.isTestMode === "function" ? _ref.isTestMode() : void 0 : void 0) || this.location.toString().match(/test_mode/)) {
     this.testMode = true;
     document.getElementsByTagName('html')[0].className += " test_mode";
   }
+
   this.isTestMode = function() {
     return !!this.testMode;
   };
+
   yepnope.addPrefix('bg', function(resource) {
     resource.bypass = browser.page_type !== "background";
     return resource;
   });
+
   yepnope.addPrefix('popup', function(resource) {
     resource.bypass = browser.page_type !== "popup";
     return resource;
   });
+
   yepnope.addPrefix('bg_spec', function(resource) {
     resource.bypass = !(this.testMode && browser.page_type === "background");
     return resource;
   });
+
   yepnope.addPrefix('popup_spec', function(resource) {
     resource.bypass = !(this.testMode && browser.page_type === "popup");
     return resource;
   });
+
   yepnope.addPrefix('test_mode', function(resource) {
     resource.bypass = !this.testMode;
     return resource;
   });
+
   yepnope.addPrefix('css', function(resource) {
     resource.forceCSS = true;
     return resource;
   });
-  files = ["lib/jquery.min.js", "lib/store.js", "lib/md5.js", "lib/underscore-min.js", "lib/backbone-min.js", "popup!lib/flexie.js", "popup!lib/iscroll.js", "popup!lib/handlebars.js", "popup!lib/spin.min.js", "test_mode!css!lib/jasmine/jasmine.css", "test_mode!lib/jasmine/jasmine.js", "test_mode!lib/jasmine/jasmine-html.js", "src/chromus.js?" + (+new Date()), "src/utils.js"];
+
+  files = ["lib/jquery.min.js", "lib/store.js", "lib/md5.js", "lib/underscore-min.js", "lib/backbone-min.js", "popup!lib/iscroll.js", "popup!lib/handlebars.js", "popup!lib/spin.min.js", "test_mode!css!lib/jasmine/jasmine.css", "test_mode!lib/jasmine/jasmine.js", "test_mode!lib/jasmine/jasmine-html.js", "src/chromus.js?" + (+new Date()), "src/utils.js"];
+
   yepnope({
     load: "lib/browser_api.js",
     complete: function() {
@@ -46,4 +57,5 @@
       });
     }
   });
+
 }).call(this);

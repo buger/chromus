@@ -1,5 +1,6 @@
 (function() {
   var Echo, _ref;
+
   Echo = {
     settings: {
       baseURL: "http://developer.echonest.com/api/v4",
@@ -7,9 +8,7 @@
       api_key: "D3QELXPGA1KC6AJ6U"
     },
     callMethod: function(method, data, callback) {
-      if (data == null) {
-        data = {};
-      }
+      if (data == null) data = {};
       data.format = this.settings.format;
       data.api_key = this.settings.api_key;
       return $.ajax({
@@ -43,7 +42,7 @@
       }
     }
   };
-  if ((_ref = this.chromus) != null) {
-    _ref.registerPlugin("echo", Echo);
-  }
+
+  if ((_ref = this.chromus) != null) _ref.registerPlugin("echo", Echo);
+
 }).call(this);

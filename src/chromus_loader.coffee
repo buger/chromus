@@ -40,8 +40,7 @@ files = [
 
     "lib/underscore-min.js"
     "lib/backbone-min.js" 
-
-    "popup!lib/flexie.js"        
+    
     "popup!lib/iscroll.js"
     "popup!lib/handlebars.js"
     "popup!lib/spin.min.js"

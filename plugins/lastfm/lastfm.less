@@ -2,6 +2,7 @@
 
 @red: #FF0000;
 @green: #008000;
+@blue: #0000FF;
 
 .menu_container {
 	.lastfm {
@@ -37,10 +38,12 @@
 
 			.notice {
 				font-size: 13px;
-				color: lighten(blue, 20%);
+				color: lighten(@blue, 20%);
 				margin-left: 10px;
-			}
+				width: 300px;
+			}			
 		}
+
 
 		label {
 			display: inline-block;

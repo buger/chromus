@@ -1,21 +1,11 @@
 (function() {
   var App, Controls, Footer, Player, Playlist, PlaylistView, Track, TrackInfo, clear_playlist;
-  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) {
-    for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; }
-    function ctor() { this.constructor = child; }
-    ctor.prototype = parent.prototype;
-    child.prototype = new ctor;
-    child.__super__ = parent.prototype;
-    return child;
-  }, __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
+
   Handlebars.registerHelper('lfm_img', function(context) {
     var image, _ref;
-    if ((_ref = context.images) == null) {
-      context.images = context.image;
-    }
-    if (!context.images) {
-      return "about:blank";
-    }
+    if ((_ref = context.images) == null) context.images = context.image;
+    if (!context.images) return "about:blank";
     image = context.images[0];
     if (typeof context.images[0] !== "string") {
       try {
@@ -27,26 +17,41 @@
       return context.images[0];
     }
   });
+
   Track = (function() {
+
     __extends(Track, Backbone.Model);
+
     function Track() {
       Track.__super__.constructor.apply(this, arguments);
     }
+
     return Track;
+
   })();
+
   Playlist = (function() {
+
     __extends(Playlist, Backbone.Collection);
+
     function Playlist() {
       Playlist.__super__.constructor.apply(this, arguments);
     }
+
     Playlist.prototype.model = Track;
+
     return Playlist;
+
   })();
+
   Player = (function() {
+
     __extends(Player, Backbone.Model);
+
     function Player() {
       Player.__super__.constructor.apply(this, arguments);
     }
+
     Player.prototype.initialize = function() {
       _.bindAll(this, "listener");
       this.playlist = new Playlist();
@@ -57,14 +62,14 @@
       });
       return browser.addMessageListener(this.listener);
     };
+
     Player.prototype.currentTrack = function() {
       return this.playlist.get(this.get('current_track'));
     };
+
     Player.prototype.play = function(track_id) {
       var track;
-      if (track_id == null) {
-        track_id = this.get('current_track');
-      }
+      if (track_id == null) track_id = this.get('current_track');
       track = this.playlist.get(track_id);
       if (!track.get('action')) {
         this.set({
@@ -83,6 +88,7 @@
         track: parseInt(track_id)
       });
     };
+
     Player.prototype.pause = function() {
       this.state.set({
         'name': 'paused'
@@ -91,11 +97,13 @@
         method: 'pause'
       });
     };
+
     Player.prototype.next = function() {
       return browser.postMessage({
         method: 'nextTrack'
       });
     };
+
     Player.prototype.setPosition = function(position) {
       this.state.set({
         'played': position
@@ -105,6 +113,7 @@
         position: position
       });
     };
+
     Player.prototype.setVolume = function(volume) {
       this.set({
         'volume': volume
@@ -114,6 +123,7 @@
         volume: volume
       });
     };
+
     Player.prototype.setSettings = function(data) {
       this.settings.set(data);
       return browser.postMessage({
@@ -121,11 +131,10 @@
         data: data
       });
     };
+
     Player.prototype.listener = function(msg) {
       var _ref;
-      if (msg.method.match("^sm2")) {
-        return;
-      }
+      if (msg.method.match("^sm2")) return;
       if (!msg.method.match('(playerState|updateState)')) {
         console.log("Popup received message", msg.method, msg);
       } else {
@@ -136,28 +145,30 @@
           });
         }
       }
-      if (msg.settings != null) {
-        this.settings.set(msg.settings);
-      }
+      if (msg.settings != null) this.settings.set(msg.settings);
       this.set({
         'volume': msg.volume != null ? msg.volume : void 0
       });
-      if (msg.state != null) {
-        this.state.set(msg.state);
-      }
-      if (msg.playlist) {
-        return this.playlist.reset(msg.playlist);
-      }
+      if (msg.state != null) this.state.set(msg.state);
+      if (msg.playlist) return this.playlist.reset(msg.playlist);
     };
+
     return Player;
+
   })();
+
   Controls = (function() {
+
     __extends(Controls, Backbone.View);
+
     function Controls() {
       Controls.__super__.constructor.apply(this, arguments);
     }
+
     Controls.prototype.el = $('#header');
+
     Controls.prototype.search_template = Handlebars.compile($('#search_result_tmpl').html());
+
     Controls.prototype.events = {
       "click .inner": "setPosition",
       "click .progress": "setPosition",
@@ -166,8 +177,10 @@
       "click .search": "toggleSearch",
       "keyup .search_bar .text": "search"
     };
+
     Controls.prototype.initialize = function() {
       var opts;
+      var _this = this;
       _.bindAll(this);
       this.model.state.bind('change', this.updateState);
       opts = {
@@ -179,13 +192,14 @@
       };
       this.spinner = new Spinner(opts);
       this.updateState(this.model.state);
-      $('.panel.search span.add_to_playlist').live('click', __bind(function(evt) {
-        return this.addToPlaylist(evt);
-      }, this));
-      return $('.panel.search a.ex_container').live('click', __bind(function(evt) {
-        return this.playSearchedTrack(evt);
-      }, this));
+      $('.panel.search span.add_to_playlist').live('click', function(evt) {
+        return _this.addToPlaylist(evt);
+      });
+      return $('.panel.search a.ex_container').live('click', function(evt) {
+        return _this.playSearchedTrack(evt);
+      });
     };
+
     Controls.prototype.updateState = function(state) {
       var toggle, track, _ref;
       track = this.model.currentTrack();
@@ -209,20 +223,20 @@
       if (track != null ? track.get('duration') : void 0) {
         this.$('.inner').width(state.played / track.get('duration') * 100 + '%');
         this.$('.time').html("-" + prettyTime(track.get('duration') - state.played));
-        if ((_ref = state.buffered) == null) {
-          state.buffered = 0;
-        }
+        if ((_ref = state.buffered) == null) state.buffered = 0;
         return this.$('.progress').width(state.buffered / track.get('duration') * 100 + '%');
       } else {
         return this.$('.time').html(prettyTime(0));
       }
     };
+
     Controls.prototype.setPosition = function(evt) {
       var position, track;
       track = this.model.currentTrack();
       position = (evt.offsetX / 278) * track.get('duration');
       return this.model.setPosition(position);
     };
+
     Controls.prototype.togglePlaying = function() {
       if (this.model.state.get('name') === "paused") {
         return this.model.play();
@@ -230,26 +244,31 @@
         return this.model.pause();
       }
     };
+
     Controls.prototype.nextTrack = function() {
       return this.model.next();
     };
+
     Controls.prototype.toggleSearch = function() {
       var _ref;
+      var _this = this;
       $('#first_run .search-tip').hide();
       this.el.toggleClass('search_mode');
       if (this.el.hasClass('search_mode')) {
         this.$('.search_bar').addClass('show');
-        setTimeout(__bind(function() {
-          return this.$('.search_bar').find('input').focus();
-        }, this), 500);
+        setTimeout(function() {
+          return _this.$('.search_bar').find('input').focus();
+        }, 500);
         return this.search_panel = chromus.openPanel(this.search_template((_ref = this.search_view) != null ? _ref : {})).addClass('search');
       } else {
         this.$('.search_bar').removeClass('show');
         return chromus.closePanel();
       }
     };
+
     Controls.prototype.search = _.debounce(function(evt) {
       var render, text, _ref;
+      var _this = this;
       if ((_ref = evt.keyCode) === 40 || _ref === 45 || _ref === 37 || _ref === 39 || _ref === 38) {
         return;
       }
@@ -279,34 +298,29 @@
             }
           }
         };
-        render = __bind(function() {
+        render = function() {
           var _ref2;
-          return this.search_panel.html(this.search_template((_ref2 = this.search_view) != null ? _ref2 : {})).find('.loader').spin('small');
-        }, this);
+          return _this.search_panel.html(_this.search_template((_ref2 = _this.search_view) != null ? _ref2 : {})).find('.loader').spin('small');
+        };
         render();
-        chromus.plugins.lastfm.artist.search(text, __bind(function(artists) {
-          if (artists == null) {
-            artists = [];
-          }
-          this.search_view.artists = _.first(artists, 4);
+        chromus.plugins.lastfm.artist.search(text, function(artists) {
+          if (artists == null) artists = [];
+          _this.search_view.artists = _.first(artists, 4);
           return render();
-        }, this));
-        chromus.plugins.lastfm.track.search(text, __bind(function(tracks) {
-          if (tracks == null) {
-            tracks = [];
-          }
-          this.search_view.tracks = _.first(tracks, 4);
+        });
+        chromus.plugins.lastfm.track.search(text, function(tracks) {
+          if (tracks == null) tracks = [];
+          _this.search_view.tracks = _.first(tracks, 4);
           return render();
-        }, this));
-        return chromus.plugins.lastfm.album.search(text, __bind(function(albums) {
-          if (albums == null) {
-            albums = [];
-          }
-          this.search_view.albums = _.first(albums, 4);
+        });
+        return chromus.plugins.lastfm.album.search(text, function(albums) {
+          if (albums == null) albums = [];
+          _this.search_view.albums = _.first(albums, 4);
           return render();
-        }, this));
+        });
       }
     }, 500);
+
     Controls.prototype.playSearchedTrack = function(evt) {
       var track_info;
       track_info = getTrackInfo(evt.currentTarget);
@@ -317,6 +331,7 @@
       });
       return this.toggleSearch();
     };
+
     Controls.prototype.addToPlaylist = function(evt) {
       var track_info;
       track_info = getTrackInfo(evt.currentTarget.parentNode);
@@ -327,29 +342,37 @@
       this.toggleSearch();
       return evt.stopPropagation();
     };
+
     return Controls;
+
   })();
+
   TrackInfo = (function() {
+
     __extends(TrackInfo, Backbone.View);
+
     function TrackInfo() {
       TrackInfo.__super__.constructor.apply(this, arguments);
     }
+
     TrackInfo.prototype.el = $('#current_song');
+
     TrackInfo.prototype.events = {
       "click .album_img": "albumCover"
     };
+
     TrackInfo.prototype.template = Handlebars.compile($('#track_info_tmpl').html());
+
     TrackInfo.prototype.initialize = function() {
       _.bindAll(this, "updateInfo");
       this.model.bind('change:current_track', this.updateInfo);
       return this.model.playlist.bind('all', _.debounce(this.updateInfo, 500));
     };
+
     TrackInfo.prototype.updateInfo = function() {
       var last_fm, track, _ref, _ref2;
       track = (_ref = this.model.currentTrack()) != null ? _ref.toJSON() : void 0;
-      if (!track) {
-        return this.el.empty();
-      }
+      if (!track) return this.el.empty();
       if ((_ref2 = track.images) == null) {
         track.images = [
           chromus.plugins.lastfm.image({
@@ -363,6 +386,7 @@
       track.song_url = "" + last_fm + "/" + track.artist + "/_/" + track.song;
       return this.el.html(this.template(track)).show();
     };
+
     TrackInfo.prototype.albumCover = function() {
       var img, src, track;
       return false;
@@ -370,9 +394,7 @@
       if (track.get('images').length) {
         img = new Image();
         src = _.last(track.get('images'));
-        if (typeof src !== "string") {
-          src = src['#text'];
-        }
+        if (typeof src !== "string") src = src['#text'];
         img.src = src;
         img.onclick = function() {
           return $('#dialog').hide();
@@ -381,14 +403,21 @@
         return $('#dialog').show();
       }
     };
+
     return TrackInfo;
+
   })();
+
   Footer = (function() {
+
     __extends(Footer, Backbone.View);
+
     function Footer() {
       Footer.__super__.constructor.apply(this, arguments);
     }
+
     Footer.prototype.el = $('#footer');
+
     Footer.prototype.events = {
       "click .menu": "toggleMenu",
       "click .volume": "toggleVolume",
@@ -396,6 +425,7 @@
       "click .shuffle": "toggleShuffle",
       "click .repeat": "toggleRepeat"
     };
+
     Footer.prototype.initialize = function() {
       _.bindAll(this);
       this.model.bind('change:volume', this.updateVolume);
@@ -409,50 +439,66 @@
         }
       });
     };
+
     Footer.prototype.toggleMenu = function() {
       $('#first_run .settings-tip').hide();
       return $('#main_menu').toggle();
     };
+
     Footer.prototype.toggleVolume = function() {
       return this.model.setVolume(0);
     };
+
     Footer.prototype.setVolume = function(evt) {
       var total_width, volume;
       total_width = this.$('.volume_bar .bar_bg').width();
       volume = evt.layerX / total_width * 100;
       return this.model.setVolume(volume);
     };
+
     Footer.prototype.updateVolume = function() {
       return this.$('.volume_bar .bar').css({
         width: this.model.get('volume') + "%"
       });
     };
+
     Footer.prototype.toggleShuffle = function() {
       return this.model.setSettings({
         'shuffle': !this.$('.shuffle').hasClass('active')
       });
     };
+
     Footer.prototype.toggleRepeat = function() {
       return this.model.setSettings({
         'repeat': !this.$('.repeat').hasClass('active')
       });
     };
+
     Footer.prototype.updateSettings = function() {
       this.$('.shuffle').toggleClass('active', this.model.settings.get('shuffle'));
       return this.$('.repeat').toggleClass('active', this.model.settings.get('repeat'));
     };
+
     return Footer;
+
   })();
+
   PlaylistView = (function() {
+
     __extends(PlaylistView, Backbone.View);
+
     function PlaylistView() {
       PlaylistView.__super__.constructor.apply(this, arguments);
     }
+
     PlaylistView.prototype.el = $('#playlist');
+
     PlaylistView.prototype.template = Handlebars.compile($('#playlist_tmpl').html());
+
     PlaylistView.prototype.events = {
       "click #playlist .song": "togglePlaying"
     };
+
     PlaylistView.prototype.initialize = function() {
       var evt, render_limiter, _i, _len, _ref;
       _.bindAll(this, 'updatePlaylist', 'updateCurrent');
@@ -467,6 +513,7 @@
         bounce: false
       });
     };
+
     PlaylistView.prototype.togglePlaying = function(evt) {
       var id;
       id = +$.attr(evt.currentTarget, 'data-id');
@@ -476,18 +523,18 @@
         return this.model.play(id);
       }
     };
+
     PlaylistView.prototype.artistPlaylistCount = function(artist, start_from) {
       var count, track, _i, _len, _ref;
       count = 0;
-      _ref = this.model.playlist.models.slice(start_from, (start_from + 3 + 1) || 9e9);
+      _ref = this.model.playlist.models.slice(start_from, (start_from + 3) + 1 || 9e9);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         track = _ref[_i];
-        if (track.get('artist') === artist) {
-          count++;
-        }
+        if (track.get('artist') === artist) count++;
       }
       return count;
     };
+
     PlaylistView.prototype.updateCurrent = function() {
       var current;
       this.$('.song.playing').removeClass('playing');
@@ -499,6 +546,7 @@
         }
       }
     };
+
     PlaylistView.prototype.updatePlaylist = function() {
       var helpers, merge_rows, model, playlist, track, view, _i, _len, _ref;
       merge_rows = 0;
@@ -529,9 +577,7 @@
           }
         },
         is_next: function(fn) {
-          if (!this.next || this.next.artist !== this.artist) {
-            return fn(this);
-          }
+          if (!this.next || this.next.artist !== this.artist) return fn(this);
         },
         title: function(fn) {
           if (this.type === 'artist') {
@@ -541,14 +587,10 @@
           }
         },
         more_then_two: function(fn) {
-          if (this.artist_playlist_count > 2) {
-            return fn(this);
-          }
+          if (this.artist_playlist_count > 2) return fn(this);
         },
         is_current: function(fn) {
-          if (this.id === model.get('current_track')) {
-            return fn(this);
-          }
+          if (this.id === model.get('current_track')) return fn(this);
         }
       };
       helpers = _.defaults(helpers, Handlebars.helpers);
@@ -561,13 +603,19 @@
       this.el.find('.track_container:odd').addClass('odd');
       return this.scroll.refresh();
     };
+
     return PlaylistView;
+
   })();
+
   App = (function() {
+
     __extends(App, Backbone.View);
+
     function App() {
       App.__super__.constructor.apply(this, arguments);
     }
+
     App.prototype.initialize = function() {
       this.model = new Player();
       this.playlist = new PlaylistView({
@@ -583,9 +631,7 @@
         model: this.model
       });
       $('#dialog').bind('click', function(evt) {
-        if (evt.target.id === "dialog") {
-          return $('#dialog').hide();
-        }
+        if (evt.target.id === "dialog") return $('#dialog').hide();
       });
       if (browser.isPokki) {
         $('#minimize').bind('click', function() {
@@ -603,24 +649,32 @@
         return $('#header').removeClass('search_mode').find('.search_bar').removeClass('show');
       });
     };
+
     App.prototype.start = function() {
       return browser.postMessage({
         method: 'ui:init'
       });
     };
+
     return App;
+
   })();
+
   this.app = new App();
+
   $(function() {
     return browser.onReady(function() {
       return app.start();
     });
   });
+
   clear_playlist = $('<li>Clear playlist</li>').bind('click', function() {
     $('#main_menu').hide();
     return browser.postMessage({
       method: "clearPlaylist"
     });
   });
+
   chromus.addMenu(clear_playlist);
+
 }).call(this);

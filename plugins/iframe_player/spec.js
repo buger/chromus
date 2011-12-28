@@ -1,4 +1,4 @@
-(function() {
+
   describe("Iframe music player", function() {
     var manager, player;
     manager = chromus.plugins.music_manager;
@@ -13,4 +13,3 @@
       }, "player frame not loaded", 2000);
     });
   });
-}).call(this);

@@ -1,17 +1,22 @@
 (function() {
   var LastfmLovedRadio, addNextTracks, manager, radio;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   LastfmLovedRadio = (function() {
+
     function LastfmLovedRadio() {}
+
     LastfmLovedRadio.prototype.initialize = function() {
       return this.reset();
     };
+
     LastfmLovedRadio.prototype.reset = function() {
       this.pages = [];
       this.page = 1;
       return this.played_tracks = [];
     };
+
     LastfmLovedRadio.prototype.getNext = function(callback) {
+      var _this = this;
       if (this.pages.length) {
         this.pages = _.shuffle(this.pages);
         this.page = this.pages[0];
@@ -19,25 +24,25 @@
       return chromus.plugins.lastfm.callMethod("user.getlovedtracks", {
         user: store.get('lastfm:user'),
         page: this.page
-      }, __bind(function(response) {
+      }, function(response) {
         var tracks;
-        if (!this.pages.length) {
-          this.pages = response.lovedtracks["@attr"].totalPages;
-          this.pages = _.range(1, this.pages);
+        if (!_this.pages.length) {
+          _this.pages = response.lovedtracks["@attr"].totalPages;
+          _this.pages = _.range(1, _this.pages);
           if (response.lovedtracks.track.length) {
-            return this.getNext(callback);
+            return _this.getNext(callback);
           } else {
             return callback([]);
           }
         }
-        tracks = _.difference(response.lovedtracks.track, this.played_tracks);
+        tracks = _.difference(response.lovedtracks.track, _this.played_tracks);
         tracks = _.shuffle(tracks);
         if (!tracks.length) {
-          this.pages = _.without(this.pages, this.page);
-          return this.getNext(callback);
+          _this.pages = _.without(_this.pages, _this.page);
+          return _this.getNext(callback);
         }
         tracks = _.first(tracks, 3);
-        this.played_tracks = _.union(this.played_tracks, tracks);
+        _this.played_tracks = _.union(_this.played_tracks, tracks);
         tracks = _.map(tracks, function(track) {
           return {
             song: track.name,
@@ -54,12 +59,17 @@
           action: true
         });
         return callback(tracks);
-      }, this));
+      });
     };
+
     return LastfmLovedRadio;
+
   })();
+
   radio = new LastfmLovedRadio();
+
   manager = chromus.plugins.music_manager;
+
   addNextTracks = function() {
     var loader, loaders, _i, _len;
     loaders = manager.playlist.filter(function(i) {
@@ -76,6 +86,7 @@
       return manager.playlist.add(tracks);
     });
   };
+
   manager.bind('change:current_track', function() {
     var track, _ref;
     track = manager.currentTrack();
@@ -83,9 +94,11 @@
       return addNextTracks();
     }
   });
+
   chromus.registerMediaType("lastfm:loved_loader", function(track) {
     return addNextTracks();
   });
+
   chromus.registerMediaType("lastfm:loved", function(track, callback) {
     radio.reset();
     manager.settings.set({
@@ -94,4 +107,5 @@
     });
     return radio.getNext(callback);
   });
+
 }).call(this);

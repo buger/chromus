@@ -1,9 +1,11 @@
 (function() {
   var music_manager;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   music_manager = chromus.plugins.music_manager;
+
   browser.addMessageListener(function(msg, sender, sendResponse) {
     var track, _i, _len, _ref, _results;
+    var _this = this;
     if (!msg.method.match('(playerState|updateState)')) {
       console.log(msg.method, msg, sender);
     }
@@ -23,10 +25,15 @@
         _results = [];
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           track = _ref[_i];
-          _results.push(track.type ? (track = new Backbone.Model(track), chromus.media_types[track.get('type')](track, __bind(function(resp) {
-            music_manager.playlist.remove(track);
-            return music_manager.playlist.add(resp);
-          }, this))) : music_manager.playlist.add(track));
+          if (track.type) {
+            track = new Backbone.Model(track);
+            _results.push(chromus.media_types[track.get('type')](track, function(resp) {
+              music_manager.playlist.remove(track);
+              return music_manager.playlist.add(resp);
+            }));
+          } else {
+            _results.push(music_manager.playlist.add(track));
+          }
         }
         return _results;
         break;
@@ -44,4 +51,5 @@
         return music_manager.playlist.reset();
     }
   });
+
 }).call(this);

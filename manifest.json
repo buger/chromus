@@ -1,12 +1,21 @@
 {
-   	"name": "Chromus",
-   	"version": "3.0.2",   
-   	"description": "Awesome music player for Pokki",      
+    "name": "Chromus",
+    "version": "3.0.5",
+    "description": "Next get music player",
 
-   	"popup": "index.html",
-   	"background_page": "background.html",
+    "icons": {
+        "16": "assets/icons/19x19.png",
+        "48": "assets/icons/48x48.png",
+        "128": "assets/icons/256x256.png"
+    },
+   
+    "browser_action": {
+        "default_icon": "assets/icons/19x19.png", 
+        "default_title": "Chromus",
+        "popup": "index.html"        
+    },
 
-   	"icon-19x19": "assets/icons/19x19.png",
-   	"icon-29x29": "assets/icons/29x29.png",
-   	"icon-42x42": "assets/icons/42x42.png"
+    "background_page": "background.html",   
+   
+    "permissions": ["notifications", "tabs", "http://*/", "https://*/"]
 }

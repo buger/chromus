@@ -1,17 +1,21 @@
 (function() {
+
   /*
-      Track scrobbling 
+      Track scrobbling
   */
+
   var addNextTracks, last_scrobbled, lastfm, manager;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+  var _this = this;
+
   lastfm = chromus.plugins.lastfm;
+
   manager = chromus.plugins.music_manager;
+
   last_scrobbled = void 0;
+
   chromus.plugins.music_manager.state.bind('change', function(state) {
     var percent_played, track;
-    if (!(store.get('lastfm:scrobbling') && store.get('lastfm:key'))) {
-      return;
-    }
+    if (!(store.get('lastfm:scrobbling') && store.get('lastfm:key'))) return;
     track = manager.currentTrack();
     if (state.get('name') === "playing" && track.id !== last_scrobbled) {
       percent_played = (state.get('played') / track.get('duration')) * 100;
@@ -34,6 +38,7 @@
       });
     }
   });
+
   addNextTracks = function() {
     var loader, loaders, _i, _len;
     loaders = manager.playlist.filter(function(i) {
@@ -50,6 +55,7 @@
       return manager.playlist.add(tracks);
     });
   };
+
   chromus.plugins.music_manager.bind('change:current_track', function() {
     var index, previous_tracks, track, _i, _len, _ref, _ref2;
     if ((_ref = manager.currentTrack()) != null ? _ref.get('lastfm_radio') : void 0) {
@@ -70,15 +76,19 @@
       }
     }
   });
+
   chromus.registerMediaType("lastfm:radio_loader", function(track) {
     return addNextTracks();
   });
+
   chromus.registerMediaType("artist", function(track, callback) {
     return lastfm.artist.getTopTracks(track.get('artist'), callback);
   });
+
   chromus.registerMediaType("album", function(track, callback) {
     return lastfm.album.getInfo(track.get('artist'), track.get('album'), callback);
   });
+
   chromus.registerMediaType("lastfm:radio", function(track, callback) {
     manager.settings.set({
       'repeat': false,
@@ -88,7 +98,8 @@
       return lastfm.radio.getPlaylist(callback);
     });
   });
-  chromus.registerMediaType("lastfm:stream_track", __bind(function(track, callback) {
+
+  chromus.registerMediaType("lastfm:stream_track", function(track, callback) {
     return $.ajax({
       url: "http://chromusapp.appspot.com/proxy?_callback=?",
       dataType: "jsonp",
@@ -102,5 +113,6 @@
         }, false);
       }
     });
-  }, this));
+  });
+
 }).call(this);

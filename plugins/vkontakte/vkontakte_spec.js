@@ -1,4 +1,4 @@
-(function() {
+
   describe("Vkontakte plugin", function() {
     var fixtures, vkontakte;
     fixtures = {
@@ -54,4 +54,3 @@
       });
     });
   });
-}).call(this);

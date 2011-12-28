@@ -1,9 +1,12 @@
 (function() {
   var Source;
-  var __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+
   Source = (function() {
+
     function Source() {}
+
     Source.prototype.baseURL = "http://search.4shared.com/q/CCQD/1/music";
+
     Source.prototype.processResults = function(response) {
       var results;
       results = $(response).find('table.listView tr');
@@ -20,11 +23,11 @@
       });
       return callb;
     };
+
     Source.prototype.search = function(args, callback) {
       var data, query, url;
-      if (callback == null) {
-        callback = function() {};
-      }
+      var _this = this;
+      if (callback == null) callback = function() {};
       query = "" + args.artist + "_" + args.song;
       query = query.replace(/\s+/, "_").replace(" ", "_");
       console.warn(query);
@@ -39,23 +42,28 @@
           data: data,
           dataType: "jsonp",
           cache: true,
-          success: __bind(function(resp) {
+          success: function(resp) {
             var responseHtml;
             responseHtml = resp.response.replace(/\n/g, '\uffff').replace(/<script.*?>.*?<\/script>/gi, '').replace(/\n/g, '\uffff').replace(/<script.*?>.*?<\/script>/gi, '').replace(/\uffff/g, '\n').replace(/<(\/?)noscript/gi, '<$1div');
-            return callback(this.processResults(responseHtml));
-          }, this)
+            return callback(_this.processResults(responseHtml));
+          }
         });
       } else {
         return $.ajax({
           url: url,
-          success: __bind(function(result) {
-            return callback(this.processResults());
-          }, this)
+          success: function(result) {
+            return callback(_this.processResults());
+          }
         });
       }
     };
+
     return Source;
+
   })();
+
   this.chromus.registerAudioSource("for_shared", new Source());
+
   this.chromus.registerPlugin("for_shared", new Source());
+
 }).call(this);

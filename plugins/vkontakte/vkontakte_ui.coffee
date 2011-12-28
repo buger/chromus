@@ -9,6 +9,7 @@ template = Handlebars.compile '
     	<ul>
     		<li>
     			<b>Logged!</b>
+    			<p>Rest of functionality will be available in next update</p>
     		</li>
     		<li>
     			<a class="btn logout" style="color: red">Logout</a>

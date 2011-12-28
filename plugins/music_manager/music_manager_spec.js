@@ -1,5 +1,6 @@
 (function() {
   var fixtures;
+
   fixtures = {
     playlist: [
       {
@@ -27,6 +28,7 @@
       }
     ]
   };
+
   describe("Music manager", function() {
     var manager;
     manager = chromus.plugins.music_manager;
@@ -135,4 +137,5 @@
       return expect(set_position_spy).toHaveBeenCalled();
     });
   });
+
 }).call(this);

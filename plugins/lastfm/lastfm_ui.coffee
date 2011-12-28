@@ -22,7 +22,7 @@ template = Handlebars.compile '
                 
                 <li class="header">
                     <span>Your Stations</span>
-                    {{#unless subscriber}}<span class="notice">Some radiostations available for subscribers only</span>{{/unless}}
+                    {{#unless subscriber}}<span class="notice">Some stations available for subscribers only</span>{{/unless}}
                 </li>
 
                 <li class="stations {{#unless subscriber}}subscribe{{/unless}}">
