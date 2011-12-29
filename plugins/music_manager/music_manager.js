@@ -149,6 +149,7 @@
 
     MusicManager.prototype.play = function(track) {
       var _this = this;
+      if (!track) return;
       if (!_.isObject(track)) track = this.playlist.get(track);
       if (!_.isFunction(track.get)) track = new Track(track);
       if (!track.get('action')) {

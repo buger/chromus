@@ -17,6 +17,7 @@
     var percent_played, track;
     if (!(store.get('lastfm:scrobbling') && store.get('lastfm:key'))) return;
     track = manager.currentTrack();
+    if (!track) return;
     if (state.get('name') === "playing" && track.id !== last_scrobbled) {
       percent_played = (state.get('played') / track.get('duration')) * 100;
       if (percent_played > 30 && track.get('duration') > 30) {

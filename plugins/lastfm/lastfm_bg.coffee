@@ -14,6 +14,8 @@ chromus.plugins.music_manager.state.bind 'change', (state) ->
 
     track = manager.currentTrack()
 
+    return unless track
+
     if state.get('name') is "playing" and track.id isnt last_scrobbled
         percent_played = (state.get('played') / track.get('duration'))*100
             

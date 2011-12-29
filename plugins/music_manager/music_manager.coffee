@@ -141,6 +141,8 @@ class MusicManager extends Backbone.Model
     # If you want to play track that already in `playlist`, 
     # you should pass Track object, or track_id
     play: (track) ->
+        return unless track
+
         unless _.isObject track
             track = @playlist.get track
 
