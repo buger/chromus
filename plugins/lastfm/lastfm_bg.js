@@ -86,6 +86,15 @@
     return lastfm.artist.getTopTracks(track.get('artist'), callback);
   });
 
+  chromus.registerMediaType("track", function(track, callback) {
+    return callback([
+      {
+        artist: track.get('artist'),
+        song: track.get('song')
+      }
+    ]);
+  });
+
   chromus.registerMediaType("album", function(track, callback) {
     return lastfm.album.getInfo(track.get('artist'), track.get('album'), callback);
   });

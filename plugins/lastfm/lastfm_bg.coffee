@@ -77,6 +77,9 @@ chromus.registerMediaType "lastfm:radio_loader", (track) ->
 chromus.registerMediaType "artist", (track, callback) ->
     lastfm.artist.getTopTracks track.get('artist'), callback
 
+chromus.registerMediaType "track", (track, callback) ->
+    callback [{artist: track.get('artist'), song: track.get('song')}]
+
 chromus.registerMediaType "album", (track, callback) ->
     lastfm.album.getInfo track.get('artist'), track.get('album'), callback
 

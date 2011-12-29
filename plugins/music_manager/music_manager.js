@@ -163,6 +163,7 @@
           'name': 'loading'
         });
       }
+      console.warn("trying to play track", track);
       if (!track.get('type')) {
         if (track.get('file_url')) {
           this.state.set({
@@ -187,10 +188,12 @@
       var media_handler;
       var _this = this;
       if (media_type == null) media_type = track.get('type');
+      console.warn("trying to handle media type", track);
       if (!(media_handler = chromus.media_types[media_type])) {
         throw "Can't find handler for media type `" + media_type + "`";
       }
       return media_handler(track, function(resp) {
+        console.warn("resp", resp);
         if (_.isArray(resp)) {
           _this.playlist.reset(resp);
           return _this.play(_this.playlist.first());

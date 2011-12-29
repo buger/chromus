@@ -178,6 +178,8 @@ function getTrackInfo(button){
         } else {
             track_info.type = "album"
         }
+    } else {
+        track_info.type = "track"
     }
 
 
