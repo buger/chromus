@@ -16,7 +16,7 @@ class LastfmLovedRadio
 
 
         chromus.plugins.lastfm.callMethod "user.getlovedtracks", 
-            user: 'teleekom'
+            user: store.get("lastfm:user")
             page: @page
         , (response) =>            
                 console.warn @page, response.lovedtracks.track.length, @pages

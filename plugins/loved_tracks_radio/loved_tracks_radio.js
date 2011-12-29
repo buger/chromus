@@ -22,7 +22,7 @@
         this.page = this.pages[0];
       }
       return chromus.plugins.lastfm.callMethod("user.getlovedtracks", {
-        user: 'teleekom',
+        user: store.get("lastfm:user"),
         page: this.page
       }, function(response) {
         var tracks;
