@@ -12,8 +12,8 @@
 	{{#if logged}}        		\
     	<ul>\
     		<li>\
-    			<b>Logged!</b>\
-    			<p>Rest of functionality will be available in next update</p>\
+    			<h3 style="font-size:20px; font-weight: bold; margin-bottom: 10px;">Logged!</h3>\
+    			<p style="font-size: 14px;">Rest of functionality will be available in next update. Stay tuned!</p>\
     		</li>\
     		<li>\
     			<a class="btn logout" style="color: red">Logout</a>\
@@ -76,6 +76,16 @@
     };
 
     UI.prototype.logout = function() {
+      $.ajax({
+        url: "" + chromus.baseURL + "/api/token/delete",
+        data: {
+          token: store.get("vk:token")
+        },
+        dataType: "jsonp",
+        success: function(resp) {
+          return console.log('token removed');
+        }
+      });
       store.remove("vk:token");
       store.remove("vk:user_id");
       return this.render();

@@ -4,28 +4,39 @@
 	</head>
 
 	<body>
-		<script type="text/javascript">			
-			if (document.location.hash.match(/access_token/)) {
-            	var hash = document.location.hash.substr(1).split('&');
-            	var auth = {}
+		<h1 id="logged" style="color: green; display: none">Logged successfully!</h1>
+		<p id="logged2" style="display: none">Now you can close window and open player</h1>
 
-	            for (var param, i=0, l=hash.length; i<l; i++) {
-	                param = hash[i].split('=');
+		<script type="text/javascript">	
+			if (window.opener) {
+				if (document.location.hash.match(/access_token/)) {
+	            	var hash = document.location.hash.substr(1).split('&');
+	            	var auth = {}
 
-	                auth[param[0]] = param[1];
-	            }
-	            
-	            if (window.pokki)
-	            	auth['session_id'] = pokki.scramble(auth['session_id'])
-	            
-	            window.opener.setVKSession(auth);	           
-	        } else if (document.location.hash.match(/error/)) {
-	        	window.parent.setVKSession({ error: true });   
-	        }
+		            for (var param, i=0, l=hash.length; i<l; i++) {
+		                param = hash[i].split('=');
 
-	        setTimeout(function(){
-	      		window.close();
-	      	});
+		                auth[param[0]] = param[1];
+		            }
+		            
+		            if (window.pokki)
+		            	auth['session_id'] = pokki.scramble(auth['session_id'])
+		            
+		            window.opener.setVKSession(auth);	           
+		        } else if (document.location.hash.match(/error/)) {
+		        	window.parent.setVKSession({ error: true });   
+		        }
+
+		        setTimeout(function(){
+		      		window.close();
+		      	});
+			} else {
+				document.getElementById('logged').style.display = 'block';
+
+				setTimeout(function(){
+		      		window.close();
+		      	}, 2000);
+			}
 		</script>
 	</body>
 </html>

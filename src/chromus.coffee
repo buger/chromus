@@ -2,7 +2,7 @@ global = @
 
 class Chromus   
 
-    baseURL: "http://chromusapp.appspot.com"
+    baseURL: "http://chromusapp-v2.appspot.com"
     
     audio_players: {}
 
@@ -101,17 +101,14 @@ class Chromus
         _.defer -> panel.addClass('show')
 
         panel
-                
+                        
     
     # Close latest created panel, by triggering close event
     closePanel: ->
         latest_panel = _.last($('.panel'))
 
         $(latest_panel).find('.back')
-            .trigger('click')
-        
-
-    
+            .trigger('click')        
 
 
 @chromus = new Chromus()

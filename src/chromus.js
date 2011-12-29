@@ -5,7 +5,7 @@
 
   Chromus = (function() {
 
-    Chromus.prototype.baseURL = "http://chromusapp.appspot.com";
+    Chromus.prototype.baseURL = "http://chromusapp-v2.appspot.com";
 
     Chromus.prototype.audio_players = {};
 

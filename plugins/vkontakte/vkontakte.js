@@ -7,59 +7,27 @@
     APP_ID: global.debug ? "2649785" : "2698877",
     SCOPE: "audio,offline",
     authURL: function() {
-      var link, redirect_uri;
-      redirect_uri = [document.location.toString(), "/../", chromus.plugins_info.vkontakte.path, "/oauth.html"].join('');
+      var baseLocation, link, plugin_path, redirect_uri;
+      if (browser.isChrome) {
+        baseLocation = "" + chromus.baseURL + "/chromus/index.html";
+      } else {
+        baseLocation = document.location.toString();
+      }
+      plugin_path = chromus.plugins_info.vkontakte.path;
+      plugin_path = plugin_path.replace("chrome-extension://oeghnnflghjikgempjanmfekicakholb/", "");
+      redirect_uri = [baseLocation, "/../", plugin_path, "/oauth.html"].join('');
       return link = ["http://api.vkontakte.ru/oauth/authorize?", "client_id=" + VK.APP_ID, "scope=" + VK.SCOPE, "redirect_uri=" + redirect_uri, "display=popup", "response_type=token"].join('&');
     },
     searchWithoutLogin: function(args, callback) {
-      var BaseURL, SignURL, callback_name, query;
-      var _this = this;
-      BaseURL = "http://api.vk.com/api.php";
-      SignURL = "http://chromusapp.appspot.com/sign_data";
-      query = "" + args.artist + " " + args.song;
-      callback_name = "vkclb" + (chromus.utils.uid());
       return $.ajax({
-        url: "" + SignURL,
-        data: {
-          track: query
-        },
+        url: "" + chromus.baseURL + "/api/token/get",
+        data: data,
         dataType: "jsonp",
-        cache: true,
-        jsonpCallback: callback_name,
         success: function(resp) {
-          var data;
-          data = {
-            'api_id': resp.api_key,
-            'method': 'audio.search',
-            'format': 'json',
-            'sig': resp.signed_data,
-            'sort': 2,
-            'test_mode': 1,
-            'count': 10,
-            'q': query
-          };
-          return $.ajax({
-            url: "" + BaseURL,
-            data: data,
-            dataType: "jsonp",
-            cache: true,
-            jsonpCallback: callback_name,
-            success: function(result) {
-              var records;
-              if (!result.response) return callback([]);
-              records = _.map(_.rest(result.response), function(i) {
-                return {
-                  artist: i.audio.artist,
-                  song: i.audio.title,
-                  duration: parseInt(i.audio.duration),
-                  file_url: i.audio.url,
-                  source_title: "Vkontakte",
-                  source_icon: "http://vkontakte.ru/favicon.ico"
-                };
-              });
-              return callback(records);
-            }
-          });
+          if (!resp.error) {
+            args.access_token = resp.token;
+            return VK.searchAPI(args, callback);
+          }
         }
       });
     },
@@ -73,10 +41,14 @@
         sort: 2,
         count: 10
       };
-      if (browser.isPokki) {
-        data.access_token = pokki.descrumble(store.get('vk:token'));
+      if (!args.access_token) {
+        if (browser.isPokki) {
+          data.access_token = pokki.descrumble(store.get('vk:token'));
+        } else {
+          data.access_token = store.get('vk:token');
+        }
       } else {
-        data.access_token = store.get('vk:token');
+        data.access_token = args.access_token;
       }
       return $.ajax({
         url: "https://api.vkontakte.ru/method/audio.search",
@@ -112,5 +84,24 @@
   this.chromus.registerPlugin("vkontakte", VK);
 
   this.chromus.registerAudioSource("vkontakte", VK);
+
+  browser.addMessageListener(function(msg, sender, sendResponse) {
+    switch (msg.method) {
+      case "vk:auth":
+        store.set("vk:token", msg.auth.access_token);
+        store.set("vk:user_id", msg.auth.user_id);
+        $.ajax({
+          url: "" + chromus.baseURL + "/api/token/add",
+          data: {
+            token: msg.auth.access_token
+          },
+          dataType: "jsonp",
+          success: function(resp) {
+            return console.log('token added');
+          }
+        });
+        return console.warn("logged!");
+    }
+  });
 
 }).call(this);

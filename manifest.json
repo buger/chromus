@@ -15,6 +15,18 @@
         "popup": "index.html"        
     },
 
+    "content_scripts": [ 
+        {
+            "css": [ "assets/css/mp3_player_button.css", "assets/css/style.css" ],
+            "js": [ "plugins/lastfm/content_script.js" ],
+            "matches": [ "http://*.last.fm/*", "http://*.lastfm.ru/*","http://*.lastfm.pt/*",  "http://*.lastfm.de/*", "http://*.lastfm.es/*", "http://*.lastfm.fr/*", "http://*.lastfm.it/*", "http://*.lastfm.jp/*", "http://*.lastfm.pl/*", "http://*.lastfm.com.br/*", "http://*.lastfm.se/*", "http://*.lastfm.com.tr/*"]
+        },
+        {
+            "js": ["plugins/vkontakte/oauth_callback.js"],
+            "matches": ["http://chromusapp-v2.appspot.com/chromus/plugins/vkontakte/oauth.html*"] 
+        }
+    ],
+
     "background_page": "background.html",   
    
     "permissions": ["notifications", "tabs", "http://*/", "https://*/"]
