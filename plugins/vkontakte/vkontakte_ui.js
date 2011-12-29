@@ -61,7 +61,7 @@
       view = {
         logged: !!store.get('vk:token')
       };
-      this.el.html(template(view));
+      $(this.el).html(template(view));
       return this.delegateEvents();
     };
 

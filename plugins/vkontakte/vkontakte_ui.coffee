@@ -49,7 +49,7 @@ class UI extends Backbone.View
 		view = 
 			logged: !!store.get('vk:token')
 
-		@el.html template view
+		$(@el).html template view
 
 		@delegateEvents()
 
