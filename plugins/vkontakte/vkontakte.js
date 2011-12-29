@@ -14,7 +14,7 @@
         baseLocation = document.location.toString();
       }
       plugin_path = chromus.plugins_info.vkontakte.path;
-      plugin_path = plugin_path.replace("chrome-extension://oeghnnflghjikgempjanmfekicakholb/", "");
+      plugin_path = plugin_path.replace(/chrome-extension:\/\/\w+\//, "");
       redirect_uri = [baseLocation, "/../", plugin_path, "/oauth.html"].join('');
       return link = ["http://api.vkontakte.ru/oauth/authorize?", "client_id=" + VK.APP_ID, "scope=" + VK.SCOPE, "redirect_uri=" + redirect_uri, "display=popup", "response_type=token"].join('&');
     },

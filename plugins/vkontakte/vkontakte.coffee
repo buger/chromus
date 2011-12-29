@@ -10,8 +10,8 @@ VK =
         else
             baseLocation = document.location.toString()
 
-        plugin_path = chromus.plugins_info.vkontakte.path
-        plugin_path = plugin_path.replace("chrome-extension://oeghnnflghjikgempjanmfekicakholb/","")
+        plugin_path = chromus.plugins_info.vkontakte.path        
+        plugin_path = plugin_path.replace(/chrome-extension:\/\/\w+\//,"")
 
         redirect_uri = [
             baseLocation

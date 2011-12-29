@@ -100,7 +100,7 @@ a.button {
   width: 100%;
 }
 .panel header {
-  width: 100%;
+  width: 468px;
   display: -webkit-box;
   display: -moz-box;
   display: box;

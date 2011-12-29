@@ -96,7 +96,7 @@
       scrobble: function(data, callback) {
         var signature;
         data.method = 'track.scrobble';
-        data.timestamp = (+LastFM.convertDateToUTC()) / 1000;
+        data.timestamp = (+new Date()) / 1000;
         data.sk = LastFM.getSession();
         data.api_key = LastFM.settings.api_key;
         signature = LastFM.getSignature(data);
