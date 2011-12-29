@@ -24,7 +24,8 @@ class LastfmLovedRadio
                 # If this is first call
                 unless @pages.length
                     @pages = response.lovedtracks["@attr"].totalPages
-                    @pages = _.range 1, @pages
+
+                    @pages = _.range 1, @pages+1
                                 
                     # If user have to loved tracks, return empty array
                     if response.lovedtracks.track.length

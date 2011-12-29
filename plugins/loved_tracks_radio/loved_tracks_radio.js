@@ -29,7 +29,7 @@
         console.warn(_this.page, response.lovedtracks.track.length, _this.pages);
         if (!_this.pages.length) {
           _this.pages = response.lovedtracks["@attr"].totalPages;
-          _this.pages = _.range(1, _this.pages);
+          _this.pages = _.range(1, _this.pages + 1);
           if (response.lovedtracks.track.length) {
             return _this.getNext(callback);
           } else {
