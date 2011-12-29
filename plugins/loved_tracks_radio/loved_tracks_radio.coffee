@@ -16,9 +16,11 @@ class LastfmLovedRadio
 
 
         chromus.plugins.lastfm.callMethod "user.getlovedtracks", 
-            user: store.get('lastfm:user')
+            user: 'teleekom'
             page: @page
         , (response) =>            
+                console.warn @page, response.lovedtracks.track.length, @pages
+        
                 # If this is first call
                 unless @pages.length
                     @pages = response.lovedtracks["@attr"].totalPages
@@ -26,9 +28,10 @@ class LastfmLovedRadio
                                 
                     # If user have to loved tracks, return empty array
                     if response.lovedtracks.track.length
-                        return @getNext(callback) 
+                        return @getNext(callback)
                     else
                         return callback []
+
 
                 tracks = _.difference response.lovedtracks.track, @played_tracks
                 tracks = _.shuffle tracks
