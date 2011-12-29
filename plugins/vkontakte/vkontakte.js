@@ -21,7 +21,6 @@
     searchWithoutLogin: function(args, callback) {
       return $.ajax({
         url: "" + chromus.baseURL + "/api/token/get",
-        data: data,
         dataType: "jsonp",
         success: function(resp) {
           if (!resp.error) {
