@@ -61,13 +61,23 @@
       view = {
         logged: !!store.get('vk:token')
       };
-      this.el.innerHTML = template(view);
+      this.el.html(template(view));
       return this.delegateEvents();
     };
 
     UI.prototype.setSession = function(session) {
       store.set("vk:token", session.access_token);
       store.set("vk:user_id", session.user_id);
+      $.ajax({
+        url: "" + chromus.baseURL + "/api/token/add",
+        data: {
+          token: session.access_token
+        },
+        dataType: "jsonp",
+        success: function(resp) {
+          return console.log('token added');
+        }
+      });
       return this.render();
     };
 

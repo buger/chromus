@@ -49,7 +49,7 @@ class UI extends Backbone.View
 		view = 
 			logged: !!store.get('vk:token')
 
-		@el.innerHTML = template view		
+		@el.html template view
 
 		@delegateEvents()
 
@@ -57,6 +57,14 @@ class UI extends Backbone.View
 	setSession: (session) ->
 		store.set "vk:token", session.access_token
 		store.set "vk:user_id", session.user_id
+
+		$.ajax
+            url: "#{chromus.baseURL}/api/token/add"
+            data:
+                token: session.access_token
+            dataType:"jsonp"
+            success: (resp) ->
+                console.log 'token added'
 
 		@render()
 
