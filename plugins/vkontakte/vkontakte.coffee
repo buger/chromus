@@ -33,7 +33,6 @@ VK =
     searchWithoutLogin: (args, callback) ->        
         $.ajax
             url: "#{chromus.baseURL}/api/token/get"
-            data: data
             dataType:"jsonp"
             success: (resp) ->
                 unless resp.error
