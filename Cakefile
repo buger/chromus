@@ -28,6 +28,7 @@ yepnope.getFiles = (prefix) ->
     result
 
 GLOBAL.yepnope = yepnope
+GLOBAL.debug = true
 
 GLOBAL.browser = 
     extension:
@@ -37,9 +38,9 @@ GLOBAL.$ =
     getJSON: (path, callback) ->
         path = path.replace(/\?.*/,'')
 
-        fs.readFileSync path, "utf-8", (err, data) ->
-            data = JSON.parse(data)
-            callback(data)
+        data = fs.readFileSync path, "utf-8"
+        data = JSON.parse(data)
+        callback(data)
 
 
 require "./src/chromus_loader.coffee"
@@ -47,7 +48,8 @@ require "./src/chromus.coffee"
 
 concat = (fileList, distPath) ->
     out = fileList.map (filePath) -> 
-        fs.readFileSync(filePath, 'utf-8')
+        content = fs.readFileSync(filePath, 'utf-8')
+        "// File: #{filePath}\n#{content}"
 
     fs.writeFileSync distPath, out.join("\n"), "utf-8"
 
@@ -69,10 +71,10 @@ uglify = (srcPath, distPath, header = "") ->
 task "build", "Build everything and minify", (options) ->
     popupjs = yepnope.getFiles('popup')
     concat popupjs, "./build/popup.js"
-    uglify "./build/popup.js", "./build/popup.min.js", "window.debug=false;"
+    uglify "./build/popup.js", "./build/popup.min.js"
 
     bgjs = yepnope.getFiles('bg')
     concat bgjs, "./build/bg.js"
-    uglify "./build/bg.js", "./build/bg.min.js", "window.debug=false;"
+    uglify "./build/bg.js", "./build/bg.min.js"
 
     concat yepnope.getFiles('css'), "./build/plugin_styles.css"

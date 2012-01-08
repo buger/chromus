@@ -1,4 +1,5 @@
 global = @
+global.debug = exports? or !!(localStorage?.getItem('debug') is "true")
 
 if @parent?.isTestMode?() or @location?.toString().match(/test_mode/)
     @testMode = true
@@ -31,33 +32,35 @@ yepnope.addPrefix 'css', (resource) ->
         resource.forceCSS = true
         resource
 
+if @debug
+    files = [
+        "lib/jquery.min.js"    
 
-files = [
-    "lib/jquery.min.js"    
+        "lib/store.js"
 
-    "lib/store.js"
-    "lib/md5.js"
+        "lib/underscore-min.js"
+        "lib/backbone-min.js" 
+        
+        "popup!lib/iscroll.js"
+        "popup!lib/handlebars.js"
+        "popup!lib/spin.min.js"
 
-    "lib/underscore-min.js"
-    "lib/backbone-min.js" 
-    
-    "popup!lib/iscroll.js"
-    "popup!lib/handlebars.js"
-    "popup!lib/spin.min.js"
+        "test_mode!css!lib/jasmine/jasmine.css"
+        "test_mode!lib/jasmine/jasmine.js"
+        "test_mode!lib/jasmine/jasmine-html.js"
 
-    "test_mode!css!lib/jasmine/jasmine.css"
-    "test_mode!lib/jasmine/jasmine.js"
-    "test_mode!lib/jasmine/jasmine-html.js"
+        "src/chromus.js?" + (+new Date())
+        "src/utils.js"
+    ]
+else
+    files = [
+        "popup!build/popup.js"
+        "bg!build/bg.js"
+        "css!build/plugin_styles.css"
+    ]
 
-    "src/chromus.js?" + (+new Date())
-    "src/utils.js"
-]
+if browser.page_type is "popup" and global.isTestMode()
+    browser.onReady ->
+        browser._bg_page.style.display = 'block';
 
-yepnope
-    load: "lib/browser_api.js"
-    complete: -> 
-        if browser.page_type is "popup" and global.isTestMode()
-            browser.onReady ->
-                browser._bg_page.style.display = 'block';
-
-        yepnope load: files
+yepnope load: files

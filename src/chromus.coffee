@@ -32,7 +32,7 @@ class Chromus
         _.bindAll @
 
         @loadPlugins()
-    
+
 
     injectPluginFiles: ->    
         files = []
@@ -55,18 +55,25 @@ class Chromus
         for plugin in @plugins_list                     
             do (plugin) =>                            
                 plugin_path = browser.extension.getURL "/plugins/#{plugin}"
-                package_path = "#{plugin_path}/package.json?#{+new Date()}"             
-                $.getJSON package_path, (package) =>                    
-                    @plugins_info[plugin] = package
+                package_path = "#{plugin_path}/package.json?#{+new Date()}"
+                
+                if global.debug or exports?
+                    $.getJSON package_path, (package) =>                    
+                        @plugins_info[plugin] = package
+                        @plugins_info[plugin].path = plugin_path
+                        
+                        callback()
+                else
+                    @plugins_info[plugin] = {}
                     @plugins_info[plugin].path = plugin_path
-                    
-                    callback()
+                
                     
 
     pluginsLoadedCallback: ->
         if global.isTestMode?()
             jasmine.getEnv().addReporter(new jasmine.TrivialReporter())
             jasmine.getEnv().execute()
+
 
     registerPlugin: (name, context) ->
         @plugins[name] = context
@@ -75,11 +82,14 @@ class Chromus
     registerPlayer: (name, context) ->
         @audio_players[name] = context
 
+
     registerAudioSource: (name, context) ->
         @audio_sources[name] = context
 
+
     registerMediaType: (name, context) ->
         @media_types[name] = context
+
 
     # UI features
     addMenu: (el) ->

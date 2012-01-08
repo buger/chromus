@@ -55,11 +55,16 @@
           var package_path, plugin_path;
           plugin_path = browser.extension.getURL("/plugins/" + plugin);
           package_path = "" + plugin_path + "/package.json?" + (+new Date());
-          return $.getJSON(package_path, function(package) {
-            _this.plugins_info[plugin] = package;
-            _this.plugins_info[plugin].path = plugin_path;
-            return callback();
-          });
+          if (global.debug || (typeof exports !== "undefined" && exports !== null)) {
+            return $.getJSON(package_path, function(package) {
+              _this.plugins_info[plugin] = package;
+              _this.plugins_info[plugin].path = plugin_path;
+              return callback();
+            });
+          } else {
+            _this.plugins_info[plugin] = {};
+            return _this.plugins_info[plugin].path = plugin_path;
+          }
         })(plugin));
       }
       return _results;
