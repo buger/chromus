@@ -46,15 +46,15 @@ GLOBAL.$ =
 require "./src/chromus_loader.coffee"
 require "./src/chromus.coffee"
 
-concat = (fileList, distPath) ->
+concat = (fileList, distPath, postfix = "") ->
     out = fileList.map (filePath) -> 
         content = fs.readFileSync(filePath, 'utf-8')
         "// File: #{filePath}\n#{content}"
 
-    fs.writeFileSync distPath, out.join("\n"), "utf-8"
+    fs.writeFileSync distPath, out.join("\n")+postfix, "utf-8"
 
 
-uglify = (srcPath, distPath, header = "") ->    
+uglify = (srcPath, distPath) ->    
     uglyfyJS = require('uglify-js')
 
     jsp = uglyfyJS.parser
@@ -64,17 +64,17 @@ uglify = (srcPath, distPath, header = "") ->
     ast = pro.ast_mangle(ast)
     ast = pro.ast_squeeze(ast)
     
-    content = header + pro.gen_code(ast);
-    fs.writeFileSync distPath, content, "utf-8"
+    fs.writeFileSync distPath, pro.gen_code(ast), "utf-8"
 
 
 task "build", "Build everything and minify", (options) ->
+    css_files = yepnope.getFiles('css').map (el) -> "\"css!#{el}\""
+    loadCSSJS = "yepnope({load:[#{css_files}]});"
+
     popupjs = yepnope.getFiles('popup')
-    concat popupjs, "./build/popup.js"
+    concat popupjs, "./build/popup.js", loadCSSJS
     uglify "./build/popup.js", "./build/popup.min.js"
 
     bgjs = yepnope.getFiles('bg')
     concat bgjs, "./build/bg.js"
     uglify "./build/bg.js", "./build/bg.min.js"
-
-    concat yepnope.getFiles('css'), "./build/plugin_styles.css"

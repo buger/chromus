@@ -4677,3 +4677,4 @@ window.findParent = findParent;
   chromus.addMenu(about);
 
 }).call(this);
+yepnope({load:["css!./lib/jasmine/jasmine.css","css!./plugins/lastfm/lastfm.css","css!./plugins/vkontakte/vkontakte_style.css"]});
