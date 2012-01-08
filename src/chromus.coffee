@@ -34,7 +34,7 @@ class Chromus
         @loadPlugins()
     
 
-    injectPluginFiles: ->       
+    injectPluginFiles: ->    
         files = []
 
         for plugin in @plugins_list
@@ -64,7 +64,7 @@ class Chromus
                     
 
     pluginsLoadedCallback: ->
-        if global.isTestMode()
+        if global.isTestMode?()
             jasmine.getEnv().addReporter(new jasmine.TrivialReporter())
             jasmine.getEnv().execute()
 

@@ -1,9 +1,9 @@
 (function() {
-  var files, global, _ref;
+  var files, global, _ref, _ref2;
 
   global = this;
 
-  if (((_ref = this.parent) != null ? typeof _ref.isTestMode === "function" ? _ref.isTestMode() : void 0 : void 0) || this.location.toString().match(/test_mode/)) {
+  if (((_ref = this.parent) != null ? typeof _ref.isTestMode === "function" ? _ref.isTestMode() : void 0 : void 0) || ((_ref2 = this.location) != null ? _ref2.toString().match(/test_mode/) : void 0)) {
     this.testMode = true;
     document.getElementsByTagName('html')[0].className += " test_mode";
   }

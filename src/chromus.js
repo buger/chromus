@@ -66,7 +66,7 @@
     };
 
     Chromus.prototype.pluginsLoadedCallback = function() {
-      if (global.isTestMode()) {
+      if (typeof global.isTestMode === "function" ? global.isTestMode() : void 0) {
         jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
         return jasmine.getEnv().execute();
       }

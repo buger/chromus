@@ -1,6 +1,6 @@
 global = @
 
-if @parent?.isTestMode?() or @location.toString().match(/test_mode/)
+if @parent?.isTestMode?() or @location?.toString().match(/test_mode/)
     @testMode = true
     document.getElementsByTagName('html')[0].className += " test_mode"
 
