@@ -29,8 +29,8 @@ class About extends Backbone.View
                     
         @el.innerHTML = template(view)
 
-    toggleDebug: (el) ->
-        store.set('debug', el.checked)
+    toggleDebug: (e) ->
+        localStorage.setItem('debug', e.target.checked)
 
 
 about = $('<li>About</li>')

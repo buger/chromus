@@ -43,8 +43,8 @@
       return this.el.innerHTML = template(view);
     };
 
-    About.prototype.toggleDebug = function(el) {
-      return store.set('debug', el.checked);
+    About.prototype.toggleDebug = function(e) {
+      return localStorage.setItem('debug', e.target.checked);
     };
 
     return About;
