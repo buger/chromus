@@ -41,7 +41,7 @@ if @debug
         "lib/underscore-min.js"
         "lib/backbone-min.js" 
         
-        "popup!lib/iscroll.js"
+        "popup!lib/jquery.nanoscroller.min.js"
         "popup!lib/handlebars.js"
         "popup!lib/spin.min.js"
 

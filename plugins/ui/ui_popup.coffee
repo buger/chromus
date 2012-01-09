@@ -384,7 +384,7 @@ class PlaylistView extends Backbone.View
         
         @model.bind "change:current_track", @updateCurrent
 
-        @scroll = new iScroll('playlist', { bounce: false })
+        @el.find('.nano').nanoScroller()
                 
     
     togglePlaying: (evt) ->
@@ -411,10 +411,7 @@ class PlaylistView extends Backbone.View
 
         if current
             @$(".track_container.id#{current} .song").addClass 'playing'
-            
-            if @scroll.vScrollbar 
-                @scroll.scrollToElement @el.find(".track_container.id#{current}")[0]  
-
+                                    
 
     updatePlaylist: ->
         merge_rows = 0
@@ -460,8 +457,7 @@ class PlaylistView extends Backbone.View
         @el.find('.track_container').each (idx, el) ->
             $(el).addClass('odd') if idx % 2 == 0
             
-
-        @scroll.refresh()  
+        @el.find('.nano').nanoScroller()  
 
 
 class App extends Backbone.View

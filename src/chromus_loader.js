@@ -45,7 +45,7 @@
   });
 
   if (this.debug) {
-    files = ["lib/zepto.js", "lib/store.js", "lib/underscore-min.js", "lib/backbone-min.js", "popup!lib/iscroll.js", "popup!lib/handlebars.js", "popup!lib/spin.min.js", "test_mode!css!lib/jasmine/jasmine.css", "test_mode!lib/jasmine/jasmine.js", "test_mode!lib/jasmine/jasmine-html.js", "src/chromus.js?" + (+new Date()), "src/utils.js"];
+    files = ["lib/zepto.js", "lib/store.js", "lib/underscore-min.js", "lib/backbone-min.js", "popup!lib/jquery.nanoscroller.min.js", "popup!lib/handlebars.js", "popup!lib/spin.min.js", "test_mode!css!lib/jasmine/jasmine.css", "test_mode!lib/jasmine/jasmine.js", "test_mode!lib/jasmine/jasmine-html.js", "src/chromus.js?" + (+new Date()), "src/utils.js"];
   } else {
     files = ["popup!build/popup.js", "bg!build/bg.js", "css!build/plugin_styles.css"];
   }

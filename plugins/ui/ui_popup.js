@@ -509,9 +509,7 @@
         this.model.playlist.bind(evt, render_limiter);
       }
       this.model.bind("change:current_track", this.updateCurrent);
-      return this.scroll = new iScroll('playlist', {
-        bounce: false
-      });
+      return this.el.find('.nano').nanoScroller();
     };
 
     PlaylistView.prototype.togglePlaying = function(evt) {
@@ -540,10 +538,7 @@
       this.$('.song.playing').removeClass('playing');
       current = this.model.get('current_track');
       if (current) {
-        this.$(".track_container.id" + current + " .song").addClass('playing');
-        if (this.scroll.vScrollbar) {
-          return this.scroll.scrollToElement(this.el.find(".track_container.id" + current)[0]);
-        }
+        return this.$(".track_container.id" + current + " .song").addClass('playing');
       }
     };
 
@@ -603,7 +598,7 @@
       this.el.find('.track_container').each(function(idx, el) {
         if (idx % 2 === 0) return $(el).addClass('odd');
       });
-      return this.scroll.refresh();
+      return this.el.find('.nano').nanoScroller();
     };
 
     return PlaylistView;

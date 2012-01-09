@@ -9,3 +9,9 @@
 @import "popup/playlist.css";
 @import "popup/footer.css";
 @import "popup/menu.css";
+
+@import 'nanoscroller.css';
+
+.nano .container      { padding: 0px 0px;}
+.nano .pane         { background: rgba(0,0,0, 0.2); }
+.nano .pane .slider { background: rgba(0,0,0, 0.7); }
