@@ -1,64 +1,39 @@
-template = Handlebars.compile '    
-    <header>
-        <a class="back"></a>
-        <h3>Vkontakte</h3>
-    </header>
-    <form class="form">
-    	<div class="logo"></div>
-	{{#if logged}}        		
-    	<ul>
-    		<li>
-    			<h3 style="font-size:20px; font-weight: bold; margin-bottom: 10px;">Logged!</h3>
-    			<p style="font-size: 14px;">Rest of functionality will be available in next update. Stay tuned!</p>
-    		</li>
-    		<li>
-    			<a class="btn logout" style="color: red">Logout</a>
-    		</li>
-    	</ul>       	
-    {{else}}    
-    	<ul>
-    		<li style="text-align: center">
-    			<a class="btn login">Login to Vkontakte</a>
-    		</li>
-    	</ul>
-    {{/if}}
-    </form>
-'
-
 vk = chromus.plugins.vkontakte
 
-class UI extends Backbone.View
+class VkUI extends Backbone.View
+    
+    template: Handlebars.templates['vkontakte.ui.tmpl']
 
-	className: 'vkontakte'
+    className: 'vkontakte'
 
-	events:
-		"click .login": "login"
-		"click .logout": "logout"
+    events:
+        "click .login": "login"
+        "click .logout": "logout"    
 
-	initialize: ->
-		_.bindAll @
+    initialize: ->
+        _.bindAll @
 
-		@render()	
+        @render()   
 
-		window.setVKSession = @setSession
+        window.setVKSession = @setSession
 
-	open: ->
-		chromus.openPanel @el
-	
-	render: ->
-		view = 
-			logged: !!store.get('vk:token')
+    open: ->
+        chromus.openPanel @el
+    
+    render: ->
+        view = 
+            logged: !!store.get('vk:token')
 
-		$(@el).html template view
+        $(@el).html @template view
 
-		@delegateEvents()
+        @delegateEvents()
 
 
-	setSession: (session) ->
-		store.set "vk:token", session.access_token
-		store.set "vk:user_id", session.user_id
+    setSession: (session) ->
+        store.set "vk:token", session.access_token
+        store.set "vk:user_id", session.user_id
 
-		$.ajax
+        $.ajax
             url: "#{chromus.baseURL}/api/token/add"
             data:
                 token: session.access_token
@@ -66,16 +41,16 @@ class UI extends Backbone.View
             success: (resp) ->
                 console.log 'token added'
 
-		@render()
+        @render()
 
-	
-	login: ->
-		window.open vk.authURL(),
-					"Vkontakte", 
-					"status=0,toolbar=0,location=0,menubar=0,resizable=1"
+    
+    login: ->
+        window.open vk.authURL(),
+                    "Vkontakte", 
+                    "status=0,toolbar=0,location=0,menubar=0,resizable=1"
 
-	logout: ->
-		$.ajax
+    logout: ->
+        $.ajax
             url: "#{chromus.baseURL}/api/token/delete"
             data:
                 token: store.get "vk:token"
@@ -83,18 +58,19 @@ class UI extends Backbone.View
             success: (resp) ->
                 console.log 'token removed'
 
-		store.remove "vk:token"
-		store.remove "vk:user_id"
+        store.remove "vk:token"
+        store.remove "vk:user_id"
 
-		@render()
+        @render()
 
 
-ui = new UI()
+ui = new VkUI()
                     
 menu = $('<li class="vkontakte">Vkontakte</li>')
     .bind 'click', ->
         $('#main_menu').hide()        
 
+        console.warn(ui.open, ui)
         ui.open()
 
 chromus.addMenu menu

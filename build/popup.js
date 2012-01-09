@@ -1435,7 +1435,7 @@ window.Zepto = Zepto;
     $.fn[m] = function(callback){ return this.bind(m, callback) }
   });
 })(Zepto);
-
+;
 // File: ./lib/store.js
 /* Copyright (c) 2010-2011 Marcus Westin
  *
@@ -1568,7 +1568,7 @@ var store = (function(){
 })();
 
 if (typeof module != 'undefined') { module.exports = store }
-
+;
 // File: ./lib/underscore-min.js
 // Underscore.js 1.2.0
 // (c) 2011 Jeremy Ashkenas, DocumentCloud Inc.
@@ -1599,7 +1599,7 @@ function(a){return a===null};b.isUndefined=function(a){return a===void 0};b.noCo
 J++;return a?a+b:b};b.templateSettings={evaluate:/<%([\s\S]+?)%>/g,interpolate:/<%=([\s\S]+?)%>/g,escape:/<%-([\s\S]+?)%>/g};b.template=function(a,c){var d=b.templateSettings,d="var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push('"+a.replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(d.escape,function(a,b){return"',_.escape("+b.replace(/\\'/g,"'")+"),'"}).replace(d.interpolate,function(a,b){return"',"+b.replace(/\\'/g,"'")+",'"}).replace(d.evaluate||null,function(a,
 b){return"');"+b.replace(/\\'/g,"'").replace(/[\r\n\t]/g," ")+"__p.push('"}).replace(/\r/g,"\\r").replace(/\n/g,"\\n").replace(/\t/g,"\\t")+"');}return __p.join('');",d=new Function("obj",d);return c?d(c):d};var m=function(a){this._wrapped=a};b.prototype=m.prototype;var t=function(a,c){return c?b(a).chain():a},I=function(a,c){m.prototype[a]=function(){var a=i.call(arguments);G.call(a,this._wrapped);return t(c.apply(b,a),this._chain)}};b.mixin(b);j("pop,push,reverse,shift,sort,splice,unshift".split(","),
 function(a){var b=k[a];m.prototype[a]=function(){b.apply(this._wrapped,arguments);return t(this._wrapped,this._chain)}});j(["concat","join","slice"],function(a){var b=k[a];m.prototype[a]=function(){return t(b.apply(this._wrapped,arguments),this._chain)}});m.prototype.chain=function(){this._chain=true;return this};m.prototype.value=function(){return this._wrapped}})();
-
+;
 // File: ./lib/backbone-min.js
 // Backbone.js 0.5.3
 // (c) 2010 Jeremy Ashkenas, DocumentCloud Inc.
@@ -1634,7 +1634,7 @@ b,c){a=document.createElement(a);b&&g(a).attr(b);c&&g(a).html(c);return a},deleg
 b,c){var d=w[a];c=f.extend({type:d,dataType:"json"},c);if(!c.url)c.url=k(b)||l();if(!c.data&&b&&(a=="create"||a=="update"))c.contentType="application/json",c.data=JSON.stringify(b.toJSON());if(e.emulateJSON)c.contentType="application/x-www-form-urlencoded",c.data=c.data?{model:c.data}:{};if(e.emulateHTTP&&(d==="PUT"||d==="DELETE")){if(e.emulateJSON)c.data._method=d;c.type="POST";c.beforeSend=function(a){a.setRequestHeader("X-HTTP-Method-Override",d)}}if(c.type!=="GET"&&!e.emulateJSON)c.processData=
 !1;return g.ajax(c)};var o=function(){},v=function(a,b,c){var d;d=b&&b.hasOwnProperty("constructor")?b.constructor:function(){return a.apply(this,arguments)};f.extend(d,a);o.prototype=a.prototype;d.prototype=new o;b&&f.extend(d.prototype,b);c&&f.extend(d,c);d.prototype.constructor=d;d.__super__=a.prototype;return d},k=function(a){if(!a||!a.url)return null;return f.isFunction(a.url)?a.url():a.url},l=function(){throw Error('A "url" property or function must be specified');},i=function(a,b,c){return function(d){a?
 a(b,d,c):b.trigger("error",b,d,c)}}}).call(this);
-
+;
 // File: ./lib/jquery.nanoscroller.min.js
 (function($, window, document) {
   var DOMSCROLL, DOWN, DRAG, MOUSEDOWN, MOUSEMOVE, MOUSEUP, MOUSEWHEEL, NanoScroll, PANEDOWN, RESIZE, SCROLL, SCROLLBAR, UP, WHEEL, getScrollbarWidth;
@@ -1778,7 +1778,6 @@ a(b,d,c):b.trigger("error",b,d,c)}}}).call(this);
       this.scrollH = this.paneH - this.sliderH;
       this.slider.height(this.sliderH);
 
-      console.warn('reseting', this.sliderH)
       if (this.paneH >= this.content[0].scrollHeight) {
         this.pane.hide();
       } else {
@@ -1907,497 +1906,12 @@ a(b,d,c):b.trigger("error",b,d,c)}}}).call(this);
       })
     }
   };
-})(window.jQuery||window.Zepto, window, document);
+})(window.jQuery||window.Zepto, window, document);;
 // File: ./lib/handlebars.js
-// lib/handlebars/parser.js
-/* Jison generated parser */
-var handlebars = (function(){
-var parser = {trace: function trace() { },
-yy: {},
-symbols_: {"error":2,"root":3,"program":4,"EOF":5,"statements":6,"simpleInverse":7,"statement":8,"openInverse":9,"closeBlock":10,"openBlock":11,"mustache":12,"partial":13,"CONTENT":14,"COMMENT":15,"OPEN_BLOCK":16,"inMustache":17,"CLOSE":18,"OPEN_INVERSE":19,"OPEN_ENDBLOCK":20,"path":21,"OPEN":22,"OPEN_UNESCAPED":23,"OPEN_PARTIAL":24,"params":25,"hash":26,"param":27,"STRING":28,"INTEGER":29,"BOOLEAN":30,"hashSegments":31,"hashSegment":32,"ID":33,"EQUALS":34,"pathSegments":35,"SEP":36,"$accept":0,"$end":1},
-terminals_: {2:"error",5:"EOF",14:"CONTENT",15:"COMMENT",16:"OPEN_BLOCK",18:"CLOSE",19:"OPEN_INVERSE",20:"OPEN_ENDBLOCK",22:"OPEN",23:"OPEN_UNESCAPED",24:"OPEN_PARTIAL",28:"STRING",29:"INTEGER",30:"BOOLEAN",33:"ID",34:"EQUALS",36:"SEP"},
-productions_: [0,[3,2],[4,3],[4,1],[4,0],[6,1],[6,2],[8,3],[8,3],[8,1],[8,1],[8,1],[8,1],[11,3],[9,3],[10,3],[12,3],[12,3],[13,3],[13,4],[7,2],[17,3],[17,2],[17,2],[17,1],[25,2],[25,1],[27,1],[27,1],[27,1],[27,1],[26,1],[31,2],[31,1],[32,3],[32,3],[32,3],[32,3],[21,1],[35,3],[35,1]],
-performAction: function anonymous(yytext,yyleng,yylineno,yy,yystate,$$,_$) {
-
-var $0 = $$.length - 1;
-switch (yystate) {
-case 1: return $$[$0-1] 
-break;
-case 2: this.$ = new yy.ProgramNode($$[$0-2], $$[$0]) 
-break;
-case 3: this.$ = new yy.ProgramNode($$[$0]) 
-break;
-case 4: this.$ = new yy.ProgramNode([]) 
-break;
-case 5: this.$ = [$$[$0]] 
-break;
-case 6: $$[$0-1].push($$[$0]); this.$ = $$[$0-1] 
-break;
-case 7: this.$ = new yy.InverseNode($$[$0-2], $$[$0-1], $$[$0]) 
-break;
-case 8: this.$ = new yy.BlockNode($$[$0-2], $$[$0-1], $$[$0]) 
-break;
-case 9: this.$ = $$[$0] 
-break;
-case 10: this.$ = $$[$0] 
-break;
-case 11: this.$ = new yy.ContentNode($$[$0]) 
-break;
-case 12: this.$ = new yy.CommentNode($$[$0]) 
-break;
-case 13: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1]) 
-break;
-case 14: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1]) 
-break;
-case 15: this.$ = $$[$0-1] 
-break;
-case 16: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1]) 
-break;
-case 17: this.$ = new yy.MustacheNode($$[$0-1][0], $$[$0-1][1], true) 
-break;
-case 18: this.$ = new yy.PartialNode($$[$0-1]) 
-break;
-case 19: this.$ = new yy.PartialNode($$[$0-2], $$[$0-1]) 
-break;
-case 20: 
-break;
-case 21: this.$ = [[$$[$0-2]].concat($$[$0-1]), $$[$0]] 
-break;
-case 22: this.$ = [[$$[$0-1]].concat($$[$0]), null] 
-break;
-case 23: this.$ = [[$$[$0-1]], $$[$0]] 
-break;
-case 24: this.$ = [[$$[$0]], null] 
-break;
-case 25: $$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
-break;
-case 26: this.$ = [$$[$0]] 
-break;
-case 27: this.$ = $$[$0] 
-break;
-case 28: this.$ = new yy.StringNode($$[$0]) 
-break;
-case 29: this.$ = new yy.IntegerNode($$[$0]) 
-break;
-case 30: this.$ = new yy.BooleanNode($$[$0]) 
-break;
-case 31: this.$ = new yy.HashNode($$[$0]) 
-break;
-case 32: $$[$0-1].push($$[$0]); this.$ = $$[$0-1] 
-break;
-case 33: this.$ = [$$[$0]] 
-break;
-case 34: this.$ = [$$[$0-2], $$[$0]] 
-break;
-case 35: this.$ = [$$[$0-2], new yy.StringNode($$[$0])] 
-break;
-case 36: this.$ = [$$[$0-2], new yy.IntegerNode($$[$0])] 
-break;
-case 37: this.$ = [$$[$0-2], new yy.BooleanNode($$[$0])] 
-break;
-case 38: this.$ = new yy.IdNode($$[$0]) 
-break;
-case 39: $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; 
-break;
-case 40: this.$ = [$$[$0]] 
-break;
-}
-},
-table: [{3:1,4:2,5:[2,4],6:3,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],22:[1,13],23:[1,14],24:[1,15]},{1:[3]},{5:[1,16]},{5:[2,3],7:17,8:18,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,19],20:[2,3],22:[1,13],23:[1,14],24:[1,15]},{5:[2,5],14:[2,5],15:[2,5],16:[2,5],19:[2,5],20:[2,5],22:[2,5],23:[2,5],24:[2,5]},{4:20,6:3,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,4],22:[1,13],23:[1,14],24:[1,15]},{4:21,6:3,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,4],22:[1,13],23:[1,14],24:[1,15]},{5:[2,9],14:[2,9],15:[2,9],16:[2,9],19:[2,9],20:[2,9],22:[2,9],23:[2,9],24:[2,9]},{5:[2,10],14:[2,10],15:[2,10],16:[2,10],19:[2,10],20:[2,10],22:[2,10],23:[2,10],24:[2,10]},{5:[2,11],14:[2,11],15:[2,11],16:[2,11],19:[2,11],20:[2,11],22:[2,11],23:[2,11],24:[2,11]},{5:[2,12],14:[2,12],15:[2,12],16:[2,12],19:[2,12],20:[2,12],22:[2,12],23:[2,12],24:[2,12]},{17:22,21:23,33:[1,25],35:24},{17:26,21:23,33:[1,25],35:24},{17:27,21:23,33:[1,25],35:24},{17:28,21:23,33:[1,25],35:24},{21:29,33:[1,25],35:24},{1:[2,1]},{6:30,8:4,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],22:[1,13],23:[1,14],24:[1,15]},{5:[2,6],14:[2,6],15:[2,6],16:[2,6],19:[2,6],20:[2,6],22:[2,6],23:[2,6],24:[2,6]},{17:22,18:[1,31],21:23,33:[1,25],35:24},{10:32,20:[1,33]},{10:34,20:[1,33]},{18:[1,35]},{18:[2,24],21:40,25:36,26:37,27:38,28:[1,41],29:[1,42],30:[1,43],31:39,32:44,33:[1,45],35:24},{18:[2,38],28:[2,38],29:[2,38],30:[2,38],33:[2,38],36:[1,46]},{18:[2,40],28:[2,40],29:[2,40],30:[2,40],33:[2,40],36:[2,40]},{18:[1,47]},{18:[1,48]},{18:[1,49]},{18:[1,50],21:51,33:[1,25],35:24},{5:[2,2],8:18,9:5,11:6,12:7,13:8,14:[1,9],15:[1,10],16:[1,12],19:[1,11],20:[2,2],22:[1,13],23:[1,14],24:[1,15]},{14:[2,20],15:[2,20],16:[2,20],19:[2,20],22:[2,20],23:[2,20],24:[2,20]},{5:[2,7],14:[2,7],15:[2,7],16:[2,7],19:[2,7],20:[2,7],22:[2,7],23:[2,7],24:[2,7]},{21:52,33:[1,25],35:24},{5:[2,8],14:[2,8],15:[2,8],16:[2,8],19:[2,8],20:[2,8],22:[2,8],23:[2,8],24:[2,8]},{14:[2,14],15:[2,14],16:[2,14],19:[2,14],20:[2,14],22:[2,14],23:[2,14],24:[2,14]},{18:[2,22],21:40,26:53,27:54,28:[1,41],29:[1,42],30:[1,43],31:39,32:44,33:[1,45],35:24},{18:[2,23]},{18:[2,26],28:[2,26],29:[2,26],30:[2,26],33:[2,26]},{18:[2,31],32:55,33:[1,56]},{18:[2,27],28:[2,27],29:[2,27],30:[2,27],33:[2,27]},{18:[2,28],28:[2,28],29:[2,28],30:[2,28],33:[2,28]},{18:[2,29],28:[2,29],29:[2,29],30:[2,29],33:[2,29]},{18:[2,30],28:[2,30],29:[2,30],30:[2,30],33:[2,30]},{18:[2,33],33:[2,33]},{18:[2,40],28:[2,40],29:[2,40],30:[2,40],33:[2,40],34:[1,57],36:[2,40]},{33:[1,58]},{14:[2,13],15:[2,13],16:[2,13],19:[2,13],20:[2,13],22:[2,13],23:[2,13],24:[2,13]},{5:[2,16],14:[2,16],15:[2,16],16:[2,16],19:[2,16],20:[2,16],22:[2,16],23:[2,16],24:[2,16]},{5:[2,17],14:[2,17],15:[2,17],16:[2,17],19:[2,17],20:[2,17],22:[2,17],23:[2,17],24:[2,17]},{5:[2,18],14:[2,18],15:[2,18],16:[2,18],19:[2,18],20:[2,18],22:[2,18],23:[2,18],24:[2,18]},{18:[1,59]},{18:[1,60]},{18:[2,21]},{18:[2,25],28:[2,25],29:[2,25],30:[2,25],33:[2,25]},{18:[2,32],33:[2,32]},{34:[1,57]},{21:61,28:[1,62],29:[1,63],30:[1,64],33:[1,25],35:24},{18:[2,39],28:[2,39],29:[2,39],30:[2,39],33:[2,39],36:[2,39]},{5:[2,19],14:[2,19],15:[2,19],16:[2,19],19:[2,19],20:[2,19],22:[2,19],23:[2,19],24:[2,19]},{5:[2,15],14:[2,15],15:[2,15],16:[2,15],19:[2,15],20:[2,15],22:[2,15],23:[2,15],24:[2,15]},{18:[2,34],33:[2,34]},{18:[2,35],33:[2,35]},{18:[2,36],33:[2,36]},{18:[2,37],33:[2,37]}],
-defaultActions: {16:[2,1],37:[2,23],53:[2,21]},
-parseError: function parseError(str, hash) {
-    throw new Error(str);
-},
-parse: function parse(input) {
-    var self = this,
-        stack = [0],
-        vstack = [null], // semantic value stack
-        lstack = [], // location stack
-        table = this.table,
-        yytext = '',
-        yylineno = 0,
-        yyleng = 0,
-        recovering = 0,
-        TERROR = 2,
-        EOF = 1;
-
-    //this.reductionCount = this.shiftCount = 0;
-
-    this.lexer.setInput(input);
-    this.lexer.yy = this.yy;
-    this.yy.lexer = this.lexer;
-    if (typeof this.lexer.yylloc == 'undefined')
-        this.lexer.yylloc = {};
-    var yyloc = this.lexer.yylloc;
-    lstack.push(yyloc);
-
-    if (typeof this.yy.parseError === 'function')
-        this.parseError = this.yy.parseError;
-
-    function popStack (n) {
-        stack.length = stack.length - 2*n;
-        vstack.length = vstack.length - n;
-        lstack.length = lstack.length - n;
-    }
-
-    function lex() {
-        var token;
-        token = self.lexer.lex() || 1; // $end = 1
-        // if token isn't its numeric value, convert
-        if (typeof token !== 'number') {
-            token = self.symbols_[token] || token;
-        }
-        return token;
-    };
-
-    var symbol, preErrorSymbol, state, action, a, r, yyval={},p,len,newState, expected;
-    while (true) {
-        // retreive state number from top of stack
-        state = stack[stack.length-1];
-
-        // use default actions if available
-        if (this.defaultActions[state]) {
-            action = this.defaultActions[state];
-        } else {
-            if (symbol == null)
-                symbol = lex();
-            // read action for current state and first input
-            action = table[state] && table[state][symbol];
-        }
-
-        // handle parse error
-        if (typeof action === 'undefined' || !action.length || !action[0]) {
-
-            if (!recovering) {
-                // Report error
-                expected = [];
-                for (p in table[state]) if (this.terminals_[p] && p > 2) {
-                    expected.push("'"+this.terminals_[p]+"'");
-                }
-                var errStr = '';
-                if (this.lexer.showPosition) {
-                    errStr = 'Parse error on line '+(yylineno+1)+":\n"+this.lexer.showPosition()+'\nExpecting '+expected.join(', ');
-                } else {
-                    errStr = 'Parse error on line '+(yylineno+1)+": Unexpected " +
-                                  (symbol == 1 /*EOF*/ ? "end of input" :
-                                              ("'"+(this.terminals_[symbol] || symbol)+"'"));
-                }
-                this.parseError(errStr,
-                    {text: this.lexer.match, token: this.terminals_[symbol] || symbol, line: this.lexer.yylineno, loc: yyloc, expected: expected});
-            }
-
-            // just recovered from another error
-            if (recovering == 3) {
-                if (symbol == EOF) {
-                    throw new Error(errStr || 'Parsing halted.');
-                }
-
-                // discard current lookahead and grab another
-                yyleng = this.lexer.yyleng;
-                yytext = this.lexer.yytext;
-                yylineno = this.lexer.yylineno;
-                yyloc = this.lexer.yylloc;
-                symbol = lex();
-            }
-
-            // try to recover from error
-            while (1) {
-                // check for error recovery rule in this state
-                if ((TERROR.toString()) in table[state]) {
-                    break;
-                }
-                if (state == 0) {
-                    throw new Error(errStr || 'Parsing halted.');
-                }
-                popStack(1);
-                state = stack[stack.length-1];
-            }
-
-            preErrorSymbol = symbol; // save the lookahead token
-            symbol = TERROR;         // insert generic error symbol as new lookahead
-            state = stack[stack.length-1];
-            action = table[state] && table[state][TERROR];
-            recovering = 3; // allow 3 real symbols to be shifted before reporting a new error
-        }
-
-        // this shouldn't happen, unless resolve defaults are off
-        if (action[0] instanceof Array && action.length > 1) {
-            throw new Error('Parse Error: multiple actions possible at state: '+state+', token: '+symbol);
-        }
-
-        switch (action[0]) {
-
-            case 1: // shift
-                //this.shiftCount++;
-
-                stack.push(symbol);
-                vstack.push(this.lexer.yytext);
-                lstack.push(this.lexer.yylloc);
-                stack.push(action[1]); // push state
-                symbol = null;
-                if (!preErrorSymbol) { // normal execution/no error
-                    yyleng = this.lexer.yyleng;
-                    yytext = this.lexer.yytext;
-                    yylineno = this.lexer.yylineno;
-                    yyloc = this.lexer.yylloc;
-                    if (recovering > 0)
-                        recovering--;
-                } else { // error just occurred, resume old lookahead f/ before error
-                    symbol = preErrorSymbol;
-                    preErrorSymbol = null;
-                }
-                break;
-
-            case 2: // reduce
-                //this.reductionCount++;
-
-                len = this.productions_[action[1]][1];
-
-                // perform semantic action
-                yyval.$ = vstack[vstack.length-len]; // default to $$ = $1
-                // default location, uses first token for firsts, last for lasts
-                yyval._$ = {
-                    first_line: lstack[lstack.length-(len||1)].first_line,
-                    last_line: lstack[lstack.length-1].last_line,
-                    first_column: lstack[lstack.length-(len||1)].first_column,
-                    last_column: lstack[lstack.length-1].last_column
-                };
-                r = this.performAction.call(yyval, yytext, yyleng, yylineno, this.yy, action[1], vstack, lstack);
-
-                if (typeof r !== 'undefined') {
-                    return r;
-                }
-
-                // pop off stack
-                if (len) {
-                    stack = stack.slice(0,-1*len*2);
-                    vstack = vstack.slice(0, -1*len);
-                    lstack = lstack.slice(0, -1*len);
-                }
-
-                stack.push(this.productions_[action[1]][0]);    // push nonterminal (reduce)
-                vstack.push(yyval.$);
-                lstack.push(yyval._$);
-                // goto new state = table[STATE][NONTERMINAL]
-                newState = table[stack[stack.length-2]][stack[stack.length-1]];
-                stack.push(newState);
-                break;
-
-            case 3: // accept
-                return true;
-        }
-
-    }
-
-    return true;
-}};/* Jison generated lexer */
-var lexer = (function(){var lexer = ({EOF:1,
-parseError:function parseError(str, hash) {
-        if (this.yy.parseError) {
-            this.yy.parseError(str, hash);
-        } else {
-            throw new Error(str);
-        }
-    },
-setInput:function (input) {
-        this._input = input;
-        this._more = this._less = this.done = false;
-        this.yylineno = this.yyleng = 0;
-        this.yytext = this.matched = this.match = '';
-        this.conditionStack = ['INITIAL'];
-        this.yylloc = {first_line:1,first_column:0,last_line:1,last_column:0};
-        return this;
-    },
-input:function () {
-        var ch = this._input[0];
-        this.yytext+=ch;
-        this.yyleng++;
-        this.match+=ch;
-        this.matched+=ch;
-        var lines = ch.match(/\n/);
-        if (lines) this.yylineno++;
-        this._input = this._input.slice(1);
-        return ch;
-    },
-unput:function (ch) {
-        this._input = ch + this._input;
-        return this;
-    },
-more:function () {
-        this._more = true;
-        return this;
-    },
-pastInput:function () {
-        var past = this.matched.substr(0, this.matched.length - this.match.length);
-        return (past.length > 20 ? '...':'') + past.substr(-20).replace(/\n/g, "");
-    },
-upcomingInput:function () {
-        var next = this.match;
-        if (next.length < 20) {
-            next += this._input.substr(0, 20-next.length);
-        }
-        return (next.substr(0,20)+(next.length > 20 ? '...':'')).replace(/\n/g, "");
-    },
-showPosition:function () {
-        var pre = this.pastInput();
-        var c = new Array(pre.length + 1).join("-");
-        return pre + this.upcomingInput() + "\n" + c+"^";
-    },
-next:function () {
-        if (this.done) {
-            return this.EOF;
-        }
-        if (!this._input) this.done = true;
-
-        var token,
-            match,
-            col,
-            lines;
-        if (!this._more) {
-            this.yytext = '';
-            this.match = '';
-        }
-        var rules = this._currentRules();
-        for (var i=0;i < rules.length; i++) {
-            match = this._input.match(this.rules[rules[i]]);
-            if (match) {
-                lines = match[0].match(/\n.*/g);
-                if (lines) this.yylineno += lines.length;
-                this.yylloc = {first_line: this.yylloc.last_line,
-                               last_line: this.yylineno+1,
-                               first_column: this.yylloc.last_column,
-                               last_column: lines ? lines[lines.length-1].length-1 : this.yylloc.last_column + match[0].length}
-                this.yytext += match[0];
-                this.match += match[0];
-                this.matches = match;
-                this.yyleng = this.yytext.length;
-                this._more = false;
-                this._input = this._input.slice(match[0].length);
-                this.matched += match[0];
-                token = this.performAction.call(this, this.yy, this, rules[i],this.conditionStack[this.conditionStack.length-1]);
-                if (token) return token;
-                else return;
-            }
-        }
-        if (this._input === "") {
-            return this.EOF;
-        } else {
-            this.parseError('Lexical error on line '+(this.yylineno+1)+'. Unrecognized text.\n'+this.showPosition(), 
-                    {text: "", token: null, line: this.yylineno});
-        }
-    },
-lex:function lex() {
-        var r = this.next();
-        if (typeof r !== 'undefined') {
-            return r;
-        } else {
-            return this.lex();
-        }
-    },
-begin:function begin(condition) {
-        this.conditionStack.push(condition);
-    },
-popState:function popState() {
-        return this.conditionStack.pop();
-    },
-_currentRules:function _currentRules() {
-        return this.conditions[this.conditionStack[this.conditionStack.length-1]].rules;
-    }});
-lexer.performAction = function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
-
-var YYSTATE=YY_START
-switch($avoiding_name_collisions) {
-case 0: this.begin("mu"); if (yy_.yytext) return 14; 
-break;
-case 1: return 14; 
-break;
-case 2: return 24; 
-break;
-case 3: return 16; 
-break;
-case 4: return 20; 
-break;
-case 5: return 19; 
-break;
-case 6: return 19; 
-break;
-case 7: return 23; 
-break;
-case 8: return 23; 
-break;
-case 9: yy_.yytext = yy_.yytext.substr(3,yy_.yyleng-5); this.begin("INITIAL"); return 15; 
-break;
-case 10: return 22; 
-break;
-case 11: return 34; 
-break;
-case 12: return 33; 
-break;
-case 13: return 33; 
-break;
-case 14: return 36; 
-break;
-case 15: /*ignore whitespace*/ 
-break;
-case 16: this.begin("INITIAL"); return 18; 
-break;
-case 17: this.begin("INITIAL"); return 18; 
-break;
-case 18: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2).replace(/\\"/g,'"'); return 28; 
-break;
-case 19: return 30; 
-break;
-case 20: return 30; 
-break;
-case 21: return 29; 
-break;
-case 22: return 33; 
-break;
-case 23: return 'INVALID'; 
-break;
-case 24: return 5; 
-break;
-}
-};
-lexer.rules = [/^[^\x00]*?(?=(\{\{))/,/^[^\x00]+/,/^\{\{>/,/^\{\{#/,/^\{\{\//,/^\{\{\^/,/^\{\{\s*else\b/,/^\{\{\{/,/^\{\{&/,/^\{\{![\s\S]*?\}\}/,/^\{\{/,/^=/,/^\.(?=[} ])/,/^\.\./,/^[/.]/,/^\s+/,/^\}\}\}/,/^\}\}/,/^"(\\["]|[^"])*"/,/^true(?=[}\s])/,/^false(?=[}\s])/,/^[0-9]+(?=[}\s])/,/^[a-zA-Z0-9_$-]+(?=[=}\s/.])/,/^./,/^$/];
-lexer.conditions = {"mu":{"rules":[2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24],"inclusive":false},"INITIAL":{"rules":[0,1,24],"inclusive":true}};return lexer;})()
-parser.lexer = lexer;
-return parser;
-})();
-if (typeof require !== 'undefined' && typeof exports !== 'undefined') {
-exports.parser = handlebars;
-exports.parse = function () { return handlebars.parse.apply(handlebars, arguments); }
-exports.main = function commonjsMain(args) {
-    if (!args[1])
-        throw new Error('Usage: '+args[0]+' FILE');
-    if (typeof process !== 'undefined') {
-        var source = require('fs').readFileSync(require('path').join(process.cwd(), args[1]), "utf8");
-    } else {
-        var cwd = require("file").path(require("file").cwd());
-        var source = cwd.join(args[1]).read({charset: "utf-8"});
-    }
-    return exports.parser.parse(source);
-}
-if (typeof module !== 'undefined' && require.main === module) {
-  exports.main(typeof process !== 'undefined' ? process.argv.slice(1) : require("system").args);
-}
-};
-;
-// lib/handlebars/base.js
+// BEGIN(BROWSER)
 var Handlebars = {};
 
-Handlebars.VERSION = "1.0.beta.2";
-
-Handlebars.Parser = handlebars;
-
-Handlebars.parse = function(string) {
-  Handlebars.Parser.yy = Handlebars.AST;
-  return Handlebars.Parser.parse(string);
-};
-
-Handlebars.print = function(ast) {
-  return new Handlebars.PrintVisitor().accept(ast);
-};
+Handlebars.VERSION = "1.0.beta.5";
 
 Handlebars.helpers  = {};
 Handlebars.partials = {};
@@ -2419,15 +1933,15 @@ Handlebars.registerHelper('helperMissing', function(arg) {
   }
 });
 
-Handlebars.registerHelper('blockHelperMissing', function(context, fn, inverse) {
-  inverse = inverse || function() {};
+var toString = Object.prototype.toString, functionType = "[object Function]";
+
+Handlebars.registerHelper('blockHelperMissing', function(context, options) {
+  var inverse = options.inverse || function() {}, fn = options.fn;
 
   var ret = "";
-  var type = Object.prototype.toString.call(context);
+  var type = toString.call(context);
 
-  if(type === "[object Function]") {
-    context = context();
-  }
+  if(type === functionType) { context = context.call(this); }
 
   if(context === true) {
     return fn(this);
@@ -2445,11 +1959,10 @@ Handlebars.registerHelper('blockHelperMissing', function(context, fn, inverse) {
   } else {
     return fn(context);
   }
-}, function(context, fn) {
-  return fn(context);
 });
 
-Handlebars.registerHelper('each', function(context, fn, inverse) {
+Handlebars.registerHelper('each', function(context, options) {
+  var fn = options.fn, inverse = options.inverse;
   var ret = "";
 
   if(context && context.length > 0) {
@@ -2462,143 +1975,44 @@ Handlebars.registerHelper('each', function(context, fn, inverse) {
   return ret;
 });
 
-Handlebars.registerHelper('if', function(context, fn, inverse) {
-  if(!context || context == []) {
-    return inverse(this);
+Handlebars.registerHelper('if', function(context, options) {
+  var type = toString.call(context);
+  if(type === functionType) { context = context.call(this); }
+
+  if(!context || Handlebars.Utils.isEmpty(context)) {
+    return options.inverse(this);
   } else {
-    return fn(this);
+    return options.fn(this);
   }
 });
 
-Handlebars.registerHelper('unless', function(context, fn, inverse) {
-  return Handlebars.helpers['if'].call(this, context, inverse, fn);
+Handlebars.registerHelper('unless', function(context, options) {
+  var fn = options.fn, inverse = options.inverse;
+  options.fn = inverse;
+  options.inverse = fn;
+
+  return Handlebars.helpers['if'].call(this, context, options);
 });
 
-Handlebars.registerHelper('with', function(context, fn) {
-  return fn(context);
+Handlebars.registerHelper('with', function(context, options) {
+  return options.fn(context);
 });
 
-Handlebars.logger = {
-  DEBUG: 0, INFO: 1, WARN: 2, ERROR: 3, level: 3,
+Handlebars.registerHelper('log', function(context) {
+  Handlebars.log(context);
+});
 
-  // override in the host environment
-  log: function(level, str) {}
-};
-
-Handlebars.log = function(level, str) { Handlebars.logger.log(level, str); };
-;
-// lib/handlebars/ast.js
-(function() {
-
-  Handlebars.AST = {};
-
-  Handlebars.AST.ProgramNode = function(statements, inverse) {
-    this.type = "program";
-    this.statements = statements;
-    if(inverse) { this.inverse = new Handlebars.AST.ProgramNode(inverse); }
-  };
-
-  Handlebars.AST.MustacheNode = function(params, hash, unescaped) {
-    this.type = "mustache";
-    this.id = params[0];
-    this.params = params.slice(1);
-    this.hash = hash;
-    this.escaped = !unescaped;
-  };
-
-  Handlebars.AST.PartialNode = function(id, context) {
-    this.type    = "partial";
-
-    // TODO: disallow complex IDs
-
-    this.id      = id;
-    this.context = context;
-  };
-
-  var verifyMatch = function(open, close) {
-    if(open.original !== close.original) {
-      throw new Handlebars.Exception(open.original + " doesn't match " + close.original);
-    }
-  };
-
-  Handlebars.AST.BlockNode = function(mustache, program, close) {
-    verifyMatch(mustache.id, close);
-    this.type = "block";
-    this.mustache = mustache;
-    this.program  = program;
-  };
-
-  Handlebars.AST.InverseNode = function(mustache, program, close) {
-    verifyMatch(mustache.id, close);
-    this.type = "inverse";
-    this.mustache = mustache;
-    this.program  = program;
-  };
-
-  Handlebars.AST.ContentNode = function(string) {
-    this.type = "content";
-    this.string = string;
-  };
-
-  Handlebars.AST.HashNode = function(pairs) {
-    this.type = "hash";
-    this.pairs = pairs;
-  };
-
-  Handlebars.AST.IdNode = function(parts) {
-    this.type = "ID";
-    this.original = parts.join(".");
-
-    var dig = [], depth = 0;
-
-    for(var i=0,l=parts.length; i<l; i++) {
-      var part = parts[i];
-
-      if(part === "..") { depth++; }
-      else if(part === "." || part === "this") { continue; }
-      else { dig.push(part); }
-    }
-
-    this.parts    = dig;
-    this.string   = dig.join('.');
-    this.depth    = depth;
-    this.isSimple = (dig.length === 1) && (depth === 0);
-  };
-
-  Handlebars.AST.StringNode = function(string) {
-    this.type = "STRING";
-    this.string = string;
-  };
-
-  Handlebars.AST.IntegerNode = function(integer) {
-    this.type = "INTEGER";
-    this.integer = integer;
-  };
-
-  Handlebars.AST.BooleanNode = function(boolean) {
-    this.type = "BOOLEAN";
-    this.boolean = boolean;
-  };
-
-  Handlebars.AST.CommentNode = function(comment) {
-    this.type = "comment";
-    this.comment = comment;
-  };
-
-})();;
-// lib/handlebars/visitor.js
-
-Handlebars.Visitor = function() {};
-
-Handlebars.Visitor.prototype = {
-  accept: function(object) {
-    return this[object.type](object);
-  }
-};;
-// lib/handlebars/utils.js
+// BEGIN(BROWSER)
 Handlebars.Exception = function(message) {
-  this.message = message;
+  var tmp = Error.prototype.constructor.apply(this, arguments);
+
+  for (var p in tmp) {
+    if (tmp.hasOwnProperty(p)) { this[p] = tmp[p]; }
+  }
+
+  this.message = tmp.message;
 };
+Handlebars.Exception.prototype = new Error;
 
 // Build out our basic SafeString type
 Handlebars.SafeString = function(string) {
@@ -2621,7 +2035,7 @@ Handlebars.SafeString.prototype.toString = function() {
   var possible = /[&<>"'`]/;
 
   var escapeChar = function(chr) {
-    return escape[chr] || "&amp;"
+    return escape[chr] || "&amp;";
   };
 
   Handlebars.Utils = {
@@ -2651,759 +2065,72 @@ Handlebars.SafeString.prototype.toString = function() {
       }
     }
   };
-})();;
-// lib/handlebars/compiler.js
-Handlebars.Compiler = function() {};
-Handlebars.JavaScriptCompiler = function() {};
-
-(function(Compiler, JavaScriptCompiler) {
-  Compiler.OPCODE_MAP = {
-    appendContent: 1,
-    getContext: 2,
-    lookupWithHelpers: 3,
-    lookup: 4,
-    append: 5,
-    invokeMustache: 6,
-    appendEscaped: 7,
-    pushString: 8,
-    truthyOrFallback: 9,
-    functionOrFallback: 10,
-    invokeProgram: 11,
-    invokePartial: 12,
-    push: 13,
-    invokeInverse: 14,
-    assignToHash: 15,
-    pushStringParam: 16
-  };
-
-  Compiler.MULTI_PARAM_OPCODES = {
-    appendContent: 1,
-    getContext: 1,
-    lookupWithHelpers: 1,
-    lookup: 1,
-    invokeMustache: 2,
-    pushString: 1,
-    truthyOrFallback: 1,
-    functionOrFallback: 1,
-    invokeProgram: 2,
-    invokePartial: 1,
-    push: 1,
-    invokeInverse: 1,
-    assignToHash: 1,
-    pushStringParam: 1
-  };
-
-  Compiler.DISASSEMBLE_MAP = {};
-
-  for(var prop in Compiler.OPCODE_MAP) {
-    var value = Compiler.OPCODE_MAP[prop];
-    Compiler.DISASSEMBLE_MAP[value] = prop;
-  }
-
-  Compiler.multiParamSize = function(code) {
-    return Compiler.MULTI_PARAM_OPCODES[Compiler.DISASSEMBLE_MAP[code]];
-  };
-
-  Compiler.prototype = {
-    compiler: Compiler,
-
-    disassemble: function() {
-      var opcodes = this.opcodes, opcode, nextCode;
-      var out = [], str, name, value;
-
-      for(var i=0, l=opcodes.length; i<l; i++) {
-        opcode = opcodes[i];
-
-        if(opcode === 'DECLARE') {
-          name = opcodes[++i];
-          value = opcodes[++i];
-          out.push("DECLARE " + name + " = " + value);
-        } else {
-          str = Compiler.DISASSEMBLE_MAP[opcode];
-
-          var extraParams = Compiler.multiParamSize(opcode);
-          var codes = [];
-
-          for(var j=0; j<extraParams; j++) {
-            nextCode = opcodes[++i];
-
-            if(typeof nextCode === "string") {
-              nextCode = "\"" + nextCode.replace("\n", "\\n") + "\"";
-            }
-
-            codes.push(nextCode);
-          }
-
-          str = str + " " + codes.join(" ");
-
-          out.push(str);
-        }
-      }
-
-      return out.join("\n");
-    },
-
-    guid: 0,
-
-    compile: function(program, options) {
-      this.children = [];
-      this.depths = {list: []};
-      this.options = options || {};
-      return this.program(program);
-    },
-
-    accept: function(node) {
-      return this[node.type](node);
-    },
-
-    program: function(program) {
-      var statements = program.statements, statement;
-      this.opcodes = [];
-
-      for(var i=0, l=statements.length; i<l; i++) {
-        statement = statements[i];
-        this[statement.type](statement);
-      }
-
-      this.depths.list = this.depths.list.sort(function(a, b) {
-        return a - b;
-      });
-
-      return this;
-    },
-
-    compileProgram: function(program) {
-      var result = new this.compiler().compile(program, this.options);
-      var guid = this.guid++;
-
-      this.usePartial = this.usePartial || result.usePartial;
-
-      this.children[guid] = result;
-
-      for(var i=0, l=result.depths.list.length; i<l; i++) {
-        depth = result.depths.list[i];
-
-        if(depth < 2) { continue; }
-        else { this.addDepth(depth - 1); }
-      }
-
-      return guid;
-    },
-
-    block: function(block) {
-      var mustache = block.mustache;
-      var depth, child, inverse, inverseGuid;
-
-      var params = this.setupStackForMustache(mustache);
-
-      var programGuid = this.compileProgram(block.program);
-
-      if(block.program.inverse) {
-        inverseGuid = this.compileProgram(block.program.inverse);
-        this.declare('inverse', inverseGuid);
-      }
-
-      this.opcode('invokeProgram', programGuid, params.length);
-      this.declare('inverse', null);
-      this.opcode('append');
-    },
-
-    inverse: function(block) {
-      this.ID(block.mustache.id);
-      var programGuid = this.compileProgram(block.program);
-
-      this.opcode('invokeInverse', programGuid);
-      this.opcode('append');
-    },
-
-    hash: function(hash) {
-      var pairs = hash.pairs, pair, val;
-
-      this.opcode('push', '{}');
-
-      for(var i=0, l=pairs.length; i<l; i++) {
-        pair = pairs[i];
-        val  = pair[1];
-
-        this.accept(val);
-        this.opcode('assignToHash', pair[0]);
-      }
-    },
-
-    partial: function(partial) {
-      var id = partial.id;
-      this.usePartial = true;
-
-      if(partial.context) {
-        this.ID(partial.context);
-      } else {
-        this.opcode('push', 'context');
-      }
-
-      this.opcode('invokePartial', id.original);
-      this.opcode('append');
-    },
-
-    content: function(content) {
-      this.opcode('appendContent', content.string);
-    },
-
-    mustache: function(mustache) {
-      var params = this.setupStackForMustache(mustache);
-
-      this.opcode('invokeMustache', params.length, mustache.id.original);
-
-      if(mustache.escaped) {
-        this.opcode('appendEscaped');
-      } else {
-        this.opcode('append');
-      }
-    },
-
-    ID: function(id) {
-      this.addDepth(id.depth);
-
-      this.opcode('getContext', id.depth);
-
-      this.opcode('lookupWithHelpers', id.parts[0] || null);
-
-      for(var i=1, l=id.parts.length; i<l; i++) {
-        this.opcode('lookup', id.parts[i]);
-      }
-    },
-
-    STRING: function(string) {
-      this.opcode('pushString', string.string);
-    },
-
-    INTEGER: function(integer) {
-      this.opcode('push', integer.integer);
-    },
-
-    BOOLEAN: function(boolean) {
-      this.opcode('push', boolean.boolean);
-    },
-
-    comment: function() {},
-
-    // HELPERS
-    pushParams: function(params) {
-      var i = params.length, param;
-
-      while(i--) {
-        param = params[i];
-
-        if(this.options.stringParams) {
-          if(param.depth) {
-            this.addDepth(param.depth);
-          }
-
-          this.opcode('getContext', param.depth || 0);
-          this.opcode('pushStringParam', param.string);
-        } else {
-          this[param.type](param);
-        }
-      }
-    },
-
-    opcode: function(name, val1, val2) {
-      this.opcodes.push(Compiler.OPCODE_MAP[name]);
-      if(val1 !== undefined) { this.opcodes.push(val1); }
-      if(val2 !== undefined) { this.opcodes.push(val2); }
-    },
-
-    declare: function(name, value) {
-      this.opcodes.push('DECLARE');
-      this.opcodes.push(name);
-      this.opcodes.push(value);
-    },
-
-    addDepth: function(depth) {
-      if(depth === 0) { return; }
-
-      if(!this.depths[depth]) {
-        this.depths[depth] = true;
-        this.depths.list.push(depth);
-      }
-    },
-
-    setupStackForMustache: function(mustache) {
-      var params = mustache.params;
-
-      this.pushParams(params);
-
-      if(mustache.hash) {
-        this.hash(mustache.hash);
-      } else {
-        this.opcode('push', '{}');
-      }
-
-      this.ID(mustache.id);
-
-      return params;
-    }
-  };
-
-  JavaScriptCompiler.prototype = {
-    // PUBLIC API: You can override these methods in a subclass to provide
-    // alternative compiled forms for name lookup and buffering semantics
-    nameLookup: function(parent, name, type) {
-      if(JavaScriptCompiler.RESERVED_WORDS[name] || name.indexOf('-') !== -1 || !isNaN(name)) {
-        return parent + "['" + name + "']";
-      } else if (/^[0-9]+$/.test(name)) {
-        return parent + "[" + name + "]";
-      } else {
-        return parent + "." + name;
-      }
-    },
-
-    appendToBuffer: function(string) {
-      return "buffer = buffer + " + string + ";";
-    },
-
-    initializeBuffer: function() {
-      return this.quotedString("");
-    },
-    // END PUBLIC API
-
-    compile: function(environment, options) {
-      this.environment = environment;
-      this.options = options || {};
-
-      this.preamble();
-
-      this.stackSlot = 0;
-      this.stackVars = [];
-      this.registers = {list: []};
-
-      this.compileChildren(environment, options);
-
-      Handlebars.log(Handlebars.logger.DEBUG, environment.disassemble() + "\n\n");
-
-      var opcodes = environment.opcodes, opcode, name, declareName, declareVal;
-
-      this.i = 0;
-
-      for(l=opcodes.length; this.i<l; this.i++) {
-        opcode = this.nextOpcode(0);
-
-        if(opcode[0] === 'DECLARE') {
-          this.i = this.i + 2;
-          this[opcode[1]] = opcode[2];
-        } else {
-          this.i = this.i + opcode[1].length;
-          this[opcode[0]].apply(this, opcode[1]);
-        }
-      }
-
-      return this.createFunction();
-    },
-
-    nextOpcode: function(n) {
-      var opcodes = this.environment.opcodes, opcode = opcodes[this.i + n], name, val;
-      var extraParams, codes;
-
-      if(opcode === 'DECLARE') {
-        name = opcodes[this.i + 1];
-        val  = opcodes[this.i + 2];
-        return ['DECLARE', name, val];
-      } else {
-        name = Compiler.DISASSEMBLE_MAP[opcode];
-
-        extraParams = Compiler.multiParamSize(opcode);
-        codes = [];
-
-        for(var j=0; j<extraParams; j++) {
-          codes.push(opcodes[this.i + j + 1 + n]);
-        }
-
-        return [name, codes];
-      }
-    },
-
-    eat: function(opcode) {
-      this.i = this.i + opcode.length;
-    },
-
-    preamble: function() {
-      var out = [];
-      out.push("var buffer = " + this.initializeBuffer() + ", currentContext = context");
-
-      var copies = "helpers = helpers || Handlebars.helpers;";
-      if(this.environment.usePartial) { copies = copies + " partials = partials || Handlebars.partials;"; }
-      out.push(copies);
-
-      // track the last context pushed into place to allow skipping the
-      // getContext opcode when it would be a noop
-      this.lastContext = 0;
-      this.source = out;
-    },
-
-    createFunction: function() {
-      var container = {
-        escapeExpression: Handlebars.Utils.escapeExpression,
-        invokePartial: Handlebars.VM.invokePartial,
-        programs: [],
-        program: function(i, helpers, partials, data) {
-          var programWrapper = this.programs[i];
-          if(data) {
-            return Handlebars.VM.program(this.children[i], helpers, partials, data);
-          } else if(programWrapper) {
-            return programWrapper;
-          } else {
-            programWrapper = this.programs[i] = Handlebars.VM.program(this.children[i], helpers, partials);
-            return programWrapper;
-          }
-        },
-        programWithDepth: Handlebars.VM.programWithDepth,
-        noop: Handlebars.VM.noop
-      };
-      var locals = this.stackVars.concat(this.registers.list);
-
-      if(locals.length > 0) {
-        this.source[0] = this.source[0] + ", " + locals.join(", ");
-      }
-
-      this.source[0] = this.source[0] + ";";
-
-      this.source.push("return buffer;");
-
-      var params = ["Handlebars", "context", "helpers", "partials"];
-
-      if(this.options.data) { params.push("data"); }
-
-      for(var i=0, l=this.environment.depths.list.length; i<l; i++) {
-        params.push("depth" + this.environment.depths.list[i]);
-      }
-
-      if(params.length === 4 && !this.environment.usePartial) { params.pop(); }
-
-      params.push(this.source.join("\n"));
-
-      var fn = Function.apply(this, params);
-      fn.displayName = "Handlebars.js";
-
-      Handlebars.log(Handlebars.logger.DEBUG, fn.toString() + "\n\n");
-
-      container.render = fn;
-
-      container.children = this.environment.children;
-
-      return function(context, options, $depth) {
-        try {
-          options = options || {};
-          var args = [Handlebars, context, options.helpers, options.partials, options.data];
-          var depth = Array.prototype.slice.call(arguments, 2);
-          args = args.concat(depth);
-
-          return container.render.apply(container, args);
-        } catch(e) {
-          throw e;
-        }
-      };
-    },
-
-    appendContent: function(content) {
-      this.source.push(this.appendToBuffer(this.quotedString(content)));
-    },
-
-    append: function() {
-      var local = this.popStack();
-      this.source.push("if(" + local + " || " + local + " === 0) { " + this.appendToBuffer(local) + " }");
-    },
-
-    appendEscaped: function() {
-      var opcode = this.nextOpcode(1), extra = "";
-
-      if(opcode[0] === 'appendContent') {
-        extra = " + " + this.quotedString(opcode[1][0]);
-        this.eat(opcode);
-      }
-
-      this.source.push(this.appendToBuffer("this.escapeExpression(" + this.popStack() + ")" + extra));
-    },
-
-    getContext: function(depth) {
-      if(this.lastContext !== depth) {
-        this.lastContext = depth;
-
-        if(depth === 0) {
-          this.source.push("currentContext = context;");
-        } else {
-          this.source.push("currentContext = depth" + depth + ";");
-        }
-      }
-    },
-
-    lookupWithHelpers: function(name) {
-      if(name) {
-        var topStack = this.nextStack();
-
-        var toPush =  "if('" + name + "' in helpers) { " + topStack +
-                      " = " + this.nameLookup('helpers', name, 'helper') +
-                      "; } else { " + topStack + " = " +
-                      this.nameLookup('currentContext', name, 'context') +
-                      "; }";
-
-        this.source.push(toPush);
-      } else {
-        this.pushStack("currentContext");
-      }
-    },
-
-    lookup: function(name) {
-      var topStack = this.topStack();
-      this.source.push(topStack + " = " + this.nameLookup(topStack, name, 'context') + ";");
-    },
-
-    pushStringParam: function(string) {
-      this.pushStack("currentContext");
-      this.pushString(string);
-    },
-
-    pushString: function(string) {
-      this.pushStack(this.quotedString(string));
-    },
-
-    push: function(name) {
-      this.pushStack(name);
-    },
-
-    invokeMustache: function(paramSize, original) {
-      this.populateParams(paramSize, this.quotedString(original), "{}", null, function(nextStack, helperMissingString, id) {
-        this.source.push("else if(" + id + "=== undefined) { " + nextStack + " = helpers.helperMissing.call(" + helperMissingString + "); }");
-        this.source.push("else { " + nextStack + " = " + id + "; }");
-      });
-    },
-
-    invokeProgram: function(guid, paramSize) {
-      var inverse = this.programExpression(this.inverse);
-      var mainProgram = this.programExpression(guid);
-
-      this.populateParams(paramSize, null, mainProgram, inverse, function(nextStack, helperMissingString, id) {
-        this.source.push("else { " + nextStack + " = helpers.blockHelperMissing.call(" + helperMissingString + "); }");
-      });
-    },
-
-    populateParams: function(paramSize, helperId, program, inverse, fn) {
-      var id = this.popStack(), nextStack;
-      var params = [], param, stringParam;
-
-      var hash = this.popStack();
-
-      this.register('tmp1', program);
-      this.source.push('tmp1.hash = ' + hash + ';');
-
-      if(this.options.stringParams) {
-        this.source.push('tmp1.contexts = [];');
-      }
-
-      for(var i=0; i<paramSize; i++) {
-        param = this.popStack();
-        params.push(param);
-
-        if(this.options.stringParams) {
-          this.source.push('tmp1.contexts.push(' + this.popStack() + ');');
-        }
-      }
-
-      if(inverse) {
-        this.source.push('tmp1.fn = tmp1;');
-        this.source.push('tmp1.inverse = ' + inverse + ';');
-      }
-
-      if(this.options.data) {
-        this.source.push('tmp1.data = data;');
-      }
-
-      params.push('tmp1');
-
-      // TODO: This is legacy behavior. Deprecate and remove.
-      if(inverse) {
-        params.push(inverse);
-      }
-
-      this.populateCall(params, id, helperId || id, fn);
-    },
-
-    populateCall: function(params, id, helperId, fn) {
-      var paramString = ["context"].concat(params).join(", ");
-      var helperMissingString = ["context"].concat(helperId).concat(params).join(", ");
-
-      nextStack = this.nextStack();
-
-      this.source.push("if(typeof " + id + " === 'function') { " + nextStack + " = " + id + ".call(" + paramString + "); }");
-      fn.call(this, nextStack, helperMissingString, id);
-    },
-
-    invokeInverse: function(guid) {
-      var program = this.programExpression(guid);
-
-      var blockMissingParams = ["context", this.topStack(), "this.noop", program];
-      this.pushStack("helpers.blockHelperMissing.call(" + blockMissingParams.join(", ") + ")");
-    },
-
-    invokePartial: function(context) {
-      this.pushStack("this.invokePartial(" + this.nameLookup('partials', context, 'partial') + ", '" + context + "', " + this.popStack() + ", helpers, partials);");
-    },
-
-    assignToHash: function(key) {
-      var value = this.popStack();
-      var hash = this.topStack();
-
-      this.source.push(hash + "['" + key + "'] = " + value + ";");
-    },
-
-    // HELPERS
-
-    compiler: JavaScriptCompiler,
-
-    compileChildren: function(environment, options) {
-      var children = environment.children, child, compiler;
-      var compiled = [];
-
-      for(var i=0, l=children.length; i<l; i++) {
-        child = children[i];
-        compiler = new this.compiler();
-
-        compiled[i] = compiler.compile(child, options);
-      }
-
-      environment.rawChildren = children;
-      environment.children = compiled;
-    },
-
-    programExpression: function(guid) {
-      if(guid == null) { return "this.noop"; }
-
-      var programParams = [guid, "helpers", "partials"];
-
-      var depths = this.environment.rawChildren[guid].depths.list;
-
-      if(this.options.data) { programParams.push("data"); }
-
-      for(var i=0, l = depths.length; i<l; i++) {
-        depth = depths[i];
-
-        if(depth === 1) { programParams.push("context"); }
-        else { programParams.push("depth" + (depth - 1)); }
-      }
-
-      if(!this.environment.usePartial) {
-        if(programParams[3]) {
-          programParams[2] = "null";
-        } else {
-          programParams.pop();
-        }
-      }
-
-      if(depths.length === 0) {
-        return "this.program(" + programParams.join(", ") + ")";
-      } else {
-        programParams[0] = "this.children[" + guid + "]";
-        return "this.programWithDepth(" + programParams.join(", ") + ")";
-      }
-    },
-
-    register: function(name, val) {
-      this.useRegister(name);
-      this.source.push(name + " = " + val + ";");
-    },
-
-    useRegister: function(name) {
-      if(!this.registers[name]) {
-        this.registers[name] = true;
-        this.registers.list.push(name);
-      }
-    },
-
-    pushStack: function(item) {
-      this.source.push(this.nextStack() + " = " + item + ";");
-      return "stack" + this.stackSlot;
-    },
-
-    nextStack: function() {
-      this.stackSlot++;
-      if(this.stackSlot > this.stackVars.length) { this.stackVars.push("stack" + this.stackSlot); }
-      return "stack" + this.stackSlot;
-    },
-
-    popStack: function() {
-      return "stack" + this.stackSlot--;
-    },
-
-    topStack: function() {
-      return "stack" + this.stackSlot;
-    },
-
-    quotedString: function(str) {
-      return '"' + str
-        .replace(/\\/g, '\\\\')
-        .replace(/"/g, '\\"')
-        .replace(/\n/g, '\\n')
-        .replace(/\r/g, '\\r') + '"';
-    }
-  };
-
-  var reservedWords = ("break case catch continue default delete do else finally " +
-                       "for function if in instanceof new return switch this throw " + 
-                       "try typeof var void while with null true false").split(" ");
-
-  compilerWords = JavaScriptCompiler.RESERVED_WORDS = {};
-
-  for(var i=0, l=reservedWords.length; i<l; i++) {
-    compilerWords[reservedWords[i]] = true;
-  }
-
-})(Handlebars.Compiler, Handlebars.JavaScriptCompiler);
+})();
 
 Handlebars.VM = {
-  programWithDepth: function(fn, helpers, partials, data, $depth) {
-    var args = Array.prototype.slice.call(arguments, 4);
+  template: function(templateSpec) {
+    // Just add water
+    var container = {
+      escapeExpression: Handlebars.Utils.escapeExpression,
+      invokePartial: Handlebars.VM.invokePartial,
+      programs: [],
+      program: function(i, fn, data) {
+        var programWrapper = this.programs[i];
+        if(data) {
+          return Handlebars.VM.program(fn, data);
+        } else if(programWrapper) {
+          return programWrapper;
+        } else {
+          programWrapper = this.programs[i] = Handlebars.VM.program(fn);
+          return programWrapper;
+        }
+      },
+      programWithDepth: Handlebars.VM.programWithDepth,
+      noop: Handlebars.VM.noop
+    };
 
     return function(context, options) {
       options = options || {};
-
-      options = {
-        helpers: options.helpers || helpers,
-        partials: options.partials || partials,
-        data: options.data || data
-      };
-
-      return fn.apply(this, [context, options].concat(args));
+      return templateSpec.call(container, Handlebars, context, options.helpers, options.partials, options.data);
     };
   },
-  program: function(fn, helpers, partials, data) {
+
+  programWithDepth: function(fn, data, $depth) {
+    var args = Array.prototype.slice.call(arguments, 2);
+
     return function(context, options) {
       options = options || {};
 
-      return fn(context, {
-        helpers: options.helpers || helpers,
-        partials: options.partials || partials,
-        data: options.data || data
-      });
+      return fn.apply(this, [context, options.data || data].concat(args));
+    };
+  },
+  program: function(fn, data) {
+    return function(context, options) {
+      options = options || {};
+
+      return fn(context, options.data || data);
     };
   },
   noop: function() { return ""; },
-  compile: function(string, options) {
-    var ast = Handlebars.parse(string);
-    var environment = new Handlebars.Compiler().compile(ast, options);
-    return new Handlebars.JavaScriptCompiler().compile(environment, options);
-  },
-  invokePartial: function(partial, name, context, helpers, partials) {
+  invokePartial: function(partial, name, context, helpers, partials, data) {
+    options = { helpers: helpers, partials: partials, data: data };
+
     if(partial === undefined) {
       throw new Handlebars.Exception("The partial " + name + " could not be found");
     } else if(partial instanceof Function) {
-      return partial(context, {helpers: helpers, partials: partials});
+      return partial(context, options);
+    } else if (!Handlebars.compile) {
+      throw new Handlebars.Exception("The partial " + name + " could not be compiled when running in runtime-only mode");
     } else {
-      partials[name] = Handlebars.VM.compile(partial);
-      return partials[name](context, {helpers: helpers, partials: partials});
+      partials[name] = Handlebars.compile(partial);
+      return partials[name](context, options);
     }
   }
 };
 
-Handlebars.compile = Handlebars.VM.compile;;
+Handlebars.template = Handlebars.VM.template;
 
+// END(BROWSER);
 // File: ./lib/spin.min.js
 //fgnass.github.com/spin.js#v1.2.1
 (function(a,b,c){function n(a){var b={x:a.offsetLeft,y:a.offsetTop};while(a=a.offsetParent)b.x+=a.offsetLeft,b.y+=a.offsetTop;return b}function m(a,b){for(var d in b)a[d]===c&&(a[d]=b[d]);return a}function l(a,b){for(var c in b)a.style[k(a,c)||c]=b[c];return a}function k(a,b){var e=a.style,f,g;if(e[b]!==c)return b;b=b.charAt(0).toUpperCase()+b.slice(1);for(g=0;g<d.length;g++){f=d[g]+b;if(e[f]!==c)return f}}function j(a,b,c,d){var g=["opacity",b,~~(a*100),c,d].join("-"),h=.01+c/d*100,j=Math.max(1-(1-a)/b*(100-h),a),k=f.substring(0,f.indexOf("Animation")).toLowerCase(),l=k&&"-"+k+"-"||"";e[g]||(i.insertRule("@"+l+"keyframes "+g+"{"+"0%{opacity:"+j+"}"+h+"%{opacity:"+a+"}"+(h+.01)+"%{opacity:1}"+(h+b)%100+"%{opacity:"+a+"}"+"100%{opacity:"+j+"}"+"}",0),e[g]=1);return g}function h(a,b,c){c&&!c.parentNode&&h(a,c),a.insertBefore(b,c||null);return a}function g(a,c){var d=b.createElement(a||"div"),e;for(e in c)d[e]=c[e];return d}var d=["webkit","Moz","ms","O"],e={},f;h(b.getElementsByTagName("head")[0],g("style"));var i=b.styleSheets[b.styleSheets.length-1],o=function q(a){if(!this.spin)return new q(a);this.opts=m(a||{},{lines:12,length:7,width:5,radius:10,color:"#000",speed:1,trail:100,opacity:.25,fps:20})},p=o.prototype={spin:function(a){this.stop();var b=this,c=b.el=l(g(),{position:"relative"}),d,e;a&&(e=n(h(a,c,a.firstChild)),d=n(c),l(c,{left:(a.offsetWidth>>1)-d.x+e.x+"px",top:(a.offsetHeight>>1)-d.y+e.y+"px"})),c.setAttribute("aria-role","progressbar"),b.lines(c,b.opts);if(!f){var i=b.opts,j=0,k=i.fps,m=k/i.speed,o=(1-i.opacity)/(m*i.trail/100),p=m/i.lines;(function q(){j++;for(var a=i.lines;a;a--){var d=Math.max(1-(j+a*p)%m*o,i.opacity);b.opacity(c,i.lines-a,d,i)}b.timeout=b.el&&setTimeout(q,~~(1e3/k))})()}return b},stop:function(){var a=this.el;a&&(clearTimeout(this.timeout),a.parentNode&&a.parentNode.removeChild(a),this.el=c);return this}};p.lines=function(a,b){function e(a,d){return l(g(),{position:"absolute",width:b.length+b.width+"px",height:b.width+"px",background:a,boxShadow:d,transformOrigin:"left",transform:"rotate("+~~(360/b.lines*c)+"deg) translate("+b.radius+"px"+",0)",borderRadius:(b.width>>1)+"px"})}var c=0,d;for(;c<b.lines;c++)d=l(g(),{position:"absolute",top:1+~(b.width/2)+"px",transform:"translate3d(0,0,0)",opacity:b.opacity,animation:f&&j(b.opacity,b.trail,c,b.lines)+" "+1/b.speed+"s linear infinite"}),b.shadow&&h(d,l(e("#000","0 0 4px #000"),{top:"2px"})),h(a,h(d,e(b.color,"0 0 1px rgba(0,0,0,.1)")));return a},p.opacity=function(a,b,c){b<a.childNodes.length&&(a.childNodes[b].style.opacity=c)},function(){var a=l(g("group"),{behavior:"url(#default#VML)"}),b;if(!k(a,"transform")&&a.adj){for(b=4;b--;)i.addRule(["group","roundrect","fill","stroke"][b],"behavior:url(#default#VML)");p.lines=function(a,b){function k(a,d,i){h(f,h(l(e(),{rotation:360/b.lines*a+"deg",left:~~d}),h(l(g("roundrect",{arcsize:1}),{width:c,height:b.width,left:b.radius,top:-b.width>>1,filter:i}),g("fill",{color:b.color,opacity:b.opacity}),g("stroke",{opacity:0}))))}function e(){return l(g("group",{coordsize:d+" "+d,coordorigin:-c+" "+ -c}),{width:d,height:d})}var c=b.length+b.width,d=2*c,f=e(),i=~(b.length+b.radius+b.width)+"px",j;if(b.shadow)for(j=1;j<=b.lines;j++)k(j,-2,"progid:DXImageTransform.Microsoft.Blur(pixelradius=2,makeshadow=1,shadowopacity=.3)");for(j=1;j<=b.lines;j++)k(j);return h(l(a,{margin:i+" 0 0 "+i,zoom:1}),f)},p.opacity=function(a,b,c,d){var e=a.firstChild;d=d.shadow&&d.lines||0,e&&b+d<e.childNodes.length&&(e=e.childNodes[b+d],e=e&&e.firstChild,e=e&&e.firstChild,e&&(e.opacity=c))}}else f=k(a,"animation")}(),a.Spinner=o})(window,document);
@@ -3444,7 +2171,7 @@ Handlebars.compile = Handlebars.VM.compile;;
 			throw "Spinner class not available.";
 		}
 	};
-})(window.jQuery || window.Zepto || window.ender);
+})(window.jQuery || window.Zepto || window.ender);;
 // File: ./src/chromus.js
 (function() {
   var Chromus, global;
@@ -3580,7 +2307,7 @@ Handlebars.compile = Handlebars.VM.compile;;
   };
 
 }).call(this);
-
+;
 // File: ./src/utils.js
 function findParent(element, className){
     if (!element)
@@ -3777,7 +2504,410 @@ function getTrackInfo(button){
 
 // Exporting functions for injected scripts in opera
 window.getTrackInfo = getTrackInfo;
-window.findParent = findParent;
+window.findParent = findParent;;
+// File: ./plugins/ui/templates/playlist.tmpl.js
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['playlist.tmpl'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var stack1, stack2, tmp1, self=this, functionType="function", blockHelperMissing=helpers.blockHelperMissing, helperMissing=helpers.helperMissing, undef=void 0, escapeExpression=this.escapeExpression;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, stack2;
+  buffer += "\r\n    ";
+  stack1 = helpers.is_previous || depth0.is_previous
+  tmp1 = self.program(2, program2, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n        <div class=\"track_container id";
+  stack1 = helpers.id || depth0.id
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "id", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\" data-id=\"";
+  stack1 = helpers.id || depth0.id
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "id", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\">\r\n            <div class=\"artist\">\r\n                <div>\r\n                    <div class=\"image\">\r\n                        <img src='";
+  stack1 = depth0;
+  stack2 = helpers.lfm_img || depth0.lfm_img
+  if(typeof stack2 === functionType) { stack1 = stack2.call(depth0, stack1, { hash: {} }); }
+  else if(stack2=== undef) { stack1 = helperMissing.call(depth0, "lfm_img", stack1, { hash: {} }); }
+  else { stack1 = stack2; }
+  buffer += escapeExpression(stack1) + "' />\r\n                    </div>\r\n                        \r\n                    <span title=\"";
+  stack1 = helpers.artist || depth0.artist
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "artist", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\">";
+  stack1 = helpers.artist || depth0.artist
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "artist", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</span>\r\n                </div>\r\n            </div>\r\n            <div class=\"song ";
+  stack1 = helpers.is_current || depth0.is_current
+  tmp1 = self.program(5, program5, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\" data-id='";
+  stack1 = helpers.id || depth0.id
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "id", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "'>                        \r\n                <span class=\"title\">";
+  stack1 = helpers.title || depth0.title
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "title", { hash: {} }); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "</span>\r\n                <div class=\"controls\">\r\n                    <a class=\"button play\"></a>\r\n                </div>\r\n            </div>\r\n        </div>\r\n    ";
+  stack1 = helpers.is_next || depth0.is_next
+  tmp1 = self.program(7, program7, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n";
+  return buffer;}
+function program2(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n    <div class=\"artist_playlist ";
+  stack1 = helpers.more_then_two || depth0.more_then_two
+  tmp1 = self.program(3, program3, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\r\n    ";
+  return buffer;}
+function program3(depth0,data) {
+  
+  
+  return "large";}
+
+function program5(depth0,data) {
+  
+  
+  return "playing";}
+
+function program7(depth0,data) {
+  
+  
+  return "\r\n    </div>\r\n    ";}
+
+  stack1 = helpers.playlist || depth0.playlist
+  stack2 = helpers.each
+  tmp1 = self.program(1, program1, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { return stack1; }
+  else { return ''; }});
+})();
+// File: ./plugins/ui/templates/track_info.tmpl.js
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['track_info.tmpl'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, stack2, tmp1, self=this, functionType="function", helperMissing=helpers.helperMissing, undef=void 0, escapeExpression=this.escapeExpression;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n        <span class=\"dash\">-</span>\r\n        <a class=\"album\" href=\"";
+  stack1 = helpers.album_url || depth0.album_url
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "album_url", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\" target=\"_blank\">";
+  stack1 = helpers.album || depth0.album
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "album", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</a>\r\n        ";
+  return buffer;}
+
+function program3(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n    <a>\r\n        <img src=\"";
+  stack1 = helpers.source_icon || depth0.source_icon
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "source_icon", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\" />\r\n        <span>";
+  stack1 = helpers.source_title || depth0.source_title
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "source_title", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</span>\r\n    </a>\r\n    ";
+  return buffer;}
+
+  buffer += "<div class=\"container\">\r\n    <a class=\"album_img\">\r\n        <img src=\"";
+  stack1 = depth0;
+  stack2 = helpers.lfm_img || depth0.lfm_img
+  if(typeof stack2 === functionType) { stack1 = stack2.call(depth0, stack1, { hash: {} }); }
+  else if(stack2=== undef) { stack1 = helperMissing.call(depth0, "lfm_img", stack1, { hash: {} }); }
+  else { stack1 = stack2; }
+  buffer += escapeExpression(stack1) + "\" />\r\n    </a>\r\n    <div class=\"love_btn\"><a class='button'></a></div>\r\n    <div class=\"info\">\r\n        <a class=\"song\" href=\"";
+  stack1 = helpers.song_url || depth0.song_url
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "song_url", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\" target=\"_blank\">";
+  stack1 = helpers.song || depth0.song
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "song", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</a>\r\n        <a class=\"artist\" href=\"";
+  stack1 = helpers.artist_url || depth0.artist_url
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "artist_url", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\" target=\"_blank\">";
+  stack1 = helpers.artist || depth0.artist
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "artist", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</a>\r\n        ";
+  stack1 = helpers.album || depth0.album
+  stack2 = helpers['if']
+  tmp1 = self.program(1, program1, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n    </div>\r\n</div>\r\n\r\n<div class=\"source\">\r\n    ";
+  stack1 = helpers.source_title || depth0.source_title
+  stack2 = helpers['if']
+  tmp1 = self.program(3, program3, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n</div>\r\n<div class=\"loader\"></div>";
+  return buffer;});
+})();
+// File: ./plugins/ui/templates/search_results.tmpl.js
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['search_results.tmpl'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, stack2, tmp1, self=this, functionType="function", helperMissing=helpers.helperMissing, undef=void 0, escapeExpression=this.escapeExpression, blockHelperMissing=helpers.blockHelperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n    <h3>Search &laquo;";
+  stack1 = helpers.search_term || depth0.search_term
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "search_term", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "&raquo;</h3>\r\n    ";
+  return buffer;}
+
+function program3(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n<h3>Artists</h3>\r\n<ul>\r\n    ";
+  stack1 = helpers.artists || depth0.artists
+  tmp1 = self.program(4, program4, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n    ";
+  stack1 = helpers.artists || depth0.artists
+  tmp1 = self.noop;
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.program(6, program6, data);
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n</ul>\r\n";
+  return buffer;}
+function program4(depth0,data) {
+  
+  var buffer = "", stack1, stack2;
+  buffer += "\r\n        <li>\r\n            <a class=\"ex_container\" data-artist=\"";
+  stack1 = helpers.name || depth0.name
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "name", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\">\r\n                <span class=\"image\" style='background-image: url(";
+  stack1 = depth0;
+  stack2 = helpers.lfm_img || depth0.lfm_img
+  if(typeof stack2 === functionType) { stack1 = stack2.call(depth0, stack1, { hash: {} }); }
+  else if(stack2=== undef) { stack1 = helperMissing.call(depth0, "lfm_img", stack1, { hash: {} }); }
+  else { stack1 = stack2; }
+  buffer += escapeExpression(stack1) + ")'></span>\r\n                <span>";
+  stack1 = helpers.name || depth0.name
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "name", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</span>\r\n\r\n                <span class=\"add_to_playlist\" title=\"Add to playlist\"></span>\r\n            </a>\r\n        </li>\r\n    ";
+  return buffer;}
+
+function program6(depth0,data) {
+  
+  
+  return "\r\n        <li class=\"loader\"></li>\r\n    ";}
+
+function program8(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n<h3>Tracks</h3>\r\n<ul>\r\n    ";
+  stack1 = helpers.tracks || depth0.tracks
+  tmp1 = self.program(9, program9, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n    ";
+  stack1 = helpers.tracks || depth0.tracks
+  tmp1 = self.noop;
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.program(11, program11, data);
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n</ul>\r\n";
+  return buffer;}
+function program9(depth0,data) {
+  
+  var buffer = "", stack1, stack2;
+  buffer += "\r\n        <li>\r\n            <a class=\"ex_container\" data-artist=\"";
+  stack1 = helpers.artist || depth0.artist
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "artist", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\" data-song=\"";
+  stack1 = helpers.name || depth0.name
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "name", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\">\r\n                <span class=\"image\" style='background-image: url(";
+  stack1 = depth0;
+  stack2 = helpers.lfm_img || depth0.lfm_img
+  if(typeof stack2 === functionType) { stack1 = stack2.call(depth0, stack1, { hash: {} }); }
+  else if(stack2=== undef) { stack1 = helperMissing.call(depth0, "lfm_img", stack1, { hash: {} }); }
+  else { stack1 = stack2; }
+  buffer += escapeExpression(stack1) + ")'></span>\r\n                <span>";
+  stack1 = helpers.artist || depth0.artist
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "artist", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "<br/><b>";
+  stack1 = helpers.name || depth0.name
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "name", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</b></span>\r\n\r\n                <span class=\"add_to_playlist\" title=\"Add to playlist\"></span>\r\n            </a>\r\n        </li>\r\n    ";
+  return buffer;}
+
+function program11(depth0,data) {
+  
+  
+  return "\r\n        <li class=\"loader\"></li>\r\n    ";}
+
+function program13(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n<h3>Albums</h3>\r\n<ul>\r\n    ";
+  stack1 = helpers.albums || depth0.albums
+  tmp1 = self.program(14, program14, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n    ";
+  stack1 = helpers.albums || depth0.albums
+  tmp1 = self.noop;
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.program(16, program16, data);
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n</ul>\r\n";
+  return buffer;}
+function program14(depth0,data) {
+  
+  var buffer = "", stack1, stack2;
+  buffer += "\r\n        <li>\r\n            <a class=\"ex_container\" data-artist=\"";
+  stack1 = helpers.artist || depth0.artist
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "artist", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\" data-album=\"";
+  stack1 = helpers.name || depth0.name
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "name", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\">\r\n                <span class=\"image\" style='background-image: url(";
+  stack1 = depth0;
+  stack2 = helpers.lfm_img || depth0.lfm_img
+  if(typeof stack2 === functionType) { stack1 = stack2.call(depth0, stack1, { hash: {} }); }
+  else if(stack2=== undef) { stack1 = helperMissing.call(depth0, "lfm_img", stack1, { hash: {} }); }
+  else { stack1 = stack2; }
+  buffer += escapeExpression(stack1) + ")'></span>\r\n                <span>";
+  stack1 = helpers.artist || depth0.artist
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "artist", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "<br/><b>";
+  stack1 = helpers.name || depth0.name
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "name", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</b></span>\r\n\r\n                <span class=\"add_to_playlist\" title=\"Add to playlist\"></span>\r\n            </a>\r\n        </li>\r\n    ";
+  return buffer;}
+
+function program16(depth0,data) {
+  
+  
+  return "\r\n        <li class=\"loader\"></li>\r\n    ";}
+
+  buffer += "<header>\r\n    <a class=\"back\"></a>\r\n    ";
+  stack1 = helpers.search_term || depth0.search_term
+  stack2 = helpers['if']
+  tmp1 = self.program(1, program1, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n</header>\r\n\r\n<div class=\"search_results\">\r\n";
+  stack1 = helpers.show_artists || depth0.show_artists
+  tmp1 = self.program(3, program3, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n\r\n";
+  stack1 = helpers.show_tracks || depth0.show_tracks
+  tmp1 = self.program(8, program8, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n\r\n";
+  stack1 = helpers.show_albums || depth0.show_albums
+  tmp1 = self.program(13, program13, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, tmp1); }
+  else { stack1 = blockHelperMissing.call(depth0, stack1, tmp1); }
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n</div>";
+  return buffer;});
+})();
 // File: ./plugins/ui/ui_popup.js
 (function() {
   var App, Controls, Footer, Player, Playlist, PlaylistView, Track, TrackInfo, clear_playlist;
@@ -3948,7 +3078,7 @@ window.findParent = findParent;
 
     Controls.prototype.el = $('#header');
 
-    Controls.prototype.search_template = Handlebars.compile($('#search_result_tmpl').html());
+    Controls.prototype.search_template = Handlebars.templates['search_results.tmpl'];
 
     Controls.prototype.events = {
       "click .inner": "setPosition",
@@ -4142,7 +3272,7 @@ window.findParent = findParent;
       "click .album_img": "albumCover"
     };
 
-    TrackInfo.prototype.template = Handlebars.compile($('#track_info_tmpl').html());
+    TrackInfo.prototype.template = Handlebars.templates['track_info.tmpl'];
 
     TrackInfo.prototype.initialize = function() {
       _.bindAll(this, "updateInfo");
@@ -4274,7 +3404,7 @@ window.findParent = findParent;
 
     PlaylistView.prototype.el = $('#playlist');
 
-    PlaylistView.prototype.template = Handlebars.compile($('#playlist_tmpl').html());
+    PlaylistView.prototype.template = Handlebars.templates['playlist.tmpl'];
 
     PlaylistView.prototype.events = {
       "click #playlist .song": "togglePlaying"
@@ -4456,7 +3586,7 @@ window.findParent = findParent;
   chromus.addMenu(clear_playlist);
 
 }).call(this);
-
+;
 // File: ./plugins/echonest/echonest.js
 (function() {
   var Echo, _ref;
@@ -4506,7 +3636,7 @@ window.findParent = findParent;
   if ((_ref = this.chromus) != null) _ref.registerPlugin("echo", Echo);
 
 }).call(this);
-
+;
 // File: ./plugins/lastfm/md5.js
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
@@ -4685,7 +3815,105 @@ function calcMD5(str)
 }
 
 global.MD5 = calcMD5
-})(this);
+})(this);;
+// File: ./plugins/lastfm/templates/lastfm.ui.tmpl.js
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['lastfm.ui.tmpl'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, stack2, tmp1, self=this, functionType="function", helperMissing=helpers.helperMissing, undef=void 0, escapeExpression=this.escapeExpression;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1, stack2;
+  buffer += "\r\n    <form class=\"form\">\r\n        <div class=\"logo\"></div>\r\n        <ul>          \r\n            <li class=\"username\">\r\n                <label>Logged as <a href=\"http://last.fm/user/";
+  stack1 = helpers.user || depth0.user
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "user", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "\" target=\"_blank\">";
+  stack1 = helpers.user || depth0.user
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "user", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "</a></label>\r\n            </li>\r\n            <li class=\"toggle\">\r\n                <label>Scrobbling</label>\r\n                <div class=\"toggler ";
+  stack1 = helpers.scrobbling || depth0.scrobbling
+  stack2 = helpers.unless
+  tmp1 = self.program(2, program2, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\r\n                    <div></div>\r\n                </div>                    \r\n            </li>\r\n            <li class=\"clearfix\"></li>\r\n            \r\n            <li class=\"header\">\r\n                <span>Your Stations</span>\r\n                ";
+  stack1 = helpers.subscriber || depth0.subscriber
+  stack2 = helpers.unless
+  tmp1 = self.program(4, program4, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n            </li>\r\n\r\n            <li class=\"stations ";
+  stack1 = helpers.subscriber || depth0.subscriber
+  stack2 = helpers.unless
+  tmp1 = self.program(6, program6, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\">\r\n                <ul>                    \r\n                    <li class=\"loved_radio free\">Loved Tracks</li>\r\n\r\n                    <li class=\"lastfm_radio pay\" data-radio=\"lastfm://user/";
+  stack1 = helpers.user || depth0.user
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "user", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "/personal\">Library Radio</li>\r\n                    <li class=\"lastfm_radio pay\" data-radio=\"lastfm://user/";
+  stack1 = helpers.user || depth0.user
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "user", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "/mix\">Mix Radio</li>\r\n                    <li class=\"lastfm_radio pay\" data-radio=\"lastfm://user/";
+  stack1 = helpers.user || depth0.user
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "user", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "/recommended\">Recommended Radio</li>\r\n                    <li class=\"lastfm_radio pay\" data-radio=\"lastfm://user/";
+  stack1 = helpers.user || depth0.user
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "user", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "/friends\">Friends Radio</li>\r\n                    <li class=\"lastfm_radio pay\" data-radio=\"lastfm://user/";
+  stack1 = helpers.user || depth0.user
+  if(typeof stack1 === functionType) { stack1 = stack1.call(depth0, { hash: {} }); }
+  else if(stack1=== undef) { stack1 = helperMissing.call(depth0, "user", { hash: {} }); }
+  buffer += escapeExpression(stack1) + "/neighbours\">Neighbourhood Radio</li>\r\n                </ul>\r\n            </li>\r\n            <li class=\"clearfix\"></li>\r\n                        \r\n            <li class=\"logout btn danger\">Logout</li>\r\n        </ul>\r\n    </form>    \r\n";
+  return buffer;}
+function program2(depth0,data) {
+  
+  
+  return "off";}
+
+function program4(depth0,data) {
+  
+  
+  return "<span class=\"notice\">Some stations available for subscribers only</span>";}
+
+function program6(depth0,data) {
+  
+  
+  return "subscribe";}
+
+function program8(depth0,data) {
+  
+  
+  return "\r\n<form class=\"form login\" onsubmit=\"return false\">\r\n    <div class=\"logo\"></div>\r\n    <ul>            \r\n        <li>\r\n            <label>Username <span class=\"error\" style=\"display:none\">Wrong credentials</span></label>\r\n            <input name=\"username\" autofocus/>\r\n        </li>\r\n        <li>\r\n            <label>Password</label>\r\n            <input type=\"password\" name=\"password\" />\r\n        </li>\r\n        <li class=\"buttons\">\r\n            <input type=\"submit\" value=\"Login\" class=\"btn\" />\r\n        </li>\r\n    </ul>\r\n</form>\r\n";}
+
+  buffer += "<header>\r\n    <a class=\"back\"></a>\r\n    <h3>Last.FM</h3>\r\n</header>\r\n";
+  stack1 = helpers.logged || depth0.logged
+  stack2 = helpers['if']
+  tmp1 = self.program(1, program1, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.program(8, program8, data);
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  return buffer;});
+})();
 // File: ./plugins/lastfm/lastfm.js
 (function() {
   var LastFM, hashToQueryString;
@@ -4949,74 +4177,13 @@ global.MD5 = calcMD5
   this.chromus.registerPlugin("lastfm", LastFM);
 
 }).call(this);
-
+;
 // File: ./plugins/lastfm/lastfm_ui.js
 (function() {
-  var Menu, SettingsView, lastfm, menu, template;
+  var Menu, SettingsView, lastfm, menu;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
 
   lastfm = chromus.plugins.lastfm;
-
-  template = Handlebars.compile('    \
-    <header>\
-        <a class="back"></a>\
-        <h3>Last.FM</h3>\
-    </header>\
-    {{#if logged}}\
-        <form class="form">\
-            <div class="logo"></div>\
-            <ul>          \
-                <li class="username">\
-                    <label>Logged as <a href="http://last.fm/user/{{user}}" target="_blank">{{user}}</a></label>\
-                </li>\
-                <li class="toggle">\
-                    <label>Scrobbling</label>\
-                    <div class="toggler {{#unless scrobbling}}off{{/unless}}">\
-                        <div></div>\
-                    </div>                    \
-                </li>\
-                <li class="clearfix"></li>\
-                \
-                <li class="header">\
-                    <span>Your Stations</span>\
-                    {{#unless subscriber}}<span class="notice">Some stations available for subscribers only</span>{{/unless}}\
-                </li>\
-\
-                <li class="stations {{#unless subscriber}}subscribe{{/unless}}">\
-                    <ul>                    \
-                        <li class="loved_radio free">Loved Tracks</li>\
-\
-                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/personal">Library Radio</li>\
-                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/mix">Mix Radio</li>\
-                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/recommended">Recommended Radio</li>\
-                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/friends">Friends Radio</li>\
-                        <li class="lastfm_radio pay" data-radio="lastfm://user/{{user}}/neighbours">Neighbourhood Radio</li>\
-                    </ul>\
-                </li>\
-                <li class="clearfix"></li>\
-                            \
-                <li class="logout btn danger">Logout</li>\
-            </ul>\
-        </form>    \
-    {{else}}\
-    <form class="form login" onsubmit="return false">\
-        <div class="logo"></div>\
-        <ul>            \
-            <li>\
-                <label>Username <span class="error" style="display:none">Wrong credentials</span></label>\
-                <input name="username" autofocus/>\
-            </li>\
-            <li>\
-                <label>Password</label>\
-                <input type="password" name="password" />\
-            </li>\
-            <li class="buttons">\
-                <input type="submit" value="Login" class="btn" />\
-            </li>\
-        </ul>\
-    </form>\
-    {{/if}}\
-    ');
 
   SettingsView = (function() {
 
@@ -5049,7 +4216,7 @@ global.MD5 = calcMD5
         user: store.get('lastfm:user'),
         subscriber: !!parseInt(store.get('lastfm:subscriber'))
       };
-      this.el.innerHTML = template(view);
+      this.el.innerHTML = Handlebars.templates['lastfm.ui.tmpl'](view);
       return this.delegateEvents();
     };
 
@@ -5182,7 +4349,7 @@ global.MD5 = calcMD5
   });
 
 }).call(this);
-
+;
 // File: ./plugins/vkontakte/vkontakte.js
 (function() {
   var VK, global;
@@ -5290,76 +4457,80 @@ global.MD5 = calcMD5
   });
 
 }).call(this);
+;
+// File: ./plugins/vkontakte/templates/vkontakte.ui.tmpl.js
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['vkontakte.ui.tmpl'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, stack2, tmp1, self=this;
 
+function program1(depth0,data) {
+  
+  
+  return "        		\r\n	<ul>\r\n		<li>\r\n			<h3 style=\"font-size:20px; font-weight: bold; margin-bottom: 10px;\">Logged!</h3>\r\n			<p style=\"font-size: 14px;\">Rest of functionality will be available in next update. Stay tuned!</p>\r\n		</li>\r\n		<li>\r\n			<a class=\"btn logout\" style=\"color: red\">Logout</a>\r\n		</li>\r\n	</ul>       	\r\n    ";}
+
+function program3(depth0,data) {
+  
+  
+  return "    \r\n	<ul>\r\n		<li style=\"text-align: center\">\r\n			<a class=\"btn login\">Login to Vkontakte</a>\r\n		</li>\r\n	</ul>\r\n    ";}
+
+  buffer += "<header>\r\n    <a class=\"back\"></a>\r\n    <h3>Vkontakte</h3>\r\n</header>\r\n<form class=\"form\">\r\n	<div class=\"logo\"></div>\r\n    ";
+  stack1 = helpers.logged || depth0.logged
+  stack2 = helpers['if']
+  tmp1 = self.program(1, program1, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.program(3, program3, data);
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n</form>";
+  return buffer;});
+})();
 // File: ./plugins/vkontakte/vkontakte_ui.js
 (function() {
-  var UI, menu, template, ui, vk;
+  var VkUI, menu, ui, vk;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
-  template = Handlebars.compile('    \
-    <header>\
-        <a class="back"></a>\
-        <h3>Vkontakte</h3>\
-    </header>\
-    <form class="form">\
-    	<div class="logo"></div>\
-	{{#if logged}}        		\
-    	<ul>\
-    		<li>\
-    			<h3 style="font-size:20px; font-weight: bold; margin-bottom: 10px;">Logged!</h3>\
-    			<p style="font-size: 14px;">Rest of functionality will be available in next update. Stay tuned!</p>\
-    		</li>\
-    		<li>\
-    			<a class="btn logout" style="color: red">Logout</a>\
-    		</li>\
-    	</ul>       	\
-    {{else}}    \
-    	<ul>\
-    		<li style="text-align: center">\
-    			<a class="btn login">Login to Vkontakte</a>\
-    		</li>\
-    	</ul>\
-    {{/if}}\
-    </form>\
-');
 
   vk = chromus.plugins.vkontakte;
 
-  UI = (function() {
+  VkUI = (function() {
 
-    __extends(UI, Backbone.View);
+    __extends(VkUI, Backbone.View);
 
-    function UI() {
-      UI.__super__.constructor.apply(this, arguments);
+    function VkUI() {
+      VkUI.__super__.constructor.apply(this, arguments);
     }
 
-    UI.prototype.className = 'vkontakte';
+    VkUI.prototype.template = Handlebars.templates['vkontakte.ui.tmpl'];
 
-    UI.prototype.events = {
+    VkUI.prototype.className = 'vkontakte';
+
+    VkUI.prototype.events = {
       "click .login": "login",
       "click .logout": "logout"
     };
 
-    UI.prototype.initialize = function() {
+    VkUI.prototype.initialize = function() {
       _.bindAll(this);
       this.render();
       return window.setVKSession = this.setSession;
     };
 
-    UI.prototype.open = function() {
+    VkUI.prototype.open = function() {
       return chromus.openPanel(this.el);
     };
 
-    UI.prototype.render = function() {
+    VkUI.prototype.render = function() {
       var view;
       view = {
         logged: !!store.get('vk:token')
       };
-      $(this.el).html(template(view));
+      $(this.el).html(this.template(view));
       return this.delegateEvents();
     };
 
-    UI.prototype.setSession = function(session) {
+    VkUI.prototype.setSession = function(session) {
       store.set("vk:token", session.access_token);
       store.set("vk:user_id", session.user_id);
       $.ajax({
@@ -5375,11 +4546,11 @@ global.MD5 = calcMD5
       return this.render();
     };
 
-    UI.prototype.login = function() {
+    VkUI.prototype.login = function() {
       return window.open(vk.authURL(), "Vkontakte", "status=0,toolbar=0,location=0,menubar=0,resizable=1");
     };
 
-    UI.prototype.logout = function() {
+    VkUI.prototype.logout = function() {
       $.ajax({
         url: "" + chromus.baseURL + "/api/token/delete",
         data: {
@@ -5395,41 +4566,50 @@ global.MD5 = calcMD5
       return this.render();
     };
 
-    return UI;
+    return VkUI;
 
   })();
 
-  ui = new UI();
+  ui = new VkUI();
 
   menu = $('<li class="vkontakte">Vkontakte</li>').bind('click', function() {
     $('#main_menu').hide();
+    console.warn(ui.open, ui);
     return ui.open();
   });
 
   chromus.addMenu(menu);
 
 }).call(this);
+;
+// File: ./plugins/about/templates/about.ui.tmpl.js
+(function() {
+  var template = Handlebars.template, templates = Handlebars.templates = Handlebars.templates || {};
+templates['about.ui.tmpl'] = template(function (Handlebars,depth0,helpers,partials,data) {
+  helpers = helpers || Handlebars.helpers;
+  var buffer = "", stack1, stack2, tmp1, self=this;
 
+function program1(depth0,data) {
+  
+  
+  return "checked=\"checked\"";}
+
+  buffer += "<header>\r\n    <a class=\"back\"></a>\r\n    <h3>About</h3>\r\n</header>\r\n<div style=\"margin-top:20px; text-align:center\">\r\n    <h1 style=\"background:url(assets/icons/42x42.png) center left no-repeat; font-weight: bold; font-size: 16px; display: inline-block; line-height: 42px; padding-left: 50px\">Chromus v3.0.2</h1>\r\n\r\n    <a href=\"https://github.com/chromus/chromus\" style=\"display:block;margin-top:15px; font-size: 14px;\" target=\"_blank\">github</a>\r\n\r\n    <div>\r\n        <label><input type=\"checkbox\" name=\"debug\" ";
+  stack1 = helpers.debug || depth0.debug
+  stack2 = helpers['if']
+  tmp1 = self.program(1, program1, data);
+  tmp1.hash = {};
+  tmp1.fn = tmp1;
+  tmp1.inverse = self.noop;
+  stack1 = stack2.call(depth0, stack1, tmp1);
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "/> Debug mode</label>            \r\n    </div>\r\n</div>";
+  return buffer;});
+})();
 // File: ./plugins/about/about.js
 (function() {
-  var About, about, template;
+  var About, about;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
-  template = Handlebars.compile('    \
-    <header>\
-        <a class="back"></a>\
-        <h3>About</h3>\
-    </header>\
-    <div style="margin-top:20px; text-align:center">\
-        <h1 style="background:url(assets/icons/42x42.png) center left no-repeat; font-weight: bold; font-size: 16px; display: inline-block; line-height: 42px; padding-left: 50px">Chromus v3.0.2</h1>\
-\
-        <a href="https://github.com/chromus/chromus" style="display:block;margin-top:15px; font-size: 14px;" target="_blank">github</a>\
-\
-        <div>\
-            <label><input type="checkbox" name="debug" {{#if debug}}checked="checked"{{/if}}/> Debug mode</label>            \
-        </div>\
-    </div>\
-');
 
   About = (function() {
 
@@ -5438,6 +4618,8 @@ global.MD5 = calcMD5
     function About() {
       About.__super__.constructor.apply(this, arguments);
     }
+
+    About.prototype.template = Handlebars.templates['about.ui.tmpl'];
 
     About.prototype.events = {
       "change input[name='debug']": 'toggleDebug'
@@ -5453,7 +4635,7 @@ global.MD5 = calcMD5
       view = {
         debug: store.get('debug')
       };
-      return this.el.innerHTML = template(view);
+      return this.el.innerHTML = this.template(view);
     };
 
     About.prototype.toggleDebug = function(e) {

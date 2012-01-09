@@ -1,71 +1,46 @@
 (function() {
-  var UI, menu, template, ui, vk;
+  var VkUI, menu, ui, vk;
   var __hasProp = Object.prototype.hasOwnProperty, __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor; child.__super__ = parent.prototype; return child; };
-
-  template = Handlebars.compile('    \
-    <header>\
-        <a class="back"></a>\
-        <h3>Vkontakte</h3>\
-    </header>\
-    <form class="form">\
-    	<div class="logo"></div>\
-	{{#if logged}}        		\
-    	<ul>\
-    		<li>\
-    			<h3 style="font-size:20px; font-weight: bold; margin-bottom: 10px;">Logged!</h3>\
-    			<p style="font-size: 14px;">Rest of functionality will be available in next update. Stay tuned!</p>\
-    		</li>\
-    		<li>\
-    			<a class="btn logout" style="color: red">Logout</a>\
-    		</li>\
-    	</ul>       	\
-    {{else}}    \
-    	<ul>\
-    		<li style="text-align: center">\
-    			<a class="btn login">Login to Vkontakte</a>\
-    		</li>\
-    	</ul>\
-    {{/if}}\
-    </form>\
-');
 
   vk = chromus.plugins.vkontakte;
 
-  UI = (function() {
+  VkUI = (function() {
 
-    __extends(UI, Backbone.View);
+    __extends(VkUI, Backbone.View);
 
-    function UI() {
-      UI.__super__.constructor.apply(this, arguments);
+    function VkUI() {
+      VkUI.__super__.constructor.apply(this, arguments);
     }
 
-    UI.prototype.className = 'vkontakte';
+    VkUI.prototype.template = Handlebars.templates['vkontakte.ui.tmpl'];
 
-    UI.prototype.events = {
+    VkUI.prototype.className = 'vkontakte';
+
+    VkUI.prototype.events = {
       "click .login": "login",
       "click .logout": "logout"
     };
 
-    UI.prototype.initialize = function() {
+    VkUI.prototype.initialize = function() {
       _.bindAll(this);
       this.render();
       return window.setVKSession = this.setSession;
     };
 
-    UI.prototype.open = function() {
+    VkUI.prototype.open = function() {
       return chromus.openPanel(this.el);
     };
 
-    UI.prototype.render = function() {
+    VkUI.prototype.render = function() {
       var view;
       view = {
         logged: !!store.get('vk:token')
       };
-      $(this.el).html(template(view));
+      $(this.el).html(this.template(view));
       return this.delegateEvents();
     };
 
-    UI.prototype.setSession = function(session) {
+    VkUI.prototype.setSession = function(session) {
       store.set("vk:token", session.access_token);
       store.set("vk:user_id", session.user_id);
       $.ajax({
@@ -81,11 +56,11 @@
       return this.render();
     };
 
-    UI.prototype.login = function() {
+    VkUI.prototype.login = function() {
       return window.open(vk.authURL(), "Vkontakte", "status=0,toolbar=0,location=0,menubar=0,resizable=1");
     };
 
-    UI.prototype.logout = function() {
+    VkUI.prototype.logout = function() {
       $.ajax({
         url: "" + chromus.baseURL + "/api/token/delete",
         data: {
@@ -101,14 +76,15 @@
       return this.render();
     };
 
-    return UI;
+    return VkUI;
 
   })();
 
-  ui = new UI();
+  ui = new VkUI();
 
   menu = $('<li class="vkontakte">Vkontakte</li>').bind('click', function() {
     $('#main_menu').hide();
+    console.warn(ui.open, ui);
     return ui.open();
   });
 

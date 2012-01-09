@@ -4,6 +4,10 @@
 	"files": [
 		"bg!ui_background.js",
 
+		"popup!templates/playlist.tmpl.js",
+		"popup!templates/track_info.tmpl.js",
+		"popup!templates/search_results.tmpl.js",
+
 		"popup!ui_popup.js"
 	]
 }

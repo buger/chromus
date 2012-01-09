@@ -97,7 +97,7 @@ class Controls extends Backbone.View
 
     el: $('#header') 
 
-    search_template: Handlebars.compile($('#search_result_tmpl').html()),
+    search_template: Handlebars.templates['search_results.tmpl']
 
     events:
         "click .inner": "setPosition"
@@ -263,7 +263,7 @@ class TrackInfo extends Backbone.View
     events: 
         "click .album_img": "albumCover"
 
-    template: Handlebars.compile($('#track_info_tmpl').html()),
+    template: Handlebars.templates['track_info.tmpl']
 
     initialize: ->
         _.bindAll @, "updateInfo"
@@ -369,7 +369,7 @@ class PlaylistView extends Backbone.View
 
     el: $('#playlist')
 
-    template: Handlebars.compile($('#playlist_tmpl').html()),
+    template: Handlebars.templates['playlist.tmpl']
 
     events: 
         "click #playlist .song": "togglePlaying"

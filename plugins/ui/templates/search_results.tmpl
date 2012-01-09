@@ -1,0 +1,65 @@
+<header>
+    <a class="back"></a>
+    {{#if search_term}}
+    <h3>Search &laquo;{{search_term}}&raquo;</h3>
+    {{/if}}
+</header>
+
+<div class="search_results">
+{{#show_artists}}
+<h3>Artists</h3>
+<ul>
+    {{#artists}}
+        <li>
+            <a class="ex_container" data-artist="{{name}}">
+                <span class="image" style='background-image: url({{lfm_img this}})'></span>
+                <span>{{name}}</span>
+
+                <span class="add_to_playlist" title="Add to playlist"></span>
+            </a>
+        </li>
+    {{/artists}}
+    {{^artists}}
+        <li class="loader"></li>
+    {{/artists}}
+</ul>
+{{/show_artists}}
+
+{{#show_tracks}}
+<h3>Tracks</h3>
+<ul>
+    {{#tracks}}
+        <li>
+            <a class="ex_container" data-artist="{{artist}}" data-song="{{name}}">
+                <span class="image" style='background-image: url({{lfm_img this}})'></span>
+                <span>{{artist}}<br/><b>{{name}}</b></span>
+
+                <span class="add_to_playlist" title="Add to playlist"></span>
+            </a>
+        </li>
+    {{/tracks}}
+    {{^tracks}}
+        <li class="loader"></li>
+    {{/tracks}}
+</ul>
+{{/show_tracks}}
+
+{{#show_albums}}
+<h3>Albums</h3>
+<ul>
+    {{#albums}}
+        <li>
+            <a class="ex_container" data-artist="{{artist}}" data-album="{{name}}">
+                <span class="image" style='background-image: url({{lfm_img this}})'></span>
+                <span>{{artist}}<br/><b>{{name}}</b></span>
+
+                <span class="add_to_playlist" title="Add to playlist"></span>
+            </a>
+        </li>
+    {{/albums}}
+    {{^albums}}
+        <li class="loader"></li>
+    {{/albums}}
+</ul>
+{{/show_albums}}
+</div>

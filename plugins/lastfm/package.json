@@ -8,6 +8,7 @@
 
 		"md5.js",
 
+		"popup!templates/lastfm.ui.tmpl.js",
 		"popup!lastfm.js",
 		"popup!lastfm_ui.js",
 		"css!lastfm.css",

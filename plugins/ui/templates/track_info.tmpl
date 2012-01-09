@@ -1,0 +1,24 @@
+<div class="container">
+    <a class="album_img">
+        <img src="{{lfm_img this}}" />
+    </a>
+    <div class="love_btn"><a class='button'></a></div>
+    <div class="info">
+        <a class="song" href="{{song_url}}" target="_blank">{{song}}</a>
+        <a class="artist" href="{{artist_url}}" target="_blank">{{artist}}</a>
+        {{#if album}}
+        <span class="dash">-</span>
+        <a class="album" href="{{album_url}}" target="_blank">{{album}}</a>
+        {{/if}}
+    </div>
+</div>
+
+<div class="source">
+    {{#if source_title}}
+    <a>
+        <img src="{{source_icon}}" />
+        <span>{{source_title}}</span>
+    </a>
+    {{/if}}
+</div>
+<div class="loader"></div>

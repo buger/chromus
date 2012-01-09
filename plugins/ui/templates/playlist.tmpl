@@ -1,0 +1,25 @@
+{{#each playlist}}
+    {{#is_previous}}
+    <div class="artist_playlist {{#more_then_two}}large{{/more_then_two}}">
+    {{/is_previous}}
+        <div class="track_container id{{id}}" data-id="{{id}}">
+            <div class="artist">
+                <div>
+                    <div class="image">
+                        <img src='{{lfm_img this}}' />
+                    </div>
+                        
+                    <span title="{{artist}}">{{artist}}</span>
+                </div>
+            </div>
+            <div class="song {{#is_current}}playing{{/is_current}}" data-id='{{id}}'>                        
+                <span class="title">{{{title}}}</span>
+                <div class="controls">
+                    <a class="button play"></a>
+                </div>
+            </div>
+        </div>
+    {{#is_next}}
+    </div>
+    {{/is_next}}
+{{/each}}

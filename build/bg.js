@@ -1435,7 +1435,7 @@ window.Zepto = Zepto;
     $.fn[m] = function(callback){ return this.bind(m, callback) }
   });
 })(Zepto);
-
+;
 // File: ./lib/store.js
 /* Copyright (c) 2010-2011 Marcus Westin
  *
@@ -1568,7 +1568,7 @@ var store = (function(){
 })();
 
 if (typeof module != 'undefined') { module.exports = store }
-
+;
 // File: ./lib/underscore-min.js
 // Underscore.js 1.2.0
 // (c) 2011 Jeremy Ashkenas, DocumentCloud Inc.
@@ -1599,7 +1599,7 @@ function(a){return a===null};b.isUndefined=function(a){return a===void 0};b.noCo
 J++;return a?a+b:b};b.templateSettings={evaluate:/<%([\s\S]+?)%>/g,interpolate:/<%=([\s\S]+?)%>/g,escape:/<%-([\s\S]+?)%>/g};b.template=function(a,c){var d=b.templateSettings,d="var __p=[],print=function(){__p.push.apply(__p,arguments);};with(obj||{}){__p.push('"+a.replace(/\\/g,"\\\\").replace(/'/g,"\\'").replace(d.escape,function(a,b){return"',_.escape("+b.replace(/\\'/g,"'")+"),'"}).replace(d.interpolate,function(a,b){return"',"+b.replace(/\\'/g,"'")+",'"}).replace(d.evaluate||null,function(a,
 b){return"');"+b.replace(/\\'/g,"'").replace(/[\r\n\t]/g," ")+"__p.push('"}).replace(/\r/g,"\\r").replace(/\n/g,"\\n").replace(/\t/g,"\\t")+"');}return __p.join('');",d=new Function("obj",d);return c?d(c):d};var m=function(a){this._wrapped=a};b.prototype=m.prototype;var t=function(a,c){return c?b(a).chain():a},I=function(a,c){m.prototype[a]=function(){var a=i.call(arguments);G.call(a,this._wrapped);return t(c.apply(b,a),this._chain)}};b.mixin(b);j("pop,push,reverse,shift,sort,splice,unshift".split(","),
 function(a){var b=k[a];m.prototype[a]=function(){b.apply(this._wrapped,arguments);return t(this._wrapped,this._chain)}});j(["concat","join","slice"],function(a){var b=k[a];m.prototype[a]=function(){return t(b.apply(this._wrapped,arguments),this._chain)}});m.prototype.chain=function(){this._chain=true;return this};m.prototype.value=function(){return this._wrapped}})();
-
+;
 // File: ./lib/backbone-min.js
 // Backbone.js 0.5.3
 // (c) 2010 Jeremy Ashkenas, DocumentCloud Inc.
@@ -1634,7 +1634,7 @@ b,c){a=document.createElement(a);b&&g(a).attr(b);c&&g(a).html(c);return a},deleg
 b,c){var d=w[a];c=f.extend({type:d,dataType:"json"},c);if(!c.url)c.url=k(b)||l();if(!c.data&&b&&(a=="create"||a=="update"))c.contentType="application/json",c.data=JSON.stringify(b.toJSON());if(e.emulateJSON)c.contentType="application/x-www-form-urlencoded",c.data=c.data?{model:c.data}:{};if(e.emulateHTTP&&(d==="PUT"||d==="DELETE")){if(e.emulateJSON)c.data._method=d;c.type="POST";c.beforeSend=function(a){a.setRequestHeader("X-HTTP-Method-Override",d)}}if(c.type!=="GET"&&!e.emulateJSON)c.processData=
 !1;return g.ajax(c)};var o=function(){},v=function(a,b,c){var d;d=b&&b.hasOwnProperty("constructor")?b.constructor:function(){return a.apply(this,arguments)};f.extend(d,a);o.prototype=a.prototype;d.prototype=new o;b&&f.extend(d.prototype,b);c&&f.extend(d,c);d.prototype.constructor=d;d.__super__=a.prototype;return d},k=function(a){if(!a||!a.url)return null;return f.isFunction(a.url)?a.url():a.url},l=function(){throw Error('A "url" property or function must be specified');},i=function(a,b,c){return function(d){a?
 a(b,d,c):b.trigger("error",b,d,c)}}}).call(this);
-
+;
 // File: ./src/chromus.js
 (function() {
   var Chromus, global;
@@ -1770,7 +1770,7 @@ a(b,d,c):b.trigger("error",b,d,c)}}}).call(this);
   };
 
 }).call(this);
-
+;
 // File: ./src/utils.js
 function findParent(element, className){
     if (!element)
@@ -1967,7 +1967,7 @@ function getTrackInfo(button){
 
 // Exporting functions for injected scripts in opera
 window.getTrackInfo = getTrackInfo;
-window.findParent = findParent;
+window.findParent = findParent;;
 // File: ./plugins/iframe_player/iframe_player.js
 (function() {
   var Player;
@@ -2084,7 +2084,7 @@ window.findParent = findParent;
   this.chromus.registerPlayer("iframe_player", new Player());
 
 }).call(this);
-
+;
 // File: ./plugins/music_manager/music_manager.js
 (function() {
   var MusicManager, Playlist, Track, music_manager;
@@ -2348,7 +2348,7 @@ window.findParent = findParent;
   }
 
 }).call(this);
-
+;
 // File: ./plugins/music_manager/music_manager_api.js
 (function() {
   var music_manager;
@@ -2405,7 +2405,7 @@ window.findParent = findParent;
   });
 
 }).call(this);
-
+;
 // File: ./plugins/ui/ui_background.js
 (function() {
   var event, music_manager, _i, _len, _ref;
@@ -2467,7 +2467,7 @@ window.findParent = findParent;
   });
 
 }).call(this);
-
+;
 // File: ./plugins/echonest/echonest.js
 (function() {
   var Echo, _ref;
@@ -2517,7 +2517,7 @@ window.findParent = findParent;
   if ((_ref = this.chromus) != null) _ref.registerPlugin("echo", Echo);
 
 }).call(this);
-
+;
 // File: ./plugins/lastfm/lastfm.js
 (function() {
   var LastFM, hashToQueryString;
@@ -2781,7 +2781,7 @@ window.findParent = findParent;
   this.chromus.registerPlugin("lastfm", LastFM);
 
 }).call(this);
-
+;
 // File: ./plugins/lastfm/lastfm_bg.js
 (function() {
 
@@ -2911,7 +2911,7 @@ window.findParent = findParent;
   });
 
 }).call(this);
-
+;
 // File: ./plugins/lastfm/md5.js
 /*
  * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
@@ -3090,7 +3090,7 @@ function calcMD5(str)
 }
 
 global.MD5 = calcMD5
-})(this);
+})(this);;
 // File: ./plugins/loved_tracks_radio/loved_tracks_radio.js
 (function() {
   var LastfmLovedRadio, addNextTracks, manager, radio;
@@ -3204,7 +3204,7 @@ global.MD5 = calcMD5
   });
 
 }).call(this);
-
+;
 // File: ./plugins/vkontakte/vkontakte.js
 (function() {
   var VK, global;

@@ -1,0 +1,24 @@
+<header>
+    <a class="back"></a>
+    <h3>Vkontakte</h3>
+</header>
+<form class="form">
+	<div class="logo"></div>
+    {{#if logged}}        		
+	<ul>
+		<li>
+			<h3 style="font-size:20px; font-weight: bold; margin-bottom: 10px;">Logged!</h3>
+			<p style="font-size: 14px;">Rest of functionality will be available in next update. Stay tuned!</p>
+		</li>
+		<li>
+			<a class="btn logout" style="color: red">Logout</a>
+		</li>
+	</ul>       	
+    {{else}}    
+	<ul>
+		<li style="text-align: center">
+			<a class="btn login">Login to Vkontakte</a>
+		</li>
+	</ul>
+    {{/if}}
+</form>

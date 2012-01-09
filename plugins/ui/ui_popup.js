@@ -167,7 +167,7 @@
 
     Controls.prototype.el = $('#header');
 
-    Controls.prototype.search_template = Handlebars.compile($('#search_result_tmpl').html());
+    Controls.prototype.search_template = Handlebars.templates['search_results.tmpl'];
 
     Controls.prototype.events = {
       "click .inner": "setPosition",
@@ -361,7 +361,7 @@
       "click .album_img": "albumCover"
     };
 
-    TrackInfo.prototype.template = Handlebars.compile($('#track_info_tmpl').html());
+    TrackInfo.prototype.template = Handlebars.templates['track_info.tmpl'];
 
     TrackInfo.prototype.initialize = function() {
       _.bindAll(this, "updateInfo");
@@ -493,7 +493,7 @@
 
     PlaylistView.prototype.el = $('#playlist');
 
-    PlaylistView.prototype.template = Handlebars.compile($('#playlist_tmpl').html());
+    PlaylistView.prototype.template = Handlebars.templates['playlist.tmpl'];
 
     PlaylistView.prototype.events = {
       "click #playlist .song": "togglePlaying"

@@ -51,7 +51,7 @@ concat = (fileList, distPath, postfix = "") ->
         content = fs.readFileSync(filePath, 'utf-8')
         "// File: #{filePath}\n#{content}"
 
-    fs.writeFileSync distPath, out.join("\n")+postfix, "utf-8"
+    fs.writeFileSync distPath, out.join(";\n")+postfix, "utf-8"
 
 
 uglify = (srcPath, distPath) ->    
@@ -78,3 +78,34 @@ task "build", "Build everything and minify", (options) ->
     bgjs = yepnope.getFiles('bg')
     concat bgjs, "./build/bg.js"
     uglify "./build/bg.js", "./build/bg.min.js"
+
+walk = (dir, done) ->
+    results = []
+    fs.readdir dir, (err, list) ->
+        return done(err) if (err)
+        i = 0
+
+        next = ->
+            file = list[i++]
+
+            return done(null, results) if not file
+
+            file = dir + '/' + file
+            
+            fs.stat file, (err, stat) ->
+                if stat and stat.isDirectory()
+                  walk file, (err, res) ->
+                    results = results.concat(res)
+                    next()                  
+                else
+                  results.push(file)
+                  next()
+        next()
+
+exec = require('child_process').exec
+
+task "tmpl", "Compile handlebars templates", (options) ->
+    walk "./", (err, files) ->
+        for file in files
+            if file.match(/\.tmpl$/)
+                exec "handlebars #{file} -f #{file}.js -k each -k if -k unless"

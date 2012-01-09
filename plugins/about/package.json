@@ -2,6 +2,7 @@
 	"name": "About",
 
 	"files": [
+		"popup!templates/about.ui.tmpl.js",
 		"popup!about.js"
 	]
 }

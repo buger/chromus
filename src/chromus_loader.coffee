@@ -56,7 +56,6 @@ else
     files = [
         "popup!build/popup.js"
         "bg!build/bg.js"
-        "css!build/plugin_styles.css"
     ]
 
 if browser.page_type is "popup" and global.isTestMode()
