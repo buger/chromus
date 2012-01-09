@@ -54,8 +54,8 @@ if @debug
     ]
 else
     files = [
-        "popup!build/popup.js"
-        "bg!build/bg.js"
+        "popup!build/popup.min.js"
+        "bg!build/bg.min.js"
     ]
 
 if browser.page_type is "popup" and global.isTestMode()
