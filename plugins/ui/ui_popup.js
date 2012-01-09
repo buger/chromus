@@ -432,7 +432,7 @@
       this.model.settings.bind('change', this.updateSettings);
       this.updateVolume();
       return $(document).bind('click', function(evt) {
-        if ($('#main_menu').is(':visible') && !$(evt.target).hasClass('menu')) {
+        if ($('#main_menu').css('display') !== 'none' && !$(evt.target).hasClass('menu')) {
           if (!$(evt.target).closest('#main_menu').length) {
             return $('#main_menu').hide();
           }
@@ -516,7 +516,7 @@
 
     PlaylistView.prototype.togglePlaying = function(evt) {
       var id;
-      id = +$.attr(evt.currentTarget, 'data-id');
+      id = +$(evt.currentTarget).attr('data-id');
       if (this.model.get('current_track') === id) {
         return this.model.pause();
       } else {
@@ -540,9 +540,9 @@
       this.$('.song.playing').removeClass('playing');
       current = this.model.get('current_track');
       if (current) {
-        this.$(".track_container." + current + " .song").addClass('playing');
+        this.$(".track_container.id" + current + " .song").addClass('playing');
         if (this.scroll.vScrollbar) {
-          return this.scroll.scrollToElement(this.el.find(".track_container." + current)[0]);
+          return this.scroll.scrollToElement(this.el.find(".track_container.id" + current)[0]);
         }
       }
     };
@@ -600,7 +600,9 @@
       this.el.css({
         visibility: 'visible'
       });
-      this.el.find('.track_container:odd').addClass('odd');
+      this.el.find('.track_container').each(function(idx, el) {
+        if (idx % 2 === 0) return $(el).addClass('odd');
+      });
       return this.scroll.refresh();
     };
 

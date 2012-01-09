@@ -34,7 +34,7 @@ yepnope.addPrefix 'css', (resource) ->
 
 if @debug
     files = [
-        "lib/jquery.min.js"    
+        "lib/zepto.js"    
 
         "lib/store.js"
 

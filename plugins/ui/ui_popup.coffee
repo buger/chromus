@@ -328,7 +328,7 @@ class Footer extends Backbone.View
         @updateVolume()
 
         $(document).bind 'click', (evt) ->
-            if $('#main_menu').is(':visible') and !$(evt.target).hasClass('menu')
+            if $('#main_menu').css('display') isnt 'none' and !$(evt.target).hasClass('menu')
 
                 unless $(evt.target).closest('#main_menu').length
                     $('#main_menu').hide()
@@ -388,7 +388,7 @@ class PlaylistView extends Backbone.View
                 
     
     togglePlaying: (evt) ->
-        id = + $.attr evt.currentTarget, 'data-id'
+        id = + $(evt.currentTarget).attr('data-id')
         
         if @model.get('current_track') is id
             @model.pause()
@@ -410,10 +410,10 @@ class PlaylistView extends Backbone.View
         current = @model.get('current_track')
 
         if current
-            @$(".track_container.#{current} .song").addClass 'playing'
+            @$(".track_container.id#{current} .song").addClass 'playing'
             
             if @scroll.vScrollbar 
-                @scroll.scrollToElement @el.find(".track_container.#{current}")[0]  
+                @scroll.scrollToElement @el.find(".track_container.id#{current}")[0]  
 
 
     updatePlaylist: ->
@@ -457,7 +457,9 @@ class PlaylistView extends Backbone.View
         @el.find('.container').html @template view, helpers: helpers        
         @el.css visibility:'visible'
 
-        @el.find('.track_container:odd').addClass('odd')
+        @el.find('.track_container').each (idx, el) ->
+            $(el).addClass('odd') if idx % 2 == 0
+            
 
         @scroll.refresh()  
 

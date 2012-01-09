@@ -6,7 +6,7 @@
 		"bg!lastfm.js",
 		"bg!lastfm_bg.js",
 
-		"bg!md5.js",
+		"md5.js",
 
 		"popup!lastfm.js",
 		"popup!lastfm_ui.js",
