@@ -9,7 +9,7 @@ var VK = {
     determineSearchMethod: function(callback){
         console.log("Trying to determine search method")
 
-        xhrRequest("http://vkontakte.ru", "GET", null, function(xhr){
+        xhrRequest("http://vk.com", "GET", null, function(xhr){
             console.log(xhr.responseText.match(/logout/));
             
             if(!xhr.responseText.match(/logout/)){
@@ -21,7 +21,7 @@ var VK = {
                     }
                 })
             } else {
-                callback({search_method:'vkontakte.ru'})
+                callback({search_method:'vk.com'})
             }
         })
     },

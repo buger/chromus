@@ -119,7 +119,7 @@ body {
   bottom: 0;
   left: 0;
   width: 700px;
-  height: 1250px;
+  height: 850px;
   margin: 0 auto;
 
   margin-top: 50px;
@@ -240,6 +240,7 @@ input[type=submit] {
 </head>
 <body>
 <a href="http://chrome-music.tumblr.com" style="position: absolute; top: 5px; left: 15px; font-size: 35px; color: #333;">http://chrome-music.tumblr.com</a>
+<a href="mailto:hello@chromusapp.com" style="position: absolute; top: 50px; left: 15px; font-size: 35px; color: #333;">hello@chromusapp.com</a>
 <div style="position: absolute; top: 10px; right: 10px; text-align: right; width: 500px;">
     <a href="https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh" title="Google Chrome extension" style="vertical-align:top; color: #333; font-size: 25px; white-space:nowrap">
         Like it? Rate us with five stars! <img src="http://upload.wikimedia.org/wikipedia/en/thumb/d/d0/Chrome_Logo.svg/200px-Chrome_Logo.svg.png" width="80" style="margin-right: 3px"/></a>
@@ -297,39 +298,35 @@ input[type=submit] {
             <label style="font-size: 18px; margin-right: 0px; color: #333;" for="show_notifications">Display notifications:</label>
             <input type="checkbox" id="show_notifications" onclick="toggle_notifications(this.checked)"/>
         </div>
-        <div style="margin-bottom: 20px;">
+        <div style="margin-bottom: 10px;">
             <label style="font-size: 18px; margin-right: 0px; color: #333;" for="play_previews">Try to play previews if track not found:</label>
             <input type="checkbox" id="play_previews" onclick="toggle_play_previews(this.checked)"/>
         </div>
-        <!--
-        <div style="border: 1px solid #ccc; width: 300px; padding: 5px; border-radius: 5px;">
-            <h2 class="banner" style="color: #333">By showing this banner you support our project. However you can disable it.</h2>
-            <label style="font-size: 18px; margin-right: 0px; color: #333;" for="toggle_banner">Show banner:</label>
-            <input type="checkbox" id="toggle_banner" onclick="toggle_banner_func(this.checked)" />
+        <div style="border: 2px solid green; line-height: 170%; width: 300px; padding: 10px; border-radius: 5px; color: #333;">
+	<div style="color: green; font-size: 20px; font-weight: bold;">NEW VERSION!</div>
+	<span style="font-size: 18px; color: #333; font-weight: bold;">We anouncing new version of player!
+	<a href="http://chromus.github.com/chromus" target="_blank" >http://chromus.github.com/chromus</a></span>
+	<div style="color: blue; margin-top: 10px;">We still in <b>BETA</b>! Help us to make it awesome!</div>
+	<div class="contacts">Contacts & Questions: <a href="mailto:hello@chromusapp.com" style="font-weight: bold;">hello@chromusapp.com</a></div>
         </div>
-        -->
         <div class="latest_changes" style="position: absolute; top: 270px; left: 50px" >
             <h2>Latest Changes</h2> 
             <ul>                
-                <li style="color:green"><b>10 Oct 2011: Fixed search another track and improved search quality</b></li>
+	    	<li style="font-weight: bold;"><span style="color:green">28 Jan 2012</span>: Fixed bug with playing, caused by new vk.com changes</li>
+                <li>10 Oct 2011: Fixed search another track and improved search quality</li>
                 <li>26 Jun 2011: Improved search quality. Removed banner :)</li>
             </ul>
         </div>    
-        <div style="position: absolute; top: 320px; left: 50px" class="helpus">            
+        <div style="position: absolute; top: 350px; left: 50px" class="helpus">            
             <h2 style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 40px;">Your support keeps us on the air!</h2>
-            <div class="payments" style="margin-top: 5px;">
-                <div style="color: green; padding-left: 20px;">Now you can support us with PayPal or Credit card!</div>
-                <form action="http://www.plimus.com/jsp/buynow.jsp" target="_blank" style="margin-left: 45px">
-                    <input type="hidden" name="contractId" value="3054624" />
-                    <input type="submit" value="$5 Donation" />
-                </form>
-                <form action="https://www.plimus.com/jsp/buynow.jsp">
+            <div class="payments" style="margin-top: 15px;">
+                <form action="https://www.plimus.com/jsp/buynow.jsp" style="margin-left: 50px;">
                     <input type="hidden" name="contractId" value="3054626" />
-                    <input type="submit" value="$10 Donation" style="font-weight: bold; font-size: 20px; "/>
+                    <input type="submit" value="$10 Donation" style="font-size: 20px; "/>
                 </form>
                 <form action="https://www.plimus.com/jsp/buynow.jsp">
                     <input type="hidden" name="contractId" value="3054628" />
-                    <input type="submit" value="$20 Donation" />
+                    <input type="submit" value="$20 Donation" style="font-size: 30px; font-weight: bold;"/>
                 </form>
                 <form action="https://www.plimus.com/jsp/buynow.jsp">
                     <input type="hidden" name="contractId" value="3054630" />
@@ -341,16 +338,6 @@ input[type=submit] {
 
                 <div style="color: #333; font-size: 20px; font-weight: bold; margin-top: 20px;margin-bottom: 10px;">Other payment methods:</div>
                 <div><a target="_blank" href="http://money.yandex.ru/">Yandex.Money</a> 41001903998889</div>
-                <div><a target="_blank" href="http://www.webmoney.ru/">Webmoney</a> Z466954938255, R296708374313</div>
-                <div><a target="_blank" href="http://www.moneybookers.com/" title="Moneybrookers">Moneybrookers</a> leonsbox@gmail.com</div>
-            </div>
-            <div class="amazon">
-                <h2>Shop at Amazon and Support our project</h2>
-                <p>You can shop at <a href='http://www.amazon.com/gp/redirect.html?ie=UTF8&location=http%3A%2F%2Fwww.amazon.com%2F&tag=chromus-20&linkCode=ur2&camp=1789&creative=9325' target="_blank">Amazon.com</a> and support Last.fm free music player: we get a 5% commission on anything (not just music) you buy if you use this <a href='http://www.amazon.com/gp/redirect.html?ie=UTF8&location=http%3A%2F%2Fwww.amazon.com%2F&tag=chromus-20&linkCode=ur2&camp=1789&creative=9325'
-                    target="_blank">Amazon.com</a> link or this <a href="http://www.amazon.co.uk/gp/redirect.html?ie=UTF8&location=http%3A%2F%2Fwww.amazon.com%2F&tag=chromus-21&linkCode=ur2&camp=1634&creative=6738" target="_blank">Amazon.co.uk</a> link or <a href="http://www.amazon.de/gp/redirect.html?ie=UTF8&location=http%3A%2F%2Fwww.amazon.de%2F&site-redirect=de&tag=chromus07-21&linkCode=ur2&camp=1638&creative=6742" target="_blank">Amazon.de</a> link. In fact, we get a commission on everything you buy from the time you click on those links, to the time you close your browser window.</p>
-            </div>
-            <div class="adv">
-                <a href="http://buysellads.com/buy/detail/32453">Advertise on Last.fm free music player!</a>
             </div>
             <h1 class="thankyou">Thank you!</h1>            
         </div>
@@ -360,24 +347,6 @@ input[type=submit] {
 </div>
 <script>
         onLoad()
-</script>
-
-<script type="text/javascript" charset="utf-8">
-  var is_ssl = ("https:" == document.location.protocol);
-  var asset_host = is_ssl ? "https://s3.amazonaws.com/getsatisfaction.com/" : "http://s3.amazonaws.com/getsatisfaction.com/";
-  document.write(unescape("%3Cscript src='" + asset_host + "javascripts/feedback-v2.js' type='text/javascript'%3E%3C/script%3E"));
-</script>
-
-<script type="text/javascript" charset="utf-8">
-  var feedback_widget_options = {};
-
-  feedback_widget_options.display = "overlay";
-  feedback_widget_options.company = "lastfm_free_music_player";
-  feedback_widget_options.placement = "left";
-  feedback_widget_options.color = "#222";
-  feedback_widget_options.style = "idea";
-
-  var feedback_widget = new GSFN.feedback_widget(feedback_widget_options);
 </script>
 </body>
 </html>

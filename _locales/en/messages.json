@@ -1,6 +1,6 @@
 {
-    "repeat": {
-        "message": "repeat",
-        "descrition": "Repeat button"
-    }
+   "repeat": {
+      "descrition": "Repeat button",
+      "message": "repeat"
+   }
 }

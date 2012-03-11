@@ -25,8 +25,8 @@ var WrapperManager = function(){
             this.artist = artist_container.innerHTML
     }
 
-    if(!this.artist && document.getElementsByClassName("artist-breadcrumb breadcrumb").length > 0 ){
-       this.artist = document.querySelector(".artist-breadcrumb.breadcrumb span a").innerHTML
+    if(!this.artist && document.getElementById('libraryBreadcrumb')){
+       this.artist = document.querySelector("#libraryBreadcrumb h2").innerHTML 
     }
 
         if(!this.artist){
@@ -209,7 +209,7 @@ TrackList.prototype.getTrack = function(row){
         track_info = row.querySelectorAll('.track a')
 
     // If inside artist page
-    if(this.artist && !this.element.className.match('big') && !document.getElementById('thePlaylist') && (!this.element.className.match('tracklist') && (track_info.length == 1 || track_info[1].href.match(/\.mp3/)) || document.getElementsByClassName("artist-breadcrumb breadcrumb").length > 0 ))
+    if(this.artist && !this.element.className.match('big') && !document.getElementById('thePlaylist') && (!this.element.className.match('tracklist') && (track_info.length == 1 || track_info[1].href.match(/\.mp3/)) || document.getElementById('libraryBreadcrumb')))
         return [this.artist, track_info[0].innerText]
     else
         return [track_info[0].innerText, track_info[1] ? track_info[1].innerText : undefined]
