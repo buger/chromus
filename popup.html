@@ -412,10 +412,10 @@
             }
         });
 
-        if (!window.localStorage["new_changes_2.9.67"]) {
+        if (!window.localStorage["new_changes_2.9.68"]) {
             $('.new_changes').show()
             .bind('click', function() {                    
-                    window.localStorage["new_changes_2.9.67"] = true;
+                    window.localStorage["new_changes_2.9.68"] = true;
 
                     chrome.tabs.create({url: chrome.extension.getURL("options.html")});
                 });
