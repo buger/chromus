@@ -94,7 +94,7 @@ var port
     Connecting to background page and initializing callback listener
 **/
 function initializePort(){
-    port = chrome.extension.connect({name: "page", reconnect:port_initialized})
+    port = chrome.extension.connect({ name: "page" })
 
     port.onMessage.addListener(function(msg){
         console.log("Received message:", msg)

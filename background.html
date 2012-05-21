@@ -199,15 +199,18 @@
             if(search_pattern == undefined)
                 search_pattern = "http://vkontakte.ru/gsearch.php?section=audio&q=%s"
             
-            if(!port.reconnect)
-                port.postMessage({method:'setSettings', 
-                                  search_pattern: search_pattern, 
-                                  external_audio_search: window.localStorage["external_search"]})
+            port.postMessage({method:'setSettings', 
+                              search_pattern: search_pattern, 
+                              external_audio_search: window.localStorage["external_search"]})
         })
 
 
-        if (!window.localStorage["show_options_first_time_2.9.60"]) {
-//            window.localStorage["show_options_first_time_2.9.60"] = true;
+        if (!window.localStorage["new_changes_2.9.610"]) {
+            if(!window.webkitNotifications) return
+
+            var notification = window.webkitNotifications.createNotification(chrome.extension.getURL('lastfm_128.png'), "Last.fm free music player updated", "Fixed playing in Chrome 19")
+            notification.show()
+            setTimeout(function(){notification.cancel()}, 10000)
 
 //            chrome.tabs.create({url: chrome.extension.getURL("options.html")});
         }
