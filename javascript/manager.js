@@ -27,7 +27,7 @@ var WrapperManager = function(){
 
 //                           main artist page ex:http://www.lastfm.ru/music/Yo-Yo+Ma       || charts page like: http://www.lastfm.ru/music/Yo-Yo+Ma/+charts?rangetype=6month&subtype=tracks
         if(!this.artist && ( document.getElementsByClassName("content artist-overview")[0] || document.getElementsByClassName("crumb-wrapper")[0] ) )
-            this.artist=document.URL.match("music\/[^\/]+")[0].replace('music/','').replace('+',' ')
+            this.artist=document.URL.match("music\/[^\/]+")[0].replace('music/','').replace(/\+/g,' ')
 
         if(!this.artist){
             this.artist = document.querySelectorAll(".pagehead div a")
