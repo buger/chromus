@@ -10,7 +10,7 @@
    "browser_action": {
      "default_icon": "lastfm_128.png", 
      "default_title": "Last.fm free music player",      
-     "popup": "popup.html"        
+     "default_popup": "popup.html"        
    },
    "content_scripts": [ {
       "css": [ "css/mp3_player_button.css", "css/style.css" ],
