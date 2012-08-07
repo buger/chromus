@@ -4,98 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
 <script src="javascript/utils.js"></script>
 
-<script type="text/javascript">
-var scrobbler = chrome.extension.getBackgroundPage().scrobbler
-
-
-// Saves options to localStorage.
-function save_options(form) {
-    for(var i=0; i< form.search_provider.length; i++){
-	if(form.search_provider[i].checked){
-	    window.localStorage["search_provider"] = form.search_provider[i].id
-	    
-	    if(form.search_provider[i].id == "other")
-		window.localStorage["search_pattern"] = form.search_pattern.value
-	    else
-		window.localStorage["search_pattern"] = form.search_provider[i].value
-	}
-    }
-
-    window.location.reload()
-}
-
-// Restores select box state to saved value from localStorage.
-function restore_options() {
-    var search_provider = window.localStorage["search_provider"];
-    try {
-        var search_pattern = window.localStrorage["search_pattern"];
-    } catch(e){}
-
-
-    if(!window.localStorage['lastfm_session']){
-        document.getElementById('not_logged').style.display = ''    
-    }
-
-
-    if(window.localStorage["skip_previews"] == "false" || window.localStorage["skip_previews"] == undefined){
-        document.getElementById('play_previews').checked = true
-    }
-
-    if(window.localStorage["show_notifications"] == "true" || window.localStorage["show_notifications"] == undefined){
-        document.getElementById('show_notifications').checked = true
-    }
-
-    if(window.localStorage["show_banner"] == "true" || window.localStorage["show_banner"] == undefined){
-//        document.getElementById('toggle_banner').checked = true
-    }
-}
-
-function showError(msg){
-    document.getElementById("error").innerHTML = msg
-    document.getElementById("error").style.display = "block"
-}
-
-function lastfm_logout(){
-  delete window.localStorage["lastfm_session"]    
-  delete window.localStorage["lastfm_username"]
-  
-  scrobbler._username = null
-  scrobbler._session_key = null
-
-  window.location.reload()
-}
-
-function onLoad(){
-    console.log("Token:", window.localStorage['lastfm_tesssion'])
-    
-    if(scrobbler._username){
-        document.getElementById("logged").style.display = ''
-        document.getElementById("username_display").innerHTML = scrobbler._username
-    }
-    
-    restore_options()
-}
-
-
-function toggle_play_previews(play){
-    window.localStorage["skip_previews"] = !play
-}
-
-function toggle_notifications(show){    
-    window.localStorage["show_notifications"] = show
-}
-
-function toggle_banner_func(show){ 
-    if (!show && confirm('This banner supports our project and helps us to develop it. Do you still want to disable banner?')) {
-        window.localStorage["show_banner"] = show
-    } else {
-        window.localStorage["show_banner"] = true
-//        document.getElementById('toggle_banner').checked = true                                
-    }
-}
-
-
-</script>
+<script type="text/javascript" src="javascript/options.js"></script>
 <style>
 body {
     background: #e5f5ff;
@@ -152,14 +61,7 @@ background: -webkit-gradient(
 
 .helpus .payments a {
     display: inline-block; 
-    width: 160px;
 
-    font-size: 18px;
-
-    color: #333;
-    
-    text-decoration: none;
-    font-weight: bold;
 }
 
 h2.banner {
@@ -251,26 +153,20 @@ input[type=submit] {
     <br/>
     <div style="position: relative; margin-left: 330px; margin-bottom: 5px;">
         <div style="float: left;padding-top: 5px; margin-right: 10px;">
-            <script type="text/javascript">
-            tweetmeme_url = 'https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh?';
-            </script>
-            <script type="text/javascript" src="http://tweetmeme.com/i/scripts/button.js"></script>
+            
         </div>
         <div style="float: left; margit-top: -5px; margin-right: 10px;">
             <a title="Post to Google Buzz" class="google-buzz-button" href="http://www.google.com/buzz/post" data-button-style="normal-count" data-url="https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh"></a>
-            <script type="text/javascript" src="http://www.google.com/buzz/api/button.js"></script>
+            <script type="text/javascript" src="https://www.google.com/buzz/api/button.js"></script>
         </div>
     </div>
     <iframe src="http://www.facebook.com/plugins/likebox.php?id=128158783888611&amp;width=200&amp;connections=10&amp;stream=false&amp;header=true&amp;height=287" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:200px; height:287px; margin-top: 10px; background: white;" allowTransparency="true"></iframe>
     <br/>
     <!-- AddToAny BEGIN -->
     <a class="a2a_dd" href="http://www.addtoany.com/share_save?linkurl=https://chrome.google.com/extensions/detail/bbncpldmanoknoahidbgmkgobgmhnafh&amp;linkname=Last.fm%20free%20music%20player"><img src="http://static.addtoany.com/buttons/share_save_171_16.png" width="171" height="16" border="0" alt="Share/Bookmark"/></a>
-    <script type="text/javascript">
-    var a2a_config = a2a_config || {};
-    a2a_config.linkname = "Last.fm free music player";
-    a2a_config.linkurl = "http://chrome-music.tumblr.com";
+    <script type="text/javascript" src="javascript/add_to_any.js">;
     </script>
-    <script type="text/javascript" src="http://static.addtoany.com/menu/page.js"></script>
+    <script type="text/javascript" src="https://static.addtoany.com/menu/page.js"></script>
 
     <br/>
     
@@ -283,9 +179,9 @@ input[type=submit] {
         <div style="float: left; height: 500px; width: 300px; background: url(images/lfm_big.gif) top center no-repeat; padding-top: 35px; text-align: left;">
             <div id="error" style="display: none">
             </div>
-            <div id="logged" style="display: none; font-size: 20px; font-weight: bold; white-space: nowrap; padding-left: 35px;">Logged as <a id="username_display" href="javascript:;" target="_blank" onclick="this.href = 'http://last.fm/user/'+this.innerHTML" style="color:#0187C5"></a>
-            <br/><a href="javascript:lastfm_logout()" style="font-size: 12px;" target="_blank">Logout</a></div>
-            <div id="not_logged" style="display: none; text-align: center"><a href="javascript:;" onclick="scrobbler.auth(); window.close()" style="color:#0187C5; font-size: 20px;">Login to last.fm</a></div>
+            <div id="logged" style="display: none; font-size: 20px; font-weight: bold; white-space: nowrap; padding-left: 35px;">Logged as <a id="username_display" href="http://last.fm" target="_blank" style="color:#0187C5"></a>
+            <br/><a href="#" style="font-size: 12px;" target="_blank" id="logout_btn">Logout</a></div>
+            <div id="not_logged" style="display: none; text-align: center"><a href="#" style="color:#0187C5; font-size: 20px;">Login to last.fm</a></div>
             <div class="hotkeys" style="padding-left: 32px; margin-top: 20px; color: #333;">                
                 <h3 style="padding:0; margin:0; font-size: 18px; padding-bottom: 3px;">Hotkeys </h3>                 
                 <span>Alt + ]</span>&nbsp;&nbsp;&ndash; <span>Next track</span><br/>                
@@ -313,27 +209,18 @@ input[type=submit] {
             <h2>Latest Changes</h2> 
             <ul>
                 <li style="font-weight: bold;">
-                    <span style="color:green">21 May 2012</span>: Fixed Chrome 19 bug
-                </li>                
-	    	    <li>11 Mar 2012: Fixed Charts playing</li>
-                <li>28 Jan 2012: Fixed bug with playing, caused by new vk.com changes</li>
+                    <span style="color:green">7 Aug 2012</span>: Updated for new Last.fm
+                </li>
+                <li>21 May 2012: Fixed Chrome 19 bug</li>
+	    	    <li>11 Mar 2012: Fixed Charts playing</li>                
             </ul>
         </div>    
         <div style="position: absolute; top: 350px; left: 50px" class="helpus">            
             <h2 style="padding-bottom: 0px; margin-bottom: 0px; margin-top: 40px;">Your support keeps us on the air!</h2>
             <div class="payments" style="margin-top: 15px;">
-                <form action="https://www.plimus.com/jsp/buynow.jsp" style="margin-left: 50px;">
-                    <input type="hidden" name="contractId" value="3054626" />
-                    <input type="submit" value="$10 Donation" style="font-size: 20px; "/>
-                </form>
-                <form action="https://www.plimus.com/jsp/buynow.jsp">
-                    <input type="hidden" name="contractId" value="3054628" />
-                    <input type="submit" value="$20 Donation" style="font-size: 30px; font-weight: bold;"/>
-                </form>
-                <form action="https://www.plimus.com/jsp/buynow.jsp">
-                    <input type="hidden" name="contractId" value="3054630" />
-                    <input type="submit" value="$50 Donation" />
-                </form>
+                <center>
+                <a href="http://gum.co/iwGx" class="gumroad-button">Last.fm free music player donation</a><script type="text/javascript" src="https://gumroad.com/js/gumroad-button.js"></script>
+                </center>
 
                 <p style="margin:0; padding: 0; color: #0187C5; font-size: 20px; margin-top: 10px; ">Your support of any amount helps us stay on the air, providing free music that can't be found anywhere else. You can donate as little as $2.99 or as much as you'd like. Donating $10-$20 really, really helps us! We accept all major credit cards as well as PayPal.
                 </p>
@@ -347,8 +234,6 @@ input[type=submit] {
 <div style="clear: both">&nbsp;</div>
 
 </div>
-<script>
-        onLoad()
-</script>
+
 </body>
 </html>

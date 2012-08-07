@@ -128,7 +128,7 @@ function ease(x) {
                             window.localStorage['lastfm_username'] = response.username
                         }
                         
-                        chrome.tabs.update(port.tab.id, {url:chrome.extension.getURL("options.html")})
+                        chrome.tabs.update(port.sender.tab.id, {url:chrome.extension.getURL("options.html")})
                     })
 
 
@@ -188,7 +188,7 @@ function ease(x) {
         })
 
 
-        if (false && !window.localStorage["new_changes_2.9.610"]) {
+        if (false && !window.localStorage["new_changes_2.9.7"]) {
             if(!window.webkitNotifications) return
 
             var notification = window.webkitNotifications.createNotification(chrome.extension.getURL('lastfm_128.png'), "Last.fm free music player updated", "Fixed playing in Chrome 19")
