@@ -15,30 +15,18 @@ var WrapperManager = function(){
     this.container_count = 0
 
     if(match = window.location.toString().match(/\/music\/([^\/\?]+)/)){
-        var artist_container = document.querySelector('#catalogueHead h1')
-
-    if(artist_container){
-        var link = artist_container.querySelector('a')
-        if(link)
-            this.artist = link.innerHTML
-        else        
-            this.artist = artist_container.innerHTML
-    }
-
-    if(!this.artist && document.getElementsByClassName("artist-breadcrumb breadcrumb").length > 0 ){
-       this.artist = document.querySelector(".artist-breadcrumb.breadcrumb span a").innerHTML
-    }
-
-        if(!this.artist){
-            this.artist = document.querySelectorAll(".pagehead div a")
-            
-            if(this.artist){
-                try{
-                    this.artist = this.artist[1].innerHTML.replace(/^\s+/,'')
-                } catch(e){}
-            }
+        title = document.querySelector('meta[property="og:title"]').content
+        try {
+            type = document.querySelector('meta[property="og:type"]').content
+        } catch (e) {
+            type = null;
         }
 
+        if (type == 'song' || type == 'band' || type == 'album') {
+            this.artist = title.split(' – ')[0]
+        } else if (window.location.toString().match('library')) {
+            this.artist = document.querySelector('#libraryBreadcrumb h2').innerText;
+        }
         console.log("Artist:", this.artist)
     }
 }
@@ -209,7 +197,7 @@ TrackList.prototype.getTrack = function(row){
         track_info = row.querySelectorAll('.track a')
 
     // If inside artist page
-    if(this.artist && !this.element.className.match('big') && !document.getElementById('thePlaylist') && (!this.element.className.match('tracklist') && (track_info.length == 1 || track_info[1].href.match(/\.mp3/)) || document.getElementsByClassName("artist-breadcrumb breadcrumb").length > 0 ))
+    if(this.artist && !this.element.className.match('big') && !document.getElementById('thePlaylist'))
         return [this.artist, track_info[0].innerText]
     else
         return [track_info[0].innerText, track_info[1] ? track_info[1].innerText : undefined]
@@ -239,7 +227,7 @@ manager.registerWrapper('table.tracklist, table.chart', TrackList)
 var SingleTrack = function(element, artist){
     this.element = element
     this.artist = artist
-    this.child_items_pattern = 'h1'
+    this.child_items_pattern = 'span[itemprop=name]'
 }
 
 SingleTrack.prototype = new MusicDomElement()
@@ -247,7 +235,7 @@ SingleTrack.prototype.constructor = SingleTrack
 
 SingleTrack.prototype.getTrack = function(){
 //    var artist = document.querySelector('.breadcrumb a').innerHTML
-    var song = document.querySelector('.breadcrumb span').innerText
+    var song = document.querySelector('.track-overview h1 span[itemprop=name]').innerText
 
     return [this.artist, song]
 }
@@ -257,7 +245,7 @@ SingleTrack.prototype.insertLink = function(el, track){
     el.className = el.className + ' ex_container'
 }
 
-manager.registerWrapper('#catalogueHead.trackHead', SingleTrack)
+manager.registerWrapper('.track-overview h1', SingleTrack)
 
 
 /**
