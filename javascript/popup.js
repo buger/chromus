@@ -410,10 +410,10 @@ function helpOnHover(element, help){
             }
         });
 
-        if (!window.localStorage["new_changes_2.9.7"]) {
+        if (!window.localStorage["new_changes_2.9.692"]) {
             $('.new_changes').show()
             .bind('click', function() {                    
-                    window.localStorage["new_changes_2.9.7"] = true;
+                    window.localStorage["new_changes_2.9.692"] = true;
 
                     chrome.tabs.create({url: chrome.extension.getURL("options.html")});
                 });
