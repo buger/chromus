@@ -199,15 +199,7 @@ function ease(x) {
         }
         // _gaq.push(['_trackPageview']);
         
-    }    
-
-    chrome.tabs.onSelectionChanged.addListener(function(){
-        chrome.tabs.executeScript(null, {"file":"javascript/hotkeys.js"}); 
-    });
-
-    try {
-        chrome.tabs.executeScript(null, {"file":"javascript/hotkeys.js"}); 
-    } catch(e) {}
+    }
 
     chrome.extension.onRequest.addListener(
         function(request, sender, sendResponse) {
