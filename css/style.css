@@ -34,7 +34,8 @@ ul.mediumChartWithImages .vk_search_button, ul.mediumChartWithImages .sm2_button
     padding-left: 0px;
 }
 
-td.playbuttonCell a.previewbutton {
+td.playbuttonCell a.sm2_button {
+    margin: 1px 3px 0 4px;
 }
 
 a.vk_search_button {
