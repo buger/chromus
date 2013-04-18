@@ -4,15 +4,15 @@ if (!window.hotkey_initialized) {
         if (evt.altKey) {
             switch(evt.keyCode) {
                 case 221:  //]
-                    chrome.extension.sendRequest({ method:'nextTrack' });
+                    chrome.extension.sendMessage({ method:'nextTrack' });
                     break;
 
                 case 219: //[
-                    chrome.extension.sendRequest({ method:'previousTrack' });
+                    chrome.extension.sendMessage({ method:'previousTrack' });
                     break;
 
                 case 80: //P
-                    chrome.extension.sendRequest({ method:'toggle' });
+                    chrome.extension.sendMessage({ method:'toggle' });
                     break;
             }
         }
