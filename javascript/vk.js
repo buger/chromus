@@ -6,24 +6,24 @@ var _gaq = _gaq || [];
     Module for working with vk.com
 **/
 var VK = {
-    determineSearchMethod: function(callback){
-        console.log("Trying to determine search method")
+    determineSearchMethod: function (callback) {
+        console.log("Trying to determine search method");
 
-        xhrRequest("http://vk.com", "GET", null, function(xhr){
-            console.log(xhr.responseText.match(/logout/));
-            
-            if(!xhr.responseText.match(/logout/)){
-                xhrRequest("http://vk.com", "GET", null, function(xhr_vk){
-                    if(!xhr_vk.responseText.match(/logout/)) {
-                        callback({search_method:'test_mode'})
-                    } else {
-                        callback({search_method:'vk.com'})
-                    }
-                })
-            } else {
-                callback({search_method:'vk.com'})
+        var xhr = new XMLHttpRequest();
+        xhr.open('HEAD', 'http://vk.com/feed', true);
+        xhr.send();
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == xhr.DONE) {
+                var redirect = xhr.getResponseHeader('TM-finalUrl') || '';
+
+                if (redirect.indexOf('/login.php') == -1) {
+                    callback({search_method: 'vk.com'});
+                } else {
+                    callback({search_method: 'test_mode'});
+                }
             }
-        })
+        };
     },
 
     /**
