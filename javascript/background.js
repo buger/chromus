@@ -96,9 +96,19 @@ function ease(x) {
 
     function onLoad(){    
         if (window.localStorage["latest_playlist"]) {
-            try {
-                music_manager.playlist = JSON.parse(window.localStorage["latest_playlist"]);
-            } catch (e) {}
+            music_manager.playlist = JSON.parse(window.localStorage["latest_playlist"]);
+        }
+
+        if (window.localStorage['play_mode']) {
+            music_manager.play_mode = window.localStorage['play_mode'];
+        }
+
+        if (window.localStorage['stop_after_playing']) {
+            music_manager.stop_after_playing = window.localStorage['stop_after_playing'];
+        }
+
+        if (window.localStorage['repeat_mode']) {
+            music_manager.repeat_mode = window.localStorage['repeat_mode'];
         }
 
         updateTime()

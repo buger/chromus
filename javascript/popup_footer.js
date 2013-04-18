@@ -15,6 +15,7 @@ $(function() {
       $(this).toggleClass('disabled');
 
       music_manager.play_mode = $(this).hasClass('disabled') ? "normal" : "shuffle";
+      window.localStorage['play_mode'] = music_manager.play_mode;
       
       _gaq.push(['_trackEvent', 'controls', 'playMode', music_manager.play_mode]);
   });
@@ -30,6 +31,7 @@ $(function() {
       $(this).toggleClass('disabled');
 
       music_manager.stop_after_playing = $(this).hasClass('disabled') ? "normal" : "stop";
+      window.localStorage['stop_after_playing'] = music_manager.stop_after_playing;
 
       _gaq.push(['_trackEvent', 'controls', 'playMode', music_manager.stop_after_playing]);
   });
@@ -54,6 +56,8 @@ $(function() {
         $(this).removeClass('disabled').addClass('all');
         music_manager.repeat_mode = "repeat_all";
       }
+
+      window.localStorage['repeat_mode'] = music_manager.repeat_mode;
       _gaq.push(['_trackEvent', 'controls', 'repeatMode', music_manager.repeat_mode]);
   });
 
