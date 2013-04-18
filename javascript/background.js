@@ -201,7 +201,7 @@ function ease(x) {
         
     }
 
-    chrome.extension.onRequest.addListener(
+    chrome.extension.onMessage.addListener(
         function(request, sender, sendResponse) {
             if (request.method === "toggle") {
                 music_manager.audio.paused ? music_manager.audio.playOrLoad() : music_manager.pause();
