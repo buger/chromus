@@ -318,9 +318,9 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch, getNe
             this.audio.playOrLoad(response[track.lastIndex].url);
             this.setVolume();
 
-			this.audio.addEventListener("loadedmetadata", function() {
-				track.duration = Math.floor(this.duration);
-			});
+            this.audio.addEventListener("loadedmetadata", function() {
+                track.duration = Math.floor(this.duration);
+            });
 
             track.scrobbled = false;
             track.next_song_prefetched = false;
