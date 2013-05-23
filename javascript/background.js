@@ -198,7 +198,7 @@ function ease(x) {
         })
 
 
-        if (false && !window.localStorage["new_changes_2.9.692"]) {
+        if (false && !window.localStorage["new_changes_2.9.7"]) {
             if(!window.webkitNotifications) return
 
             var notification = window.webkitNotifications.createNotification(chrome.extension.getURL('lastfm_128.png'), "Last.fm free music player updated", "Fixed playing in Chrome 19")
