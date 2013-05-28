@@ -9,3 +9,4 @@ Version 2.9.7
 - Replace deprecated calls
 - Faster vk.com user login detection
 - Some fixes makekup on lastfm and extension
+- Fix pauses sometimes when track ends
