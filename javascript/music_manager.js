@@ -313,17 +313,16 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch, getNe
             }
             
             console.log("nextIndex", track.lastIndex)
-
+            
             this.createAudio();
-            this.audio.playOrLoad(response[track.lastIndex].url);
-            this.setVolume();
+            this.audio.playOrLoad(response[track.lastIndex].url)
 
-            this.audio.addEventListener("loadedmetadata", function() {
-                track.duration = Math.floor(this.duration);
-            });
+            this.setVolume()            
+    
+            track.duration = parseInt(response[track.lastIndex].duration)
+            track.scrobbled = false
+            track.next_song_prefetched = false 
 
-            track.scrobbled = false;
-            track.next_song_prefetched = false;
             track.audio_url = response[track.lastIndex].url;
             
             this.showNotification()

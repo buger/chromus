@@ -16,7 +16,7 @@ if (!window.hotkey_initialized) {
                     break;
             }
         }
-    });
+    }, false);
 
     window.hotkey_initialized = true;
 }
