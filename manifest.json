@@ -1,7 +1,7 @@
 {
    "manifest_version": 2,
    "name": "Last.fm free music player",
-   "version": "2.9.692",
+   "version": "2.9.699",
    "description": "!! Yes it plays music! Browser as a music player? Why not? Free music player for Google Chrome with Last.fm integration.",
    "icons": {
       "128": "lastfm_128.png"
@@ -31,5 +31,5 @@
    },
    "options_page": "options.html",
    "permissions": ["notifications", "tabs", "http://*/", "https://*/"],
-   "content_security_policy": "script-src 'self' https://www.google.com/buzz/api/button.js https://static.addtoany.com/menu/page.js https://gumroad.com/js/gumroad-button.js https://gumroad.com/js/gumroad-button.js; object-src 'self'; "
+   "content_security_policy": "script-src 'self' https://ssl.google-analytics.com/ga.js https://www.google.com/buzz/api/button.js https://static.addtoany.com/menu/page.js https://gumroad.com/js/gumroad-button.js https://gumroad.com/js/gumroad-button.js; object-src 'self'; "
 }
