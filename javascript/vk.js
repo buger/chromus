@@ -259,8 +259,8 @@ var VK = {
         _gaq.push(['_trackEvent', 'vkontakte_search', this.search_method, artist+'-'+song]);
 
         if (this.search_method == "fail_mode") {
-            callback({error: 'cant search'});
-        } else if(this.search_method == "test_mode") {
+            callback({error: 'cant_search'});
+        } else if (this.search_method == "test_mode") {
             this._testmodeSearch(artist, song, duration, callback);
         } else {
             this._rawSearch(artist, song, duration, callback);
