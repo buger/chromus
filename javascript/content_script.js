@@ -41,8 +41,26 @@ var tracks_cache = {}
 
     Get all tracks in music block, where button is    
 **/
+
+
+var findParentByFilesSearchMark = function(node) {
+    
+
+    var parent_node = node.parentNode;
+
+    while (parent_node) {
+        if (parent_node.has_files_search) {
+            return parent_node;
+        }
+        parent_node = parent_node.parentNode;
+    }
+    return null;
+    
+};
+
+
 function getPlaylist(button){
-    var container = findParent(button, 'with_vk_search')
+    var container = findParentByFilesSearchMark(button);
 
     var tracks = []
 

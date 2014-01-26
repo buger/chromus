@@ -188,13 +188,8 @@ function ease(x) {
             })
 
 
-            search_pattern = window.localStorage["search_pattern"]                            
-            if(search_pattern == undefined)
-                search_pattern = "http://vkontakte.ru/gsearch.php?section=audio&q=%s"
             
-            port.postMessage({method:'setSettings', 
-                              search_pattern: search_pattern, 
-                              external_audio_search: window.localStorage["external_search"]})
+            port.postMessage({method:'setSettings'})
         })
 
 
