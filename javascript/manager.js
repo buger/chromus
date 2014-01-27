@@ -65,8 +65,9 @@ WrapperManager.prototype.wrapMusicElements = function(){
             if(!cur.has_files_search){
 
                 var playlist = [];
+                var dom_index = {};
                 try{
-                    new wrapper(elements[i], artist).injectSearch(playlist);
+                    new wrapper(elements[i], artist).injectSearch(playlist, dom_index);
                     
                     this.container_count += 1;
                 } catch(e){
@@ -76,9 +77,13 @@ WrapperManager.prototype.wrapMusicElements = function(){
                 if (playlist.length) {
                     playlists_list.push(playlist);
 
+                    var playlist_num = playlists_list.length - 1;
+
                     for (var jj = 0; jj < playlist.length; jj++) {
-                        playlist[jj].playlist_num = playlists_list.length - 1;
+                        playlist[jj].playlist_num = playlist_num;
                     }
+
+                    views_storage.songs[playlist_num] = dom_index;
                 }
 
 
@@ -88,7 +93,7 @@ WrapperManager.prototype.wrapMusicElements = function(){
             }
         }
     }
-    console.log(playlists_list);
+    console.log(playlists_list, views_storage.songs);
 };
 
 WrapperManager.prototype.registerWrapper = function(css_expr, wrapper){
@@ -134,7 +139,7 @@ MusicDomElement.prototype.insertLink = function(el){console.error('Abstract func
 
     Finds all parent blocks matching a pattern, and injects play and search links into all matching childs.
 **/
-MusicDomElement.prototype.injectSearch = function(playlist_array){
+MusicDomElement.prototype.injectSearch = function(playlist_array, dom_index){
     var track;
 
     if(!this.element) {
@@ -178,6 +183,8 @@ MusicDomElement.prototype.injectSearch = function(playlist_array){
                         counter += 1;
 
                         playlist_array.push( track_info );
+
+                        dom_index[ playlist_array.length - 1 ] = comment_node;
                     }
                 }
             }
@@ -217,7 +224,7 @@ MusicDomElement.prototype.generateAudioLink = function(track){
     Class TrackList < MusicDomElement
 
     Most popular block. User/Artist charts.
-**/ 
+**/
 var TrackList = function(element, artist){
     this.element = element;
     this.artist = artist;
