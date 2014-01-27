@@ -109,7 +109,7 @@ function showOverloadWindow(){
                     "<h3 class='ex_header' style='background-image:url("+image_url+")'>Last.fm free music player</h3>"+
                     "<div class='dialogContent'>"+
                         "<p class='ex_title'>We are out of capacity :(</p>"+
-                        "<p>If you don't want to see this window and play music without limits, you must be logged at <a href='http://vk.com'>http://vk.com</a> or <a href='http://vkontakte.ru'>http://vkontakte.ru</a>, or you can try play track later.</p>"+
+                        "<p>If you don't want to see this window and play music without limits, you must be logged at <a href='http://vk.com'>http://vk.com</a>.</p>"+
                         "<p>To be clear, this is not advertising, it is due technical reasons.</p>"+
                     "</div>" 
 
@@ -148,17 +148,17 @@ function initializePort(){
             var button = document.getElementById(msg.element_id)
             
             if(button)
-                if(msg.error){
+                if(msg.error_type){
                     button.className = "sm2_button disabled"
-                    if(msg.error == 'not_found')
+                    if(msg.error_type == 'not_found') {
                         button.title = "Track not found"
-                    else if (msg.error == 'overload') {
+                    } else if (msg.error_type == 'overload' || msg.error_type == 'cant_search') {
                         button.title = "Server overload. Try later."                    
                         button.className = "sm2_button"
 
                         showOverloadWindow()
                     } else {
-                        button.title = msg.error
+                        button.title = msg.error_type;
                     }
                 } else {
                     stopCurrentTrack()

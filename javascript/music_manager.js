@@ -258,6 +258,7 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch, getNe
         console.log("Resp",response)
 
         if(response.error){
+            track.error_type = response.error;
             this.canResearch = false;
             if(response.error == 'not_found' && track.track_id && track.streamable && this.playPreviews()) {
                 this.not_found_in_row = 0
@@ -278,7 +279,8 @@ MusicManager.prototype.searchTrack = function(trackIndex, playAfterSearch, getNe
             } else {
                 this.current_track = trackIndex
 
-                track.not_found = true
+                track.not_found = true;
+
 
                 this.fireEvent("onPlay")
                 
