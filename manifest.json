@@ -14,7 +14,7 @@
    },
    "content_scripts": [ {
       "css": [ "css/mp3_player_button.css", "css/style.css" ],
-      "js": [ "javascript/utils.js", "javascript/manager.js", "javascript/content_script.js" ],
+      "js": [ "javascript/content_scripts/manager.js", "javascript/content_scripts/content_script.js" ],
       "matches": [ "http://*.last.fm/*", "http://*.lastfm.ru/*","http://*.lastfm.pt/*",  "http://*.lastfm.de/*", "http://*.lastfm.es/*", "http://*.lastfm.fr/*", "http://*.lastfm.it/*", "http://*.lastfm.jp/*", "http://*.lastfm.pl/*", "http://*.lastfm.com.br/*", "http://*.lastfm.se/*", "http://*.lastfm.com.tr/*"]
    },
    {
