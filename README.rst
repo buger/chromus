@@ -1,4 +1,4 @@
-This repo is not maintained, active development happen in this fork: https://github.com/arestov/chromus
+This repo is not maintained
 ======
 
 Last.fm free music player
