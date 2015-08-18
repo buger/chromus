@@ -49,10 +49,16 @@ function ease(x) {
             chrome.browserAction.setTitle({title: track.artist +' - '+ track.song})       
 
         if(active_port){
-            if(track.not_found)
-                active_port.postMessage({method:"readyToPlay", error:'not_found', element_id: track.element_id})
-            else
-                active_port.postMessage({method:"readyToPlay", element_id:track.element_id})
+            if ( track.error_type ) {
+                active_port.postMessage({
+                    method:"readyToPlay",
+                    error:'not_found',
+                    element_id: track.element_id,
+                    error_type: track.error_type
+                });
+            } else {
+                active_port.postMessage({method:"readyToPlay", element_id:track.element_id});
+            }
         }
     }, true)
 
@@ -188,13 +194,8 @@ function ease(x) {
             })
 
 
-            search_pattern = window.localStorage["search_pattern"]                            
-            if(search_pattern == undefined)
-                search_pattern = "http://vkontakte.ru/gsearch.php?section=audio&q=%s"
             
-            port.postMessage({method:'setSettings', 
-                              search_pattern: search_pattern, 
-                              external_audio_search: window.localStorage["external_search"]})
+            port.postMessage({method:'setSettings'})
         })
 
 
